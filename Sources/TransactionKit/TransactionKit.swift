@@ -21,7 +21,7 @@ public extension TX {
     static func information() -> InformationResponse {
         // Conpublic public struct the required request for information and make the request
         let request: InformationRequest = InformationRequest()
-        return callLibraryFunction(
+        return Self.callLibraryFunction(
             input: request,
             function: libTX.information
         )
@@ -33,98 +33,98 @@ public extension TX {
             function: convert_manifest
         )
     }
-    
+
     static func compileTransactionIntentRequest(request: CompileTransactionIntentRequest) -> CompileTransactionIntentResponse {
         return callLibraryFunction(
             input: request,
             function: compile_transaction_intent
         )
     }
-    
+
     static func decompileTransactionIntentRequest(request: DecompileTransactionIntentRequest) -> DecompileTransactionIntentResponse {
         return callLibraryFunction(
             input: request,
             function: decompile_transaction_intent
         )
     }
-    
+
     static func compileSignedTransactionIntentRequest(request: CompileSignedTransactionIntentRequest) -> CompileSignedTransactionIntentResponse {
         return callLibraryFunction(
             input: request,
             function: compile_signed_transaction_intent
         )
     }
-    
+
     static func decompileSignedTransactionIntentRequest(request: DecompileSignedTransactionIntentRequest) -> DecompileSignedTransactionIntentResponse {
         return callLibraryFunction(
             input: request,
             function: decompile_signed_transaction_intent
         )
     }
-    
+
     static func compileNotarizedTransactionIntentRequest(request: CompileNotarizedTransactionIntentRequest) -> CompileNotarizedTransactionIntentResponse {
         return callLibraryFunction(
             input: request,
             function: compile_notarized_transaction_intent
         )
     }
-    
+
     static func decompileNotarizedTransactionIntentRequest(request: DecompileNotarizedTransactionIntentRequest) -> DecompileNotarizedTransactionIntentResponse {
         return callLibraryFunction(
             input: request,
             function: decompile_notarized_transaction_intent
         )
     }
-    
+
     static func decompileUnknownTransactionIntentRequest(request: DecompileUnknownTransactionIntentRequest) -> DecompileUnknownTransactionIntentResponse {
         return callLibraryFunction(
             input: request,
             function: decompile_unknown_transaction_intent
         )
     }
-    
+
     static func decodeAddressRequest(request: DecodeAddressRequest) -> DecodeAddressResponse {
         return callLibraryFunction(
             input: request,
             function: decode_address
         )
     }
-    
+
     static func encodeAddressRequest(request: EncodeAddressRequest) -> EncodeAddressResponse {
         return callLibraryFunction(
             input: request,
             function: encode_address
         )
     }
-    
+
     static func sborDecodeRequest(request: SborDecodeRequest) -> SborDecodeResponse {
         return callLibraryFunction(
             input: request,
             function: sbor_decode
         )
     }
-    
+
     static func sborEncodeRequest(request: SborEncodeRequest) -> SborEncodeResponse {
         return callLibraryFunction(
             input: request,
             function: sbor_encode
         )
     }
-    
+
     static func extractAbiRequest(request: ExtractAbiRequest) -> ExtractAbiResponse {
         return callLibraryFunction(
             input: request,
             function: extract_abi
         )
     }
-    
+
     static func deriveNonFungibleAddressFromPublicKeyRequest(request: DeriveNonFungibleAddressFromPublicKeyRequest) -> DeriveNonFungibleAddressFromPublicKeyResponse {
         return callLibraryFunction(
             input: request,
             function: derive_non_fungible_address_from_public_key
         )
     }
-    
+
     static func deriveNonFungibleAddressRequest(request: DeriveNonFungibleAddressRequest) -> DeriveNonFungibleAddressResponse {
         return callLibraryFunction(
             input: request,
@@ -140,7 +140,7 @@ private extension TX {
     /// communicating and getting responses back from the library.
     static func callLibraryFunction<I: Encodable, O: Decodable>(
         input: I,
-        function: (UnsafeMutablePointer<CChar>?) -> UnsafeMutablePointer<CChar>?
+        function: (UnsafePointer<CChar>?) -> UnsafePointer<CChar>?
     ) -> O {
         // Serialize the given request to a JSON string.
         let requestString: String = serialize(object: input)
@@ -152,7 +152,7 @@ private extension TX {
         
         // Calling the underlying transaction library function and getting a pointer
         // response. We cannot deallocated the `responsePointer`, it results in a crash.
-        let responsePointer: UnsafeMutablePointer<CChar> = function(allocatedMemory)!
+        let responsePointer = function(allocatedMemory)!
         let responseString: String = readStringFromMemory(pointer: responsePointer)
         
         // Deallocating the request and response memory
@@ -230,7 +230,7 @@ private extension TX {
     ///
     /// This function reads a C-String, null terminated, string from the provided memory location and returns it.
     static func readStringFromMemory(
-        pointer: UnsafeMutablePointer<CChar>
+        pointer: UnsafePointer<CChar>
     ) -> String {
         String(cString: pointer)
     }
