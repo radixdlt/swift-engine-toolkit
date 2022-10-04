@@ -1,0 +1,3 @@
+[submodule "Sources/libTX/build/transaction-library"]
+	path = Sources/libTX/build/transaction-library
+	url = git@github.com:radixdlt/transaction-library.git
