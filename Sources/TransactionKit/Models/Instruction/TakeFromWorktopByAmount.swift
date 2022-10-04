@@ -2,7 +2,7 @@ import Foundation
 
 public struct TakeFromWorktopByAmount: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.TakeFromWorktopByAmount
+    public static let kind: InstructionKind = .takeFromWorktopByAmount
     
     // ===============
     // Struct members
@@ -52,7 +52,7 @@ public extension TakeFromWorktopByAmount {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let resourceAddress: ResourceAddress = try values.decode(ResourceAddress.self, forKey: .resourceAddress)

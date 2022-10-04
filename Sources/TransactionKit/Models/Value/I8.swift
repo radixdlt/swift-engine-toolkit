@@ -2,7 +2,7 @@ import Foundation
 
 public struct I8: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.I8
+    public static let kind: ValueKind = .i8
     
     // ===============
     // Struct members
@@ -43,7 +43,7 @@ public extension I8 {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `value`
@@ -51,7 +51,7 @@ public extension I8 {
         if let value = Int8(valueString) {
             self.value = value
         } else {
-            throw DecodeError.ParsingError
+            throw DecodeError.parsingError
         }
     }
 }

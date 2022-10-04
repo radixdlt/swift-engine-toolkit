@@ -2,7 +2,7 @@ import Foundation
 
 public struct CreateProofFromAuthZone: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.CreateProofFromAuthZone
+    public static let kind: InstructionKind = .createProofFromAuthZone
     
     // ===============
     // Struct members
@@ -49,7 +49,7 @@ public extension CreateProofFromAuthZone {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let resourceAddress: ResourceAddress = try values.decode(ResourceAddress.self, forKey: .resourceAddress)

@@ -2,14 +2,14 @@ import Foundation
 
 public enum Option: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.Option;
+    public static let kind: ValueKind = .option
     
     // ==============
     // Enum Variants
     // ==============
     
-    case Some(Value)
-    case None
+    case some(Value)
+    case none
 }
 
 public extension Option {
@@ -23,20 +23,30 @@ public extension Option {
         case field
     }
     
+    private enum Discriminator: String, Codable {
+        case some = "Some"
+        case none = "None"
+    }
+    private var discriminator: Discriminator {
+        switch self {
+        case .none: return .none
+        case .some: return .some
+        }
+    }
+    
     // ======================
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
         var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
+        try container.encode(discriminator, forKey: .variant)
         
         // Encode depending on whether this is a Some or None
         switch self {
-            case .Some(let value):
-                try container.encode("Some", forKey: .variant)
+            case .some(let value):
                 try container.encode(value, forKey: .field)
-            case .None:
-                try container.encode("None", forKey: .variant)
+            case .none: break
         }
     }
     
@@ -45,19 +55,16 @@ public extension Option {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let variant: String = try values.decode(String.self, forKey: .variant)
-        switch variant {
-        case "Some":
+        let discriminator = try values.decode(Discriminator.self, forKey: .variant)
+        switch discriminator {
+        case .some:
             let value: Value = try values.decode(Value.self, forKey: .field)
-            self = Self.Some(value)
-        case "None":
-            self = Self.None
-        default:
-            // TODO: Need a nicer error here.
-            throw DecodeError.ParsingError
+            self = .some(value)
+        case .none:
+            self = .none
         }
     }
 }

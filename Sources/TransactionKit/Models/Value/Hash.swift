@@ -2,7 +2,7 @@ import Foundation
 
 public struct Hash: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.Hash
+    public static let kind: ValueKind = .hash
     
     // ===============
     // Struct members
@@ -49,7 +49,7 @@ public extension Hash {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `value`

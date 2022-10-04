@@ -182,8 +182,8 @@ public enum PublicKey: Sendable, Codable, Hashable {
     // Enum Variants
     // ==============
     
-    case EcdsaSecp256k1(EcdsaSecp256k1PublicKeyString)
-    case EddsaEd25519(EddsaEd25519PublicKeyString)
+    case ecdsaSecp256k1(EcdsaSecp256k1PublicKeyString)
+    case eddsaEd25519(EddsaEd25519PublicKeyString)
 }
 
 public extension PublicKey {
@@ -202,10 +202,10 @@ public extension PublicKey {
         var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {
-            case .EcdsaSecp256k1(let publicKey):
+            case .ecdsaSecp256k1(let publicKey):
                 try container.encode("EcdsaSecp256k1", forKey: .type)
                 try container.encode(publicKey, forKey: .publicKey)
-            case .EddsaEd25519(let publicKey):
+            case .eddsaEd25519(let publicKey):
                 try container.encode("EddsaEd25519", forKey: .type)
                 try container.encode(publicKey, forKey: .publicKey)
          }
@@ -218,12 +218,12 @@ public extension PublicKey {
         
         switch type {
             case "EcdsaSecp256k1":
-                self = Self.EcdsaSecp256k1(try values.decode(EcdsaSecp256k1PublicKeyString.self, forKey: .publicKey))
+                self = .ecdsaSecp256k1(try values.decode(EcdsaSecp256k1PublicKeyString.self, forKey: .publicKey))
             case "EddsaEd25519":
-                self = Self.EddsaEd25519(try values.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey))
+                self = .eddsaEd25519(try values.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey))
             default:
                 // TODO: Temporary error. Need a better one
-                throw DecodeError.ParsingError
+                throw DecodeError.parsingError
         }
     }
 }
@@ -233,8 +233,23 @@ public enum Signature: Sendable, Codable, Hashable {
     // Enum Variants
     // ==============
     
-    case EcdsaSecp256k1(EcdsaSecp256k1SignatureString)
-    case EddsaEd25519(EddsaEd25519SignatureString)
+    case ecdsaSecp256k1(EcdsaSecp256k1SignatureString)
+    case eddsaEd25519(EddsaEd25519SignatureString)
+}
+
+internal enum CurveDiscriminator: String, Codable {
+    case ecdsaSecp256k1 = "EcdsaSecp256k1"
+    case eddsaEd25519 = "EddsaEd25519"
+}
+
+private extension Signature {
+   
+    var discriminator: CurveDiscriminator {
+        switch self {
+        case .ecdsaSecp256k1: return .ecdsaSecp256k1
+        case .eddsaEd25519: return .eddsaEd25519
+        }
+    }
 }
 
 public extension Signature {
@@ -247,18 +262,18 @@ public extension Signature {
         case signature
     }
     
+    
     // ======================
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
         var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(discriminator, forKey: .type)
         
         switch self {
-            case .EcdsaSecp256k1(let signature):
-                try container.encode("EcdsaSecp256k1", forKey: .type)
+            case .ecdsaSecp256k1(let signature):
                 try container.encode(signature, forKey: .signature)
-            case .EddsaEd25519(let signature):
-                try container.encode("EddsaEd25519", forKey: .type)
+            case .eddsaEd25519(let signature):
                 try container.encode(signature, forKey: .signature)
          }
     }
@@ -266,16 +281,13 @@ public extension Signature {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let type: String = try values.decode(String.self, forKey: .type)
+        let discriminator = try values.decode(CurveDiscriminator.self, forKey: .type)
         
-        switch type {
-            case "EcdsaSecp256k1":
-                self = Self.EcdsaSecp256k1(try values.decode(EcdsaSecp256k1SignatureString.self, forKey: .signature))
-            case "EddsaEd25519":
-                self = Self.EddsaEd25519(try values.decode(EddsaEd25519SignatureString.self, forKey: .signature))
-            default:
-                // TODO: Temporary error. Need a better one
-                throw DecodeError.ParsingError
+        switch discriminator {
+        case .ecdsaSecp256k1:
+            self = .ecdsaSecp256k1(try values.decode(EcdsaSecp256k1SignatureString.self, forKey: .signature))
+        case .eddsaEd25519:
+            self = .eddsaEd25519(try values.decode(EddsaEd25519SignatureString.self, forKey: .signature))
         }
     }
 }
@@ -285,9 +297,20 @@ public enum SignatureWithPublicKey: Sendable, Codable, Hashable {
     // Enum Variants
     // ==============
     
-    case EcdsaSecp256k1(EcdsaSecp256k1SignatureString)
-    case EddsaEd25519(EddsaEd25519PublicKeyString, EddsaEd25519SignatureString)
+    case ecdsaSecp256k1(EcdsaSecp256k1SignatureString)
+    case eddsaEd25519(EddsaEd25519PublicKeyString, EddsaEd25519SignatureString)
 }
+
+private extension SignatureWithPublicKey {
+   
+    var discriminator: CurveDiscriminator {
+        switch self {
+        case .ecdsaSecp256k1: return .ecdsaSecp256k1
+        case .eddsaEd25519: return .eddsaEd25519
+        }
+    }
+}
+
 
 public extension SignatureWithPublicKey {
     
@@ -305,13 +328,12 @@ public extension SignatureWithPublicKey {
     // ======================
     func encode(to encoder: Encoder) throws {
         var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(discriminator, forKey: .type)
         
         switch self {
-            case .EcdsaSecp256k1(let signature):
-                try container.encode("EcdsaSecp256k1", forKey: .type)
+            case .ecdsaSecp256k1(let signature):
                 try container.encode(signature, forKey: .signature)
-            case .EddsaEd25519(let publicKey, let signature):
-                try container.encode("EddsaEd25519", forKey: .type)
+            case .eddsaEd25519(let publicKey, let signature):
                 try container.encode(publicKey, forKey: .publicKey)
                 try container.encode(signature, forKey: .signature)
          }
@@ -319,20 +341,17 @@ public extension SignatureWithPublicKey {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let type: String = try values.decode(String.self, forKey: .type)
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let discriminator = try values.decode(CurveDiscriminator.self, forKey: .type)
         
-        switch type {
-            case "EcdsaSecp256k1":
-                self = Self.EcdsaSecp256k1(try values.decode(EcdsaSecp256k1SignatureString.self, forKey: .signature))
-            case "EddsaEd25519":
-                self = Self.EddsaEd25519(
-                    try values.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey),
-                    try values.decode(EddsaEd25519SignatureString.self, forKey: .signature)
-                )
-            default:
-                // TODO: Temporary error. Need a better one
-                throw DecodeError.ParsingError
+        switch discriminator {
+        case .ecdsaSecp256k1:
+            self = .ecdsaSecp256k1(try values.decode(EcdsaSecp256k1SignatureString.self, forKey: .signature))
+        case .eddsaEd25519:
+            self = .eddsaEd25519(
+                try values.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey),
+                try values.decode(EddsaEd25519SignatureString.self, forKey: .signature)
+            )
         }
     }
 }

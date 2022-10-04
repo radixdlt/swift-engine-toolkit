@@ -2,14 +2,14 @@ import Foundation
 
 public enum Result: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.Result
+    public static let kind: ValueKind = .result
     
     // ==============
     // Enum Variants
     // ==============
     
-    case Ok(Value)
-    case Err(Value)
+    case ok(Value)
+    case err(Value)
  
 }
 
@@ -33,10 +33,10 @@ public extension Result {
         
         // Encode depending on whether this is a Some or None
         switch self {
-            case .Ok(let value):
+            case .ok(let value):
                 try container.encode("Ok", forKey: .variant)
                 try container.encode(value, forKey: .field)
-            case .Err(let value):
+            case .err(let value):
                 try container.encode("Error", forKey: .variant)
                 try container.encode(value, forKey: .field)
         }
@@ -47,19 +47,19 @@ public extension Result {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let variant: String = try values.decode(String.self, forKey: .variant)
         let value: Value = try values.decode(Value.self, forKey: .field)
         switch variant {
         case "Ok":
-            self = Self.Ok(value)
+            self = .ok(value)
         case "Err":
-            self = Self.Err(value)
+            self = .err(value)
         default:
             // TODO: Need a nicer error here.
-            throw DecodeError.ParsingError
+            throw DecodeError.parsingError
         }
     }
 }

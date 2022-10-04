@@ -2,7 +2,7 @@ import Foundation
 
 public struct CreateProofFromBucket: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.CreateProofFromBucket
+    public static let kind: InstructionKind = .createProofFromBucket
     
     // ===============
     // Struct members
@@ -48,7 +48,7 @@ public extension CreateProofFromBucket {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let bucket: Bucket = try values.decode(Bucket.self, forKey: .bucket)

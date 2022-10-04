@@ -2,7 +2,7 @@ import Foundation
 
 public struct PublishPackage: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.PublishPackage
+    public static let kind: InstructionKind = .publishPackage
     
     // ===============
     // Struct members
@@ -49,7 +49,7 @@ public extension PublishPackage {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let code: Blob = try values.decode(Blob.self, forKey: .code)

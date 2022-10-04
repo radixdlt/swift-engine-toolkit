@@ -3,7 +3,7 @@ import Foundation
 // TODO: The underscore is added here to avoid name collisions. Something better is needed.
 public struct Set_: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.Set
+    public static let kind: ValueKind = .set
     
     // ===============
     // Struct members
@@ -49,7 +49,7 @@ public extension Set_ {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `elementType`

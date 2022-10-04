@@ -5,61 +5,61 @@ public indirect enum Value: Sendable, Codable, Hashable {
     // Enum Variants
     // ==============
     
-    case UnitType(Unit)
-    case BooleanType(Boolean)
+    case unitType(Unit)
+    case booleanType(Boolean)
     
-    case I8Type(I8)
-    case I16Type(I16)
-    case I32Type(I32)
-    case I64Type(I64)
-    case I128Type(I128)
+    case i8Type(I8)
+    case i16Type(I16)
+    case i32Type(I32)
+    case i64Type(I64)
+    case i128Type(I128)
     
-    case U8Type(U8)
-    case U16Type(U16)
-    case U32Type(U32)
-    case U64Type(U64)
-    case U128Type(U128)
+    case u8Type(U8)
+    case u16Type(U16)
+    case u32Type(U32)
+    case u64Type(U64)
+    case u128Type(U128)
     
-    case StringType(String_)
+    case stringType(String_)
     
-    case StructType(Struct)
-    case EnumType(Enum)
+    case structType(Struct)
+    case enumType(Enum)
     
-    case OptionType(Option)
-    case ArrayType(Array_)
-    case TupleType(Tuple)
-    case ResultType(Result)
+    case optionType(Option)
+    case arrayType(Array_)
+    case tupleType(Tuple)
+    case resultType(Result)
     
-    case ListType(List)
-    case SetType(Set_)
-    case MapType(Map)
+    case listType(List)
+    case setType(Set_)
+    case mapType(Map)
     
-    case DecimalType(Decimal_)
-    case PreciseDecimalType(PreciseDecimal)
+    case decimalType(Decimal_)
+    case preciseDecimalType(PreciseDecimal)
     
-    case ComponentType(Component)
-    case PackageAddressType(PackageAddress)
-    case ComponentAddressType(ComponentAddress)
-    case ResourceAddressType(ResourceAddress)
+    case componentType(Component)
+    case packageAddressType(PackageAddress)
+    case componentAddressType(ComponentAddress)
+    case resourceAddressType(ResourceAddress)
     
-    case HashType(Hash)
+    case hashType(Hash)
     
-    case BucketType(Bucket)
-    case ProofType(Proof)
-    case VaultType(Vault)
+    case bucketType(Bucket)
+    case proofType(Proof)
+    case vaultType(Vault)
     
-    case NonFungibleIdType(NonFungibleId)
-    case NonFungibleAddressType(NonFungibleAddress)
+    case nonFungibleIdType(NonFungibleId)
+    case nonFungibleAddressType(NonFungibleAddress)
     
-    case KeyValueStoreType(KeyValueStore)
+    case keyValueStoreType(KeyValueStore)
     
-    case EcdsaSecp256k1PublicKeyType(EcdsaSecp256k1PublicKey)
-    case EcdsaSecp256k1SignatureType(EcdsaSecp256k1Signature)
-    case EddsaEd25519PublicKeyType(EddsaEd25519PublicKey)
-    case EddsaEd25519SignatureType(EddsaEd25519Signature)
+    case ecdsaSecp256k1PublicKeyType(EcdsaSecp256k1PublicKey)
+    case ecdsaSecp256k1SignatureType(EcdsaSecp256k1Signature)
+    case eddsaEd25519PublicKeyType(EddsaEd25519PublicKey)
+    case eddsaEd25519SignatureType(EddsaEd25519Signature)
     
-    case BlobType(Blob)
-    case ExpressionType(Expression)
+    case blobType(Blob)
+    case expressionType(Expression)
 }
 
 public extension Value {
@@ -68,141 +68,141 @@ public extension Value {
     // =============
     
     init(from value: Unit) {
-        self = Self.UnitType(value)
+        self = .unitType(value)
     }
     init(from value: Boolean) {
-        self = Self.BooleanType(value)
+        self = .booleanType(value)
     }
     
     init(from value: I8) {
-        self = Self.I8Type(value)
+        self = .i8Type(value)
     }
     init(from value: I16) {
-        self = Self.I16Type(value)
+        self = .i16Type(value)
     }
     init(from value: I32) {
-        self = Self.I32Type(value)
+        self = .i32Type(value)
     }
     init(from value: I64) {
-        self = Self.I64Type(value)
+        self = .i64Type(value)
     }
     init(from value: I128) {
-        self = Self.I128Type(value)
+        self = .i128Type(value)
     }
     
     init(from value: U8) {
-        self = Self.U8Type(value)
+        self = .u8Type(value)
     }
     init(from value: U16) {
-        self = Self.U16Type(value)
+        self = .u16Type(value)
     }
     init(from value: U32) {
-        self = Self.U32Type(value)
+        self = .u32Type(value)
     }
     init(from value: U64) {
-        self = Self.U64Type(value)
+        self = .u64Type(value)
     }
     init(from value: U128) {
-        self = Self.U128Type(value)
+        self = .u128Type(value)
     }
     
     init(from value: String_) {
-        self = Self.StringType(value)
+        self = .stringType(value)
     }
     
     init(from value: Struct) {
-        self = Self.StructType(value)
+        self = .structType(value)
     }
     init(from value: Enum) {
-        self = Self.EnumType(value)
+        self = .enumType(value)
     }
     
     init(from value: Option) {
-        self = Self.OptionType(value)
+        self = .optionType(value)
     }
     init(from value: Array_) {
-        self = Self.ArrayType(value)
+        self = .arrayType(value)
     }
     init(from value: Tuple) {
-        self = Self.TupleType(value)
+        self = .tupleType(value)
     }
     init(from value: Result) {
-        self = Self.ResultType(value)
+        self = .resultType(value)
     }
     
     init(from value: List) {
-        self = Self.ListType(value)
+        self = .listType(value)
     }
     init(from value: Set_) {
-        self = Self.SetType(value)
+        self = .setType(value)
     }
     init(from value: Map) {
-        self = Self.MapType(value)
+        self = .mapType(value)
     }
     
     init(from value: Decimal_) {
-        self = Self.DecimalType(value)
+        self = .decimalType(value)
     }
     init(from value: PreciseDecimal) {
-        self = Self.PreciseDecimalType(value)
+        self = .preciseDecimalType(value)
     }
     
     init(from value: Component) {
-        self = Self.ComponentType(value)
+        self = .componentType(value)
     }
     init(from value: PackageAddress) {
-        self = Self.PackageAddressType(value)
+        self = .packageAddressType(value)
     }
     init(from value: ComponentAddress) {
-        self = Self.ComponentAddressType(value)
+        self = .componentAddressType(value)
     }
     init(from value: ResourceAddress) {
-        self = Self.ResourceAddressType(value)
+        self = .resourceAddressType(value)
     }
     
     init(from value: Hash) {
-        self = Self.HashType(value)
+        self = .hashType(value)
     }
     
     init(from value: Bucket) {
-        self = Self.BucketType(value)
+        self = .bucketType(value)
     }
     init(from value: Proof) {
-        self = Self.ProofType(value)
+        self = .proofType(value)
     }
     init(from value: Vault) {
-        self = Self.VaultType(value)
+        self = .vaultType(value)
     }
     
     init(from value: NonFungibleId) {
-        self = Self.NonFungibleIdType(value)
+        self = .nonFungibleIdType(value)
     }
     init(from value: NonFungibleAddress) {
-        self = Self.NonFungibleAddressType(value)
+        self = .nonFungibleAddressType(value)
     }
     
     init(from value: KeyValueStore) {
-        self = Self.KeyValueStoreType(value)
+        self = .keyValueStoreType(value)
     }
     
     init(from value: EcdsaSecp256k1PublicKey) {
-        self = Self.EcdsaSecp256k1PublicKeyType(value)
+        self = .ecdsaSecp256k1PublicKeyType(value)
     }
     init(from value: EcdsaSecp256k1Signature) {
-        self = Self.EcdsaSecp256k1SignatureType(value)
+        self = .ecdsaSecp256k1SignatureType(value)
     }
     init(from value: EddsaEd25519PublicKey) {
-        self = Self.EddsaEd25519PublicKeyType(value)
+        self = .eddsaEd25519PublicKeyType(value)
     }
     init(from value: EddsaEd25519Signature) {
-        self = Self.EddsaEd25519SignatureType(value)
+        self = .eddsaEd25519SignatureType(value)
     }
     
     init(from value: Blob) {
-        self = Self.BlobType(value)
+        self = .blobType(value)
     }
     init(from value: Expression) {
-        self = Self.ExpressionType(value)
+        self = .expressionType(value)
     }
 }
 
@@ -214,102 +214,102 @@ public extension Value {
     
     func kind() -> ValueKind {
         switch self {
-        case .UnitType(_):
-            return ValueKind.Unit
-        case .BooleanType(_):
-            return ValueKind.Bool
+        case .unitType(_):
+            return .unit
+        case .booleanType(_):
+            return .bool
             
-        case .I8Type(_):
-            return ValueKind.I8
-        case .I16Type(_):
-            return ValueKind.I16
-        case .I32Type(_):
-            return ValueKind.I32
-        case .I64Type(_):
-            return ValueKind.I64
-        case .I128Type(_):
-            return ValueKind.I128
+        case .i8Type(_):
+            return .i8
+        case .i16Type(_):
+            return .i16
+        case .i32Type(_):
+            return .i32
+        case .i64Type(_):
+            return .i64
+        case .i128Type(_):
+            return .i128
             
-        case .U8Type(_):
-            return ValueKind.U8
-        case .U16Type(_):
-            return ValueKind.U16
-        case .U32Type(_):
-            return ValueKind.U32
-        case .U64Type(_):
-            return ValueKind.U64
-        case .U128Type(_):
-            return ValueKind.U128
+        case .u8Type(_):
+            return .u8
+        case .u16Type(_):
+            return .u16
+        case .u32Type(_):
+            return .u32
+        case .u64Type(_):
+            return .u64
+        case .u128Type(_):
+            return .u128
             
-        case .StringType(_):
-            return ValueKind.String
+        case .stringType(_):
+            return .string
             
-        case .StructType(_):
-            return ValueKind.Struct
-        case .EnumType(_):
-            return ValueKind.Enum
+        case .structType(_):
+            return .struct
+        case .enumType(_):
+            return .enum
             
-        case .OptionType(_):
-            return ValueKind.Option
-        case .ArrayType(_):
-            return ValueKind.Array
-        case .TupleType(_):
-            return ValueKind.Tuple
-        case .ResultType(_):
-            return ValueKind.Result
+        case .optionType(_):
+            return .option
+        case .arrayType(_):
+            return .array
+        case .tupleType(_):
+            return .tuple
+        case .resultType(_):
+            return .result
             
-        case .ListType(_):
-            return ValueKind.List
-        case .SetType(_):
-            return ValueKind.Set
-        case .MapType(_):
-            return ValueKind.Map
+        case .listType(_):
+            return .list
+        case .setType(_):
+            return .set
+        case .mapType(_):
+            return .map
             
-        case .DecimalType(_):
-            return ValueKind.Decimal
-        case .PreciseDecimalType(_):
-            return ValueKind.PreciseDecimal
+        case .decimalType(_):
+            return .decimal
+        case .preciseDecimalType(_):
+            return .preciseDecimal
             
-        case .ComponentType(_):
-            return ValueKind.Component
-        case .PackageAddressType(_):
-            return ValueKind.PackageAddress
-        case .ComponentAddressType(_):
-            return ValueKind.ComponentAddress
-        case .ResourceAddressType(_):
-            return ValueKind.ResourceAddress
+        case .componentType(_):
+            return .component
+        case .packageAddressType(_):
+            return .packageAddress
+        case .componentAddressType(_):
+            return .componentAddress
+        case .resourceAddressType(_):
+            return .resourceAddress
             
-        case .HashType(_):
-            return ValueKind.Hash
+        case .hashType(_):
+            return .hash
             
-        case .BucketType(_):
-            return ValueKind.Bucket
-        case .ProofType(_):
-            return ValueKind.Proof
-        case .VaultType(_):
-            return ValueKind.Vault
+        case .bucketType(_):
+            return .bucket
+        case .proofType(_):
+            return .proof
+        case .vaultType(_):
+            return .vault
             
-        case .NonFungibleIdType(_):
-            return ValueKind.NonFungibleId
-        case .NonFungibleAddressType(_):
-            return ValueKind.NonFungibleAddress
+        case .nonFungibleIdType(_):
+            return .nonFungibleId
+        case .nonFungibleAddressType(_):
+            return .nonFungibleAddress
             
-        case .KeyValueStoreType(_):
-            return ValueKind.KeyValueStore
+        case .keyValueStoreType(_):
+            return .keyValueStore
             
-        case .EcdsaSecp256k1PublicKeyType(_):
-            return ValueKind.EcdsaSecp256k1PublicKey
-        case .EcdsaSecp256k1SignatureType(_):
-            return ValueKind.EcdsaSecp256k1Signature
-        case .EddsaEd25519PublicKeyType(_):
-            return ValueKind.EddsaEd25519PublicKey
-        case .EddsaEd25519SignatureType(_):
-            return ValueKind.EddsaEd25519Signature
+        case .ecdsaSecp256k1PublicKeyType(_):
+            return .ecdsaSecp256k1PublicKey
+        case .ecdsaSecp256k1SignatureType(_):
+            return .ecdsaSecp256k1Signature
+        case .eddsaEd25519PublicKeyType(_):
+            return .eddsaEd25519PublicKey
+        case .eddsaEd25519SignatureType(_):
+            return .eddsaEd25519Signature
             
-        case .BlobType(_):
-            return ValueKind.Blob
-        case .ExpressionType(_):
-            return ValueKind.Expression
+        case .blobType(_):
+            return .blob
+        case .expressionType(_):
+            return .expression
         }
     }
 }
@@ -328,101 +328,101 @@ public extension Value {
     // ======================
     func encode(to encoder: Encoder) throws {
         switch self {
-            case .UnitType(let value):
+            case .unitType(let value):
                 try value.encode(to: encoder)
-            case .BooleanType(let value):
-                try value.encode(to: encoder)
-
-            case .I8Type(let value):
-                try value.encode(to: encoder)
-            case .I16Type(let value):
-                try value.encode(to: encoder)
-            case .I32Type(let value):
-                try value.encode(to: encoder)
-            case .I64Type(let value):
-                try value.encode(to: encoder)
-            case .I128Type(let value):
+            case .booleanType(let value):
                 try value.encode(to: encoder)
 
-            case .U8Type(let value):
+            case .i8Type(let value):
                 try value.encode(to: encoder)
-            case .U16Type(let value):
+            case .i16Type(let value):
                 try value.encode(to: encoder)
-            case .U32Type(let value):
+            case .i32Type(let value):
                 try value.encode(to: encoder)
-            case .U64Type(let value):
+            case .i64Type(let value):
                 try value.encode(to: encoder)
-            case .U128Type(let value):
-                try value.encode(to: encoder)
-
-            case .StringType(let value):
+            case .i128Type(let value):
                 try value.encode(to: encoder)
 
-            case .StructType(let value):
+            case .u8Type(let value):
                 try value.encode(to: encoder)
-            case .EnumType(let value):
+            case .u16Type(let value):
                 try value.encode(to: encoder)
-
-            case .OptionType(let value):
+            case .u32Type(let value):
                 try value.encode(to: encoder)
-            case .ArrayType(let value):
+            case .u64Type(let value):
                 try value.encode(to: encoder)
-            case .TupleType(let value):
-                try value.encode(to: encoder)
-            case .ResultType(let value):
+            case .u128Type(let value):
                 try value.encode(to: encoder)
 
-            case .ListType(let value):
-                try value.encode(to: encoder)
-            case .SetType(let value):
-                try value.encode(to: encoder)
-            case .MapType(let value):
+            case .stringType(let value):
                 try value.encode(to: encoder)
 
-            case .DecimalType(let value):
+            case .structType(let value):
                 try value.encode(to: encoder)
-            case .PreciseDecimalType(let value):
-                try value.encode(to: encoder)
-
-            case .ComponentType(let value):
-                try value.encode(to: encoder)
-            case .PackageAddressType(let value):
-                try value.encode(to: encoder)
-            case .ComponentAddressType(let value):
-                try value.encode(to: encoder)
-            case .ResourceAddressType(let value):
+            case .enumType(let value):
                 try value.encode(to: encoder)
 
-            case .HashType(let value):
+            case .optionType(let value):
+                try value.encode(to: encoder)
+            case .arrayType(let value):
+                try value.encode(to: encoder)
+            case .tupleType(let value):
+                try value.encode(to: encoder)
+            case .resultType(let value):
                 try value.encode(to: encoder)
 
-            case .BucketType(let value):
+            case .listType(let value):
                 try value.encode(to: encoder)
-            case .ProofType(let value):
+            case .setType(let value):
                 try value.encode(to: encoder)
-            case .VaultType(let value):
-                try value.encode(to: encoder)
-
-            case .NonFungibleIdType(let value):
-                try value.encode(to: encoder)
-            case .NonFungibleAddressType(let value):
+            case .mapType(let value):
                 try value.encode(to: encoder)
 
-            case .KeyValueStoreType(let value):
+            case .decimalType(let value):
+                try value.encode(to: encoder)
+            case .preciseDecimalType(let value):
                 try value.encode(to: encoder)
 
-            case .EcdsaSecp256k1PublicKeyType(let value):
+            case .componentType(let value):
                 try value.encode(to: encoder)
-            case .EcdsaSecp256k1SignatureType(let value):
+            case .packageAddressType(let value):
                 try value.encode(to: encoder)
-            case .EddsaEd25519PublicKeyType(let value):
+            case .componentAddressType(let value):
                 try value.encode(to: encoder)
-            case .EddsaEd25519SignatureType(let value):
+            case .resourceAddressType(let value):
                 try value.encode(to: encoder)
 
-            case .BlobType(let value):
+            case .hashType(let value):
                 try value.encode(to: encoder)
-            case .ExpressionType(let value):
+
+            case .bucketType(let value):
+                try value.encode(to: encoder)
+            case .proofType(let value):
+                try value.encode(to: encoder)
+            case .vaultType(let value):
+                try value.encode(to: encoder)
+
+            case .nonFungibleIdType(let value):
+                try value.encode(to: encoder)
+            case .nonFungibleAddressType(let value):
+                try value.encode(to: encoder)
+
+            case .keyValueStoreType(let value):
+                try value.encode(to: encoder)
+
+            case .ecdsaSecp256k1PublicKeyType(let value):
+                try value.encode(to: encoder)
+            case .ecdsaSecp256k1SignatureType(let value):
+                try value.encode(to: encoder)
+            case .eddsaEd25519PublicKeyType(let value):
+                try value.encode(to: encoder)
+            case .eddsaEd25519SignatureType(let value):
+                try value.encode(to: encoder)
+
+            case .blobType(let value):
+                try value.encode(to: encoder)
+            case .expressionType(let value):
                 try value.encode(to: encoder)
         }
     }
@@ -434,101 +434,101 @@ public extension Value {
         
         switch kind {
             
-        case .Unit:
+        case .unit:
             self = Self(from: try Unit(from: decoder))
-        case .Bool:
+        case .bool:
             self = Self(from: try Boolean(from: decoder))
 
-        case .I8:
+        case .i8:
             self = Self(from: try I8(from: decoder))
-        case .I16:
+        case .i16:
             self = Self(from: try I16(from: decoder))
-        case .I32:
+        case .i32:
             self = Self(from: try I32(from: decoder))
-        case .I64:
+        case .i64:
             self = Self(from: try I64(from: decoder))
-        case .I128:
+        case .i128:
             self = Self(from: try I128(from: decoder))
 
-        case .U8:
+        case .u8:
             self = Self(from: try U8(from: decoder))
-        case .U16:
+        case .u16:
             self = Self(from: try U16(from: decoder))
-        case .U32:
+        case .u32:
             self = Self(from: try U32(from: decoder))
-        case .U64:
+        case .u64:
             self = Self(from: try U64(from: decoder))
-        case .U128:
+        case .u128:
             self = Self(from: try U128(from: decoder))
 
-        case .String:
+        case .string:
             self = Self(from: try String_(from: decoder))
 
-        case .Struct:
+        case .struct:
             self = Self(from: try Struct(from: decoder))
-        case .Enum:
+        case .enum:
             self = Self(from: try Enum(from: decoder))
 
-        case .Option:
+        case .option:
             self = Self(from: try Option(from: decoder))
-        case .Array:
+        case .array:
             self = Self(from: try Array_(from: decoder))
-        case .Tuple:
+        case .tuple:
             self = Self(from: try Tuple(from: decoder))
-        case .Result:
+        case .result:
             self = Self(from: try Result(from: decoder))
 
-        case .List:
+        case .list:
             self = Self(from: try List(from: decoder))
-        case .Set:
+        case .set:
             self = Self(from: try Set_(from: decoder))
-        case .Map:
+        case .map:
             self = Self(from: try Map(from: decoder))
 
-        case .Decimal:
+        case .decimal:
             self = Self(from: try Decimal_(from: decoder))
-        case .PreciseDecimal:
+        case .preciseDecimal:
             self = Self(from: try PreciseDecimal(from: decoder))
 
-        case .Component:
+        case .component:
             self = Self(from: try Component(from: decoder))
-        case .PackageAddress:
+        case .packageAddress:
             self = Self(from: try PackageAddress(from: decoder))
-        case .ComponentAddress:
+        case .componentAddress:
             self = Self(from: try ComponentAddress(from: decoder))
-        case .ResourceAddress:
+        case .resourceAddress:
             self = Self(from: try ResourceAddress(from: decoder))
 
-        case .Hash:
+        case .hash:
             self = Self(from: try Hash(from: decoder))
 
-        case .Bucket:
+        case .bucket:
             self = Self(from: try Bucket(from: decoder))
-        case .Proof:
+        case .proof:
             self = Self(from: try Proof(from: decoder))
-        case .Vault:
+        case .vault:
             self = Self(from: try Vault(from: decoder))
 
-        case .NonFungibleId:
+        case .nonFungibleId:
             self = Self(from: try NonFungibleId(from: decoder))
-        case .NonFungibleAddress:
+        case .nonFungibleAddress:
             self = Self(from: try NonFungibleAddress(from: decoder))
 
-        case .KeyValueStore:
+        case .keyValueStore:
             self = Self(from: try KeyValueStore(from: decoder))
 
-        case .EcdsaSecp256k1PublicKey:
+        case .ecdsaSecp256k1PublicKey:
             self = Self(from: try EcdsaSecp256k1PublicKey(from: decoder))
-        case .EcdsaSecp256k1Signature:
+        case .ecdsaSecp256k1Signature:
             self = Self(from: try EcdsaSecp256k1Signature(from: decoder))
-        case .EddsaEd25519PublicKey:
+        case .eddsaEd25519PublicKey:
             self = Self(from: try EddsaEd25519PublicKey(from: decoder))
-        case .EddsaEd25519Signature:
+        case .eddsaEd25519Signature:
             self = Self(from: try EddsaEd25519Signature(from: decoder))
 
-        case .Blob:
+        case .blob:
             self = Self(from: try Blob(from: decoder))
-        case .Expression:
+        case .expression:
             self = Self(from: try Expression(from: decoder))
 
         }
@@ -536,9 +536,9 @@ public extension Value {
 }
 
 enum DecodeError: Error {
-    case ValueTypeDiscriminatorMismatch(ValueKind, ValueKind)
-    case InstructionTypeDiscriminatorMismatch(InstructionKind, InstructionKind)
-    case ParsingError
-    case TypeMismatch
-    case InvalidManifestInstructionsType(String)
+    case valueTypeDiscriminatorMismatch(ValueKind, ValueKind)
+    case instructionTypeDiscriminatorMismatch(InstructionKind, InstructionKind)
+    case parsingError
+    case typeMismatch
+    case invalidManifestInstructionsType(String)
 }

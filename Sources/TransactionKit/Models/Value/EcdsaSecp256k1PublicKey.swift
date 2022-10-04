@@ -2,7 +2,7 @@ import Foundation
 
 public struct EcdsaSecp256k1PublicKey: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.EcdsaSecp256k1PublicKey
+    public static let kind: ValueKind = .ecdsaSecp256k1PublicKey
     
     // ===============
     // Struct members
@@ -49,7 +49,7 @@ public extension EcdsaSecp256k1PublicKey {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `publicKey`

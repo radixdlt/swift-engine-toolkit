@@ -2,7 +2,7 @@ import Foundation
 
 public struct ComponentAddress: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.ComponentAddress
+    public static let kind: ValueKind = .componentAddress
     
     // ===============
     // Struct members
@@ -45,7 +45,7 @@ public extension ComponentAddress {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `address`

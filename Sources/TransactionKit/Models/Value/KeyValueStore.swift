@@ -2,7 +2,7 @@ import Foundation
 
 public struct KeyValueStore: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.KeyValueStore
+    public static let kind: ValueKind = .keyValueStore
     
     // ===============
     // Struct members
@@ -42,7 +42,7 @@ public extension KeyValueStore {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `identifier`

@@ -2,7 +2,7 @@ import Foundation
 
 public struct PopFromAuthZone: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.PopFromAuthZone
+    public static let kind: InstructionKind = .popFromAuthZone
     
     // ===============
     // Struct members
@@ -45,7 +45,7 @@ public extension PopFromAuthZone {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let intoProof: Proof = try values.decode(Proof.self, forKey: .intoProof)

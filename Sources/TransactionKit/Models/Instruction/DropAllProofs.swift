@@ -2,7 +2,7 @@ import Foundation
 
 public struct DropAllProofs: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.DropAllProofs
+    public static let kind: InstructionKind = .dropAllProofs
 
 }
 
@@ -28,7 +28,7 @@ public extension DropAllProofs {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
     }
 }

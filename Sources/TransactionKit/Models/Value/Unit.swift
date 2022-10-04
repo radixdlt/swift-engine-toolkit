@@ -2,7 +2,7 @@ import Foundation
 
 public struct Unit: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.Unit
+    public static let kind: ValueKind = .unit
 }
 
 public extension Unit {
@@ -26,7 +26,8 @@ public extension Unit {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
     }
 }
+

@@ -2,7 +2,7 @@ import Foundation;
 
 public struct U64: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.U64
+    public static let kind: ValueKind = .u64
     
     // ===============
     // Struct members
@@ -43,7 +43,7 @@ public extension U64 {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `value`
@@ -51,7 +51,7 @@ public extension U64 {
         if let value = UInt64(valueString) {
             self.value = value
         } else {
-            throw DecodeError.ParsingError
+            throw DecodeError.parsingError
         }
     }
 }

@@ -2,7 +2,7 @@ import Foundation
 
 public struct CreateResource: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.CreateResource
+    public static let kind: InstructionKind = .createResource
     
     // ===============
     // Struct members
@@ -45,7 +45,7 @@ public extension CreateResource {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let args: Array<Value> = try values.decode(Array<Value>.self, forKey: .args)

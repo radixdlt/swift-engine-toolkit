@@ -1,8 +1,8 @@
 import Foundation
 
 public enum ManifestInstructionsKind: String, Codable, Hashable, Sendable {
-    case String
-    case JSON
+    case string
+    case json
 }
 
 public enum ManifestInstructions: Sendable, Codable, Hashable {
@@ -10,8 +10,8 @@ public enum ManifestInstructions: Sendable, Codable, Hashable {
     // Enum Variants
     // ==============
     
-    case StringInstructions(String)
-    case JsonInstructions(Array<Instruction>)
+    case stringInstructions(String)
+    case jsonInstructions(Array<Instruction>)
 }
 
 public extension ManifestInstructions {
@@ -31,11 +31,11 @@ public extension ManifestInstructions {
         var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {
-            case .StringInstructions(let value):
-                try container.encode(ManifestInstructionsKind.String, forKey: .type)
+            case .stringInstructions(let value):
+                try container.encode(ManifestInstructionsKind.string, forKey: .type)
                 try container.encode(value, forKey: .value)
-            case .JsonInstructions(let value):
-                try container.encode(ManifestInstructionsKind.JSON, forKey: .type)
+            case .jsonInstructions(let value):
+                try container.encode(ManifestInstructionsKind.json, forKey: .type)
                 try container.encode(value, forKey: .value)
         }
     }
@@ -46,12 +46,12 @@ public extension ManifestInstructions {
         let manifestInstructionsKind: ManifestInstructionsKind = try values.decode(ManifestInstructionsKind.self, forKey: .type)
         
         switch manifestInstructionsKind {
-            case ManifestInstructionsKind.String:
+            case .string:
                 let manifestInstructions: String = try values.decode(String.self, forKey: .value)
-                self = Self.StringInstructions(manifestInstructions)
-            case ManifestInstructionsKind.JSON:
+                self = Self.stringInstructions(manifestInstructions)
+            case .json:
                 let manifestInstructions: Array<Instruction> = try values.decode(Array<Instruction>.self, forKey: .value)
-                self = Self.JsonInstructions(manifestInstructions)
+                self = Self.jsonInstructions(manifestInstructions)
         }
     }
 }

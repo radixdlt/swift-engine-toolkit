@@ -2,7 +2,7 @@ import Foundation
 
 public struct PushToAuthZone: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.PushToAuthZone
+    public static let kind: InstructionKind = .pushToAuthZone
     
     // ===============
     // Struct members
@@ -44,7 +44,7 @@ public extension PushToAuthZone {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let proof: Proof = try values.decode(Proof.self, forKey: .proof)

@@ -2,7 +2,7 @@ import Foundation
 
 public struct CallFunction: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = InstructionKind.CallFunction
+    public static let kind: InstructionKind = .callFunction
     
     // ===============
     // Struct members
@@ -56,7 +56,7 @@ public extension CallFunction {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.InstructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         let packageAddress: PackageAddress = try values.decode(PackageAddress.self, forKey: .packageAddress)

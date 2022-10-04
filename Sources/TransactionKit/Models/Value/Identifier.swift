@@ -5,8 +5,8 @@ public enum Identifier: Sendable, Codable, Hashable {
     // Enum Variants
     // ==============
     
-    case String_(String)
-    case U32(UInt32)
+    case string(String)
+    case u32(UInt32)
 
 }
 
@@ -19,9 +19,9 @@ public extension Identifier {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
         
         switch self {
-        case .String_(let string):
+        case .string(let string):
             try container.encode(string)
-        case .U32(let id):
+        case .u32(let id):
             try container.encode(id)
         }
     }
@@ -30,10 +30,10 @@ public extension Identifier {
         let value: SingleValueDecodingContainer = try decoder.singleValueContainer()
         do {
             let id: UInt32 = try value.decode(UInt32.self)
-            self = Self.U32(id)
+            self = .u32(id)
         } catch {
             let string: String = try value.decode(String.self)
-            self = Self.String_(string)
+            self = .string(string)
         }
     }
 }

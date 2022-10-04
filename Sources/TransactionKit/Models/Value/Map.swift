@@ -2,7 +2,7 @@ import Foundation
 
 public struct Map: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.Map
+    public static let kind: ValueKind = .map
     
     // ===============
     // Struct members
@@ -50,7 +50,7 @@ public extension Map {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `keyType` & `valueType`

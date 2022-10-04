@@ -67,16 +67,16 @@ public extension DecodeAddressResponse {
 }
 
 public enum AddressKind: String, Codable, Sendable, Hashable {
-    case Resource
-    case Package
+    case resource
+    case package
 
-    case AccountComponent
-    case SystemComponent
-    case NormalComponent
+    case accountComponent
+    case systemComponent
+    case normalComponent
 }
 
 public enum Address: Sendable, Codable, Hashable {
-    case PackageAddress(PackageAddress)
-    case ComponentAddress(ComponentAddress)
-    case ResourceAddress(ResourceAddress)
+    case packageAddress(PackageAddress)
+    case componentAddress(ComponentAddress)
+    case resourceAddress(ResourceAddress)
 }

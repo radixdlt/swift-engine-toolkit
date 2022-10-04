@@ -50,9 +50,9 @@ public enum DecompileUnknownTransactionIntentResponse: Sendable, Codable, Hashab
     // Enum Variants
     // ==============
     
-    case TransactionIntent(DecompileTransactionIntentResponse)
-    case SignedTransactionIntent(DecompileSignedTransactionIntentResponse)
-    case NotarizedTransactionIntent(DecompileNotarizedTransactionIntentResponse)
+    case transactionIntent(DecompileTransactionIntentResponse)
+    case signedTransactionIntent(DecompileSignedTransactionIntentResponse)
+    case notarizedTransactionIntent(DecompileNotarizedTransactionIntentResponse)
 }
 
 public extension DecompileUnknownTransactionIntentResponse {
@@ -72,11 +72,11 @@ public extension DecompileUnknownTransactionIntentResponse {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
         
         switch self {
-            case .TransactionIntent(let intent):
+            case .transactionIntent(let intent):
                 try container.encode(intent)
-            case .SignedTransactionIntent(let intent):
+            case .signedTransactionIntent(let intent):
                 try container.encode(intent)
-            case .NotarizedTransactionIntent(let intent):
+            case .notarizedTransactionIntent(let intent):
                 try container.encode(intent)
         }
     }
@@ -86,12 +86,12 @@ public extension DecompileUnknownTransactionIntentResponse {
         let values: SingleValueDecodingContainer = try decoder.singleValueContainer()
         
         do {
-            self = Self.TransactionIntent(try values.decode(DecompileTransactionIntentResponse.self))
+            self = .transactionIntent(try values.decode(DecompileTransactionIntentResponse.self))
         } catch {
             do {
-                self = Self.SignedTransactionIntent(try values.decode(DecompileSignedTransactionIntentResponse.self))
+                self = .signedTransactionIntent(try values.decode(DecompileSignedTransactionIntentResponse.self))
             } catch {
-                self = Self.NotarizedTransactionIntent(try values.decode(DecompileNotarizedTransactionIntentResponse.self))
+                self = .notarizedTransactionIntent(try values.decode(DecompileNotarizedTransactionIntentResponse.self))
             }
         }
     }

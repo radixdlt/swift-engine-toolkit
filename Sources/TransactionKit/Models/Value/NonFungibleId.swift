@@ -2,7 +2,7 @@ import Foundation
 
 public struct NonFungibleId: Codable, Hashable, Sendable {
     // Type name, used as a discriminator
-    public static let kind: ValueKind = ValueKind.NonFungibleId
+    public static let kind: ValueKind = .nonFungibleId
     
     // ===============
     // Struct members
@@ -48,7 +48,7 @@ public extension NonFungibleId {
         let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.ValueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `value`
