@@ -14,11 +14,11 @@ public struct Hash: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from value: Array<UInt8>) {
+    public init(from value: Array<UInt8>) {
         self.value = value
     }
     
-    init(from value: String) throws {
+    public init(from value: String) throws {
         // TODO: Validation of length of Hash
         self.value = Array<UInt8>(hex: value)
     }

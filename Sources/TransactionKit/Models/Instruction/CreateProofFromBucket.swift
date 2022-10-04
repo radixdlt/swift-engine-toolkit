@@ -15,7 +15,7 @@ public struct CreateProofFromBucket: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from bucket: Bucket, intoProof: Proof) {
+    public init(from bucket: Bucket, intoProof: Proof) {
         self.bucket = bucket
         self.intoProof = intoProof
     }

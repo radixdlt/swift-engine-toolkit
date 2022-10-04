@@ -14,7 +14,7 @@ public struct Tuple: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from elements: Array<Value>) {
+    public init(from elements: Array<Value>) {
         self.elements = elements
     }
 }

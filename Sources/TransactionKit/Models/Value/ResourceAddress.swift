@@ -14,7 +14,7 @@ public struct ResourceAddress: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from address: String) {
+    public init(from address: String) {
         // TODO: Perform some simple Bech32m validation.
         self.address = address
     }

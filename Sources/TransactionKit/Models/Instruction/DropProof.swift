@@ -14,7 +14,7 @@ public struct DropProof: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from proof: Proof) {
+    public init(from proof: Proof) {
         self.proof = proof
     }
 

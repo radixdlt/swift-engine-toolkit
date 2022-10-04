@@ -9,12 +9,12 @@ public struct DecompileNotarizedTransactionIntentRequest: Sendable, Codable, Has
     // Constructors
     // =============
     
-    init(from compiledNotarizedIntent: Array<UInt8>, manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(from compiledNotarizedIntent: Array<UInt8>, manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledNotarizedIntent = compiledNotarizedIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
-    init(from compiledNotarizedIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
+    public init(from compiledNotarizedIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
         self.compiledNotarizedIntent = Array<UInt8>(hex: compiledNotarizedIntent)
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }

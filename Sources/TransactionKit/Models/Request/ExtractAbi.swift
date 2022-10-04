@@ -8,11 +8,11 @@ public struct ExtractAbiRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from packageWasm: Array<UInt8>) {
+    public init(from packageWasm: Array<UInt8>) {
         self.packageWasm = packageWasm
     }
     
-    init(from packageWasm: String) {
+    public init(from packageWasm: String) {
         self.packageWasm = Array<UInt8>(hex: packageWasm)
     }
 
@@ -54,12 +54,12 @@ public struct ExtractAbiResponse: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from code: Array<UInt8>, abi: Array<UInt8>) {
+    public init(from code: Array<UInt8>, abi: Array<UInt8>) {
         self.code = code
         self.abi = abi
     }
     
-    init(from code: String, abi: String) {
+    public init(from code: String, abi: String) {
         self.code = Array<UInt8>(hex: code)
         self.abi = Array<UInt8>(hex: abi)
     }

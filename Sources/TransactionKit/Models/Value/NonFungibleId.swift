@@ -14,11 +14,11 @@ public struct NonFungibleId: Codable, Hashable, Sendable {
     // Constructors
     // =============
     
-    init(from value: Array<UInt8>) {
+    public init(from value: Array<UInt8>) {
         self.value = value
     }
     
-    init(from value: String) throws {
+    public init(from value: String) throws {
         self.value = Array<UInt8>(hex: value)
     }
 

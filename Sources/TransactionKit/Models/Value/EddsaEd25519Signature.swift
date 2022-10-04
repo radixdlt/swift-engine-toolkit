@@ -14,11 +14,11 @@ public struct EddsaEd25519Signature: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from signature: Array<UInt8>) {
+    public init(from signature: Array<UInt8>) {
         self.signature = signature
     }
     
-    init(from signature: String) throws {
+    public init(from signature: String) throws {
         // TODO: Validation of length of array
         self.signature = Array<UInt8>(hex: signature)
     }

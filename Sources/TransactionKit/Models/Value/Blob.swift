@@ -14,11 +14,11 @@ public struct Blob: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from hash: Array<UInt8>) {
+    public init(from hash: Array<UInt8>) {
         self.hash = hash
     }
     
-    init(from hash: String) throws {
+    public init(from hash: String) throws {
         // TODO: Validation of length of Hash
         self.hash = Array<UInt8>(hex: hash)
     }

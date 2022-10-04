@@ -10,11 +10,11 @@ public struct CompileTransactionIntentResponse: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from compiledIntent: Array<UInt8>) {
+    public init(from compiledIntent: Array<UInt8>) {
         self.compiledIntent = compiledIntent
     }
     
-    init(from compiledIntent: String) throws {
+    public init(from compiledIntent: String) throws {
         self.compiledIntent = Array<UInt8>(hex: compiledIntent)
     }
 }

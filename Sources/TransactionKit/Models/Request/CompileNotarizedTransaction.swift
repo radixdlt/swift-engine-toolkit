@@ -10,11 +10,11 @@ public struct CompileNotarizedTransactionIntentResponse: Sendable, Codable, Hash
     // Constructors
     // =============
     
-    init(from compiledNotarizedIntent: Array<UInt8>) {
+    public init(from compiledNotarizedIntent: Array<UInt8>) {
         self.compiledNotarizedIntent = compiledNotarizedIntent
     }
     
-    init(from compiledNotarizedIntent: String) throws {
+    public init(from compiledNotarizedIntent: String) throws {
         self.compiledNotarizedIntent = Array<UInt8>(hex: compiledNotarizedIntent)
     }
 }

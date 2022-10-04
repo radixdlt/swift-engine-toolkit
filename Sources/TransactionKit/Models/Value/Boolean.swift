@@ -13,7 +13,7 @@ public struct Boolean: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from value: Bool) {
+    public init(from value: Bool) {
         self.value = value
     }
 }

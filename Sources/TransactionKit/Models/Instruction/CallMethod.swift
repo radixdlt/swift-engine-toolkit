@@ -16,7 +16,7 @@ public struct CallMethod: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from componentAddress: ComponentAddress, methodName: String_, arguments: Array<Value>?) {
+    public init(from componentAddress: ComponentAddress, methodName: String_, arguments: Array<Value>?) {
         self.componentAddress = componentAddress
         self.methodName = methodName
         self.arguments = arguments ?? Array<Value>([])

@@ -8,7 +8,7 @@ public struct DecodeAddressRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from address: String) {
+    public init(from address: String) {
         self.address = address
     }
 }

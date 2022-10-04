@@ -14,7 +14,7 @@ public struct CreateResource: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from args: Array<Value>) {
+    public init(from args: Array<Value>) {
         self.args = args
     }
 

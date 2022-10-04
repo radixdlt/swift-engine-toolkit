@@ -15,7 +15,7 @@ public struct AssertWorktopContainsByIds: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>) {
+    public init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>) {
         self.resourceAddress = resourceAddress
         self.ids = ids
     }

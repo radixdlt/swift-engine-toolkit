@@ -13,7 +13,7 @@ public struct U8: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from value: UInt8) {
+    public init(from value: UInt8) {
         self.value = value
     }
 }

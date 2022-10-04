@@ -44,82 +44,82 @@ public extension Instruction {
     // Constructors
     // =============
     
-    init (from instruction: CallFunction) {
+    init(from instruction: CallFunction) {
         self = .callFunctionType(instruction)
     }
-    init (from instruction: CallMethod) {
+    init(from instruction: CallMethod) {
         self = .callMethodType(instruction)
     }
     
-    init (from instruction: TakeFromWorktop) {
+    init(from instruction: TakeFromWorktop) {
         self = .takeFromWorktopType(instruction)
     }
-    init (from instruction: TakeFromWorktopByAmount) {
+    init(from instruction: TakeFromWorktopByAmount) {
         self = .takeFromWorktopByAmountType(instruction)
     }
-    init (from instruction: TakeFromWorktopByIds) {
+    init(from instruction: TakeFromWorktopByIds) {
         self = .takeFromWorktopByIdsType(instruction)
     }
     
-    init (from instruction: ReturnToWorktop) {
+    init(from instruction: ReturnToWorktop) {
         self = .returnToWorktopType(instruction)
     }
     
-    init (from instruction: AssertWorktopContains) {
+    init(from instruction: AssertWorktopContains) {
         self = .assertWorktopContainsType(instruction)
     }
-    init (from instruction: AssertWorktopContainsByAmount) {
+    init(from instruction: AssertWorktopContainsByAmount) {
         self = .assertWorktopContainsByAmountType(instruction)
     }
-    init (from instruction: AssertWorktopContainsByIds) {
+    init(from instruction: AssertWorktopContainsByIds) {
         self = .assertWorktopContainsByIdsType(instruction)
     }
     
-    init (from instruction: PopFromAuthZone) {
+    init(from instruction: PopFromAuthZone) {
         self = .popFromAuthZoneType(instruction)
     }
-    init (from instruction: PushToAuthZone) {
+    init(from instruction: PushToAuthZone) {
         self = .pushToAuthZoneType(instruction)
     }
     
-    init (from instruction: ClearAuthZone) {
+    init(from instruction: ClearAuthZone) {
         self = .clearAuthZoneType(instruction)
     }
     
-    init (from instruction: CreateProofFromAuthZone) {
+    init(from instruction: CreateProofFromAuthZone) {
         self = .createProofFromAuthZoneType(instruction)
     }
-    init (from instruction: CreateProofFromAuthZoneByAmount) {
+    init(from instruction: CreateProofFromAuthZoneByAmount) {
         self = .createProofFromAuthZoneByAmountType(instruction)
     }
-    init (from instruction: CreateProofFromAuthZoneByIds) {
+    init(from instruction: CreateProofFromAuthZoneByIds) {
         self = .createProofFromAuthZoneByIdsType(instruction)
     }
-    init (from instruction: CreateProofFromBucket) {
+    init(from instruction: CreateProofFromBucket) {
         self = .createProofFromBucketType(instruction)
     }
     
-    init (from instruction: CloneProof) {
+    init(from instruction: CloneProof) {
         self = .cloneProofType(instruction)
     }
-    init (from instruction: DropProof) {
+    init(from instruction: DropProof) {
         self = .dropProofType(instruction)
     }
-    init (from instruction: DropAllProofs) {
+    init(from instruction: DropAllProofs) {
         self = .dropAllProofsType(instruction)
     }
     
-    init (from instruction: PublishPackage) {
+    init(from instruction: PublishPackage) {
         self = .publishPackageType(instruction)
     }
     
-    init (from instruction: CreateResource) {
+    init(from instruction: CreateResource) {
         self = .createResourceType(instruction)
     }
-    init (from instruction: BurnBucket) {
+    init(from instruction: BurnBucket) {
         self = .burnBucketType(instruction)
     }
-    init (from instruction: MintFungible) {
+    init(from instruction: MintFungible) {
         self = .mintFungibleType(instruction)
     }
 }

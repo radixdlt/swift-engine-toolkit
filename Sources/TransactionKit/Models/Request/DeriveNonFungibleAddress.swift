@@ -9,12 +9,12 @@ public struct DeriveNonFungibleAddressRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: String, nonFungibleId: Array<UInt8>) {
+    public init(from resourceAddress: String, nonFungibleId: Array<UInt8>) {
         self.resourceAddress = resourceAddress
         self.nonFungibleId = nonFungibleId
     }
     
-    init(from resourceAddress: String, nonFungibleId: String) {
+    public init(from resourceAddress: String, nonFungibleId: String) {
         self.resourceAddress = resourceAddress
         self.nonFungibleId = Array<UInt8>(hex: nonFungibleId)
     }
@@ -57,7 +57,7 @@ public struct DeriveNonFungibleAddressResponse: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from nonFungibleAddress: String) {
+    public init(from nonFungibleAddress: String) {
         self.nonFungibleAddress = nonFungibleAddress
     }
     

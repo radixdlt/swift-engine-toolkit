@@ -16,7 +16,7 @@ public struct CreateProofFromAuthZoneByAmount: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: ResourceAddress, amount: Decimal_, intoProof: Proof) {
+    public init(from resourceAddress: ResourceAddress, amount: Decimal_, intoProof: Proof) {
         self.resourceAddress = resourceAddress
         self.amount = amount
         self.intoProof = intoProof

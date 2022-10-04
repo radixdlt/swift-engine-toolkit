@@ -16,7 +16,7 @@ extension Array where Element == UInt8 {
 }
 
 extension Array where Element == UInt8 {
-    public init(hex: String) {
+    init(hex: String) {
         self.init()
         
         let utf8 = Array<Element.IntegerLiteralType>(hex.utf8)

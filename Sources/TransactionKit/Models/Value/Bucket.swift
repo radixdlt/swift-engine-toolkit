@@ -14,15 +14,15 @@ public struct Bucket: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from identifier: Identifier) {
+    public init(from identifier: Identifier) {
         self.identifier = identifier
     }
     
-    init(from identifier: String) {
+    public init(from identifier: String) {
         self.identifier = .string(identifier)
     }
     
-    init(from identifier: UInt32) {
+    public init(from identifier: UInt32) {
         self.identifier = .u32(identifier)
     }
 

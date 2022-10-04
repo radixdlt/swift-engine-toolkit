@@ -16,7 +16,7 @@ public struct Map: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from keyType: ValueKind, valueType: ValueKind, elements: Array<Value>) {
+    public init(from keyType: ValueKind, valueType: ValueKind, elements: Array<Value>) {
         // TODO: Validate keys and values types
         self.keyType = keyType
         self.valueType = valueType

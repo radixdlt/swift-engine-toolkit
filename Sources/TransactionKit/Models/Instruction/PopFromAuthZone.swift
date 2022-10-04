@@ -14,7 +14,7 @@ public struct PopFromAuthZone: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from intoProof: Proof) {
+    public init(from intoProof: Proof) {
         self.intoProof = intoProof
     }
 

@@ -7,7 +7,7 @@ public struct DeriveNonFungibleAddressFromPublicKeyRequest: Sendable, Codable, H
     // =============
     // Constructors
     // =============
-    init(from publicKey: PublicKey) {
+    public init(from publicKey: PublicKey) {
         self.publicKey = publicKey
     }
     
@@ -29,7 +29,7 @@ public struct DeriveNonFungibleAddressFromPublicKeyResponse: Sendable, Codable, 
     // Constructors
     // =============
     
-    init(from nonFungibleAddress: String) {
+    public init(from nonFungibleAddress: String) {
         self.nonFungibleAddress = nonFungibleAddress
     }
     

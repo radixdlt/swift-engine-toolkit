@@ -15,7 +15,7 @@ public struct PublishPackage: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from code: Blob, abi: Blob) {
+    public init(from code: Blob, abi: Blob) {
         self.code = code
         self.abi = abi
     }

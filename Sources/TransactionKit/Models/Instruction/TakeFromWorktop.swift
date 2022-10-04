@@ -15,7 +15,7 @@ public struct TakeFromWorktop: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: ResourceAddress, intoBucket: Bucket) {
+    public init(from resourceAddress: ResourceAddress, intoBucket: Bucket) {
         self.resourceAddress = resourceAddress
         self.intoBucket = intoBucket
     }

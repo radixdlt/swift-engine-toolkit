@@ -15,7 +15,7 @@ public struct CloneProof: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from proof: Proof, intoProof: Proof) {
+    public init(from proof: Proof, intoProof: Proof) {
         self.proof = proof
         self.intoProof = intoProof
     }

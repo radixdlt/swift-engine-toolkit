@@ -14,11 +14,11 @@ public struct EddsaEd25519PublicKey: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from publicKey: Array<UInt8>) {
+    public init(from publicKey: Array<UInt8>) {
         self.publicKey = publicKey
     }
     
-    init(from publicKey: String) throws {
+    public init(from publicKey: String) throws {
         // TODO: Validation of length of array
         self.publicKey = Array<UInt8>(hex: publicKey)
     }

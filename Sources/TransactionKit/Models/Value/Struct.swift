@@ -14,7 +14,7 @@ public struct Struct: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from fields: Array<Value>) {
+    public init(from fields: Array<Value>) {
         self.fields = fields
     }
 

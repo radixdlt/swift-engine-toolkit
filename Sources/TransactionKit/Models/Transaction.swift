@@ -68,7 +68,7 @@ public struct TransactionManifest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from instructions: ManifestInstructions, blobs: Array<Array<UInt8>>) {
+    public init(from instructions: ManifestInstructions, blobs: Array<Array<UInt8>>) {
         self.instructions = instructions
         self.blobs = blobs
     }

@@ -12,7 +12,7 @@ public struct BurnBucket: Sendable, Codable, Hashable {
     // =============
     // Constructors
     // =============
-    init(from bucket: Bucket) {
+    public init(from bucket: Bucket) {
         self.bucket = bucket
     }
 }

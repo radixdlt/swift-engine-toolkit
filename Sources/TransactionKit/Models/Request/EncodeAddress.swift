@@ -9,12 +9,12 @@ public struct EncodeAddressRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from address: Array<UInt8>, networkId: UInt8) {
+    public init(from address: Array<UInt8>, networkId: UInt8) {
         self.address = address
         self.networkId = networkId
     }
     
-    init(from addressHex: String, networkId: UInt8) {
+    public init(from addressHex: String, networkId: UInt8) {
         self.address = Array<UInt8>(hex: addressHex)
         self.networkId = networkId
     }

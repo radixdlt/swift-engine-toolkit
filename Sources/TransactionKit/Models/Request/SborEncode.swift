@@ -10,11 +10,11 @@ public struct SborEncodeResponse: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from encodedValue: Array<UInt8>) {
+    public init(from encodedValue: Array<UInt8>) {
         self.encodedValue = encodedValue
     }
     
-    init(from encodedValue: String) {
+    public init(from encodedValue: String) {
         self.encodedValue = Array<UInt8>(hex: encodedValue)
     }
 

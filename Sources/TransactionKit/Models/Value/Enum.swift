@@ -15,7 +15,7 @@ public struct Enum: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from variant: String, fields: Array<Value>) {
+    public init(from variant: String, fields: Array<Value>) {
         self.variant = variant
         self.fields = fields
     }

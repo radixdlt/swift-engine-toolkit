@@ -14,7 +14,7 @@ public struct AssertWorktopContains: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: ResourceAddress) {
+    public init(from resourceAddress: ResourceAddress) {
         self.resourceAddress = resourceAddress
     }
 }

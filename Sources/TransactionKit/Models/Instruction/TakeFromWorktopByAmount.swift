@@ -16,7 +16,7 @@ public struct TakeFromWorktopByAmount: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: ResourceAddress, amount: Decimal_, intoBucket: Bucket) {
+    public init(from resourceAddress: ResourceAddress, amount: Decimal_, intoBucket: Bucket) {
         self.resourceAddress = resourceAddress
         self.amount = amount
         self.intoBucket = intoBucket

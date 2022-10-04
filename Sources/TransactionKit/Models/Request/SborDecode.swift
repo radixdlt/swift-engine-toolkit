@@ -9,12 +9,12 @@ public struct SborDecodeRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from encodedValue: Array<UInt8>, networkId: UInt8) {
+    public init(from encodedValue: Array<UInt8>, networkId: UInt8) {
         self.encodedValue = encodedValue
         self.networkId = networkId
     }
     
-    init(from encodedValue: String, networkId: UInt8) {
+    public init(from encodedValue: String, networkId: UInt8) {
         self.encodedValue = Array<UInt8>(hex: encodedValue)
         self.networkId = networkId
     }

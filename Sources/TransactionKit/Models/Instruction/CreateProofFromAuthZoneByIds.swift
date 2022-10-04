@@ -16,7 +16,7 @@ public struct CreateProofFromAuthZoneByIds: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>, intoProof: Proof) {
+    public init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>, intoProof: Proof) {
         self.resourceAddress = resourceAddress
         self.ids = ids
         self.intoProof = intoProof

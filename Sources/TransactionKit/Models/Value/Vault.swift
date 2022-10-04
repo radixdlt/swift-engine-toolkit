@@ -14,7 +14,7 @@ public struct Vault: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from identifier: String) {
+    public init(from identifier: String) {
         self.identifier = identifier
     }
 }

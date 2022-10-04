@@ -13,7 +13,7 @@ public struct I64: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from value: Int64) {
+    public init(from value: Int64) {
         self.value = value
     }
 

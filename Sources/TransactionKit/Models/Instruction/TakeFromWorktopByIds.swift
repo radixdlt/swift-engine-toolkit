@@ -16,7 +16,7 @@ public struct TakeFromWorktopByIds: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>, intoBucket: Bucket) {
+    public init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>, intoBucket: Bucket) {
         self.resourceAddress = resourceAddress
         self.ids = ids
         self.intoBucket = intoBucket

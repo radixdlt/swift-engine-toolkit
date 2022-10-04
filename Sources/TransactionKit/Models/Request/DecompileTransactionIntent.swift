@@ -9,12 +9,12 @@ public struct DecompileTransactionIntentRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from compiledIntent: Array<UInt8>, manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(from compiledIntent: Array<UInt8>, manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledIntent = compiledIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
-    init(from compiledIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
+    public init(from compiledIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
         self.compiledIntent = Array<UInt8>(hex: compiledIntent)
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }

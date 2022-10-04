@@ -13,7 +13,7 @@ public struct U64: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from value: UInt64) {
+    public init(from value: UInt64) {
         self.value = value
     }
 

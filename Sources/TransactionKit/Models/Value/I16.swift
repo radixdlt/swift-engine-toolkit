@@ -13,7 +13,7 @@ public struct I16: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from value: Int16) {
+    public init(from value: Int16) {
         self.value = value
     }
 

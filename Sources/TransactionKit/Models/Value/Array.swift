@@ -16,7 +16,7 @@ public struct Array_: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from elementType: ValueKind, elements: Array<Value>) {
+    public init(from elementType: ValueKind, elements: Array<Value>) {
         // TODO: Validate that all elements are of type `elementType`
         self.elementType = elementType
         self.elements = elements

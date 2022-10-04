@@ -17,7 +17,7 @@ public struct CallFunction: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from packageAddress: PackageAddress, blueprintName: String_, functionName: String_, arguments: Array<Value>?) {
+    public init(from packageAddress: PackageAddress, blueprintName: String_, functionName: String_, arguments: Array<Value>?) {
         self.packageAddress = packageAddress
         self.blueprintName = blueprintName
         self.functionName = functionName

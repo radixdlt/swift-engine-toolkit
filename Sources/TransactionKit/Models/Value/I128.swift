@@ -15,7 +15,7 @@ public struct I128: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from value: String) {
+    public init(from value: String) {
         self.value = value
     }
 

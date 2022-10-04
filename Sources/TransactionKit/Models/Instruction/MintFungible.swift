@@ -15,7 +15,7 @@ public struct MintFungible: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    init(from resourceAddress: ResourceAddress, amount: Decimal_) {
+    public init(from resourceAddress: ResourceAddress, amount: Decimal_) {
         self.resourceAddress = resourceAddress
         self.amount = amount
     }
