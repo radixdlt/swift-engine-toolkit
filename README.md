@@ -1,3 +1,3 @@
-# SwiftTX
+# TransactionKit
 
 A description of this package.
