@@ -18,12 +18,12 @@ public extension TX {
     /// For the time being, this function ends with an underscore in order to avoid the name collision with the
     /// functrion from the library itself. We should look into fixing that somehow. Perhaps the libraries exposed by the
     /// static library should be prefixed with something?
-    static func information_() -> InformationResponse {
+    static func information() -> InformationResponse {
         // Conpublic public struct the required request for information and make the request
         let request: InformationRequest = InformationRequest()
         return callLibraryFunction(
             input: request,
-            function: information
+            function: libTX.information
         )
     }
     
