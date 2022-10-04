@@ -7,3 +7,7 @@ DerivedData/
 .swiftpm/config/registries.json
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .netrc
+
+Sources/libTX/libTX.xcframework/macos-arm64_x86_64/libTX.a
+Sources/libTX/libTX.xcframework/ios-arm64/libTX.a
+Sources/libTX/libTX.xcframework/ios-arm64-simulator/libTX.a
