@@ -31,15 +31,15 @@ public extension ExtractAbiRequest {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(packageWasm.toHexString(), forKey: .packageWasm)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try values.decode(String.self, forKey: .packageWasm))
+        self = Self(from: try container.decode(String.self, forKey: .packageWasm))
     }
 }
 
@@ -80,15 +80,15 @@ public extension ExtractAbiResponse {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(code.toHexString(), forKey: .code)
         try container.encode(abi.toHexString(), forKey: .abi)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try values.decode(String.self, forKey: .code), abi: try values.decode(String.self, forKey: .code))
+        self = Self(from: try container.decode(String.self, forKey: .code), abi: try container.decode(String.self, forKey: .code))
     }
 }

@@ -22,8 +22,8 @@ public extension TransactionManifest {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
-        let hexBlobs: Array<String> = blobs.map { $0.toHexString() }
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let hexBlobs = blobs.map { $0.toHexString() }
         
         try container.encode(instructions, forKey: .instructions)
         try container.encode(hexBlobs, forKey: .blobs)
@@ -31,10 +31,10 @@ public extension TransactionManifest {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        let instructions: ManifestInstructions = try values.decode(ManifestInstructions.self, forKey: .instructions)
-        let hexBlobs = (try? values.decode(Array<String>.self, forKey: .blobs)) ?? []
+        let instructions: ManifestInstructions = try container.decode(ManifestInstructions.self, forKey: .instructions)
+        let hexBlobs = (try? container.decode(Array<String>.self, forKey: .blobs)) ?? []
         let blobs = hexBlobs.map { Array<UInt8>(hex: $0) }
         self = Self(from: instructions, blobs: blobs)
     }

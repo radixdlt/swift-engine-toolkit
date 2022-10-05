@@ -42,7 +42,7 @@ public extension CallFunction {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(packageAddress, forKey: .packageAddress)
@@ -53,16 +53,16 @@ public extension CallFunction {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let packageAddress: PackageAddress = try values.decode(PackageAddress.self, forKey: .packageAddress)
-        let blueprintName: String_ = try values.decode(String_.self, forKey: .blueprintName)
-        let functionName: String_ = try values.decode(String_.self, forKey: .functionName)
-        let arguments: Array<Value> = try values.decode(Array<Value>.self, forKey: .arguments)
+        let packageAddress: PackageAddress = try container.decode(PackageAddress.self, forKey: .packageAddress)
+        let blueprintName: String_ = try container.decode(String_.self, forKey: .blueprintName)
+        let functionName: String_ = try container.decode(String_.self, forKey: .functionName)
+        let arguments: Array<Value> = try container.decode(Array<Value>.self, forKey: .arguments)
         
         self = Self(from: packageAddress, blueprintName: blueprintName, functionName: functionName, arguments: arguments)
     }

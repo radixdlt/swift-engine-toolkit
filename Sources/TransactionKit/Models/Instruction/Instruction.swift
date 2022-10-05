@@ -266,8 +266,8 @@ public extension Instruction {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         
         switch kind {
             case .callFunction:

@@ -43,7 +43,7 @@ public extension DecodeAddressResponse {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encode(networkId, forKey: .networkId)
         try container.encode(networkName, forKey: .networkName)
@@ -55,14 +55,14 @@ public extension DecodeAddressResponse {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        networkId = try values.decode(UInt8.self, forKey: .networkId)
-        networkName = try values.decode(String.self, forKey: .networkName)
-        entityType = try values.decode(AddressKind.self, forKey: .entityType)
-        data = Array<UInt8>(hex: try values.decode(String.self, forKey: .data))
-        hrp = try values.decode(String.self, forKey: .hrp)
-        address = try values.decode(Address.self, forKey: .address)
+        networkId = try container.decode(UInt8.self, forKey: .networkId)
+        networkName = try container.decode(String.self, forKey: .networkName)
+        entityType = try container.decode(AddressKind.self, forKey: .entityType)
+        data = Array<UInt8>(hex: try container.decode(String.self, forKey: .data))
+        hrp = try container.decode(String.self, forKey: .hrp)
+        address = try container.decode(Address.self, forKey: .address)
     }
 }
 

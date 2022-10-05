@@ -33,16 +33,16 @@ public extension DeriveNonFungibleAddressRequest {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(resourceAddress, forKey: .resourceAddress)
         try container.encode(nonFungibleId.toHexString(), forKey: .nonFungibleId)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try values.decode(String.self, forKey: .resourceAddress), nonFungibleId: try values.decode(String.self, forKey: .nonFungibleId))
+        self = Self(from: try container.decode(String.self, forKey: .resourceAddress), nonFungibleId: try container.decode(String.self, forKey: .nonFungibleId))
         
     }
 }

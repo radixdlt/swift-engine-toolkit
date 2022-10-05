@@ -21,7 +21,7 @@ public extension ManifestInstructions {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {
             case .stringInstructions(let value):
@@ -35,15 +35,15 @@ public extension ManifestInstructions {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let manifestInstructionsKind: ManifestInstructionsKind = try values.decode(ManifestInstructionsKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let manifestInstructionsKind: ManifestInstructionsKind = try container.decode(ManifestInstructionsKind.self, forKey: .type)
         
         switch manifestInstructionsKind {
             case .string:
-                let manifestInstructions: String = try values.decode(String.self, forKey: .value)
+                let manifestInstructions: String = try container.decode(String.self, forKey: .value)
                 self = Self.stringInstructions(manifestInstructions)
             case .json:
-                let manifestInstructions: Array<Instruction> = try values.decode(Array<Instruction>.self, forKey: .value)
+                let manifestInstructions: Array<Instruction> = try container.decode(Array<Instruction>.self, forKey: .value)
                 self = Self.jsonInstructions(manifestInstructions)
         }
     }

@@ -39,7 +39,7 @@ public extension CallMethod {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(componentAddress, forKey: .componentAddress)
@@ -49,15 +49,15 @@ public extension CallMethod {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let componentAddress: ComponentAddress = try values.decode(ComponentAddress.self, forKey: .componentAddress)
-        let methodName: String_ = try values.decode(String_.self, forKey: .methodName)
-        let arguments: Array<Value> = try values.decode(Array<Value>.self, forKey: .arguments)
+        let componentAddress: ComponentAddress = try container.decode(ComponentAddress.self, forKey: .componentAddress)
+        let methodName: String_ = try container.decode(String_.self, forKey: .methodName)
+        let arguments: Array<Value> = try container.decode(Array<Value>.self, forKey: .arguments)
         
         self = Self(from: componentAddress, methodName: methodName, arguments: arguments)
     }

@@ -37,7 +37,7 @@ public extension NonFungibleAddress {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(address.toHexString(), forKey: .address)
@@ -45,13 +45,13 @@ public extension NonFungibleAddress {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `address`
-        self = try Self(from: try values.decode(String.self, forKey: .address))
+        self = try Self(from: try container.decode(String.self, forKey: .address))
     }
 }

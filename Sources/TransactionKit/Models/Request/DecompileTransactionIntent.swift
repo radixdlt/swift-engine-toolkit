@@ -34,14 +34,14 @@ public extension DecompileTransactionIntentRequest {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(compiledIntent.toHexString(), forKey: .compiledIntent)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try values.decode(String.self, forKey: .compiledIntent), manifestInstructionsOutputFormat: try values.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat))
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self = try Self(from: try container.decode(String.self, forKey: .compiledIntent), manifestInstructionsOutputFormat: try container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat))
     }
 }
 

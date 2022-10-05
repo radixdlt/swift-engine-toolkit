@@ -429,8 +429,8 @@ public extension Value {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         
         switch kind {
             

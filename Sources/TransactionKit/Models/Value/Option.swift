@@ -38,7 +38,7 @@ public extension Option {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         try container.encode(discriminator, forKey: .variant)
         
@@ -52,16 +52,16 @@ public extension Option {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let discriminator = try values.decode(Discriminator.self, forKey: .variant)
+        let discriminator = try container.decode(Discriminator.self, forKey: .variant)
         switch discriminator {
         case .some:
-            let value: Value = try values.decode(Value.self, forKey: .field)
+            let value: Value = try container.decode(Value.self, forKey: .field)
             self = .some(value)
         case .none:
             self = .none
