@@ -13,7 +13,10 @@ public struct TransactionManifest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from instructions: ManifestInstructions, blobs: [[UInt8]]) {
+    public init(
+        instructions: ManifestInstructions,
+        blobs: [[UInt8]] = []
+    ) {
         self.instructions = instructions
         self.blobs = blobs
     }
