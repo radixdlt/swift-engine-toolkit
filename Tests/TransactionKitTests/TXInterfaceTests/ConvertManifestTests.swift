@@ -10,15 +10,15 @@ final class ConvertManifestTests: XCTestCase {
 		)
 
         let request = ConvertManifestRequest(
-            transactionVersion: 1,
-            networkId: 1,
-            manifestInstructionsOutputFormat: .json,
-            manifest: manifest
+			transactionVersion: 1,
+			manifest: manifest,
+            outputFormat: .json,
+			networkId: .simulator
         )
 
         let sut = TX.convertManifest(request:)
 
-        let output = try sut(request)
+        XCTAssertNoThrow(try sut(request))
     }
 }
 

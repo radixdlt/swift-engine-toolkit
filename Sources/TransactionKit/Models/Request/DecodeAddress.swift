@@ -17,12 +17,28 @@ public struct DecodeAddressResponse: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let networkId: UInt8
+    public let networkId: NetworkID
     public let networkName: String
     public let entityType: AddressKind
     public let data: [UInt8]
     public let hrp: String
     public let address: Address
+	
+	public init(
+		networkName: String,
+		entityType: AddressKind,
+		data: [UInt8],
+		hrp: String,
+		address: Address,
+		networkId: NetworkID = .mainnet
+	) {
+		self.networkId = networkId
+		self.networkName = networkName
+		self.entityType = entityType
+		self.data = data
+		self.hrp = hrp
+		self.address = address
+	}
 }
 
 public extension DecodeAddressResponse {
@@ -54,16 +70,18 @@ public extension DecodeAddressResponse {
     }
     
     init(from decoder: Decoder) throws {
-        // Checking for type discriminator
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        networkId = try container.decode(UInt8.self, forKey: .networkId)
-        networkName = try container.decode(String.self, forKey: .networkName)
-        entityType = try container.decode(AddressKind.self, forKey: .entityType)
-        data = [UInt8](hex: try container.decode(String.self, forKey: .data))
-        hrp = try container.decode(String.self, forKey: .hrp)
-        address = try container.decode(Address.self, forKey: .address)
-    }
+		// Checking for type discriminator
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		
+		try self.init(
+			networkName: container.decode(String.self, forKey: .networkName),
+			entityType: container.decode(AddressKind.self, forKey: .entityType),
+			data: [UInt8](hex: container.decode(String.self, forKey: .data)),
+			hrp: container.decode(String.self, forKey: .hrp),
+			address: container.decode(Address.self, forKey: .address),
+			networkId: container.decode(NetworkID.self, forKey: .networkId)
+		)
+	}
 }
 
 public enum AddressKind: String, Codable, Sendable, Hashable {

@@ -3,20 +3,19 @@ public struct SborDecodeRequest: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     public let encodedValue: [UInt8]
-    public let networkId: UInt8
+    public let networkId: NetworkID
     
     // =============
     // Constructors
     // =============
     
-    public init(from encodedValue: [UInt8], networkId: UInt8) {
-        self.encodedValue = encodedValue
+	public init(encodedBytes: [UInt8], networkId: NetworkID = .mainnet) {
+        self.encodedValue = encodedBytes
         self.networkId = networkId
     }
     
-    public init(from encodedValue: String, networkId: UInt8) {
-        self.encodedValue = [UInt8](hex: encodedValue)
-        self.networkId = networkId
+	public init(encodedHex: String, networkId: NetworkID = .mainnet) {
+		self.init(encodedBytes: [UInt8](hex: encodedHex), networkId: networkId)
     }
 }
 
@@ -42,7 +41,10 @@ public extension SborDecodeRequest {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try container.decode(String.self, forKey: .encodedValue), networkId: try container.decode(UInt8.self, forKey: .networkId))
+		try self.init(
+			encodedHex: container.decode(String.self, forKey: .encodedValue),
+			networkId: container.decode(NetworkID.self, forKey: .networkId)
+		)
         
     }
 }

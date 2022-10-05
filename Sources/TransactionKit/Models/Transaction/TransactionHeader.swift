@@ -9,7 +9,7 @@ import Foundation
 
 public struct TransactionHeader: Sendable, Codable, Hashable {
     public let version: UInt8
-    public let networkId: UInt8
+    public let networkId: NetworkID
     public let startEpochInclusive: UInt64
     public let endEpochExclusive: UInt64
     public let nonce: UInt64

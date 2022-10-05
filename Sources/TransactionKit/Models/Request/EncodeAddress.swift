@@ -3,18 +3,18 @@ public struct EncodeAddressRequest: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     public let address: [UInt8]
-    public let networkId: UInt8
+    public let networkId: NetworkID
     
     // =============
     // Constructors
     // =============
     
-    public init(from address: [UInt8], networkId: UInt8) {
+	public init(address: [UInt8], networkId: NetworkID = .mainnet) {
         self.address = address
         self.networkId = networkId
     }
     
-    public init(from addressHex: String, networkId: UInt8) {
+	public init(addressHex: String, networkId: NetworkID = .mainnet) {
         self.address = [UInt8](hex: addressHex)
         self.networkId = networkId
     }
@@ -42,7 +42,10 @@ public extension EncodeAddressRequest {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try container.decode(String.self, forKey: .address), networkId: try container.decode(UInt8.self, forKey: .networkId))
+		try self.init(
+			addressHex: container.decode(String.self, forKey: .address),
+			networkId: container.decode(NetworkID.self, forKey: .networkId)
+		)
         
     }
 }
