@@ -4,30 +4,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "TransactionKit",
+    name: "EngineToolkit",
     platforms: [.macOS(.v12), .iOS(.v15)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "TransactionKit",
-            targets: ["TransactionKit"]),
+            name: "EngineToolkit",
+            targets: ["EngineToolkit"]),
     ],
-    dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
-    ],
+    dependencies: [],
     targets: [
         .binaryTarget(
             name: "libTX",
             path: "Sources/libTX/libTX.xcframework"
         ),
         .target(
-            name: "TransactionKit",
+            name: "EngineToolkit",
             dependencies: ["libTX"]
         ),
         .testTarget(
-            name: "TransactionKitTests",
-            dependencies: ["TransactionKit"]
+            name: "EngineToolkitTests",
+            dependencies: ["EngineToolkit"]
         ),
     ]
 )

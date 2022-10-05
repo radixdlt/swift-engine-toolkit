@@ -1,11 +1,11 @@
-# TransactionKit
+# EngineToolkit 🛠 🧰
 
-A description of this package.
+Swift EngineToolkit provides a high level functions and method for the interaction with the [transaction library][tlib].
 
 # Binaries exluded
 Binaries total size is 50+50+100 (iOS, iOS Sim, macOS (Intel/Apple Silicon)) mb for the three different `libTX.a` files.
 
-For now you need to build the [transaction library](https://github.com/radixdlt/transaction-library) your self, using `build.sh`
+For now you need to build the [transaction library][tlib] yourself, using `build.sh`
 
 # Supported Platforms
 The underlying binary is built for these platforms:
@@ -45,4 +45,5 @@ open Example/AppTX.xcodeproj
 
 **I have successfully archived this example for iOS, resulting in an .xcarchive weighing 12.3 mb**
 
+[tlib]: https://github.com/radixdlt/transaction-library
 [iphonearchs]: https://docs.elementscompiler.com/Platforms/Cocoa/CpuArchitectures/

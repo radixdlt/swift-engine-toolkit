@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import TransactionKit
+@testable import EngineToolkit
 
 extension TransactionManifest {
     static let complex = Self(instructions: .string(complexManifestString))
