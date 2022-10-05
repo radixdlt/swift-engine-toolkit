@@ -30,7 +30,7 @@ public extension EddsaEd25519Signature {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case signature, type
     }
     

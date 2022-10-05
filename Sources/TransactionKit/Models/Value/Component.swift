@@ -25,7 +25,7 @@ public extension Component {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case address, type
     }
     

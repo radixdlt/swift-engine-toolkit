@@ -22,7 +22,7 @@ public extension BurnBucket {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case bucket
     }

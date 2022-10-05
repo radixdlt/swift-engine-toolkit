@@ -24,7 +24,7 @@ public extension SborDecodeRequest {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case encodedValue = "encoded_value"
         case networkId = "network_id"
     }

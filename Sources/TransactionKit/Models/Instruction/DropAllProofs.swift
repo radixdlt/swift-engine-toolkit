@@ -11,7 +11,7 @@ public extension DropAllProofs {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
     }
     

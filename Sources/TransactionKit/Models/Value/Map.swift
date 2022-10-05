@@ -29,7 +29,7 @@ public extension Map {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case elements, keyType = "key_type", valueType = "value_type", type
     }
     

@@ -25,7 +25,7 @@ public extension String_ {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     

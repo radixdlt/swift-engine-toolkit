@@ -26,7 +26,7 @@ public extension AssertWorktopContainsByIds {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case ids
         case resourceAddress = "resource_address"

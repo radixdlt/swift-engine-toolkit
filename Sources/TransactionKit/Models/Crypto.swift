@@ -26,7 +26,7 @@ public extension EcdsaSecp256k1SignatureString {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -70,7 +70,7 @@ public extension EcdsaSecp256k1PublicKeyString {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -114,7 +114,7 @@ public extension EddsaEd25519SignatureString {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -159,7 +159,7 @@ public extension EddsaEd25519PublicKeyString {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -190,7 +190,7 @@ public extension PublicKey {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case publicKey = "public_key"
     }
@@ -257,7 +257,7 @@ public extension Signature {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case signature
     }
@@ -317,7 +317,7 @@ public extension SignatureWithPublicKey {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case publicKey = "public_key"
         case signature

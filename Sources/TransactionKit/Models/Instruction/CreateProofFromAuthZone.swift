@@ -27,7 +27,7 @@ public extension CreateProofFromAuthZone {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case resourceAddress = "resource_address"
         case intoBucket = "into_bucket"

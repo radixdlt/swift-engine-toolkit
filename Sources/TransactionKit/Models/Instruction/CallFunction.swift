@@ -30,7 +30,7 @@ public extension CallFunction {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case packageAddress = "package_address"
         case blueprintName = "blueprint_name"

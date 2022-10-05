@@ -28,7 +28,7 @@ public extension CallMethod {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case componentAddress = "component_address"
         case methodName = "method_name"

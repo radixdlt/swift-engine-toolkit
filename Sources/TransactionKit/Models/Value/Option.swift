@@ -17,7 +17,7 @@ public extension Option {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case variant
         case type
         case field

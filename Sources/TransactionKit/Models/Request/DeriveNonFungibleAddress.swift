@@ -24,7 +24,7 @@ public extension DeriveNonFungibleAddressRequest {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case resourceAddress = "resource_address"
         case nonFungibleId = "non_fungible_id"
     }
@@ -64,7 +64,7 @@ public struct DeriveNonFungibleAddressResponse: Sendable, Codable, Hashable {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case nonFungibleAddress = "non_fungible_address"
     }
 }

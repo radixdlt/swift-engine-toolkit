@@ -29,7 +29,7 @@ public extension CreateProofFromAuthZoneByAmount {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case amount
         case resourceAddress = "resource_address"

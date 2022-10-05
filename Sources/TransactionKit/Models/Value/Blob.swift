@@ -30,7 +30,7 @@ public extension Blob {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case hash, type
     }
     

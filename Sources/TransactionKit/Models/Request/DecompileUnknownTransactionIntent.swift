@@ -25,7 +25,7 @@ public extension DecompileUnknownTransactionIntentRequest {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case compiledUnknownIntent = "compiled_unknown_intent"
         case manifestInstructionsOutputFormat = "manifest_instructions_output_format"
     }
@@ -59,7 +59,7 @@ public extension DecompileUnknownTransactionIntentResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case variant
         case type
         case field

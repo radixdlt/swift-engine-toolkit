@@ -26,7 +26,7 @@ public extension CreateProofFromBucket {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case bucket
         case intoProof = "into_proof"

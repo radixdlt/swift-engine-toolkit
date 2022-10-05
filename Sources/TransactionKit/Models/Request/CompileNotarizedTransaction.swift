@@ -24,7 +24,7 @@ public extension CompileNotarizedTransactionIntentResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case compiledNotarizedIntent = "compiled_notarized_intent"
     }
     

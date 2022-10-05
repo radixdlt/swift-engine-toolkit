@@ -23,7 +23,7 @@ public extension ExtractAbiRequest {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case packageWasm = "package_wasm"
     }
     
@@ -71,7 +71,7 @@ public extension ExtractAbiResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case code
         case abi
     }

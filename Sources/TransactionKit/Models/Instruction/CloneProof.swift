@@ -26,7 +26,7 @@ public extension CloneProof {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case proof
         case intoProof = "into_proof"

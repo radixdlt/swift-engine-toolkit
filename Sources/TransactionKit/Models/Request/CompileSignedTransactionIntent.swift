@@ -24,7 +24,7 @@ public extension CompileSignedTransactionIntentResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case compiledSignedIntent = "compiled_signed_intent"
     }
     

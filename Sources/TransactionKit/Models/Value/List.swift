@@ -28,7 +28,7 @@ public extension List {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case elements, elementType = "element_type", type
     }
     

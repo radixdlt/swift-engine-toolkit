@@ -30,7 +30,7 @@ public extension DecodeAddressResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case networkId = "network_id"
         case networkName = "network_name"
         case entityType = "entity_type"

@@ -25,7 +25,7 @@ public extension DecompileSignedTransactionIntentRequest {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case compiledSignedIntent = "compiled_signed_intent"
         case manifestInstructionsOutputFormat = "manifest_instructions_output_format"
     }

@@ -1,4 +1,4 @@
-import Foundation;
+import Foundation
 
 public struct U64: Sendable, Codable, Hashable {
     // Type name, used as a discriminator
@@ -24,7 +24,7 @@ public extension U64 {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
