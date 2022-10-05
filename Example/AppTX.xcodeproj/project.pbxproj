@@ -11,7 +11,7 @@
 		E618162F28EC294800B4E578 /* AppTXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618162A28EC294700B4E578 /* AppTXApp.swift */; };
 		E618163028EC294800B4E578 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E618162B28EC294700B4E578 /* Assets.xcassets */; };
 		E618163128EC294800B4E578 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618162C28EC294800B4E578 /* ContentView.swift */; };
-		E618163628EC29D400B4E578 /* TransactionKit in Frameworks */ = {isa = PBXBuildFile; productRef = E618163528EC29D400B4E578 /* TransactionKit */; };
+		E6EF2F4F28EDDAC30015AF17 /* EngineToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = E6EF2F4E28EDDAC30015AF17 /* EngineToolkit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,7 +21,7 @@
 		E618162B28EC294700B4E578 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E618162C28EC294800B4E578 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E618162D28EC294800B4E578 /* AppTX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = AppTX.entitlements; sourceTree = "<group>"; };
-		E618163328EC29CB00B4E578 /* TransactionKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TransactionKit; path = ..; sourceTree = "<group>"; };
+		E6EF2F4D28EDDABA0015AF17 /* EngineToolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = EngineToolkit; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,7 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E618163628EC29D400B4E578 /* TransactionKit in Frameworks */,
+				E6EF2F4F28EDDAC30015AF17 /* EngineToolkit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,7 +69,7 @@
 		E618163228EC29CB00B4E578 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				E618163328EC29CB00B4E578 /* TransactionKit */,
+				E6EF2F4D28EDDABA0015AF17 /* EngineToolkit */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -95,11 +95,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				E618163828EC29D800B4E578 /* PBXTargetDependency */,
+				E6EF2F5128EDDAC60015AF17 /* PBXTargetDependency */,
 			);
 			name = AppTX;
 			packageProductDependencies = (
-				E618163528EC29D400B4E578 /* TransactionKit */,
+				E6EF2F4E28EDDAC30015AF17 /* EngineToolkit */,
 			);
 			productName = AppTX;
 			productReference = E618161628EC28C600B4E578 /* AppTX.app */;
@@ -164,9 +164,9 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E618163828EC29D800B4E578 /* PBXTargetDependency */ = {
+		E6EF2F5128EDDAC60015AF17 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = E618163728EC29D800B4E578 /* TransactionKit */;
+			productRef = E6EF2F5028EDDAC60015AF17 /* EngineToolkit */;
 		};
 /* End PBXTargetDependency section */
 
@@ -377,13 +377,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E618163528EC29D400B4E578 /* TransactionKit */ = {
+		E6EF2F4E28EDDAC30015AF17 /* EngineToolkit */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = TransactionKit;
+			productName = EngineToolkit;
 		};
-		E618163728EC29D800B4E578 /* TransactionKit */ = {
+		E6EF2F5028EDDAC60015AF17 /* EngineToolkit */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = TransactionKit;
+			productName = EngineToolkit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
