@@ -209,7 +209,7 @@ private extension TX {
         
         // Deallocating the request and response memory
         deallocateMemory(pointer: allocatedMemory)
-        
+        debugPrint(responseString)
         return try deserialize(jsonString: responseString)
     }
     

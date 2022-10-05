@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ResourceAddress: Sendable, Codable, Hashable {
+public struct ResourceAddress: Sendable, Codable, Hashable, AddressProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .resourceAddress
     
@@ -14,7 +14,7 @@ public struct ResourceAddress: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from address: String) {
+    public init(address: String) {
         // TODO: Perform some simple Bech32m validation.
         self.address = address
     }
@@ -47,6 +47,8 @@ public extension ResourceAddress {
         }
         
         // Decoding `address`
-        self = Self(from: try container.decode(String.self, forKey: .address))
+        try self.init(
+            address: container.decode(String.self, forKey: .address)
+        )
     }
 }

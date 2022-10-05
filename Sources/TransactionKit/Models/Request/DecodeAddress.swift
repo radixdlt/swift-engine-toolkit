@@ -7,8 +7,8 @@ public struct DecodeAddressRequest: Sendable, Codable, Hashable {
     // =============
     // Constructors
     // =============
-    
-    public init(from address: String) {
+   
+    public init(address: String) {
         self.address = address
     }
 }
@@ -93,8 +93,22 @@ public enum AddressKind: String, Codable, Sendable, Hashable {
     case normalComponent
 }
 
-public enum Address: Sendable, Codable, Hashable {
+public protocol AddressProtocol {
+    var address: String { get }
+}
+
+public enum Address: Sendable, Codable, Hashable, AddressProtocol {
     case packageAddress(PackageAddress)
     case componentAddress(ComponentAddress)
     case resourceAddress(ResourceAddress)
+}
+
+public extension Address {
+    var address: String {
+        switch self {
+        case let .packageAddress(address): return address.address
+        case let .componentAddress(address): return address.address
+        case let .resourceAddress(address): return address.address
+        }
+    }
 }
