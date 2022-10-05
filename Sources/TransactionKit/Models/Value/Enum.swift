@@ -9,13 +9,13 @@ public struct Enum: Sendable, Codable, Hashable {
     // ===============
     
     public let variant: String
-    public let fields: Array<Value>
+    public let fields: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from variant: String, fields: Array<Value>) {
+    public init(from variant: String, fields: [Value]) {
         self.variant = variant
         self.fields = fields
     }
@@ -54,6 +54,6 @@ public extension Enum {
         // Decoding `variant`
         variant = try container.decode(String.self, forKey: .variant)
         // Decoding `fields`
-        fields = try container.decode(Array<Value>.self, forKey: .fields)
+        fields = try container.decode([Value].self, forKey: .fields)
     }
 }

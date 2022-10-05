@@ -4,18 +4,18 @@ public struct CompileNotarizedTransactionIntentResponse: Sendable, Codable, Hash
     // ===============
     // Struct members
     // ===============
-    public let compiledNotarizedIntent: Array<UInt8>
+    public let compiledNotarizedIntent: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from compiledNotarizedIntent: Array<UInt8>) {
+    public init(from compiledNotarizedIntent: [UInt8]) {
         self.compiledNotarizedIntent = compiledNotarizedIntent
     }
     
     public init(from compiledNotarizedIntent: String) throws {
-        self.compiledNotarizedIntent = Array<UInt8>(hex: compiledNotarizedIntent)
+        self.compiledNotarizedIntent = [UInt8](hex: compiledNotarizedIntent)
     }
 }
 

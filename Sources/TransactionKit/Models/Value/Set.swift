@@ -10,13 +10,13 @@ public struct Set_: Sendable, Codable, Hashable {
     // ===============
     
     public let elementType: ValueKind
-    public let elements: Array<Value>
+    public let elements: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from elementType: ValueKind, elements: Array<Value>) {
+    public init(from elementType: ValueKind, elements: [Value]) {
         // TODO: Validate that all elements are of type `elementType`
         self.elementType = elementType
         self.elements = elements
@@ -57,6 +57,6 @@ public extension Set_ {
         
         // Decoding `elements`
         // TODO: Validate that all elements are of type `elementType`
-        elements = try container.decode(Array<Value>.self, forKey: .elements)
+        elements = try container.decode([Value].self, forKey: .elements)
     }
 }

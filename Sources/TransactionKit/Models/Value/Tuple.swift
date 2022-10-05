@@ -8,13 +8,13 @@ public struct Tuple: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let elements: Array<Value>
+    public let elements: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from elements: Array<Value>) {
+    public init(from elements: [Value]) {
         self.elements = elements
     }
 }
@@ -50,6 +50,6 @@ public extension Tuple {
     
         // Decoding `elements`
         // TODO: Validate that all elements are of type `elementType`
-        elements = try container.decode(Array<Value>.self, forKey: .elements)
+        elements = try container.decode([Value].self, forKey: .elements)
     }
 }

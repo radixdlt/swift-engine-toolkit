@@ -8,13 +8,13 @@ public struct CreateResource: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let args: Array<Value>
+    public let args: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from args: Array<Value>) {
+    public init(from args: [Value]) {
         self.args = args
     }
 
@@ -48,7 +48,7 @@ public extension CreateResource {
             throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let args: Array<Value> = try container.decode(Array<Value>.self, forKey: .args)
+        let args: [Value] = try container.decode([Value].self, forKey: .args)
         
         self = Self(from: args)
     }

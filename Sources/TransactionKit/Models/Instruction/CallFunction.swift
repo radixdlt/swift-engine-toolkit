@@ -11,17 +11,22 @@ public struct CallFunction: Sendable, Codable, Hashable {
     public let packageAddress: PackageAddress
     public let blueprintName: String_
     public let functionName: String_
-    public let arguments: Array<Value>
+    public let arguments: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from packageAddress: PackageAddress, blueprintName: String_, functionName: String_, arguments: Array<Value>?) {
+    public init(
+        packageAddress: PackageAddress,
+        blueprintName: String_,
+        functionName: String_,
+        arguments: [Value] = []
+    ) {
         self.packageAddress = packageAddress
         self.blueprintName = blueprintName
         self.functionName = functionName
-        self.arguments = arguments ?? Array<Value>([])
+        self.arguments = arguments
     }
 }
 
@@ -54,16 +59,21 @@ public extension CallFunction {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
+        let kind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let packageAddress: PackageAddress = try container.decode(PackageAddress.self, forKey: .packageAddress)
-        let blueprintName: String_ = try container.decode(String_.self, forKey: .blueprintName)
-        let functionName: String_ = try container.decode(String_.self, forKey: .functionName)
-        let arguments: Array<Value> = try container.decode(Array<Value>.self, forKey: .arguments)
+        let packageAddress = try container.decode(PackageAddress.self, forKey: .packageAddress)
+        let blueprintName = try container.decode(String_.self, forKey: .blueprintName)
+        let functionName = try container.decode(String_.self, forKey: .functionName)
+        let arguments = try container.decode([Value].self, forKey: .arguments)
         
-        self = Self(from: packageAddress, blueprintName: blueprintName, functionName: functionName, arguments: arguments)
+        self.init(
+            packageAddress: packageAddress,
+            blueprintName: blueprintName,
+            functionName: functionName,
+            arguments: arguments
+        )
     }
 }

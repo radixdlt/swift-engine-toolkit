@@ -4,18 +4,18 @@ public struct SborEncodeResponse: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let encodedValue: Array<UInt8>
+    public let encodedValue: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from encodedValue: Array<UInt8>) {
+    public init(from encodedValue: [UInt8]) {
         self.encodedValue = encodedValue
     }
     
     public init(from encodedValue: String) {
-        self.encodedValue = Array<UInt8>(hex: encodedValue)
+        self.encodedValue = [UInt8](hex: encodedValue)
     }
 
 }

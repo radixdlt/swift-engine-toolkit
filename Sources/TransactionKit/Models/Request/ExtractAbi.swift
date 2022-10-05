@@ -2,18 +2,18 @@ public struct ExtractAbiRequest: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let packageWasm: Array<UInt8>
+    public let packageWasm: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from packageWasm: Array<UInt8>) {
+    public init(from packageWasm: [UInt8]) {
         self.packageWasm = packageWasm
     }
     
     public init(from packageWasm: String) {
-        self.packageWasm = Array<UInt8>(hex: packageWasm)
+        self.packageWasm = [UInt8](hex: packageWasm)
     }
 
 }
@@ -47,21 +47,21 @@ public struct ExtractAbiResponse: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let code: Array<UInt8>
-    public let abi: Array<UInt8>
+    public let code: [UInt8]
+    public let abi: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from code: Array<UInt8>, abi: Array<UInt8>) {
+    public init(from code: [UInt8], abi: [UInt8]) {
         self.code = code
         self.abi = abi
     }
     
     public init(from code: String, abi: String) {
-        self.code = Array<UInt8>(hex: code)
-        self.abi = Array<UInt8>(hex: abi)
+        self.code = [UInt8](hex: code)
+        self.abi = [UInt8](hex: abi)
     }
 
 }

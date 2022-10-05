@@ -8,19 +8,19 @@ public struct EddsaEd25519Signature: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let signature: Array<UInt8>
+    public let signature: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from signature: Array<UInt8>) {
+    public init(from signature: [UInt8]) {
         self.signature = signature
     }
     
     public init(from signature: String) throws {
         // TODO: Validation of length of array
-        self.signature = Array<UInt8>(hex: signature)
+        self.signature = [UInt8](hex: signature)
     }
  
 }

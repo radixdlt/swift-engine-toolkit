@@ -13,7 +13,7 @@ public enum ManifestInstructions: Sendable, Codable, Hashable {
     // ==============
     
     case stringInstructions(String)
-    case jsonInstructions(Array<Instruction>)
+    case jsonInstructions([Instruction])
 }
 
 public extension ManifestInstructions {

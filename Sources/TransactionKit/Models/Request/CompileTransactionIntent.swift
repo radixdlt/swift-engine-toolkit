@@ -4,18 +4,18 @@ public struct CompileTransactionIntentResponse: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let compiledIntent: Array<UInt8>
+    public let compiledIntent: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from compiledIntent: Array<UInt8>) {
+    public init(from compiledIntent: [UInt8]) {
         self.compiledIntent = compiledIntent
     }
     
     public init(from compiledIntent: String) throws {
-        self.compiledIntent = Array<UInt8>(hex: compiledIntent)
+        self.compiledIntent = [UInt8](hex: compiledIntent)
     }
 }
 

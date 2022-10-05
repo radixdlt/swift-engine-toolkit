@@ -2,20 +2,20 @@ public struct DecompileUnknownTransactionIntentRequest: Sendable, Codable, Hasha
     // ===============
     // Struct members
     // ===============
-    public let compiledUnknownIntent: Array<UInt8>
+    public let compiledUnknownIntent: [UInt8]
     public let manifestInstructionsOutputFormat: ManifestInstructionsKind
     
     // =============
     // Constructors
     // =============
     
-    public init(from compiledUnknownIntent: Array<UInt8>, manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(from compiledUnknownIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledUnknownIntent = compiledUnknownIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
     public init(from compiledUnknownIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
-        self.compiledUnknownIntent = Array<UInt8>(hex: compiledUnknownIntent)
+        self.compiledUnknownIntent = [UInt8](hex: compiledUnknownIntent)
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
 }

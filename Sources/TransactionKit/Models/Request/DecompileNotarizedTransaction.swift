@@ -2,20 +2,20 @@ public struct DecompileNotarizedTransactionIntentRequest: Sendable, Codable, Has
     // ===============
     // Struct members
     // ===============
-    public let compiledNotarizedIntent: Array<UInt8>
+    public let compiledNotarizedIntent: [UInt8]
     public let manifestInstructionsOutputFormat: ManifestInstructionsKind
     
     // =============
     // Constructors
     // =============
     
-    public init(from compiledNotarizedIntent: Array<UInt8>, manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(from compiledNotarizedIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledNotarizedIntent = compiledNotarizedIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
     public init(from compiledNotarizedIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
-        self.compiledNotarizedIntent = Array<UInt8>(hex: compiledNotarizedIntent)
+        self.compiledNotarizedIntent = [UInt8](hex: compiledNotarizedIntent)
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
 

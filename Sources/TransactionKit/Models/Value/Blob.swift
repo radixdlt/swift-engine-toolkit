@@ -8,19 +8,19 @@ public struct Blob: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let hash: Array<UInt8>
+    public let hash: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from hash: Array<UInt8>) {
+    public init(from hash: [UInt8]) {
         self.hash = hash
     }
     
     public init(from hash: String) throws {
         // TODO: Validation of length of Hash
-        self.hash = Array<UInt8>(hex: hash)
+        self.hash = [UInt8](hex: hash)
     }
 
 }

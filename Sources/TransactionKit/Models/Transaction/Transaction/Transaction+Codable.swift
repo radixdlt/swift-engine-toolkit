@@ -34,8 +34,8 @@ public extension TransactionManifest {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let instructions: ManifestInstructions = try container.decode(ManifestInstructions.self, forKey: .instructions)
-        let hexBlobs = (try? container.decode(Array<String>.self, forKey: .blobs)) ?? []
-        let blobs = hexBlobs.map { Array<UInt8>(hex: $0) }
+        let hexBlobs = (try? container.decode([String].self, forKey: .blobs)) ?? []
+        let blobs = hexBlobs.map { [UInt8](hex: $0) }
         self = Self(from: instructions, blobs: blobs)
     }
 }

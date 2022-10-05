@@ -10,13 +10,13 @@ public struct Map: Sendable, Codable, Hashable {
     
     public let keyType: ValueKind
     public let valueType: ValueKind
-    public let elements: Array<Value>
+    public let elements: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from keyType: ValueKind, valueType: ValueKind, elements: Array<Value>) {
+    public init(from keyType: ValueKind, valueType: ValueKind, elements: [Value]) {
         // TODO: Validate keys and values types
         self.keyType = keyType
         self.valueType = valueType
@@ -59,6 +59,6 @@ public extension Map {
         
         // Decoding `elements`
         // TODO: Validate that all elements are of type `elementType`
-        elements = try container.decode(Array<Value>.self, forKey: .elements)
+        elements = try container.decode([Value].self, forKey: .elements)
     }
 }

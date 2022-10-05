@@ -8,18 +8,18 @@ public struct NonFungibleAddress: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let address: Array<UInt8>
+    public let address: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from address: Array<UInt8>) {
+    public init(from address: [UInt8]) {
         self.address = address
     }
     
     public init(from address: String) throws {
-        self.address = Array<UInt8>(hex: address)
+        self.address = [UInt8](hex: address)
     }
 
 }

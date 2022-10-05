@@ -2,20 +2,20 @@ public struct SborDecodeRequest: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let encodedValue: Array<UInt8>
+    public let encodedValue: [UInt8]
     public let networkId: UInt8
     
     // =============
     // Constructors
     // =============
     
-    public init(from encodedValue: Array<UInt8>, networkId: UInt8) {
+    public init(from encodedValue: [UInt8], networkId: UInt8) {
         self.encodedValue = encodedValue
         self.networkId = networkId
     }
     
     public init(from encodedValue: String, networkId: UInt8) {
-        self.encodedValue = Array<UInt8>(hex: encodedValue)
+        self.encodedValue = [UInt8](hex: encodedValue)
         self.networkId = networkId
     }
 }

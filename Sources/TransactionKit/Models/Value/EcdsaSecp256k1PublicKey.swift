@@ -8,19 +8,19 @@ public struct EcdsaSecp256k1PublicKey: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let publicKey: Array<UInt8>
+    public let publicKey: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from publicKey: Array<UInt8>) {
+    public init(from publicKey: [UInt8]) {
         self.publicKey = publicKey
     }
     
     public init(from publicKey: String) throws {
         // TODO: Validation of length of array
-        self.publicKey = Array<UInt8>(hex: publicKey)
+        self.publicKey = [UInt8](hex: publicKey)
     }
 
 }

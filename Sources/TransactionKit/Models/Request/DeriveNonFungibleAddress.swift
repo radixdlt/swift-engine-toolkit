@@ -3,20 +3,20 @@ public struct DeriveNonFungibleAddressRequest: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     public let resourceAddress: String
-    public let nonFungibleId: Array<UInt8>
+    public let nonFungibleId: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from resourceAddress: String, nonFungibleId: Array<UInt8>) {
+    public init(from resourceAddress: String, nonFungibleId: [UInt8]) {
         self.resourceAddress = resourceAddress
         self.nonFungibleId = nonFungibleId
     }
     
     public init(from resourceAddress: String, nonFungibleId: String) {
         self.resourceAddress = resourceAddress
-        self.nonFungibleId = Array<UInt8>(hex: nonFungibleId)
+        self.nonFungibleId = [UInt8](hex: nonFungibleId)
     }
 }
 

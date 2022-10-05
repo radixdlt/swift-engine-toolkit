@@ -10,16 +10,16 @@ public struct CallMethod: Sendable, Codable, Hashable {
     
     public let componentAddress: ComponentAddress
     public let methodName: String_
-    public let arguments: Array<Value>
+    public let arguments: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from componentAddress: ComponentAddress, methodName: String_, arguments: Array<Value>?) {
+    public init(from componentAddress: ComponentAddress, methodName: String_, arguments: [Value]?) {
         self.componentAddress = componentAddress
         self.methodName = methodName
-        self.arguments = arguments ?? Array<Value>([])
+        self.arguments = arguments ?? [Value]([])
     }
 }
 
@@ -57,7 +57,7 @@ public extension CallMethod {
         
         let componentAddress: ComponentAddress = try container.decode(ComponentAddress.self, forKey: .componentAddress)
         let methodName: String_ = try container.decode(String_.self, forKey: .methodName)
-        let arguments: Array<Value> = try container.decode(Array<Value>.self, forKey: .arguments)
+        let arguments: [Value] = try container.decode([Value].self, forKey: .arguments)
         
         self = Self(from: componentAddress, methodName: methodName, arguments: arguments)
     }

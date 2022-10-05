@@ -8,13 +8,13 @@ public struct Struct: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let fields: Array<Value>
+    public let fields: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from fields: Array<Value>) {
+    public init(from fields: [Value]) {
         self.fields = fields
     }
 
@@ -48,6 +48,6 @@ public extension Struct {
         }
         
         // Decoding `fields`
-        fields = try container.decode(Array<Value>.self, forKey: .fields)
+        fields = try container.decode([Value].self, forKey: .fields)
     }
 }

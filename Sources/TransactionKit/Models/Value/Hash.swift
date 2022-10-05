@@ -8,19 +8,19 @@ public struct Hash: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: Array<UInt8>
+    public let value: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: Array<UInt8>) {
+    public init(from value: [UInt8]) {
         self.value = value
     }
     
     public init(from value: String) throws {
         // TODO: Validation of length of Hash
-        self.value = Array<UInt8>(hex: value)
+        self.value = [UInt8](hex: value)
     }
 
 }

@@ -2,20 +2,20 @@ public struct DecompileSignedTransactionIntentRequest: Sendable, Codable, Hashab
     // ===============
     // Struct members
     // ===============
-    public let compiledSignedIntent: Array<UInt8>
+    public let compiledSignedIntent: [UInt8]
     public let manifestInstructionsOutputFormat: ManifestInstructionsKind
     
     // =============
     // Constructors
     // =============
     
-    public init(from compiledSignedIntent: Array<UInt8>, manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(from compiledSignedIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledSignedIntent = compiledSignedIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
     public init(from compiledSignedIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
-        self.compiledSignedIntent = Array<UInt8>(hex: compiledSignedIntent)
+        self.compiledSignedIntent = [UInt8](hex: compiledSignedIntent)
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
 }

@@ -2,20 +2,20 @@ public struct EncodeAddressRequest: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let address: Array<UInt8>
+    public let address: [UInt8]
     public let networkId: UInt8
     
     // =============
     // Constructors
     // =============
     
-    public init(from address: Array<UInt8>, networkId: UInt8) {
+    public init(from address: [UInt8], networkId: UInt8) {
         self.address = address
         self.networkId = networkId
     }
     
     public init(from addressHex: String, networkId: UInt8) {
-        self.address = Array<UInt8>(hex: addressHex)
+        self.address = [UInt8](hex: addressHex)
         self.networkId = networkId
     }
 }

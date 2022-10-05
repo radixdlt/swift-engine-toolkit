@@ -20,7 +20,7 @@ public struct DecodeAddressResponse: Sendable, Codable, Hashable {
     public let networkId: UInt8
     public let networkName: String
     public let entityType: AddressKind
-    public let data: Array<UInt8>
+    public let data: [UInt8]
     public let hrp: String
     public let address: Address
 }
@@ -60,7 +60,7 @@ public extension DecodeAddressResponse {
         networkId = try container.decode(UInt8.self, forKey: .networkId)
         networkName = try container.decode(String.self, forKey: .networkName)
         entityType = try container.decode(AddressKind.self, forKey: .entityType)
-        data = Array<UInt8>(hex: try container.decode(String.self, forKey: .data))
+        data = [UInt8](hex: try container.decode(String.self, forKey: .data))
         hrp = try container.decode(String.self, forKey: .hrp)
         address = try container.decode(Address.self, forKey: .address)
     }

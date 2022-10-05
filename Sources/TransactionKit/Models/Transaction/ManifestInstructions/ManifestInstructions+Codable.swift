@@ -43,7 +43,7 @@ public extension ManifestInstructions {
                 let manifestInstructions: String = try container.decode(String.self, forKey: .value)
                 self = Self.stringInstructions(manifestInstructions)
             case .json:
-                let manifestInstructions: Array<Instruction> = try container.decode(Array<Instruction>.self, forKey: .value)
+                let manifestInstructions: [Instruction] = try container.decode([Instruction].self, forKey: .value)
                 self = Self.jsonInstructions(manifestInstructions)
         }
     }
