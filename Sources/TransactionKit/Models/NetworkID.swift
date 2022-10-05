@@ -33,15 +33,18 @@ public extension NetworkID {
 public extension NetworkID {
 	
 	/// https://github.com/radixdlt/radixdlt-scrypto/blob/f4c41985ad9d1570fff7293fa90b77a896b3be2b/scrypto/src/core/network.rs#L43
-	static let mainnet: Self = 1
+	static let mainnet: Self = 0x01
 	
 	/// https://github.com/radixdlt/radixdlt-scrypto/blob/f4c41985ad9d1570fff7293fa90b77a896b3be2b/scrypto/src/core/network.rs#L19
-	static let simulator: Self = 242
+	/// Decimal value: 242
+	static let simulator: Self = 0xF2
 	
 	/// https://github.com/radixdlt/radixdlt-scrypto/blob/f4c41985ad9d1570fff7293fa90b77a896b3be2b/scrypto/src/core/network.rs#L27
-	static let adapanet: Self = 0x0a
+	/// Decimal value: 10
+	static let adapanet: Self = 0x0A
 	
 	/// https://github.com/radixdlt/radixdlt-scrypto/blob/f4c41985ad9d1570fff7293fa90b77a896b3be2b/scrypto/src/core/network.rs#L35
-	static let nebunet: Self = 0x0b
+	/// Decimal value: 11
+	static let nebunet: Self = 0x0B
 	
 }
