@@ -48,7 +48,7 @@ public extension CreateProofFromBucket {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
         let bucket: Bucket = try container.decode(Bucket.self, forKey: .bucket)

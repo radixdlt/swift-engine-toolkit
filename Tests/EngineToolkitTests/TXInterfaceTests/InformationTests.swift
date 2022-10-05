@@ -1,9 +1,4 @@
-import XCTest
-@testable import EngineToolkit
-
-final class InformationTests: XCTestCase {
-	
-	private let sut = TX()
+final class InformationTests: TestCase {
 	
     func test__information() throws {
         let information = try sut.information()

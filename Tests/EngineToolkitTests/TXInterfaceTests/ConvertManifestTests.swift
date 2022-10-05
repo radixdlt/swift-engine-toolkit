@@ -1,10 +1,10 @@
-import XCTest
-@testable import EngineToolkit
-
-final class ConvertManifestTests: XCTestCase {
-
-	private let sut = TX()
+final class ConvertManifestTests: TestCase {
 	
+    override func setUp() {
+        debugPrint = false // set before calling super.
+        super.setUp()
+    }
+    
     func test__convertManifest_from_string_to_json_does_not_throw() throws {
 		let request = makeRequest(outputFormat: .json)
 		XCTAssertNoThrow(try sut.convertManifest(request: request))

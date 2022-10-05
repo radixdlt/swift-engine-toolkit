@@ -5,6 +5,7 @@ import libTX
 /// interaction with the transaction library and abstracting away
 /// the low level memory allocation, serialization, and other low level concepts.
 public struct TX {
+    internal static var _debugPrint = false
 	
 	private let jsonEncoder: JSONEncoder
 	private let jsonDecoder: JSONDecoder
@@ -193,6 +194,10 @@ private extension TX {
         // Serialize the given request to a JSON string.
         let requestString = try serialize(object: input)
         
+        #if DEBUG
+        prettyPrintRequest(jsonString: requestString)
+        #endif
+        
         // Allocate enough memory for the request string and then write it to
         // that memory location
         let allocatedMemory = try allocateMemory(string: requestString)
@@ -209,7 +214,11 @@ private extension TX {
         
         // Deallocating the request and response memory
         deallocateMemory(pointer: allocatedMemory)
-        debugPrint(responseString)
+       
+        #if DEBUG
+        prettyPrintResponse(jsonString: responseString)
+        #endif
+        
         return try deserialize(jsonString: responseString)
     }
     
@@ -292,3 +301,44 @@ private extension TX {
         String(cString: pointer)
     }
 }
+
+#if DEBUG
+
+func prettyPrintRequest(jsonString: String) {
+    prettyPrint(jsonString: jsonString, label: "\n📦⬆️ Request JSON string")
+}
+func prettyPrintResponse(jsonString: String) {
+    prettyPrint(jsonString: jsonString, label: "\n📦⬇️ Response JSON string (prettified before JSON decoding)")
+}
+
+/// Tries to pretty prints JSON string even before Decodable JSON decoding takes place
+/// using old Cocoa APIs
+func prettyPrint(jsonString: String, label: String?) {
+    guard
+        TX._debugPrint,
+        let data = jsonString.data(using: .utf8),
+        let pretty = data.prettyPrintedJSONString
+    else {
+        return
+    }
+    if let label {
+        debugPrint(label)
+    }
+    debugPrint(pretty)
+}
+
+// https://gist.github.com/cprovatas/5c9f51813bc784ef1d7fcbfb89de74fe
+extension Data {
+    /// NSString gives us a nice sanitized debugDescription
+    var prettyPrintedJSONString: NSString? {
+        
+        guard
+            let object = try? JSONSerialization.jsonObject(with: self, options: []),
+            let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+            let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+        else { return nil }
+
+        return prettyPrintedString
+    }
+}
+#endif

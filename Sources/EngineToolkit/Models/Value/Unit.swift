@@ -26,7 +26,7 @@ public extension Unit {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
     }
 }
