@@ -5,23 +5,36 @@ final class ConvertManifestTests: XCTestCase {
 
 	private let sut = TX()
 	
-    func test__convertManifest_to_json() throws {
-        
-        let manifest = TransactionManifest(
-			instructions: .string(manifestString)
-		)
-
-        let request = ConvertManifestRequest(
-			transactionVersion: 1,
-			manifest: manifest,
-            outputFormat: .json,
-			networkId: .simulator
-        )
+    func test__convertManifest_from_string_to_json_does_not_throw() throws {
+		let request = makeRequest(outputFormat: .json)
 		XCTAssertNoThrow(try sut.convertManifest(request: request))
     }
+	
+	func test__convertManifest_from_string_to_string_returns_the_same_manifest() throws {
+		let manifest: TransactionManifest = complexManifest
+		let request = makeRequest(outputFormat: .string, manifest: manifest)
+		let converted = try sut.convertManifest(request: request)
+		XCTAssertEqual(manifest, converted)
+	}
 }
 
-let manifestString = """
+private extension ConvertManifestTests {
+	func makeRequest(
+		outputFormat: ManifestInstructionsKind = .json,
+		manifest: TransactionManifest = complexManifest
+	) -> ConvertManifestRequest {
+		ConvertManifestRequest(
+			transactionVersion: 1,
+			manifest: manifest,
+			outputFormat: outputFormat,
+			networkId: .simulator
+		)
+	}
+}
+
+let complexManifest = TransactionManifest(instructions: .string(complexManifestString))
+
+let complexManifestString = """
 # Withdraw XRD from account
 CALL_METHOD ComponentAddress("account_sim1q02r73u7nv47h80e30pc3q6ylsj7mgvparm3pnsm780qgsy064") "withdraw_by_amount" Decimal("5.0") ResourceAddress("resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag");
 
