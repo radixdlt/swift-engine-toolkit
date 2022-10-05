@@ -3,6 +3,8 @@ import XCTest
 
 final class ConvertManifestTests: XCTestCase {
 
+	private let sut = TX()
+	
     func test__convertManifest_to_json() throws {
         
         let manifest = TransactionManifest(
@@ -15,10 +17,7 @@ final class ConvertManifestTests: XCTestCase {
             outputFormat: .json,
 			networkId: .simulator
         )
-
-        let sut = TX.convertManifest(request:)
-
-        XCTAssertNoThrow(try sut(request))
+		XCTAssertNoThrow(try sut.convertManifest(request: request))
     }
 }
 

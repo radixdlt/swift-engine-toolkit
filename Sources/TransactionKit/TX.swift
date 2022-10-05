@@ -1,10 +1,24 @@
 import Foundation
 import libTX
 
-/// A namespace `TX` providing a high level functions and method for the
-/// interaction with the transaction library and abstracting away the low level memory allocation, serialization, and
-/// other low level concepts.
-public enum TX {}
+/// A `TX` type provides a high level functions and method for the
+/// interaction with the transaction library and abstracting away
+/// the low level memory allocation, serialization, and other low level concepts.
+public struct TX {
+	
+	private let jsonEncoder: JSONEncoder
+	private let jsonDecoder: JSONDecoder
+	
+	public init(
+		jsonEncoder: JSONEncoder = .init(),
+		jsonDecoder: JSONDecoder = .init()
+	) {
+		self.jsonEncoder = jsonEncoder
+		self.jsonDecoder = jsonDecoder
+	}
+}
+
+// MARK: Public
 public extension TX {
     
     /// Obtains information on the current transaction library used.
@@ -13,63 +27,77 @@ public extension TX {
     /// think of this information request as the "Hello World" example of the transaction library where, this is
     /// typically the first request type to be implemented in any implementation of the transaction library, if this
     /// request works then you can be assured that all of the other lower level operations work as well.
-    static func information() throws -> InformationResponse {
+    func information() throws -> InformationResponse {
         try callLibraryFunction(
             input: InformationRequest(),
             function: libTX.information
         )
     }
     
-    static func convertManifest(request: ConvertManifestRequest) throws -> ConvertManifestResponse {
+    func convertManifest(
+		request: ConvertManifestRequest
+	) throws -> ConvertManifestResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.convert_manifest
         )
     }
 
-    static func compileTransactionIntentRequest(request: CompileTransactionIntentRequest) throws -> CompileTransactionIntentResponse {
+    func compileTransactionIntentRequest(
+		request: CompileTransactionIntentRequest
+	) throws -> CompileTransactionIntentResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.compile_transaction_intent
         )
     }
 
-    static func decompileTransactionIntentRequest(request: DecompileTransactionIntentRequest) throws -> DecompileTransactionIntentResponse {
+    func decompileTransactionIntentRequest(
+		request: DecompileTransactionIntentRequest
+	) throws -> DecompileTransactionIntentResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.decompile_transaction_intent
         )
     }
 
-    static func compileSignedTransactionIntentRequest(request: CompileSignedTransactionIntentRequest) throws -> CompileSignedTransactionIntentResponse {
+    func compileSignedTransactionIntentRequest(
+		request: CompileSignedTransactionIntentRequest
+	) throws -> CompileSignedTransactionIntentResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.compile_signed_transaction_intent
         )
     }
 
-    static func decompileSignedTransactionIntentRequest(request: DecompileSignedTransactionIntentRequest) throws -> DecompileSignedTransactionIntentResponse {
+    func decompileSignedTransactionIntentRequest(
+		request: DecompileSignedTransactionIntentRequest
+	) throws -> DecompileSignedTransactionIntentResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.decompile_signed_transaction_intent
         )
     }
 
-    static func compileNotarizedTransactionIntentRequest(request: CompileNotarizedTransactionIntentRequest) throws -> CompileNotarizedTransactionIntentResponse {
+    func compileNotarizedTransactionIntentRequest(
+		request: CompileNotarizedTransactionIntentRequest
+	) throws -> CompileNotarizedTransactionIntentResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.compile_notarized_transaction_intent
         )
     }
 
-    static func decompileNotarizedTransactionIntentRequest(request: DecompileNotarizedTransactionIntentRequest) throws -> DecompileNotarizedTransactionIntentResponse {
+    func decompileNotarizedTransactionIntentRequest(
+		request: DecompileNotarizedTransactionIntentRequest
+	) throws -> DecompileNotarizedTransactionIntentResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.decompile_notarized_transaction_intent
         )
     }
 
-    static func decompileUnknownTransactionIntentRequest(
+    func decompileUnknownTransactionIntentRequest(
 		request: DecompileUnknownTransactionIntentRequest
 	) throws -> DecompileUnknownTransactionIntentResponse {
         try callLibraryFunction(
@@ -78,42 +106,52 @@ public extension TX {
         )
     }
 
-    static func decodeAddressRequest(request: DecodeAddressRequest) throws -> DecodeAddressResponse {
+    func decodeAddressRequest(
+		request: DecodeAddressRequest
+	) throws -> DecodeAddressResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.decode_address
         )
     }
 
-    static func encodeAddressRequest(request: EncodeAddressRequest) throws -> EncodeAddressResponse {
+    func encodeAddressRequest(
+		request: EncodeAddressRequest
+	) throws -> EncodeAddressResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.encode_address
         )
     }
 
-    static func sborDecodeRequest(request: SborDecodeRequest) throws -> SborDecodeResponse {
+    func sborDecodeRequest(
+		request: SborDecodeRequest
+	) throws -> SborDecodeResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.sbor_decode
         )
     }
 
-    static func sborEncodeRequest(request: SborEncodeRequest) throws -> SborEncodeResponse {
+    func sborEncodeRequest(
+		request: SborEncodeRequest
+	) throws -> SborEncodeResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.sbor_encode
         )
     }
 
-    static func extractAbiRequest(request: ExtractAbiRequest) throws -> ExtractAbiResponse {
+    func extractAbiRequest(
+		request: ExtractAbiRequest
+	) throws -> ExtractAbiResponse {
         try callLibraryFunction(
             input: request,
             function: libTX.extract_abi
         )
     }
 
-    static func deriveNonFungibleAddressFromPublicKeyRequest(
+    func deriveNonFungibleAddressFromPublicKeyRequest(
 		request: DeriveNonFungibleAddressFromPublicKeyRequest
 	) throws -> DeriveNonFungibleAddressFromPublicKeyResponse {
         try callLibraryFunction(
@@ -122,7 +160,7 @@ public extension TX {
         )
     }
 
-    static func deriveNonFungibleAddressRequest(
+    func deriveNonFungibleAddressRequest(
 		request: DeriveNonFungibleAddressRequest
 	) throws -> DeriveNonFungibleAddressResponse {
         try callLibraryFunction(
@@ -132,27 +170,32 @@ public extension TX {
     }
 }
 
+// MARK: Error
 internal extension TX {
-	enum Error: Swift.Error {
+	enum Error: String, Swift.Error, Equatable {
 		case noOutputFromLibraryCall
+		case failedToUTF8DecodeJSONStringFromData
+		case failedToUTF8EncodeJSONString
+		case failedToCStringUTF8Encode
 	}
 }
 
+// MARK: Private
 private extension TX {
     /// Calls the transaction library with a given input and returns the output back.
     ///
     /// This function abstracts away how the transaction library is called and provides a high level interface for
     /// communicating and getting responses back from the library.
-    static func callLibraryFunction<I: Encodable, O: Decodable>(
+    func callLibraryFunction<I: Encodable, O: Decodable>(
         input: I,
         function: (UnsafePointer<CChar>?) -> UnsafePointer<CChar>?
     ) throws -> O {
         // Serialize the given request to a JSON string.
-        let requestString: String = try serialize(object: input)
+        let requestString = try serialize(object: input)
         
         // Allocate enough memory for the request string and then write it to
         // that memory location
-        let allocatedMemory: UnsafeMutablePointer<CChar> = allocateMemory(string: requestString)
+        let allocatedMemory = try allocateMemory(string: requestString)
         writeStringToMemory(string: requestString, pointer: allocatedMemory)
         
         // Calling the underlying transaction library function and getting a pointer
@@ -160,13 +203,14 @@ private extension TX {
 		guard let responsePointer = function(allocatedMemory) else {
 			throw Error.noOutputFromLibraryCall
 		}
-        let responseString: String = readStringFromMemory(pointer: responsePointer)
+        
+		let responseString = readStringFromMemory(pointer: responsePointer)
 		
         
         // Deallocating the request and response memory
         deallocateMemory(pointer: allocatedMemory)
         
-        return try deserialize(string: responseString)
+        return try deserialize(jsonString: responseString)
     }
     
     /// Serializes an object to a JSON string.
@@ -174,10 +218,11 @@ private extension TX {
     /// This private function takes an object and serializes it to a JSON string. In the current implementation, this
     /// object needs to be `Encodable`, therefore, this function abstracts the serialization logic away from the
     /// transaction library operations and into an individual function.
-    static func serialize<T: Encodable>(object: T) throws -> String {
-        let encoder: JSONEncoder = JSONEncoder()
-        let jsonData: Data = try encoder.encode(object)
-        let jsonString: String = String(data: jsonData, encoding: .utf8)!
+    func serialize<T: Encodable>(object: T) throws -> String {
+        let jsonData = try jsonEncoder.encode(object)
+		guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+			throw Error.failedToUTF8DecodeJSONStringFromData
+		}
         return jsonString
     }
     
@@ -188,12 +233,11 @@ private extension TX {
     ///
     /// TODO: In the future, it would be better to have this a `Result<T, Error>` since there is a chance
     /// that this could be an error type as well and not an Ok response.
-    static func deserialize<T: Decodable>(string: String) throws -> T {
-		
-		debugPrint(string)
-		
-        let decoder = JSONDecoder()
-        return try decoder.decode(T.self, from: string.data(using: String.Encoding.utf8)!)
+    func deserialize<T: Decodable>(jsonString: String) throws -> T {
+		guard let jsonData = jsonString.data(using: .utf8) else {
+			throw Error.failedToUTF8EncodeJSONString
+		}
+		return try jsonDecoder.decode(T.self, from: jsonData)
     }
     
     /// Allocates as memory as the C-String representation of the provided String requires.
@@ -204,19 +248,21 @@ private extension TX {
     /// memory allocator and pass pointers to memory allocated by swift, or alternativly you may choose to use the
     /// memory allocator used in the transaction library. However, it is not recommended to use both at the same
     /// time as it can lead to heap corruption and other undefined behavior.
-    static func allocateMemory(string: String) -> UnsafeMutablePointer<CChar> {
+    func allocateMemory(string: String) throws -> UnsafeMutablePointer<CChar> {
         // Get the byte count of the C-String representation of the utf-8 encoded
         // string.
-        let byteCount: Int = string.cString(using: String.Encoding.utf8)!.count
-        let allocatedMemory: UnsafeMutablePointer<CChar> = UnsafeMutablePointer<CChar>.allocate(capacity: byteCount)
-        return allocatedMemory
+		guard let cString = string.cString(using: .utf8) else {
+			throw Error.failedToCStringUTF8Encode
+		}
+        let byteCount: Int = cString.count
+        return UnsafeMutablePointer<CChar>.allocate(capacity: byteCount)
     }
     
     /// Deallocates memory
     ///
     /// This function deallocates memory which was previously allocated by the transaction library memory allocator.
     /// There are no returns from this function since it is assumed that the memory deallocation will always succeed.
-    static func deallocateMemory(pointer: UnsafeMutablePointer<CChar>) {
+    func deallocateMemory(pointer: UnsafeMutablePointer<CChar>) {
         pointer.deallocate()
     }
     
@@ -224,7 +270,7 @@ private extension TX {
     ///
     /// This function writes the C-String representation of the passed string to the provided pointer. Since this is a C-String
     /// representation, this means that an additional byte is added at the end with the null terminator.
-    static func writeStringToMemory(
+    func writeStringToMemory(
         string: String,
         pointer: UnsafeMutablePointer<CChar>
     ) {
@@ -240,7 +286,7 @@ private extension TX {
     /// Reads a string from the provided memory location.
     ///
     /// This function reads a C-String, null terminated, string from the provided memory location and returns it.
-    static func readStringFromMemory(
+    func readStringFromMemory(
         pointer: UnsafePointer<CChar>
     ) -> String {
         String(cString: pointer)
