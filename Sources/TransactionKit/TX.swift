@@ -6,129 +6,122 @@ import libTX
 /// other low level concepts.
 public enum TX {}
 public extension TX {
+    
     /// Obtains information on the current transaction library used.
     ///
     /// This function is used to get information on the transaction library such as the package version. You may
     /// think of this information request as the "Hello World" example of the transaction library where, this is
     /// typically the first request type to be implemented in any implementation of the transaction library, if this
     /// request works then you can be assured that all of the other lower level operations work as well.
-    ///
-    /// **Note:**
-    ///
-    /// For the time being, this function ends with an underscore in order to avoid the name collision with the
-    /// functrion from the library itself. We should look into fixing that somehow. Perhaps the libraries exposed by the
-    /// static library should be prefixed with something?
     static func information() -> InformationResponse {
-        // Conpublic public struct the required request for information and make the request
-        let request: InformationRequest = InformationRequest()
-        return callLibraryFunction(
-            input: request,
+        callLibraryFunction(
+            input: InformationRequest(),
             function: libTX.information
         )
     }
     
     static func convertManifest(request: ConvertManifestRequest) -> ConvertManifestResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: convert_manifest
+            function: libTX.convert_manifest
         )
     }
-    
+
     static func compileTransactionIntentRequest(request: CompileTransactionIntentRequest) -> CompileTransactionIntentResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: compile_transaction_intent
+            function: libTX.compile_transaction_intent
         )
     }
-    
+
     static func decompileTransactionIntentRequest(request: DecompileTransactionIntentRequest) -> DecompileTransactionIntentResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: decompile_transaction_intent
+            function: libTX.decompile_transaction_intent
         )
     }
-    
+
     static func compileSignedTransactionIntentRequest(request: CompileSignedTransactionIntentRequest) -> CompileSignedTransactionIntentResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: compile_signed_transaction_intent
+            function: libTX.compile_signed_transaction_intent
         )
     }
-    
+
     static func decompileSignedTransactionIntentRequest(request: DecompileSignedTransactionIntentRequest) -> DecompileSignedTransactionIntentResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: decompile_signed_transaction_intent
+            function: libTX.decompile_signed_transaction_intent
         )
     }
-    
+
     static func compileNotarizedTransactionIntentRequest(request: CompileNotarizedTransactionIntentRequest) -> CompileNotarizedTransactionIntentResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: compile_notarized_transaction_intent
+            function: libTX.compile_notarized_transaction_intent
         )
     }
-    
+
     static func decompileNotarizedTransactionIntentRequest(request: DecompileNotarizedTransactionIntentRequest) -> DecompileNotarizedTransactionIntentResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: decompile_notarized_transaction_intent
+            function: libTX.decompile_notarized_transaction_intent
         )
     }
-    
+
     static func decompileUnknownTransactionIntentRequest(request: DecompileUnknownTransactionIntentRequest) -> DecompileUnknownTransactionIntentResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: decompile_unknown_transaction_intent
+            function: libTX.decompile_unknown_transaction_intent
         )
     }
-    
+
     static func decodeAddressRequest(request: DecodeAddressRequest) -> DecodeAddressResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: decode_address
+            function: libTX.decode_address
         )
     }
-    
+
     static func encodeAddressRequest(request: EncodeAddressRequest) -> EncodeAddressResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: encode_address
+            function: libTX.encode_address
         )
     }
-    
+
     static func sborDecodeRequest(request: SborDecodeRequest) -> SborDecodeResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: sbor_decode
+            function: libTX.sbor_decode
         )
     }
-    
+
     static func sborEncodeRequest(request: SborEncodeRequest) -> SborEncodeResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: sbor_encode
+            function: libTX.sbor_encode
         )
     }
-    
+
     static func extractAbiRequest(request: ExtractAbiRequest) -> ExtractAbiResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: extract_abi
+            function: libTX.extract_abi
         )
     }
-    
+
     static func deriveNonFungibleAddressFromPublicKeyRequest(request: DeriveNonFungibleAddressFromPublicKeyRequest) -> DeriveNonFungibleAddressFromPublicKeyResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: derive_non_fungible_address_from_public_key
+            function: libTX.derive_non_fungible_address_from_public_key
         )
     }
-    
+
     static func deriveNonFungibleAddressRequest(request: DeriveNonFungibleAddressRequest) -> DeriveNonFungibleAddressResponse {
-        return callLibraryFunction(
+        callLibraryFunction(
             input: request,
-            function: derive_non_fungible_address
+            function: libTX.derive_non_fungible_address
         )
     }
 }
@@ -140,7 +133,7 @@ private extension TX {
     /// communicating and getting responses back from the library.
     static func callLibraryFunction<I: Encodable, O: Decodable>(
         input: I,
-        function: (UnsafeMutablePointer<CChar>?) -> UnsafeMutablePointer<CChar>?
+        function: (UnsafePointer<CChar>?) -> UnsafePointer<CChar>?
     ) -> O {
         // Serialize the given request to a JSON string.
         let requestString: String = serialize(object: input)
@@ -152,7 +145,7 @@ private extension TX {
         
         // Calling the underlying transaction library function and getting a pointer
         // response. We cannot deallocated the `responsePointer`, it results in a crash.
-        let responsePointer: UnsafeMutablePointer<CChar> = function(allocatedMemory)!
+        let responsePointer = function(allocatedMemory)!
         let responseString: String = readStringFromMemory(pointer: responsePointer)
         
         // Deallocating the request and response memory
@@ -175,10 +168,10 @@ private extension TX {
     
     /// Deserializes a JSON string to a generic `T`.
     ///
-    /// This function deserializes a JSON string to a generic `T` which is defined by the return of this function. It is
+    /// This function deserializes a JSON string to a generic `T` which is defined by the of this function. It is
     /// assumed that the deserialization does not fail since the payload is a trusted payload.
     ///
-    /// TODO: In the future, it would be better to have this return a `Result<T, Error>` since there is a chance
+    /// TODO: In the future, it would be better to have this a `Result<T, Error>` since there is a chance
     /// that this could be an error type as well and not an Ok response.
     static func deserialize<T: Decodable>(string: String) -> T {
         let decoder: JSONDecoder = JSONDecoder()
@@ -230,7 +223,7 @@ private extension TX {
     ///
     /// This function reads a C-String, null terminated, string from the provided memory location and returns it.
     static func readStringFromMemory(
-        pointer: UnsafeMutablePointer<CChar>
+        pointer: UnsafePointer<CChar>
     ) -> String {
         String(cString: pointer)
     }
