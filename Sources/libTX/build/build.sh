@@ -15,7 +15,6 @@ echo "🔮 🛠 🎯 Building targets for all platforms...☑️"
 echo "🔮 🦀  Switch rust to stable ⚖️"
 rustup default stable
 
-# cargo build --target x86_64-apple-ios --release         # iOS Simulator & iPhone x86 target
 cargo build --target aarch64-apple-ios-sim --release    # iOS Simulator Aarch64 target
 cargo build --target aarch64-apple-ios --release        # iOS iPhone Aarch64 target
 
@@ -29,19 +28,20 @@ echo "🔮 🛠 🎯 Finished building all targets ✅"
     cd target
     mkdir -p macos-arm64_x86_64
 
-     # Combine the two macOS builds into one fat file
+     # Combine two builds for the macOS archictures together into one fat file.
     lipo -create \
         aarch64-apple-darwin/release/libtransaction_library.a \
         x86_64-apple-darwin/release/libtransaction_library.a \
         -o macos-arm64_x86_64/libTX.a
         
+    # Lipo is not needed for iOS, since we only support one architecture, and that is `aarch64` (ARM64 iOS).
+    # And lipo is only used to combine different architectures for same platform together.
+    
     mv aarch64-apple-ios/release/libtransaction_library.a aarch64-apple-ios/release/libTX.a
     mv aarch64-apple-ios-sim/release/libtransaction_library.a aarch64-apple-ios-sim/release/libTX.a
 
 	echo "🔮 🙏 Finished merging some of the targets using 'lipo'"
 )
-
-
 
 # Create the C header of the provided functions and adding it to the directory of each of the
 # builds
@@ -82,8 +82,9 @@ echo "🔮 🛠 🎯 Finished building all targets ✅"
     rustup default stable
 )
 
-echo "🔮 📦 Creating '.xcframework' ☑️"
+echo "🔮 📦 Creating '.xcframework' for platforms: [iOS, iOS Simulator, macOS] ☑️"
 
+# iOS, iOS Sim, macOS
 xcodebuild -create-xcframework \
     -library target/aarch64-apple-ios/release/libTX.a \
     -headers target/aarch64-apple-ios/release/include \
@@ -93,4 +94,4 @@ xcodebuild -create-xcframework \
     -headers target/macos-arm64_x86_64/include \
     -output ../../libTX.xcframework
 
-echo "🔮 📦 Created '.xcframework' ✅"
+echo "🔮 📦 Created '.xcframework' for platforms: [iOS, iOS Simulator, macOS] ✅"
