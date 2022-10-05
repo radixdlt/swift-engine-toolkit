@@ -535,14 +535,4 @@ public extension Value {
     }
 }
 
-enum DecodeError: Error {
-    case valueTypeDiscriminatorMismatch(expectedAnyOf: [ValueKind], butGot: ValueKind)
-    case instructionTypeDiscriminatorMismatch(expected: InstructionKind, butGot: InstructionKind)
-    case parsingError
-}
 
-extension DecodeError {
-    static func valueTypeDiscriminatorMismatch(expected: ValueKind, butGot: ValueKind) -> Self {
-        .valueTypeDiscriminatorMismatch(expectedAnyOf: [expected], butGot: butGot)
-    }
-}

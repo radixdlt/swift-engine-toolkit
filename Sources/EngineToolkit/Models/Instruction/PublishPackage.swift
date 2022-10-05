@@ -49,7 +49,7 @@ public extension PublishPackage {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
+            throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
         let code: Blob = try container.decode(Blob.self, forKey: .code)

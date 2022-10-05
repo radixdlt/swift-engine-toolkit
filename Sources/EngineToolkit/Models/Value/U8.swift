@@ -42,7 +42,7 @@ public extension U8 {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
+            throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
         // Decoding `value`
@@ -50,7 +50,7 @@ public extension U8 {
         if let value = UInt8(valueString) {
             self.value = value
         } else {
-            throw DecodeError.parsingError
+            throw InternalDecodingFailure.parsingError
         }
     }
 }
