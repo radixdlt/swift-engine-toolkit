@@ -12,10 +12,16 @@ public extension CustomStringConvertible where Self: RawRepresentable, RawValue 
     var description: String { rawValue }
 }
 
-public protocol ErrorResponseProtocol: Swift.Error, Sendable, Equatable, Codable {
+protocol ErrorResponseProtocol: Swift.Error, Sendable, Equatable, Codable {
     static var type: ErrorResponseType { get }
 }
-public protocol ErrorResponseWithValueProtocol: ErrorResponseProtocol {}
+protocol ErrorResponseWithValueProtocol: ErrorResponseProtocol {
+    associatedtype Value: Codable
+    var value: Value { get }
+    init (value: Value)
+}
+protocol ErrorResponseWithStringValueProtocol: ErrorResponseWithValueProtocol where Value == String {}
+protocol ErrorResponseWithNumberValueProtocol: ErrorResponseWithValueProtocol where Value == Int {}
 
 public enum ErrorResponse: Swift.Error, Sendable, Equatable, Codable {
     case addressError(AddressError)
@@ -90,22 +96,26 @@ public enum ErrorResponseType: String, Swift.Error, Sendable, Equatable, Codable
 }
 
 
-public struct AddressError: ErrorResponseProtocol {
+public struct AddressError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .addressError
+    public let value: String
 }
 public struct UnrecognizedAddressFormat: ErrorResponseProtocol {
     public static let type: ErrorResponseType = .addressError
 }
 
 /// Not to be confused with `InternalDecodingFailure`
-public struct DecodeError: ErrorResponseProtocol {
+public struct DecodeError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .decodeError
+    public let value: String
 }
-public struct DeserializationError: ErrorResponseProtocol {
+public struct DeserializationError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .deserializationError
+    public let value: String
 }
-public struct InvalidRequestString: ErrorResponseProtocol {
+public struct InvalidRequestString: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .invalidRequestString
+    public let value: String
 }
 public struct UnexpectedContents: ErrorResponseProtocol {
     public static let type: ErrorResponseType = .unexpectedContents
@@ -122,30 +132,53 @@ public struct ParseError: ErrorResponseProtocol {
 public struct NoManifestRepresentation: ErrorResponseProtocol {
     public static let type: ErrorResponseType = .noManifestRepresentation
 }
-public struct TransactionCompileError: ErrorResponseProtocol {
+public struct TransactionCompileError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .transactionCompileError
+    public let value: String
 }
-public struct TransactionDecompileError: ErrorResponseProtocol {
+public struct TransactionDecompileError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .transactionDecompileError
+    public let value: String
 }
-public struct UnsupportedTransactionVersion: ErrorResponseProtocol {
+public struct UnsupportedTransactionVersion: ErrorResponseWithNumberValueProtocol {
     public static let type: ErrorResponseType = .unsupportedTransactionVersion
+    public let value: Int
 }
-public struct GeneratorError: ErrorResponseProtocol {
+public struct GeneratorError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .generatorError
+    public let value: String
 }
-public struct RequestResponseConversionError: ErrorResponseProtocol {
+public struct RequestResponseConversionError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .requestResponseConversionError
+    public let value: String
 }
 public struct UnrecognizedCompiledIntentFormat: ErrorResponseProtocol {
     public static let type: ErrorResponseType = .unrecognizedCompiledIntentFormat
 }
-public struct TransactionValidationError: ErrorResponseProtocol {
+public struct TransactionValidationError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .transactionValidationError
+    public let value: String
 }
-public struct ExtractAbiError: ErrorResponseProtocol {
+public struct ExtractAbiError: ErrorResponseWithStringValueProtocol {
     public static let type: ErrorResponseType = .extractAbiError
+    public let value: String
 }
 public struct NetworkMismatchError: ErrorResponseProtocol {
     public static let type: ErrorResponseType = .networkMismatchError
+}
+
+private enum ErrorResponseCodingKeys: String, CodingKey {
+    case type, value
+}
+extension ErrorResponseWithValueProtocol {
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: ErrorResponseCodingKeys.self)
+        let type = try container.decode(ErrorResponseType.self, forKey: .type)
+        guard type == Self.type else {
+            throw InternalDecodingFailure.errorTypeDiscriminatorMismatch(expected: Self.type, butGot: type)
+        }
+        let value = try container.decode(Value.self, forKey: .value)
+        self.init(value: value)
+    }
 }
