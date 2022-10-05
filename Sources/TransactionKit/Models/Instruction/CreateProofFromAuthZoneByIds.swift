@@ -29,7 +29,7 @@ public extension CreateProofFromAuthZoneByIds {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case ids
         case resourceAddress = "resource_address"
@@ -40,7 +40,7 @@ public extension CreateProofFromAuthZoneByIds {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(resourceAddress, forKey: .resourceAddress)
@@ -50,15 +50,15 @@ public extension CreateProofFromAuthZoneByIds {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let resourceAddress: ResourceAddress = try values.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let ids: Set<NonFungibleId> = try values.decode(Set<NonFungibleId>.self, forKey: .ids)
-        let intoProof: Proof = try values.decode(Proof.self, forKey: .intoProof)
+        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
+        let ids: Set<NonFungibleId> = try container.decode(Set<NonFungibleId>.self, forKey: .ids)
+        let intoProof: Proof = try container.decode(Proof.self, forKey: .intoProof)
         
         self = Self(from: resourceAddress, ids: ids, intoProof: intoProof)
     }

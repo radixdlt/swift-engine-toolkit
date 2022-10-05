@@ -4,18 +4,18 @@ public struct CompileTransactionIntentResponse: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let compiledIntent: Array<UInt8>
+    public let compiledIntent: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from compiledIntent: Array<UInt8>) {
+    public init(from compiledIntent: [UInt8]) {
         self.compiledIntent = compiledIntent
     }
     
     public init(from compiledIntent: String) throws {
-        self.compiledIntent = Array<UInt8>(hex: compiledIntent)
+        self.compiledIntent = [UInt8](hex: compiledIntent)
     }
 }
 
@@ -24,7 +24,7 @@ public extension CompileTransactionIntentResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case compiledIntent = "compiled_intent"
     }
     
@@ -32,13 +32,13 @@ public extension CompileTransactionIntentResponse {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(compiledIntent.toHexString(), forKey: .compiledIntent)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try values.decode(String.self, forKey: .compiledIntent))
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self = try Self(from: try container.decode(String.self, forKey: .compiledIntent))
     }
 }

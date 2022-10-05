@@ -17,12 +17,28 @@ public struct DecodeAddressResponse: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let networkId: UInt8
+    public let networkId: NetworkID
     public let networkName: String
     public let entityType: AddressKind
-    public let data: Array<UInt8>
+    public let data: [UInt8]
     public let hrp: String
     public let address: Address
+	
+	public init(
+		networkName: String,
+		entityType: AddressKind,
+		data: [UInt8],
+		hrp: String,
+		address: Address,
+		networkId: NetworkID = .mainnet
+	) {
+		self.networkId = networkId
+		self.networkName = networkName
+		self.entityType = entityType
+		self.data = data
+		self.hrp = hrp
+		self.address = address
+	}
 }
 
 public extension DecodeAddressResponse {
@@ -30,7 +46,7 @@ public extension DecodeAddressResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case networkId = "network_id"
         case networkName = "network_name"
         case entityType = "entity_type"
@@ -43,7 +59,7 @@ public extension DecodeAddressResponse {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encode(networkId, forKey: .networkId)
         try container.encode(networkName, forKey: .networkName)
@@ -54,16 +70,18 @@ public extension DecodeAddressResponse {
     }
     
     init(from decoder: Decoder) throws {
-        // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        
-        networkId = try values.decode(UInt8.self, forKey: .networkId)
-        networkName = try values.decode(String.self, forKey: .networkName)
-        entityType = try values.decode(AddressKind.self, forKey: .entityType)
-        data = Array<UInt8>(hex: try values.decode(String.self, forKey: .data))
-        hrp = try values.decode(String.self, forKey: .hrp)
-        address = try values.decode(Address.self, forKey: .address)
-    }
+		// Checking for type discriminator
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		
+		try self.init(
+			networkName: container.decode(String.self, forKey: .networkName),
+			entityType: container.decode(AddressKind.self, forKey: .entityType),
+			data: [UInt8](hex: container.decode(String.self, forKey: .data)),
+			hrp: container.decode(String.self, forKey: .hrp),
+			address: container.decode(Address.self, forKey: .address),
+			networkId: container.decode(NetworkID.self, forKey: .networkId)
+		)
+	}
 }
 
 public enum AddressKind: String, Codable, Sendable, Hashable {

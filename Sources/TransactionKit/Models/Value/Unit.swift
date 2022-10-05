@@ -9,7 +9,7 @@ public extension Unit {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -17,14 +17,14 @@ public extension Unit {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }

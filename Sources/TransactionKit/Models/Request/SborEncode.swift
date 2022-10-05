@@ -4,18 +4,18 @@ public struct SborEncodeResponse: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let encodedValue: Array<UInt8>
+    public let encodedValue: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from encodedValue: Array<UInt8>) {
+    public init(from encodedValue: [UInt8]) {
         self.encodedValue = encodedValue
     }
     
     public init(from encodedValue: String) {
-        self.encodedValue = Array<UInt8>(hex: encodedValue)
+        self.encodedValue = [UInt8](hex: encodedValue)
     }
 
 }
@@ -25,7 +25,7 @@ public extension SborEncodeResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case encodedValue = "encoded_value"
     }
     
@@ -33,15 +33,15 @@ public extension SborEncodeResponse {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(encodedValue.toHexString(), forKey: .encodedValue)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try values.decode(String.self, forKey: .encodedValue))
+        self = Self(from: try container.decode(String.self, forKey: .encodedValue))
         
     }
 }

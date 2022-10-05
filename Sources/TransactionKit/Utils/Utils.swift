@@ -19,7 +19,7 @@ extension Array where Element == UInt8 {
     init(hex: String) {
         self.init()
         
-        let utf8 = Array<Element.IntegerLiteralType>(hex.utf8)
+        let utf8 = [Element.IntegerLiteralType](hex.utf8)
         for idx in stride(from: 0, to: utf8.endIndex, by: utf8.startIndex.advanced(by: 2)) {
             let byteHex = "\(UnicodeScalar(utf8[idx]))\(UnicodeScalar(utf8[idx.advanced(by: 1)]))"
             if let byte = UInt8(byteHex, radix: 16) {

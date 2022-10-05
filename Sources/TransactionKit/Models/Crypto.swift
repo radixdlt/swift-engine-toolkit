@@ -5,19 +5,19 @@ public struct EcdsaSecp256k1SignatureString: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: Array<UInt8>
+    public let value: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: Array<UInt8>) {
+    public init(from value: [UInt8]) {
         self.value = value
     }
     
     public init(from value: String) throws {
         // TODO: Validation of length of array
-        self.value = Array<UInt8>(hex: value)
+        self.value = [UInt8](hex: value)
     }
 }
 
@@ -26,7 +26,7 @@ public extension EcdsaSecp256k1SignatureString {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -39,8 +39,8 @@ public extension EcdsaSecp256k1SignatureString {
     }
     
     init(from decoder: Decoder) throws {
-        let values: SingleValueDecodingContainer = try decoder.singleValueContainer()
-        self = try Self(from: try values.decode(String.self))
+        let container = try decoder.singleValueContainer()
+        self = try Self(from: try container.decode(String.self))
     }
 }
 
@@ -49,19 +49,19 @@ public struct EcdsaSecp256k1PublicKeyString: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: Array<UInt8>
+    public let value: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: Array<UInt8>) {
+    public init(from value: [UInt8]) {
         self.value = value
     }
     
     public init(from value: String) throws {
         // TODO: Validation of length of array
-        self.value = Array<UInt8>(hex: value)
+        self.value = [UInt8](hex: value)
     }
 }
 
@@ -70,7 +70,7 @@ public extension EcdsaSecp256k1PublicKeyString {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -83,8 +83,8 @@ public extension EcdsaSecp256k1PublicKeyString {
     }
     
     init(from decoder: Decoder) throws {
-        let values: SingleValueDecodingContainer = try decoder.singleValueContainer()
-        self = try Self(from: try values.decode(String.self))
+        let container = try decoder.singleValueContainer()
+        self = try Self(from: try container.decode(String.self))
     }
 }
 
@@ -93,19 +93,19 @@ public struct EddsaEd25519SignatureString: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: Array<UInt8>
+    public let value: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: Array<UInt8>) {
+    public init(from value: [UInt8]) {
         self.value = value
     }
     
     public init(from value: String) throws {
         // TODO: Validation of length of array
-        self.value = Array<UInt8>(hex: value)
+        self.value = [UInt8](hex: value)
     }
 }
 
@@ -114,7 +114,7 @@ public extension EddsaEd25519SignatureString {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -127,8 +127,8 @@ public extension EddsaEd25519SignatureString {
     }
     
     init(from decoder: Decoder) throws {
-        let values: SingleValueDecodingContainer = try decoder.singleValueContainer()
-        self = try Self(from: try values.decode(String.self))
+        let container = try decoder.singleValueContainer()
+        self = try Self(from: try container.decode(String.self))
     }
 }
 
@@ -137,19 +137,19 @@ public struct EddsaEd25519PublicKeyString: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: Array<UInt8>
+    public let value: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: Array<UInt8>) {
+    public init(from value: [UInt8]) {
         self.value = value
     }
     
     public init(from value: String) throws {
         // TODO: Validation of length of array
-        self.value = Array<UInt8>(hex: value)
+        self.value = [UInt8](hex: value)
     }
   
 }
@@ -159,7 +159,7 @@ public extension EddsaEd25519PublicKeyString {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
@@ -172,8 +172,8 @@ public extension EddsaEd25519PublicKeyString {
     }
     
     init(from decoder: Decoder) throws {
-        let values: SingleValueDecodingContainer = try decoder.singleValueContainer()
-        self = try Self(from: try values.decode(String.self))
+        let container = try decoder.singleValueContainer()
+        self = try Self(from: try container.decode(String.self))
     }
 }
 
@@ -190,7 +190,7 @@ public extension PublicKey {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case publicKey = "public_key"
     }
@@ -199,7 +199,7 @@ public extension PublicKey {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {
             case .ecdsaSecp256k1(let publicKey):
@@ -213,14 +213,14 @@ public extension PublicKey {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let type: String = try values.decode(String.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type: String = try container.decode(String.self, forKey: .type)
         
         switch type {
             case "EcdsaSecp256k1":
-                self = .ecdsaSecp256k1(try values.decode(EcdsaSecp256k1PublicKeyString.self, forKey: .publicKey))
+                self = .ecdsaSecp256k1(try container.decode(EcdsaSecp256k1PublicKeyString.self, forKey: .publicKey))
             case "EddsaEd25519":
-                self = .eddsaEd25519(try values.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey))
+                self = .eddsaEd25519(try container.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey))
             default:
                 // TODO: Temporary error. Need a better one
                 throw DecodeError.parsingError
@@ -257,7 +257,7 @@ public extension Signature {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case signature
     }
@@ -267,7 +267,7 @@ public extension Signature {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(discriminator, forKey: .type)
         
         switch self {
@@ -280,14 +280,14 @@ public extension Signature {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let discriminator = try values.decode(CurveDiscriminator.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let discriminator = try container.decode(CurveDiscriminator.self, forKey: .type)
         
         switch discriminator {
         case .ecdsaSecp256k1:
-            self = .ecdsaSecp256k1(try values.decode(EcdsaSecp256k1SignatureString.self, forKey: .signature))
+            self = .ecdsaSecp256k1(try container.decode(EcdsaSecp256k1SignatureString.self, forKey: .signature))
         case .eddsaEd25519:
-            self = .eddsaEd25519(try values.decode(EddsaEd25519SignatureString.self, forKey: .signature))
+            self = .eddsaEd25519(try container.decode(EddsaEd25519SignatureString.self, forKey: .signature))
         }
     }
 }
@@ -317,7 +317,7 @@ public extension SignatureWithPublicKey {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case publicKey = "public_key"
         case signature
@@ -327,7 +327,7 @@ public extension SignatureWithPublicKey {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(discriminator, forKey: .type)
         
         switch self {
@@ -341,16 +341,16 @@ public extension SignatureWithPublicKey {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        let discriminator = try values.decode(CurveDiscriminator.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let discriminator = try container.decode(CurveDiscriminator.self, forKey: .type)
         
         switch discriminator {
         case .ecdsaSecp256k1:
-            self = .ecdsaSecp256k1(try values.decode(EcdsaSecp256k1SignatureString.self, forKey: .signature))
+            self = .ecdsaSecp256k1(try container.decode(EcdsaSecp256k1SignatureString.self, forKey: .signature))
         case .eddsaEd25519:
             self = .eddsaEd25519(
-                try values.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey),
-                try values.decode(EddsaEd25519SignatureString.self, forKey: .signature)
+                try container.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey),
+                try container.decode(EddsaEd25519SignatureString.self, forKey: .signature)
             )
         }
     }

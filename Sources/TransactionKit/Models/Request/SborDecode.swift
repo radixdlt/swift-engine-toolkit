@@ -2,21 +2,20 @@ public struct SborDecodeRequest: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let encodedValue: Array<UInt8>
-    public let networkId: UInt8
+    public let encodedValue: [UInt8]
+    public let networkId: NetworkID
     
     // =============
     // Constructors
     // =============
     
-    public init(from encodedValue: Array<UInt8>, networkId: UInt8) {
-        self.encodedValue = encodedValue
+	public init(encodedBytes: [UInt8], networkId: NetworkID = .mainnet) {
+        self.encodedValue = encodedBytes
         self.networkId = networkId
     }
     
-    public init(from encodedValue: String, networkId: UInt8) {
-        self.encodedValue = Array<UInt8>(hex: encodedValue)
-        self.networkId = networkId
+	public init(encodedHex: String, networkId: NetworkID = .mainnet) {
+		self.init(encodedBytes: [UInt8](hex: encodedHex), networkId: networkId)
     }
 }
 
@@ -24,7 +23,7 @@ public extension SborDecodeRequest {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case encodedValue = "encoded_value"
         case networkId = "network_id"
     }
@@ -33,16 +32,19 @@ public extension SborDecodeRequest {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(encodedValue.toHexString(), forKey: .encodedValue)
         try container.encode(networkId, forKey: .networkId)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try values.decode(String.self, forKey: .encodedValue), networkId: try values.decode(UInt8.self, forKey: .networkId))
+		try self.init(
+			encodedHex: container.decode(String.self, forKey: .encodedValue),
+			networkId: container.decode(NetworkID.self, forKey: .networkId)
+		)
         
     }
 }

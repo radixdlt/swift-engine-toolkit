@@ -10,13 +10,13 @@ public struct Map: Sendable, Codable, Hashable {
     
     public let keyType: ValueKind
     public let valueType: ValueKind
-    public let elements: Array<Value>
+    public let elements: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from keyType: ValueKind, valueType: ValueKind, elements: Array<Value>) {
+    public init(from keyType: ValueKind, valueType: ValueKind, elements: [Value]) {
         // TODO: Validate keys and values types
         self.keyType = keyType
         self.valueType = valueType
@@ -29,7 +29,7 @@ public extension Map {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case elements, keyType = "key_type", valueType = "value_type", type
     }
     
@@ -37,7 +37,7 @@ public extension Map {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(elements, forKey: .elements)
@@ -47,18 +47,18 @@ public extension Map {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `keyType` & `valueType`
-        keyType = try values.decode(ValueKind.self, forKey: .keyType)
-        valueType = try values.decode(ValueKind.self, forKey: .valueType)
+        keyType = try container.decode(ValueKind.self, forKey: .keyType)
+        valueType = try container.decode(ValueKind.self, forKey: .valueType)
         
         // Decoding `elements`
         // TODO: Validate that all elements are of type `elementType`
-        elements = try values.decode(Array<Value>.self, forKey: .elements)
+        elements = try container.decode([Value].self, forKey: .elements)
     }
 }

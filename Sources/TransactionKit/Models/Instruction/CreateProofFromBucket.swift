@@ -26,7 +26,7 @@ public extension CreateProofFromBucket {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case bucket
         case intoProof = "into_proof"
@@ -36,7 +36,7 @@ public extension CreateProofFromBucket {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(bucket, forKey: .bucket)
@@ -45,14 +45,14 @@ public extension CreateProofFromBucket {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let bucket: Bucket = try values.decode(Bucket.self, forKey: .bucket)
-        let intoProof: Proof = try values.decode(Proof.self, forKey: .intoProof)
+        let bucket: Bucket = try container.decode(Bucket.self, forKey: .bucket)
+        let intoProof: Proof = try container.decode(Proof.self, forKey: .intoProof)
         
         self = Self(from: bucket, intoProof: intoProof)
     }

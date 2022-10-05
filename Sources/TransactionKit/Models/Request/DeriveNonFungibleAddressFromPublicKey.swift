@@ -14,7 +14,7 @@ public struct DeriveNonFungibleAddressFromPublicKeyRequest: Sendable, Codable, H
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case publicKey = "public_key"
     }
 }
@@ -36,7 +36,7 @@ public struct DeriveNonFungibleAddressFromPublicKeyResponse: Sendable, Codable, 
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case nonFungibleAddress = "non_fungible_address"
     }
 }

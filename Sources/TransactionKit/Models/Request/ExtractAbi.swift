@@ -2,18 +2,18 @@ public struct ExtractAbiRequest: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let packageWasm: Array<UInt8>
+    public let packageWasm: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from packageWasm: Array<UInt8>) {
+    public init(from packageWasm: [UInt8]) {
         self.packageWasm = packageWasm
     }
     
     public init(from packageWasm: String) {
-        self.packageWasm = Array<UInt8>(hex: packageWasm)
+        self.packageWasm = [UInt8](hex: packageWasm)
     }
 
 }
@@ -23,7 +23,7 @@ public extension ExtractAbiRequest {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case packageWasm = "package_wasm"
     }
     
@@ -31,15 +31,15 @@ public extension ExtractAbiRequest {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(packageWasm.toHexString(), forKey: .packageWasm)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try values.decode(String.self, forKey: .packageWasm))
+        self = Self(from: try container.decode(String.self, forKey: .packageWasm))
     }
 }
 
@@ -47,21 +47,21 @@ public struct ExtractAbiResponse: Sendable, Codable, Hashable {
     // ===============
     // Struct members
     // ===============
-    public let code: Array<UInt8>
-    public let abi: Array<UInt8>
+    public let code: [UInt8]
+    public let abi: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from code: Array<UInt8>, abi: Array<UInt8>) {
+    public init(from code: [UInt8], abi: [UInt8]) {
         self.code = code
         self.abi = abi
     }
     
     public init(from code: String, abi: String) {
-        self.code = Array<UInt8>(hex: code)
-        self.abi = Array<UInt8>(hex: abi)
+        self.code = [UInt8](hex: code)
+        self.abi = [UInt8](hex: abi)
     }
 
 }
@@ -71,7 +71,7 @@ public extension ExtractAbiResponse {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case code
         case abi
     }
@@ -80,15 +80,15 @@ public extension ExtractAbiResponse {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(code.toHexString(), forKey: .code)
         try container.encode(abi.toHexString(), forKey: .abi)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try values.decode(String.self, forKey: .code), abi: try values.decode(String.self, forKey: .code))
+        self = Self(from: try container.decode(String.self, forKey: .code), abi: try container.decode(String.self, forKey: .code))
     }
 }

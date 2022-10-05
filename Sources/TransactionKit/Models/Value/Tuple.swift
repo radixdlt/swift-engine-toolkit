@@ -8,13 +8,13 @@ public struct Tuple: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let elements: Array<Value>
+    public let elements: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from elements: Array<Value>) {
+    public init(from elements: [Value]) {
         self.elements = elements
     }
 }
@@ -26,7 +26,7 @@ public extension Tuple {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case elements, type
     }
     
@@ -34,7 +34,7 @@ public extension Tuple {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(elements, forKey: .elements)
@@ -42,14 +42,14 @@ public extension Tuple {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
     
         // Decoding `elements`
         // TODO: Validate that all elements are of type `elementType`
-        elements = try values.decode(Array<Value>.self, forKey: .elements)
+        elements = try container.decode([Value].self, forKey: .elements)
     }
 }

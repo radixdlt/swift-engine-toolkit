@@ -8,19 +8,19 @@ public struct Blob: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let hash: Array<UInt8>
+    public let hash: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from hash: Array<UInt8>) {
+    public init(from hash: [UInt8]) {
         self.hash = hash
     }
     
     public init(from hash: String) throws {
         // TODO: Validation of length of Hash
-        self.hash = Array<UInt8>(hex: hash)
+        self.hash = [UInt8](hex: hash)
     }
 
 }
@@ -30,7 +30,7 @@ public extension Blob {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case hash, type
     }
     
@@ -38,7 +38,7 @@ public extension Blob {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(hash.toHexString(), forKey: .hash)
@@ -46,13 +46,13 @@ public extension Blob {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `hash`
-        self = try Self(from: try values.decode(String.self, forKey: .hash))
+        self = try Self(from: try container.decode(String.self, forKey: .hash))
     }
 }

@@ -9,13 +9,13 @@ public struct Enum: Sendable, Codable, Hashable {
     // ===============
     
     public let variant: String
-    public let fields: Array<Value>
+    public let fields: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from variant: String, fields: Array<Value>) {
+    public init(from variant: String, fields: [Value]) {
         self.variant = variant
         self.fields = fields
     }
@@ -26,7 +26,7 @@ public extension Enum {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case variant
         case type
         case fields
@@ -36,7 +36,7 @@ public extension Enum {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(variant, forKey: .variant)
@@ -45,15 +45,15 @@ public extension Enum {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try values.decode(ValueKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
         // Decoding `variant`
-        variant = try values.decode(String.self, forKey: .variant)
+        variant = try container.decode(String.self, forKey: .variant)
         // Decoding `fields`
-        fields = try values.decode(Array<Value>.self, forKey: .fields)
+        fields = try container.decode([Value].self, forKey: .fields)
     }
 }

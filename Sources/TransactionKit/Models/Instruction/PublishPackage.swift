@@ -27,7 +27,7 @@ public extension PublishPackage {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case code
         case abi
@@ -37,7 +37,7 @@ public extension PublishPackage {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(code, forKey: .code)
@@ -46,14 +46,14 @@ public extension PublishPackage {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let code: Blob = try values.decode(Blob.self, forKey: .code)
-        let abi: Blob = try values.decode(Blob.self, forKey: .abi)
+        let code: Blob = try container.decode(Blob.self, forKey: .code)
+        let abi: Blob = try container.decode(Blob.self, forKey: .abi)
         
         self = Self(from: code, abi: abi)
     }

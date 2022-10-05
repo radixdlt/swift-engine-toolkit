@@ -27,7 +27,7 @@ public extension CreateProofFromAuthZone {
     // =======================
     // Coding Keys Definition
     // =======================
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case resourceAddress = "resource_address"
         case intoBucket = "into_bucket"
@@ -37,7 +37,7 @@ public extension CreateProofFromAuthZone {
     // Encoding and Decoding
     // ======================
     func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(resourceAddress, forKey: .resourceAddress)
@@ -46,14 +46,14 @@ public extension CreateProofFromAuthZone {
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
-        let values: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: InstructionKind = try values.decode(InstructionKind.self, forKey: .type)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
             throw DecodeError.instructionTypeDiscriminatorMismatch(Self.kind, kind)
         }
         
-        let resourceAddress: ResourceAddress = try values.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let intoBucket: Bucket = try values.decode(Bucket.self, forKey: .intoBucket)
+        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
+        let intoBucket: Bucket = try container.decode(Bucket.self, forKey: .intoBucket)
         
         self = Self(from: resourceAddress, intoBucket: intoBucket)
     }
