@@ -12,15 +12,15 @@ public enum ManifestInstructions: Sendable, Codable, Hashable {
     // Enum Variants
     // ==============
     
-    case stringInstructions(String)
-    case jsonInstructions([Instruction])
+    case string(String)
+    case json([Instruction])
 }
 
 public extension ManifestInstructions {
     
     enum Kind: String, Codable, Hashable, Sendable {
-        case string
-        case json
+        case string = "String"
+        case json = "JSON"
     }
 
 }

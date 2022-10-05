@@ -13,117 +13,129 @@ public extension TX {
     /// think of this information request as the "Hello World" example of the transaction library where, this is
     /// typically the first request type to be implemented in any implementation of the transaction library, if this
     /// request works then you can be assured that all of the other lower level operations work as well.
-    static func information() -> InformationResponse {
-        callLibraryFunction(
+    static func information() throws -> InformationResponse {
+        try callLibraryFunction(
             input: InformationRequest(),
             function: libTX.information
         )
     }
     
-    static func convertManifest(request: ConvertManifestRequest) -> ConvertManifestResponse {
-        callLibraryFunction(
+    static func convertManifest(request: ConvertManifestRequest) throws -> ConvertManifestResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.convert_manifest
         )
     }
 
-    static func compileTransactionIntentRequest(request: CompileTransactionIntentRequest) -> CompileTransactionIntentResponse {
-        callLibraryFunction(
+    static func compileTransactionIntentRequest(request: CompileTransactionIntentRequest) throws -> CompileTransactionIntentResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.compile_transaction_intent
         )
     }
 
-    static func decompileTransactionIntentRequest(request: DecompileTransactionIntentRequest) -> DecompileTransactionIntentResponse {
-        callLibraryFunction(
+    static func decompileTransactionIntentRequest(request: DecompileTransactionIntentRequest) throws -> DecompileTransactionIntentResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.decompile_transaction_intent
         )
     }
 
-    static func compileSignedTransactionIntentRequest(request: CompileSignedTransactionIntentRequest) -> CompileSignedTransactionIntentResponse {
-        callLibraryFunction(
+    static func compileSignedTransactionIntentRequest(request: CompileSignedTransactionIntentRequest) throws -> CompileSignedTransactionIntentResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.compile_signed_transaction_intent
         )
     }
 
-    static func decompileSignedTransactionIntentRequest(request: DecompileSignedTransactionIntentRequest) -> DecompileSignedTransactionIntentResponse {
-        callLibraryFunction(
+    static func decompileSignedTransactionIntentRequest(request: DecompileSignedTransactionIntentRequest) throws -> DecompileSignedTransactionIntentResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.decompile_signed_transaction_intent
         )
     }
 
-    static func compileNotarizedTransactionIntentRequest(request: CompileNotarizedTransactionIntentRequest) -> CompileNotarizedTransactionIntentResponse {
-        callLibraryFunction(
+    static func compileNotarizedTransactionIntentRequest(request: CompileNotarizedTransactionIntentRequest) throws -> CompileNotarizedTransactionIntentResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.compile_notarized_transaction_intent
         )
     }
 
-    static func decompileNotarizedTransactionIntentRequest(request: DecompileNotarizedTransactionIntentRequest) -> DecompileNotarizedTransactionIntentResponse {
-        callLibraryFunction(
+    static func decompileNotarizedTransactionIntentRequest(request: DecompileNotarizedTransactionIntentRequest) throws -> DecompileNotarizedTransactionIntentResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.decompile_notarized_transaction_intent
         )
     }
 
-    static func decompileUnknownTransactionIntentRequest(request: DecompileUnknownTransactionIntentRequest) -> DecompileUnknownTransactionIntentResponse {
-        callLibraryFunction(
+    static func decompileUnknownTransactionIntentRequest(
+		request: DecompileUnknownTransactionIntentRequest
+	) throws -> DecompileUnknownTransactionIntentResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.decompile_unknown_transaction_intent
         )
     }
 
-    static func decodeAddressRequest(request: DecodeAddressRequest) -> DecodeAddressResponse {
-        callLibraryFunction(
+    static func decodeAddressRequest(request: DecodeAddressRequest) throws -> DecodeAddressResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.decode_address
         )
     }
 
-    static func encodeAddressRequest(request: EncodeAddressRequest) -> EncodeAddressResponse {
-        callLibraryFunction(
+    static func encodeAddressRequest(request: EncodeAddressRequest) throws -> EncodeAddressResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.encode_address
         )
     }
 
-    static func sborDecodeRequest(request: SborDecodeRequest) -> SborDecodeResponse {
-        callLibraryFunction(
+    static func sborDecodeRequest(request: SborDecodeRequest) throws -> SborDecodeResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.sbor_decode
         )
     }
 
-    static func sborEncodeRequest(request: SborEncodeRequest) -> SborEncodeResponse {
-        callLibraryFunction(
+    static func sborEncodeRequest(request: SborEncodeRequest) throws -> SborEncodeResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.sbor_encode
         )
     }
 
-    static func extractAbiRequest(request: ExtractAbiRequest) -> ExtractAbiResponse {
-        callLibraryFunction(
+    static func extractAbiRequest(request: ExtractAbiRequest) throws -> ExtractAbiResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.extract_abi
         )
     }
 
-    static func deriveNonFungibleAddressFromPublicKeyRequest(request: DeriveNonFungibleAddressFromPublicKeyRequest) -> DeriveNonFungibleAddressFromPublicKeyResponse {
-        callLibraryFunction(
+    static func deriveNonFungibleAddressFromPublicKeyRequest(
+		request: DeriveNonFungibleAddressFromPublicKeyRequest
+	) throws -> DeriveNonFungibleAddressFromPublicKeyResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.derive_non_fungible_address_from_public_key
         )
     }
 
-    static func deriveNonFungibleAddressRequest(request: DeriveNonFungibleAddressRequest) -> DeriveNonFungibleAddressResponse {
-        callLibraryFunction(
+    static func deriveNonFungibleAddressRequest(
+		request: DeriveNonFungibleAddressRequest
+	) throws -> DeriveNonFungibleAddressResponse {
+        try callLibraryFunction(
             input: request,
             function: libTX.derive_non_fungible_address
         )
     }
+}
+
+internal extension TX {
+	enum Error: Swift.Error {
+		case noOutputFromLibraryCall
+	}
 }
 
 private extension TX {
@@ -134,9 +146,9 @@ private extension TX {
     static func callLibraryFunction<I: Encodable, O: Decodable>(
         input: I,
         function: (UnsafePointer<CChar>?) -> UnsafePointer<CChar>?
-    ) -> O {
+    ) throws -> O {
         // Serialize the given request to a JSON string.
-        let requestString: String = serialize(object: input)
+        let requestString: String = try serialize(object: input)
         
         // Allocate enough memory for the request string and then write it to
         // that memory location
@@ -145,13 +157,16 @@ private extension TX {
         
         // Calling the underlying transaction library function and getting a pointer
         // response. We cannot deallocated the `responsePointer`, it results in a crash.
-        let responsePointer = function(allocatedMemory)!
+		guard let responsePointer = function(allocatedMemory) else {
+			throw Error.noOutputFromLibraryCall
+		}
         let responseString: String = readStringFromMemory(pointer: responsePointer)
+		
         
         // Deallocating the request and response memory
         deallocateMemory(pointer: allocatedMemory)
         
-        return deserialize(string: responseString)
+        return try deserialize(string: responseString)
     }
     
     /// Serializes an object to a JSON string.
@@ -159,9 +174,9 @@ private extension TX {
     /// This private function takes an object and serializes it to a JSON string. In the current implementation, this
     /// object needs to be `Encodable`, therefore, this function abstracts the serialization logic away from the
     /// transaction library operations and into an individual function.
-    static func serialize<T: Encodable>(object: T) -> String {
+    static func serialize<T: Encodable>(object: T) throws -> String {
         let encoder: JSONEncoder = JSONEncoder()
-        let jsonData: Data = try! encoder.encode(object)
+        let jsonData: Data = try encoder.encode(object)
         let jsonString: String = String(data: jsonData, encoding: .utf8)!
         return jsonString
     }
@@ -173,9 +188,12 @@ private extension TX {
     ///
     /// TODO: In the future, it would be better to have this a `Result<T, Error>` since there is a chance
     /// that this could be an error type as well and not an Ok response.
-    static func deserialize<T: Decodable>(string: String) -> T {
-        let decoder: JSONDecoder = JSONDecoder()
-        return try! decoder.decode(T.self, from: string.data(using: String.Encoding.utf8)!)
+    static func deserialize<T: Decodable>(string: String) throws -> T {
+		
+		debugPrint(string)
+		
+        let decoder = JSONDecoder()
+        return try decoder.decode(T.self, from: string.data(using: String.Encoding.utf8)!)
     }
     
     /// Allocates as memory as the C-String representation of the provided String requires.

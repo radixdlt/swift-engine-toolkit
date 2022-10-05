@@ -5,18 +5,20 @@ final class ConvertManifestTests: XCTestCase {
 
     func test__convertManifest_to_json() throws {
         
-        let manifest = TransactionManifest.init(from: .stringInstructions(manifestString), blobs: <#T##[[UInt8]]#>)
-//
-//        let request = ConvertManifestRequest(
-//            transactionVersion: 1,
-//            networkId: 1,
-//            manifestInstructionsOutputFormat: .json,
-//            manifest: manifest
-//        )
-//
-//        let sut = TX.convertManifest(request:)
-//
-//        let output = sut(request)
+        let manifest = TransactionManifest(
+			instructions: .string(manifestString)
+		)
+
+        let request = ConvertManifestRequest(
+            transactionVersion: 1,
+            networkId: 1,
+            manifestInstructionsOutputFormat: .json,
+            manifest: manifest
+        )
+
+        let sut = TX.convertManifest(request:)
+
+        let output = try sut(request)
     }
 }
 

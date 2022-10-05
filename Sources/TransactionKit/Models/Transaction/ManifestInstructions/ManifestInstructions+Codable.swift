@@ -24,10 +24,10 @@ public extension ManifestInstructions {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {
-            case .stringInstructions(let value):
+            case .string(let value):
                 try container.encode(ManifestInstructionsKind.string, forKey: .type)
                 try container.encode(value, forKey: .value)
-            case .jsonInstructions(let value):
+            case .json(let value):
                 try container.encode(ManifestInstructionsKind.json, forKey: .type)
                 try container.encode(value, forKey: .value)
         }
@@ -40,11 +40,11 @@ public extension ManifestInstructions {
         
         switch manifestInstructionsKind {
             case .string:
-                let manifestInstructions: String = try container.decode(String.self, forKey: .value)
-                self = Self.stringInstructions(manifestInstructions)
+                let manifestInstructions = try container.decode(String.self, forKey: .value)
+                self = .string(manifestInstructions)
             case .json:
-                let manifestInstructions: [Instruction] = try container.decode([Instruction].self, forKey: .value)
-                self = Self.jsonInstructions(manifestInstructions)
+                let manifestInstructions = try container.decode([Instruction].self, forKey: .value)
+                self = .json(manifestInstructions)
         }
     }
 }

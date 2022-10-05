@@ -4,7 +4,7 @@ import XCTest
 final class InformationTests: XCTestCase {
 
     func test__information() throws {
-        let information = TX.information()
+        let information = try TX.information()
         XCTAssertEqual(information, .init(packageVersion: "0.1.0"))
     }
 }
