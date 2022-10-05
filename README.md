@@ -41,4 +41,8 @@ In order to run the example app, make sure to close down any other Xcode window 
 open Example/AppTX.xcodeproj
 ```
 
+**I have successfully run this example on an iPhone 7 (iOS 15.6.1)**
+
+**I have successfully archived this example for iOS, resulting in an .xcarchive weighing 12.3 mb**
+
 [iphonearchs]: https://docs.elementscompiler.com/Platforms/Cocoa/CpuArchitectures/
