@@ -1,3 +1,5 @@
+@_exported @testable import EngineToolkit
+
 final class SborEncodeDecodeRequestTests: TestCase {
     
     func test__encodeDecodeAddressRequest() throws {
@@ -20,35 +22,165 @@ private extension SborEncodeDecodeRequestTests {
         
         let encodeRequest = vector.decoded
         let encoded = try sut.sborEncodeRequest(request: encodeRequest)
-        XCTAssertEqual(encoded.encodedValue, [UInt8](hex: vector.encoded))
+        XCTAssertEqual(encoded.encodedValue, [UInt8](hex: vector.encoded), line: line)
         
     }
     typealias TestSuite = SborDecodeEncodeTestVectors
 }
 
-// NOTE: We will need to update these test vectors when SBOR gets updated.
+// NOTE: We will need to update these test vectors if SBOR gets updated.
 enum SborDecodeEncodeTestVectors {
-    private static let encoded: [String] = [
-        "a120000000000077320a73efb0060000000000000000000000000000000000000000000000",
-        "0c0c00000048656c6c6f20576f726c6421",
-        "1200b1040000000c000000",
-        "1300a2400000000000000000000000d1531fee3d622fe08fbe322151e4226dd6911475000000000000000000000000000000000000000000000000000000000000000000000000"
-    ]
-    
-    private static let decoded: [Value] = [
-        Value.decimalType(Decimal_(from: "123.43")),
-        Value.stringType(String_(from: "Hello World!")),
-        Value.optionType(Option.some(Value.bucketType(Bucket(from: Identifier.u32(12))))),
-        Value.resultType(Result.ok(Value.preciseDecimalType(PreciseDecimal(from: "1233"))))
-    ]
     typealias Vector = (encoded: String, decoded: Value)
-    private static func vector(at index: Int) -> Vector {
-        (encoded: Self.encoded[index], decoded: Self.decoded[index])
-    }
-    static var vectors: [Vector] {
-        precondition(encoded.count == decoded.count)
-        return (0..<encoded.count).map {
-            vector(at: $0)
-        }
-    }
+    static let vectors: [Vector] = [
+        // SBOR Primitive Types
+        (
+            encoded: "0000",
+            decoded: .unitType(Unit())
+        ),
+        (
+            encoded: "0100",
+            decoded: .booleanType(Boolean(from: false))
+        ),
+        (
+            encoded: "0101",
+            decoded: .booleanType(Boolean(from: true))
+        ),
+        
+        (
+            encoded: "0701",
+            decoded: .u8Type(U8(from: 1))
+        ),
+        (
+            encoded: "080200",
+            decoded: .u16Type(U16(from: 2))
+        ),
+        (
+            encoded: "0903000000",
+            decoded: .u32Type(U32(from: 3))
+        ),
+        (
+            encoded: "0a0400000000000000",
+            decoded: .u64Type(U64(from: 4))
+        ),
+        (
+            encoded: "0b05000000000000000000000000000000",
+            decoded: .u128Type(U128(from: "5"))
+        ),
+        
+        (
+            encoded: "0206",
+            decoded: .i8Type(I8(from: 6))
+        ),
+        (
+            encoded: "030700",
+            decoded: .i16Type(I16(from: 7))
+        ),
+        (
+            encoded: "0408000000",
+            decoded: .i32Type(I32(from: 8))
+        ),
+        (
+            encoded: "050900000000000000",
+            decoded: .i64Type(I64(from: 9))
+        ),
+        (
+            encoded: "060a000000000000000000000000000000",
+            decoded: .i128Type(I128(from: "10"))
+        ),
+        
+        (
+            encoded: "0c0c00000048656c6c6f20576f726c6421",
+            decoded: .stringType(String_(from: "Hello World!"))
+        ),
+        
+        (
+            encoded: "1002000000070c0c050000005261646978",
+            decoded: .structType(Struct(
+                from: [
+                    .u8Type(U8(from: 12)),
+                    .stringType(String_(from: "Radix"))
+                ]
+            ))
+        ),
+        (
+            encoded: "11070000004661737443617202000000070c0c050000005261646978",
+            decoded: .enumType(Enum(
+                from: "FastCar",
+                fields: [
+                    .u8Type(U8(from: 12)),
+                    .stringType(String_(from: "Radix"))
+                ]
+            ))
+        ),
+        
+        (
+            encoded: "12000764",
+            decoded: .optionType(.some(.u8Type(U8(from: 100))))
+        ),
+        (
+            encoded: "1201",
+            decoded: .optionType(.none)
+        ),
+        
+        (
+            encoded: "13000000",
+            decoded: .resultType(.ok(.unitType(Unit())))
+        ),
+        // TODO: Waiting on Alex's PR to be merged and will then update this
+//        (
+//            encoded: "13010000",
+//            decoded: .resultType(.err(.unitType(Unit())))
+//        ),
+        
+        (
+            encoded: "2007020000000c00",
+            decoded: .arrayType(Array_(
+                from: .u8,
+                elements: [
+                    .u8Type(U8(from: 12)),
+                    .u8Type(U8(from: 0)),
+                ]
+            ))
+        ),
+        (
+            encoded: "3107020000000c00",
+            decoded: .setType(Set_(
+                from: .u8,
+                elements: [
+                    .u8Type(U8(from: 12)),
+                    .u8Type(U8(from: 0)),
+                ]
+            ))
+        ),
+        (
+            encoded: "3007020000000c00",
+            decoded: .listType(List(
+                from: .u8,
+                elements: [
+                    .u8Type(U8(from: 12)),
+                    .u8Type(U8(from: 0)),
+                ]
+            ))
+        ),
+        (
+            encoded: "2102000000070c0700",
+            decoded: .tupleType(Tuple(
+                from: [
+                    .u8Type(U8(from: 12)),
+                    .u8Type(U8(from: 0)),
+                ]
+            ))
+        ),
+        (
+            encoded: "320707010000000c00",
+            decoded: .mapType(Map(
+                from: .u8,
+                valueType: .u8,
+                elements: [
+                    .u8Type(U8(from: 12)),
+                    .u8Type(U8(from: 0)),
+                ]
+            ))
+        ),
+    ]
 }
