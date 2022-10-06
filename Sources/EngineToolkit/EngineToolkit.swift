@@ -185,15 +185,15 @@ private extension EngineToolkit {
         // Serialize the given request to a JSON string.
         serialize(object: input)
             .mapError(Error.serializeRequestFailure)
-            .flatMap { requestString -> Result<(allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>), Error>  in
-#if DEBUG
-prettyPrintRequest(jsonString: requestString)
-#endif
+            .flatMap { requestString in
+                #if DEBUG
+                prettyPrintRequest(jsonString: requestString)
+                #endif
                 
                 // Allocate enough memory for the request string and then write it to
                 // that memory location
                 return allocateMemory(string: requestString)
-                    .flatMap { allocatedMemory -> Result<(allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>), Error.CallLibraryFunctionFailure> in
+                    .flatMap { allocatedMemory in
                         writeStringToMemory(string: requestString, pointer: allocatedMemory)
                         
                         // Calling the underlying transaction library function and getting a pointer
@@ -201,34 +201,28 @@ prettyPrintRequest(jsonString: requestString)
                         guard let responsePointer = function(allocatedMemory) else {
                             // Deallocate memory on failure.
                             deallocateMemory(pointer: allocatedMemory)
+                            
                             return .failure(.noReturnedOutputFromLibraryFunction)
                         }
                         
                         return .success((allocatedMemory, responsePointer))
                     }
-                    .mapError { (callError: Error.CallLibraryFunctionFailure) -> Error in
-                        Error.callLibraryFunctionFailure(callError)
-                    }
-            }.flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) -> Result<O, Error>  in
+                    .mapError(Error.callLibraryFunctionFailure)
+            }.flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) in
+                
                 let responseString = readStringFromMemory(pointer: responsePointer)
                 
-                 #if DEBUG
-                 prettyPrintResponse(jsonString: responseString)
-                 #endif
+                #if DEBUG
+                prettyPrintResponse(jsonString: responseString)
+                #endif
                 
                 // Deallocating the request and response memory
                 deallocateMemory(pointer: allocatedMemory)
-               
-                
-                return deserialize(jsonString: responseString)
-                    .mapError { (deserializeError: Error.DeserializeResponseFailure) -> Error in
-                        Error.deserializeResponseFailure(deserializeError)
-                    }
 
+                // Deserialize response
+                return deserialize(jsonString: responseString)
+                    .mapError(Error.deserializeResponseFailure)
             }
-        
-        
-        
     }
     
     /// Serializes an object to a JSON string.
