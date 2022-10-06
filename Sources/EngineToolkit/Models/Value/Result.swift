@@ -47,7 +47,7 @@ public extension Result {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
         let variant: String = try container.decode(String.self, forKey: .variant)

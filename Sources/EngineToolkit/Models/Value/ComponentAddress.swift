@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ComponentAddress: Sendable, Codable, Hashable {
+public struct ComponentAddress: Sendable, Codable, Hashable, AddressProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .componentAddress
     
@@ -14,7 +14,7 @@ public struct ComponentAddress: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from address: String) {
+    public init(address: String) {
         // TODO: Perform some simple Bech32m validation.
         self.address = address
     }
@@ -45,10 +45,10 @@ public extension ComponentAddress {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.valueTypeDiscriminatorMismatch(Self.kind, kind)
+            throw DecodeError.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
         // Decoding `address`
-        self = Self(from: try container.decode(String.self, forKey: .address))
+        try self.init(address: container.decode(String.self, forKey: .address))
     }
 }
