@@ -104,36 +104,69 @@ public enum ErrorKind: String, Swift.Error, Sendable, Equatable, Codable, Custom
 }
 
 
+// MARK: AddressError
 public struct AddressError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .addressError
     public let value: String
 }
+
+// MARK: UnrecognizedAddressFormat
 public struct UnrecognizedAddressFormat: EmptyErrorResponseProtocol {
     public static let errorKind: ErrorKind = .addressError
 }
 
-/// Not to be confused with `InternalDecodingFailure`
+// MARK: DecodeError
+/// Not to be confused with `InternalDecodingFailure` nor `DeserializationError`
 public struct DecodeError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .decodeError
     public let value: String
 }
+
+// MARK: DeserializationError
+/// Not to be confused with `InternalDecodingFailure` nor `DecodeError`
 public struct DeserializationError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .deserializationError
     public let value: String
 }
+
+// MARK: InvalidRequestString
 public struct InvalidRequestString: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .invalidRequestString
     public let value: String
 }
+
+// MARK: UnexpectedContents
+
+/// An error emitted when an unexpected type is encountered when parsing the transaction manifest.
+///
+/// As an example, we expect that when parsing a `Bucket` we either encounter a `u32` or a `String`.
+/// Instead, in this example, we encounter a `Decimal` inside of a `Bucket`
+/// (something like `Bucket(Decimal("123.44"))`) then we get the following error:
+///
+///     UnexpectedContents {
+///         kind: ValueKind.Bucket, // We were parsing a bucket
+///         expected: vec![
+///             ValueKind.U32,
+///             ValueKind.String
+///         ], // We expect a bucket to contain either a u32 or String
+///         found: ValueKind.Decimal // We found a Decimal in the bucket
+///     }
+///
 public struct UnexpectedContents: ErrorResponseProtocol {
     public static let errorKind: ErrorKind = .unexpectedContents
-    public let foundKind: ValueKind
-
-    // FIXME: how does this `kind` relate to `expectedKind`? Should one be removed?
+    
+    /// The kind that was parsed, e.g. a `Bucket`, which we expect to contain either a `u32` or a `String`,
+    /// which is the `expectedKind` property
     public let kind: ValueKind
-    // FIXME: how does this `expectedKind` relate to `kind`? Should one be removed?
+    
+    /// We expect to find any of these types, but found `foundKind`.
     public let expectedKind: [ValueKind]
+    
+    /// The unexpected type we found, instead of any of the `expectedKind`, when parsing the `kind`.
+    public let foundKind: ValueKind
 }
+
+// MARK: InvalidType
 public struct InvalidType: ErrorResponseProtocol {
     public static let errorKind: ErrorKind = .invalidType
     // FIXME: rename `expectedKind` ? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
@@ -141,50 +174,74 @@ public struct InvalidType: ErrorResponseProtocol {
     // FIXME: rename `actual` ? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
     public let actualType: ValueKind
 }
+
+// MARK: UnknownTypeId
 public struct UnknownTypeId: ErrorResponseProtocol {
     public static let errorKind: ErrorKind = .unknownTypeId
     public let typeId: Int
 }
+
+// MARK: ParseError
 public struct ParseError: ErrorResponseProtocol {
     public static let errorKind: ErrorKind = .parseError
     public let kind: ValueKind
     public let message: String
 }
+
+// MARK: NoManifestRepresentation
 public struct NoManifestRepresentation: ErrorResponseWithKindProtocol {
     public static let errorKind: ErrorKind = .noManifestRepresentation
     public let kind: ValueKind
 }
+
+// MARK: TransactionCompileError
 public struct TransactionCompileError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .transactionCompileError
     public let value: String
 }
+
+// MARK: TransactionDecompileError
 public struct TransactionDecompileError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .transactionDecompileError
     public let value: String
 }
+
+// MARK: UnsupportedTransactionVersion
 public struct UnsupportedTransactionVersion: ErrorResponseWithNumberValueProtocol {
     public static let errorKind: ErrorKind = .unsupportedTransactionVersion
     public let value: Int
 }
+
+// MARK: GeneratorError
 public struct GeneratorError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .generatorError
     public let value: String
 }
+
+// MARK: RequestResponseConversionError
 public struct RequestResponseConversionError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .requestResponseConversionError
     public let value: String
 }
+
+// MARK: UnrecognizedCompiledIntentFormat
 public struct UnrecognizedCompiledIntentFormat: EmptyErrorResponseProtocol {
     public static let errorKind: ErrorKind = .unrecognizedCompiledIntentFormat
 }
+
+// MARK: TransactionValidationError
 public struct TransactionValidationError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .transactionValidationError
     public let value: String
 }
+
+// MARK: ExtractAbiError
 public struct ExtractAbiError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .extractAbiError
     public let value: String
 }
+
+// MARK: NetworkMismatchError
 public struct NetworkMismatchError: ErrorResponseProtocol {
     public static let errorKind: ErrorKind = .networkMismatchError
     public let expected: NetworkID
@@ -264,7 +321,7 @@ public extension UnexpectedContents {
         // FIXME: how does this `expectedKind` relate to `kind`? Should one be removed?
         let expectedKind = try container.decode([ValueKind].self, forKey: .expected)
         
-        self.init(foundKind: foundKind, kind: kind, expectedKind: expectedKind)
+        self.init(kind: kind, expectedKind: expectedKind, foundKind: foundKind)
     }
 }
 

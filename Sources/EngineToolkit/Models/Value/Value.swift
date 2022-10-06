@@ -28,7 +28,7 @@ public indirect enum Value: Sendable, Codable, Hashable {
     case optionType(Option)
     case arrayType(Array_)
     case tupleType(Tuple)
-    case resultType(Result)
+    case resultType(Result_)
     
     case listType(List)
     case setType(Set_)
@@ -126,7 +126,7 @@ public extension Value {
     init(from value: Tuple) {
         self = .tupleType(value)
     }
-    init(from value: Result) {
+    init(from value: Result_) {
         self = .resultType(value)
     }
     
@@ -476,7 +476,7 @@ public extension Value {
         case .tuple:
             self = Self(from: try Tuple(from: decoder))
         case .result:
-            self = Self(from: try Result(from: decoder))
+            self = Self(from: try Result_(from: decoder))
 
         case .list:
             self = Self(from: try List(from: decoder))

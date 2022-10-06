@@ -1,10 +1,10 @@
 import Foundation
 import libTX
 
-/// A `TX` type provides a high level functions and method for the
+/// A type provides a high level functions and method for the
 /// interaction with the transaction library and abstracting away
 /// the low level memory allocation, serialization, and other low level concepts.
-public struct TX {
+public struct EngineToolkit {
     internal static var _debugPrint = false
 	
 	private let jsonEncoder: JSONEncoder
@@ -20,7 +20,7 @@ public struct TX {
 }
 
 // MARK: Public
-public extension TX {
+public extension EngineToolkit {
     
     /// Obtains information on the current transaction library used.
     ///
@@ -28,8 +28,8 @@ public extension TX {
     /// think of this information request as the "Hello World" example of the transaction library where, this is
     /// typically the first request type to be implemented in any implementation of the transaction library, if this
     /// request works then you can be assured that all of the other lower level operations work as well.
-    func information() throws -> InformationResponse {
-        try callLibraryFunction(
+    func information() -> Result<InformationResponse, Error> {
+        callLibraryFunction(
             input: InformationRequest(),
             function: libTX.information
         )
@@ -37,8 +37,8 @@ public extension TX {
     
     func convertManifest(
 		request: ConvertManifestRequest
-	) throws -> ConvertManifestResponse {
-        try callLibraryFunction(
+	) -> Result<ConvertManifestResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.convert_manifest
         )
@@ -46,8 +46,8 @@ public extension TX {
 
     func compileTransactionIntentRequest(
 		request: CompileTransactionIntentRequest
-	) throws -> CompileTransactionIntentResponse {
-        try callLibraryFunction(
+	) -> Result<CompileTransactionIntentResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.compile_transaction_intent
         )
@@ -55,8 +55,8 @@ public extension TX {
 
     func decompileTransactionIntentRequest(
 		request: DecompileTransactionIntentRequest
-	) throws -> DecompileTransactionIntentResponse {
-        try callLibraryFunction(
+	) -> Result<DecompileTransactionIntentResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.decompile_transaction_intent
         )
@@ -64,8 +64,8 @@ public extension TX {
 
     func compileSignedTransactionIntentRequest(
 		request: CompileSignedTransactionIntentRequest
-	) throws -> CompileSignedTransactionIntentResponse {
-        try callLibraryFunction(
+	) -> Result<CompileSignedTransactionIntentResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.compile_signed_transaction_intent
         )
@@ -73,8 +73,8 @@ public extension TX {
 
     func decompileSignedTransactionIntentRequest(
 		request: DecompileSignedTransactionIntentRequest
-	) throws -> DecompileSignedTransactionIntentResponse {
-        try callLibraryFunction(
+	) -> Result<DecompileSignedTransactionIntentResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.decompile_signed_transaction_intent
         )
@@ -82,8 +82,8 @@ public extension TX {
 
     func compileNotarizedTransactionIntentRequest(
 		request: CompileNotarizedTransactionIntentRequest
-	) throws -> CompileNotarizedTransactionIntentResponse {
-        try callLibraryFunction(
+	) -> Result<CompileNotarizedTransactionIntentResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.compile_notarized_transaction_intent
         )
@@ -91,8 +91,8 @@ public extension TX {
 
     func decompileNotarizedTransactionIntentRequest(
 		request: DecompileNotarizedTransactionIntentRequest
-	) throws -> DecompileNotarizedTransactionIntentResponse {
-        try callLibraryFunction(
+	) -> Result<DecompileNotarizedTransactionIntentResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.decompile_notarized_transaction_intent
         )
@@ -100,8 +100,8 @@ public extension TX {
 
     func decompileUnknownTransactionIntentRequest(
 		request: DecompileUnknownTransactionIntentRequest
-	) throws -> DecompileUnknownTransactionIntentResponse {
-        try callLibraryFunction(
+	) -> Result<DecompileUnknownTransactionIntentResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.decompile_unknown_transaction_intent
         )
@@ -109,8 +109,8 @@ public extension TX {
 
     func decodeAddressRequest(
 		request: DecodeAddressRequest
-	) throws -> DecodeAddressResponse {
-        try callLibraryFunction(
+	) -> Result<DecodeAddressResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.decode_address
         )
@@ -118,8 +118,8 @@ public extension TX {
 
     func encodeAddressRequest(
 		request: EncodeAddressRequest
-	) throws -> EncodeAddressResponse {
-        try callLibraryFunction(
+	) -> Result<EncodeAddressResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.encode_address
         )
@@ -127,8 +127,8 @@ public extension TX {
 
     func sborDecodeRequest(
 		request: SborDecodeRequest
-	) throws -> SborDecodeResponse {
-        try callLibraryFunction(
+	) -> Result<SborDecodeResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.sbor_decode
         )
@@ -136,8 +136,8 @@ public extension TX {
 
     func sborEncodeRequest(
 		request: SborEncodeRequest
-	) throws -> SborEncodeResponse {
-        try callLibraryFunction(
+	) -> Result<SborEncodeResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.sbor_encode
         )
@@ -145,8 +145,8 @@ public extension TX {
 
     func extractAbiRequest(
 		request: ExtractAbiRequest
-	) throws -> ExtractAbiResponse {
-        try callLibraryFunction(
+	) -> Result<ExtractAbiResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.extract_abi
         )
@@ -154,8 +154,8 @@ public extension TX {
 
     func deriveNonFungibleAddressFromPublicKeyRequest(
 		request: DeriveNonFungibleAddressFromPublicKeyRequest
-	) throws -> DeriveNonFungibleAddressFromPublicKeyResponse {
-        try callLibraryFunction(
+	) -> Result<DeriveNonFungibleAddressFromPublicKeyResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.derive_non_fungible_address_from_public_key
         )
@@ -163,26 +163,17 @@ public extension TX {
 
     func deriveNonFungibleAddressRequest(
 		request: DeriveNonFungibleAddressRequest
-	) throws -> DeriveNonFungibleAddressResponse {
-        try callLibraryFunction(
+	) -> Result<DeriveNonFungibleAddressResponse, Error> {
+        callLibraryFunction(
             input: request,
             function: libTX.derive_non_fungible_address
         )
     }
 }
 
-// MARK: Error
-internal extension TX {
-	enum Error: String, Swift.Error, Equatable {
-		case noOutputFromLibraryCall
-		case failedToUTF8DecodeJSONStringFromData
-		case failedToUTF8EncodeJSONString
-		case failedToCStringUTF8Encode
-	}
-}
 
 // MARK: Private
-private extension TX {
+private extension EngineToolkit {
     /// Calls the transaction library with a given input and returns the output back.
     ///
     /// This function abstracts away how the transaction library is called and provides a high level interface for
@@ -190,36 +181,54 @@ private extension TX {
     func callLibraryFunction<I: Encodable, O: Decodable>(
         input: I,
         function: (UnsafePointer<CChar>?) -> UnsafePointer<CChar>?
-    ) throws -> O {
+    ) -> Result<O, Error> {
         // Serialize the given request to a JSON string.
-        let requestString = try serialize(object: input)
+        serialize(object: input)
+            .mapError(Error.serializeRequestFailure)
+            .flatMap { requestString -> Result<(allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>), Error>  in
+#if DEBUG
+prettyPrintRequest(jsonString: requestString)
+#endif
+                
+                // Allocate enough memory for the request string and then write it to
+                // that memory location
+                return allocateMemory(string: requestString)
+                    .flatMap { allocatedMemory -> Result<(allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>), Error.CallLibraryFunctionFailure> in
+                        writeStringToMemory(string: requestString, pointer: allocatedMemory)
+                        
+                        // Calling the underlying transaction library function and getting a pointer
+                        // response. We cannot deallocated the `responsePointer`, it results in a crash.
+                        guard let responsePointer = function(allocatedMemory) else {
+                            // Deallocate memory on failure.
+                            deallocateMemory(pointer: allocatedMemory)
+                            return .failure(.noReturnedOutputFromLibraryFunction)
+                        }
+                        
+                        return .success((allocatedMemory, responsePointer))
+                    }
+                    .mapError { (callError: Error.CallLibraryFunctionFailure) -> Error in
+                        Error.callLibraryFunctionFailure(callError)
+                    }
+            }.flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) -> Result<O, Error>  in
+                let responseString = readStringFromMemory(pointer: responsePointer)
+                
+                 #if DEBUG
+                 prettyPrintResponse(jsonString: responseString)
+                 #endif
+                
+                // Deallocating the request and response memory
+                deallocateMemory(pointer: allocatedMemory)
+               
+                
+                return deserialize(jsonString: responseString)
+                    .mapError { (deserializeError: Error.DeserializeResponseFailure) -> Error in
+                        Error.deserializeResponseFailure(deserializeError)
+                    }
+
+            }
         
-        #if DEBUG
-        prettyPrintRequest(jsonString: requestString)
-        #endif
         
-        // Allocate enough memory for the request string and then write it to
-        // that memory location
-        let allocatedMemory = try allocateMemory(string: requestString)
-        writeStringToMemory(string: requestString, pointer: allocatedMemory)
         
-        // Calling the underlying transaction library function and getting a pointer
-        // response. We cannot deallocated the `responsePointer`, it results in a crash.
-		guard let responsePointer = function(allocatedMemory) else {
-			throw Error.noOutputFromLibraryCall
-		}
-        
-		let responseString = readStringFromMemory(pointer: responsePointer)
-		
-        
-        // Deallocating the request and response memory
-        deallocateMemory(pointer: allocatedMemory)
-       
-        #if DEBUG
-        prettyPrintResponse(jsonString: responseString)
-        #endif
-        
-        return try deserialize(jsonString: responseString)
     }
     
     /// Serializes an object to a JSON string.
@@ -227,12 +236,17 @@ private extension TX {
     /// This private function takes an object and serializes it to a JSON string. In the current implementation, this
     /// object needs to be `Encodable`, therefore, this function abstracts the serialization logic away from the
     /// transaction library operations and into an individual function.
-    func serialize<T: Encodable>(object: T) throws -> String {
-        let jsonData = try jsonEncoder.encode(object)
+    func serialize<T: Encodable>(object: T) -> Result<String, Error.SerializeRequestFailure> {
+        let jsonData: Data
+        do {
+           jsonData = try jsonEncoder.encode(object)
+        } catch {
+            return .failure(.jsonEncodeRequestFailed)
+        }
 		guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-			throw Error.failedToUTF8DecodeJSONStringFromData
+            return .failure(.utf8EncodingFailed)
 		}
-        return jsonString
+        return .success(jsonString)
     }
     
     /// Deserializes a JSON string to a generic `T`.
@@ -242,11 +256,28 @@ private extension TX {
     ///
     /// TODO: In the future, it would be better to have this a `Result<T, Error>` since there is a chance
     /// that this could be an error type as well and not an Ok response.
-    func deserialize<T: Decodable>(jsonString: String) throws -> T {
+    func deserialize<T: Decodable>(jsonString: String) -> Result<T, Error.DeserializeResponseFailure> {
 		guard let jsonData = jsonString.data(using: .utf8) else {
-			throw Error.failedToUTF8EncodeJSONString
+//			throw Error.failedToUTF8EncodeJSONString
+            return .failure(.beforeDecodingError(.failedToUTF8EncodeResponseJSONString))
 		}
-		return try jsonDecoder.decode(T.self, from: jsonData)
+        
+        do {
+            let response = try jsonDecoder.decode(T.self, from: jsonData)
+            return .success(response)
+        } catch {
+            do {
+                /// We might have got an **ErrorResponse** from the Radix Engine Toolkit,
+                /// try decoding jsonData to that instead.
+                let errorResponse = try jsonDecoder.decode(ErrorResponse.self, from: jsonData)
+                return .failure(.errorResponse(errorResponse))
+            } catch {
+                #if DEBUG
+                prettyPrint(responseJSONString: jsonString, error: error, failedToDecodeInto: T.self)
+                #endif
+                return .failure(.decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(responseType: "\(T.self)", decodingFailure: String(describing: error)))
+            }
+        }
     }
     
     /// Allocates as memory as the C-String representation of the provided String requires.
@@ -257,14 +288,15 @@ private extension TX {
     /// memory allocator and pass pointers to memory allocated by swift, or alternativly you may choose to use the
     /// memory allocator used in the transaction library. However, it is not recommended to use both at the same
     /// time as it can lead to heap corruption and other undefined behavior.
-    func allocateMemory(string: String) throws -> UnsafeMutablePointer<CChar> {
+    func allocateMemory(string: String) -> Result<UnsafeMutablePointer<CChar>, Error.CallLibraryFunctionFailure> {
         // Get the byte count of the C-String representation of the utf-8 encoded
         // string.
 		guard let cString = string.cString(using: .utf8) else {
-			throw Error.failedToCStringUTF8Encode
+            return .failure(.allocatedMemoryForResponseFailedCouldNotUTF8EncodeCString)
 		}
         let byteCount: Int = cString.count
-        return UnsafeMutablePointer<CChar>.allocate(capacity: byteCount)
+        let allocatedMemory = UnsafeMutablePointer<CChar>.allocate(capacity: byteCount)
+        return .success(allocatedMemory)
     }
     
     /// Deallocates memory
@@ -310,12 +342,22 @@ func prettyPrintRequest(jsonString: String) {
 func prettyPrintResponse(jsonString: String) {
     prettyPrint(jsonString: jsonString, label: "\n📦⬇️ Response JSON string (prettified before JSON decoding)")
 }
+func prettyPrint<FailedDecodable: Decodable>(
+    responseJSONString: String,
+    error: Swift.Error,
+    failedToDecodeInto: FailedDecodable.Type
+) {
+    prettyPrint(
+        jsonString: responseJSONString,
+        label: "\n📦⬇️ Failed to parse response JSON string to either \(FailedDecodable.self) or \(ErrorResponse.self), underlying decoding error: \(String(describing: error))"
+    )
+}
 
 /// Tries to pretty prints JSON string even before Decodable JSON decoding takes place
 /// using old Cocoa APIs
 func prettyPrint(jsonString: String, label: String?) {
     guard
-        TX._debugPrint,
+        EngineToolkit._debugPrint,
         let data = jsonString.data(using: .utf8),
         let pretty = data.prettyPrintedJSONString
     else {
