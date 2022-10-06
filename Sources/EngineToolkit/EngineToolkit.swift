@@ -185,7 +185,7 @@ private extension EngineToolkit {
         // Serialize the given request to a JSON string.
         serialize(object: input)
             .mapError(Error.serializeRequestFailure)
-            .flatMap { requestString in
+            .flatMap { (requestString: String) in
                 #if DEBUG
                 prettyPrintRequest(jsonString: requestString)
                 #endif
@@ -193,22 +193,26 @@ private extension EngineToolkit {
                 // Allocate enough memory for the request string and then write it to
                 // that memory location
                 return allocateMemory(string: requestString)
-                    .flatMap { allocatedMemory in
+                    .map { allocatedMemory in
                         writeStringToMemory(string: requestString, pointer: allocatedMemory)
-                        
-                        // Calling the underlying transaction library function and getting a pointer
-                        // response. We cannot deallocated the `responsePointer`, it results in a crash.
-                        guard let responsePointer = function(allocatedMemory) else {
-                            // Deallocate memory on failure.
-                            deallocateMemory(pointer: allocatedMemory)
-                            
-                            return .failure(.noReturnedOutputFromLibraryFunction)
-                        }
-                        
-                        return .success((allocatedMemory, responsePointer))
+                        return allocatedMemory
                     }
                     .mapError(Error.callLibraryFunctionFailure)
-            }.flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) in
+                   
+            }
+            .flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>) in
+                // Calling the underlying transaction library function and getting a pointer
+                // response. We cannot deallocated the `responsePointer`, it results in a crash.
+                guard let responsePointer = function(allocatedMemory) else {
+                    // Deallocate memory on failure.
+                    deallocateMemory(pointer: allocatedMemory)
+                    
+                    return .failure(Error.callLibraryFunctionFailure(.noReturnedOutputFromLibraryFunction))
+                }
+                
+                return .success((allocatedMemory, responsePointer))
+            }
+            .flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) in
                 
                 let responseString = readStringFromMemory(pointer: responsePointer)
                 
@@ -218,7 +222,7 @@ private extension EngineToolkit {
                 
                 // Deallocating the request and response memory
                 deallocateMemory(pointer: allocatedMemory)
-
+                
                 // Deserialize response
                 return deserialize(jsonString: responseString)
                     .mapError(Error.deserializeResponseFailure)
@@ -252,7 +256,6 @@ private extension EngineToolkit {
     /// that this could be an error type as well and not an Ok response.
     func deserialize<T: Decodable>(jsonString: String) -> Result<T, Error.DeserializeResponseFailure> {
 		guard let jsonData = jsonString.data(using: .utf8) else {
-//			throw Error.failedToUTF8EncodeJSONString
             return .failure(.beforeDecodingError(.failedToUTF8EncodeResponseJSONString))
 		}
         
