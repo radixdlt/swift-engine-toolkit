@@ -11,7 +11,7 @@ import Foundation
 public enum InternalDecodingFailure: Swift.Error, Sendable, Equatable, Codable {
     case valueTypeDiscriminatorMismatch(expectedAnyOf: [ValueKind], butGot: ValueKind)
     case instructionTypeDiscriminatorMismatch(expected: InstructionKind, butGot: InstructionKind)
-    case errorTypeDiscriminatorMismatch(expected: ErrorResponseType, butGot: ErrorResponseType)
+    case errorKindMismatch(expected: ErrorKind, butGot: ErrorKind)
     case parsingError
 }
 

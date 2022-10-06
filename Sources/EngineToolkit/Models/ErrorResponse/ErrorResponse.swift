@@ -12,18 +12,26 @@ public extension CustomStringConvertible where Self: RawRepresentable, RawValue 
     var description: String { rawValue }
 }
 
-protocol ErrorResponseProtocol: Swift.Error, Sendable, Equatable, Codable {
-    static var type: ErrorResponseType { get }
+protocol ErrorResponseProtocol: Swift.Error, Sendable, Equatable, Decodable {
+    static var errorKind: ErrorKind { get }
+}
+protocol EmptyErrorResponseProtocol: ErrorResponseProtocol {
+    init()
 }
 protocol ErrorResponseWithValueProtocol: ErrorResponseProtocol {
-    associatedtype Value: Codable
+    associatedtype Value: Decodable
     var value: Value { get }
     init (value: Value)
 }
 protocol ErrorResponseWithStringValueProtocol: ErrorResponseWithValueProtocol where Value == String {}
 protocol ErrorResponseWithNumberValueProtocol: ErrorResponseWithValueProtocol where Value == Int {}
 
-public enum ErrorResponse: Swift.Error, Sendable, Equatable, Codable {
+protocol ErrorResponseWithKindProtocol: ErrorResponseProtocol {
+    var kind: ValueKind { get }
+    init (kind: ValueKind)
+}
+
+public enum ErrorResponse: Swift.Error, Sendable, Equatable, Decodable {
     case addressError(AddressError)
     case unrecognizedAddressFormat(UnrecognizedAddressFormat)
     
@@ -48,7 +56,7 @@ public enum ErrorResponse: Swift.Error, Sendable, Equatable, Codable {
 }
 
 public extension ErrorResponse {
-    var type: ErrorResponseType {
+    var errorKind: ErrorKind {
         switch self {
         case .addressError: return .addressError
         case .unrecognizedAddressFormat: return .unrecognizedAddressFormat
@@ -73,7 +81,7 @@ public extension ErrorResponse {
     }
 }
 
-public enum ErrorResponseType: String, Swift.Error, Sendable, Equatable, Codable, CustomStringConvertible {
+public enum ErrorKind: String, Swift.Error, Sendable, Equatable, Codable, CustomStringConvertible {
     case addressError = "AddressError"
     case unrecognizedAddressFormat = "UnrecognizedAddressFormat"
     case decodeError = "InternalDecodingFailure"
@@ -97,88 +105,207 @@ public enum ErrorResponseType: String, Swift.Error, Sendable, Equatable, Codable
 
 
 public struct AddressError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .addressError
+    public static let errorKind: ErrorKind = .addressError
     public let value: String
 }
-public struct UnrecognizedAddressFormat: ErrorResponseProtocol {
-    public static let type: ErrorResponseType = .addressError
+public struct UnrecognizedAddressFormat: EmptyErrorResponseProtocol {
+    public static let errorKind: ErrorKind = .addressError
 }
 
 /// Not to be confused with `InternalDecodingFailure`
 public struct DecodeError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .decodeError
+    public static let errorKind: ErrorKind = .decodeError
     public let value: String
 }
 public struct DeserializationError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .deserializationError
+    public static let errorKind: ErrorKind = .deserializationError
     public let value: String
 }
 public struct InvalidRequestString: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .invalidRequestString
+    public static let errorKind: ErrorKind = .invalidRequestString
     public let value: String
 }
 public struct UnexpectedContents: ErrorResponseProtocol {
-    public static let type: ErrorResponseType = .unexpectedContents
+    public static let errorKind: ErrorKind = .unexpectedContents
+    public let foundKind: ValueKind
+
+    // FIXME: how does this `kind` relate to `expectedKind`? Should one be removed?
+    public let kind: ValueKind
+    // FIXME: how does this `expectedKind` relate to `kind`? Should one be removed?
+    public let expectedKind: [ValueKind]
 }
 public struct InvalidType: ErrorResponseProtocol {
-    public static let type: ErrorResponseType = .invalidType
+    public static let errorKind: ErrorKind = .invalidType
+    // FIXME: rename `expectedKind` ? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
+    public let expectedType: ValueKind
+    // FIXME: rename `actual` ? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
+    public let actualType: ValueKind
 }
 public struct UnknownTypeId: ErrorResponseProtocol {
-    public static let type: ErrorResponseType = .unknownTypeId
+    public static let errorKind: ErrorKind = .unknownTypeId
+    public let typeId: Int
 }
 public struct ParseError: ErrorResponseProtocol {
-    public static let type: ErrorResponseType = .parseError
+    public static let errorKind: ErrorKind = .parseError
+    public let kind: ValueKind
+    public let message: String
 }
-public struct NoManifestRepresentation: ErrorResponseProtocol {
-    public static let type: ErrorResponseType = .noManifestRepresentation
+public struct NoManifestRepresentation: ErrorResponseWithKindProtocol {
+    public static let errorKind: ErrorKind = .noManifestRepresentation
+    public let kind: ValueKind
 }
 public struct TransactionCompileError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .transactionCompileError
+    public static let errorKind: ErrorKind = .transactionCompileError
     public let value: String
 }
 public struct TransactionDecompileError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .transactionDecompileError
+    public static let errorKind: ErrorKind = .transactionDecompileError
     public let value: String
 }
 public struct UnsupportedTransactionVersion: ErrorResponseWithNumberValueProtocol {
-    public static let type: ErrorResponseType = .unsupportedTransactionVersion
+    public static let errorKind: ErrorKind = .unsupportedTransactionVersion
     public let value: Int
 }
 public struct GeneratorError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .generatorError
+    public static let errorKind: ErrorKind = .generatorError
     public let value: String
 }
 public struct RequestResponseConversionError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .requestResponseConversionError
+    public static let errorKind: ErrorKind = .requestResponseConversionError
     public let value: String
 }
-public struct UnrecognizedCompiledIntentFormat: ErrorResponseProtocol {
-    public static let type: ErrorResponseType = .unrecognizedCompiledIntentFormat
+public struct UnrecognizedCompiledIntentFormat: EmptyErrorResponseProtocol {
+    public static let errorKind: ErrorKind = .unrecognizedCompiledIntentFormat
 }
 public struct TransactionValidationError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .transactionValidationError
+    public static let errorKind: ErrorKind = .transactionValidationError
     public let value: String
 }
 public struct ExtractAbiError: ErrorResponseWithStringValueProtocol {
-    public static let type: ErrorResponseType = .extractAbiError
+    public static let errorKind: ErrorKind = .extractAbiError
     public let value: String
 }
 public struct NetworkMismatchError: ErrorResponseProtocol {
-    public static let type: ErrorResponseType = .networkMismatchError
+    public static let errorKind: ErrorKind = .networkMismatchError
+    public let expected: NetworkID
+    public let found: NetworkID
 }
 
 private enum ErrorResponseCodingKeys: String, CodingKey {
-    case type, value
+    case errorKind = "error"
+    case value
+    
+    case expected = "expected"
+    case found = "found"
+    
+    case expectedType = "expected_type"
+    case actualType = "actual_type"
+    
+    case typeId = "type_id"
+
+    case kind
+    case message
+    
 }
+
+extension ErrorResponseProtocol {
+    fileprivate static func containerAssertingErrorKind(
+        from decoder: Decoder
+    ) throws -> KeyedDecodingContainer<ErrorResponseCodingKeys> {
+        let container = try decoder.container(keyedBy: ErrorResponseCodingKeys.self)
+        let errorKind = try container.decode(ErrorKind.self, forKey: .errorKind)
+        guard errorKind == Self.errorKind else {
+            throw InternalDecodingFailure.errorKindMismatch(expected: Self.errorKind, butGot: errorKind)
+        }
+        return container
+    }
+    
+    fileprivate static func containerAndValueKindAssertingErrorKind(
+        from decoder: Decoder
+    ) throws -> (container: KeyedDecodingContainer<ErrorResponseCodingKeys>, valueKind: ValueKind) {
+        let container = try Self.containerAssertingErrorKind(from: decoder)
+        let valueKind = try container.decode(ValueKind.self, forKey: .kind)
+        return (container, valueKind)
+    }
+}
+
+extension ErrorResponseWithKindProtocol {
+    public init(from decoder: Decoder) throws {
+        let (_, kind) = try Self.containerAndValueKindAssertingErrorKind(from: decoder)
+       self.init(kind: kind)
+   }
+}
+
 extension ErrorResponseWithValueProtocol {
     
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: ErrorResponseCodingKeys.self)
-        let type = try container.decode(ErrorResponseType.self, forKey: .type)
-        guard type == Self.type else {
-            throw InternalDecodingFailure.errorTypeDiscriminatorMismatch(expected: Self.type, butGot: type)
-        }
+     public init(from decoder: Decoder) throws {
+        let container = try Self.containerAssertingErrorKind(from: decoder)
         let value = try container.decode(Value.self, forKey: .value)
         self.init(value: value)
+    }
+}
+
+extension EmptyErrorResponseProtocol {
+    
+    public init(from decoder: Decoder) throws {
+        // Nothing more to decode
+        _ = try Self.containerAssertingErrorKind(from: decoder)
+        self.init()
+    }
+}
+
+// MARK: UnexpectedContents + Decodable
+public extension UnexpectedContents {
+    init(from decoder: Decoder) throws {
+        // FIXME: how does this `kind` relate to `expectedKind`? Should one be removed?
+        let (container, kind) = try Self.containerAndValueKindAssertingErrorKind(from: decoder)
+        let foundKind = try container.decode(ValueKind.self, forKey: .found)
+        
+        // FIXME: how does this `expectedKind` relate to `kind`? Should one be removed?
+        let expectedKind = try container.decode([ValueKind].self, forKey: .expected)
+        
+        self.init(foundKind: foundKind, kind: kind, expectedKind: expectedKind)
+    }
+}
+
+// MARK: InvalidType + Decodable
+public extension InvalidType {
+    init(from decoder: Decoder) throws {
+        let container = try Self.containerAssertingErrorKind(from: decoder)
+        
+        // FIXME: rename to `actual`? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
+        let actualType = try container.decode(ValueKind.self, forKey: .actualType)
+        // FIXME: rename to `expected`? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
+        let expectedType = try container.decode(ValueKind.self, forKey: .expected)
+        
+        self.init(expectedType: expectedType, actualType: actualType)
+    }
+}
+
+// MARK: UnknownTypeId + Decodable
+public extension UnknownTypeId {
+    init(from decoder: Decoder) throws {
+        let container = try Self.containerAssertingErrorKind(from: decoder)
+        let typeId = try container.decode(Int.self, forKey: .typeId)
+        self.init(typeId: typeId)
+    }
+}
+
+// MARK: ParseError + Decodable
+public extension ParseError {
+    init(from decoder: Decoder) throws {
+        let (container, kind) = try Self.containerAndValueKindAssertingErrorKind(from: decoder)
+        let message = try container.decode(String.self, forKey: .message)
+        self.init(kind: kind, message: message)
+    }
+}
+
+// MARK: NetworkMismatchError + Decodable
+public extension NetworkMismatchError {
+    init(from decoder: Decoder) throws {
+        let container = try Self.containerAssertingErrorKind(from: decoder)
+        let expectedNetworkID = try container.decode(NetworkID.self, forKey: .expected)
+        let foundNetworkID = try container.decode(NetworkID.self, forKey: .found)
+        self.init(expected: expectedNetworkID, found: foundNetworkID)
     }
 }
