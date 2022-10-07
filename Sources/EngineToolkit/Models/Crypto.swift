@@ -223,7 +223,7 @@ public extension PublicKey {
                 self = .eddsaEd25519(try container.decode(EddsaEd25519PublicKeyString.self, forKey: .publicKey))
             default:
                 // TODO: Temporary error. Need a better one
-                throw DecodeError.parsingError
+                throw InternalDecodingFailure.parsingError
         }
     }
 }

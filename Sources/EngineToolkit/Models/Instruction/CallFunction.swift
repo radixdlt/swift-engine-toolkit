@@ -61,7 +61,7 @@ public extension CallFunction {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
+            throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
         let packageAddress = try container.decode(PackageAddress.self, forKey: .packageAddress)

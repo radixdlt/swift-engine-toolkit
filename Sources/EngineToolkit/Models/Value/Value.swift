@@ -28,7 +28,7 @@ public indirect enum Value: Sendable, Codable, Hashable {
     case optionType(Option)
     case arrayType(Array_)
     case tupleType(Tuple)
-    case resultType(Result)
+    case resultType(Result<Value, Value>)
     
     case listType(List)
     case setType(Set_)
@@ -126,7 +126,7 @@ public extension Value {
     init(from value: Tuple) {
         self = .tupleType(value)
     }
-    init(from value: Result) {
+    init(from value: Result<Value, Value>) {
         self = .resultType(value)
     }
     
@@ -535,14 +535,4 @@ public extension Value {
     }
 }
 
-enum DecodeError: Error {
-    case valueTypeDiscriminatorMismatch(expectedAnyOf: [ValueKind], butGot: ValueKind)
-    case instructionTypeDiscriminatorMismatch(expected: InstructionKind, butGot: InstructionKind)
-    case parsingError
-}
 
-extension DecodeError {
-    static func valueTypeDiscriminatorMismatch(expected: ValueKind, butGot: ValueKind) -> Self {
-        .valueTypeDiscriminatorMismatch(expectedAnyOf: [expected], butGot: butGot)
-    }
-}

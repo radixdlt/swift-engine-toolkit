@@ -45,7 +45,7 @@ public extension CreateResource {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
+            throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
         let args: [Value] = try container.decode([Value].self, forKey: .args)

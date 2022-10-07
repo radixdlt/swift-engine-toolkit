@@ -1,19 +1,18 @@
 import Foundation
 
-public enum Result: Sendable, Codable, Hashable {
-    // Type name, used as a discriminator
-    public static let kind: ValueKind = .result
-    
-    // ==============
-    // Enum Variants
-    // ==============
-    
-    case ok(Value)
-    case err(Value)
- 
-}
-
-public extension Result {
+// Only marked as an `Error` to be able to be used as `Failure` in `Result`.
+extension Value: Swift.Error {}
+extension Result: Codable where Success == Value, Failure == Value {
+    private enum Variant: String, Codable, Equatable {
+        case success = "Ok"
+        case failure = "Err"
+    }
+    private var variant: Variant {
+        switch self {
+        case .failure: return .failure
+        case .success: return .success
+        }
+    }
     
     // =======================
     // Coding Keys Definition
@@ -27,39 +26,38 @@ public extension Result {
     // ======================
     // Encoding and Decoding
     // ======================
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
+        try container.encode(variant, forKey: .variant)
         
         // Encode depending on whether this is a Some or None
         switch self {
-            case .ok(let value):
-                try container.encode("Ok", forKey: .variant)
+            case .success(let value):
                 try container.encode(value, forKey: .field)
-            case .err(let value):
-                try container.encode("Error", forKey: .variant)
+            case .failure(let value):
                 try container.encode(value, forKey: .field)
         }
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
+        let kind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
+            throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let variant: String = try container.decode(String.self, forKey: .variant)
-        let value: Value = try container.decode(Value.self, forKey: .field)
+        let variant = try container.decode(Variant.self, forKey: .variant)
+        let value = try container.decode(Value.self, forKey: .field)
         switch variant {
-        case "Ok":
-            self = .ok(value)
-        case "Err":
-            self = .err(value)
-        default:
-            // TODO: Need a nicer error here.
-            throw DecodeError.parsingError
+        case .success:
+            self = .success(value)
+        case .failure:
+            self = .failure(value)
         }
     }
+    
+    public static var kind: ValueKind { .result }
 }
+

@@ -14,7 +14,7 @@ public struct Component: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from address: String) {
+    public init(address: String) {
         // TODO: Perform some simple Bech32m validation.
         self.address = address
     }
@@ -44,10 +44,12 @@ public extension Component {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
         if kind != Self.kind {
-            throw DecodeError.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
+            throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
         // Decoding `address`
-        self = Self(from: try container.decode(String.self, forKey: .address))
+        try self.init(
+            address: container.decode(String.self, forKey: .address)
+        )
     }
 }

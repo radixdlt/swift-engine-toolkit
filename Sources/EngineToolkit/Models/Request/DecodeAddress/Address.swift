@@ -32,7 +32,7 @@ public extension Address {
         case .resourceAddress:
             self = try .resourceAddress(singleValueContainer.decode(ResourceAddress.self))
         default:
-            throw DecodeError.valueTypeDiscriminatorMismatch(expectedAnyOf: [.componentAddress, .packageAddress, .resourceAddress], butGot: discriminator)
+            throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expectedAnyOf: [.componentAddress, .packageAddress, .resourceAddress], butGot: discriminator)
         }
     }
     

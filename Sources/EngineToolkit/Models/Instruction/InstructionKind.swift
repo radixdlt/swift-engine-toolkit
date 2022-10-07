@@ -1,6 +1,6 @@
 import Foundation
 
-public enum InstructionKind: String, Codable {
+public enum InstructionKind: String, Codable, Sendable, Hashable {
     case callFunction = "CALL_FUNCTION"
     case callMethod = "CALL_METHOD"
     
