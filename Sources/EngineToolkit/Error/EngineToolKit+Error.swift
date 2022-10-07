@@ -71,7 +71,13 @@ public extension EngineToolkit.Error {
         
         /// Failed to decode the JSON response into expected resonse type and also failed to decode
         /// it into an `ErrorResponse`.
-        case decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(responseType: String, decodingFailure: String)
+        case decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(responseType: String, decodingError: Swift.DecodingError)
+        
+        // When using JSONDecoder and casting thrown error to `Swift.DecodingError`
+        /// (which always should work) but for some reason did not, maybe because we developers as
+        /// part of a test used a subclass of JSONDecoder which throws a differnt kind of
+        /// error than `Swift.DecodingError`
+        case decodeResponseFailedAndCouldNotDecodeAsErrorResponseEitherNorAsSwiftDecodingError(responseType: String, nonSwiftDecodingError: String)
     }
 }
 
@@ -81,3 +87,4 @@ public extension EngineToolkit.Error.DeserializeResponseFailure {
         case failedToUTF8EncodeResponseJSONString
     }
 }
+

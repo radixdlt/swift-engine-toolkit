@@ -65,14 +65,29 @@ final class TestOfErrors: TestCase {
         )
     }
     
-    func test_error_deserializeResponseFailure_jsonDecodeFail() throws {
-        let sut = EngineToolkit(jsonDecoder: FailingJSONDecoder())
+    func test_error_deserializeResponseFailure_jsonDecodeFail_non_swiftDecodingError() throws {
+        let failingMockErrorDecoder = FailingJSONDecoder()
+        let sut = EngineToolkit(jsonDecoder: failingMockErrorDecoder)
+        XCTAssert(
+            sut.information(),
+            throwsSpecificError: .deserializeResponseFailure(
+                .decodeResponseFailedAndCouldNotDecodeAsErrorResponseEitherNorAsSwiftDecodingError(
+                    responseType: "\(InformationResponse.self)",
+                    nonSwiftDecodingError: MockError.jsonDecodeFail.rawValue
+                )
+            )
+        )
+    }
+    
+    func test_error_deserializeResponseFailure_jsonDecodeFail_swiftDecodingError() throws {
+        let failingSwiftDecodingErrorDecoder = FailingJSONDecoderSwiftDecodingError()
+        let sut = EngineToolkit(jsonDecoder: failingSwiftDecodingErrorDecoder)
         XCTAssert(
             sut.information(),
             throwsSpecificError: .deserializeResponseFailure(
                 .decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(
                     responseType: "\(InformationResponse.self)",
-                    decodingFailure: MockError.jsonDecodeFail.rawValue
+                    decodingError: .mock
                 )
             )
         )
@@ -112,7 +127,6 @@ final class TestOfErrors: TestCase {
         )
     }
     
-    
     func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_invalid_char_space() throws {
         let badRequest = DecodeAddressRequest(address: "bad1 invalid char spaces")
         let result = sut.decodeAddressRequest(request: badRequest)
@@ -149,4 +163,17 @@ final class FailingJSONDecoder: JSONDecoder {
         throw MockError.jsonDecodeFail
     }
     
+}
+final class FailingJSONDecoderSwiftDecodingError: JSONDecoder {
+    override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
+        throw Swift.DecodingError.mock
+    }
+    
+}
+
+extension Swift.DecodingError {
+    static let mock = Self.dataCorrupted(Context.mock)
+}
+extension Swift.DecodingError.Context {
+    static let mock = Self(codingPath: [], debugDescription: "Mock")
 }
