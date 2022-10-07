@@ -12,11 +12,18 @@ public struct EngineToolkit {
 	
 	public init(
 		jsonEncoder: JSONEncoder = .init(),
-		jsonDecoder: JSONDecoder = .init()
+		jsonDecoder: JSONDecoder = .init(),
+        jsonStringFromJSONData: @escaping JSONStringFromJSONData = { String(data: $0, encoding: .utf8) },
+        cCharsFromJSONString: @Sendable @escaping (String) -> [CChar]? = { $0.cString(using: .utf8) },
+        jsonDataFromJSONString: @Sendable @escaping (String) -> Data? = { $0.data(using: .utf8) }
 	) {
 		self.jsonEncoder = jsonEncoder
 		self.jsonDecoder = jsonDecoder
 	}
+}
+
+internal extension EngineToolkit {
+    typealias JSONStringFromJSONData = @Sendable (Data) -> String?
 }
 
 // MARK: Public
@@ -256,6 +263,7 @@ private extension EngineToolkit {
     func deserialize<Response>(jsonString: String) -> Result<Response, Error.DeserializeResponseFailure>
         where Response: Decodable
     {
+        
 		guard let jsonData = jsonString.data(using: .utf8) else {
             return .failure(.beforeDecodingError(.failedToUTF8EncodeResponseJSONString))
 		}
@@ -292,6 +300,7 @@ private extension EngineToolkit {
 		guard let cString = requestJSONString.cString(using: .utf8) else {
             return .failure(.allocatedMemoryForResponseFailedCouldNotUTF8EncodeCString)
 		}
+        
         let byteCount: Int = cString.count
         let allocatedMemory = UnsafeMutablePointer<CChar>.allocate(capacity: byteCount)
         return .success(allocatedMemory)
