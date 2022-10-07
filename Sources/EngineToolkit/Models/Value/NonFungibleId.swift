@@ -1,6 +1,6 @@
 import Foundation
 
-public struct NonFungibleId: Codable, Hashable, Sendable {
+public struct NonFungibleId: Codable, Hashable, Sendable, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .nonFungibleId
     
@@ -8,20 +8,30 @@ public struct NonFungibleId: Codable, Hashable, Sendable {
     // Struct members
     // ===============
     
-    public let value: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: [UInt8]) {
-        self.value = value
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
+}
+
+public extension NonFungibleId {
     
-    public init(from value: String) throws {
-        self.value = [UInt8](hex: value)
+    init(hex: String) throws {
+        try self.init(bytes: [UInt8](hex: hex))
     }
 
+    // FIXME maybe we wanna move `ExpressibleByStringLiteral` to test since this can fatalError.
+    init(stringLiteral hexString: String) {
+        guard let bytes = try? [UInt8](hex: hexString) else {
+            fatalError("Failed to create \(Self.self) from string, invalid hex.")
+        }
+        self.init(bytes: bytes)
+    }
 }
 
 public extension NonFungibleId {
@@ -40,7 +50,7 @@ public extension NonFungibleId {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(value.toHexString(), forKey: .value)
+        try container.encode(bytes.toHexString(), forKey: .value)
     }
     
     init(from decoder: Decoder) throws {
@@ -52,6 +62,6 @@ public extension NonFungibleId {
         }
         
         // Decoding `value`
-        self = try Self(from: try container.decode(String.self, forKey: .value))
+        try self.init(hex: container.decode(String.self, forKey: .value))
     }
 }

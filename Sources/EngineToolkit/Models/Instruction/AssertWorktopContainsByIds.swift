@@ -1,8 +1,11 @@
 import Foundation
 
-public struct AssertWorktopContainsByIds: Sendable, Codable, Hashable {
+public struct AssertWorktopContainsByIds: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .assertWorktopContainsByIds
+    public func embed() -> Instruction {
+        .assertWorktopContainsByIds(self)
+    }
     
     // ===============
     // Struct members

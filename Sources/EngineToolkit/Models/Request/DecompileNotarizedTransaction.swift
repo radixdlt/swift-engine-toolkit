@@ -9,14 +9,16 @@ public struct DecompileNotarizedTransactionIntentRequest: Sendable, Codable, Has
     // Constructors
     // =============
     
-    public init(from compiledNotarizedIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(compiledNotarizedIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledNotarizedIntent = compiledNotarizedIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
-    public init(from compiledNotarizedIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
-        self.compiledNotarizedIntent = [UInt8](hex: compiledNotarizedIntent)
-        self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
+    public init(compiledNotarizedIntentHex: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
+        try self.init(
+            compiledNotarizedIntent: [UInt8](hex: compiledNotarizedIntentHex),
+            manifestInstructionsOutputFormat: manifestInstructionsOutputFormat
+        )
     }
 
 }
@@ -41,7 +43,11 @@ public extension DecompileNotarizedTransactionIntentRequest {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try container.decode(String.self, forKey: .compiledNotarizedIntent), manifestInstructionsOutputFormat: try container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat))
+        
+        try self.init(
+            compiledNotarizedIntentHex: container.decode(String.self, forKey: .compiledNotarizedIntent),
+            manifestInstructionsOutputFormat: container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat)
+        )
     }
 }
 

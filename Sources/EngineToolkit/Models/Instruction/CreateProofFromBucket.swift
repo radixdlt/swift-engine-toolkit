@@ -1,23 +1,26 @@
 import Foundation
 
-public struct CreateProofFromBucket: Sendable, Codable, Hashable {
+public struct CreateProofFromBucket: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .createProofFromBucket
+    public func embed() -> Instruction {
+        .createProofFromBucket(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
     public let bucket: Bucket
-    public let intoProof: Proof
+    public let proof: Proof
     
     // =============
     // Constructors
     // =============
     
-    public init(from bucket: Bucket, intoProof: Proof) {
+    public init(bucket: Bucket, proof: Proof) {
         self.bucket = bucket
-        self.intoProof = intoProof
+        self.proof = proof
     }
 }
 
@@ -40,7 +43,7 @@ public extension CreateProofFromBucket {
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(bucket, forKey: .bucket)
-        try container.encode(intoProof, forKey: .intoProof)
+        try container.encode(proof, forKey: .intoProof)
     }
     
     init(from decoder: Decoder) throws {
@@ -51,9 +54,9 @@ public extension CreateProofFromBucket {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let bucket: Bucket = try container.decode(Bucket.self, forKey: .bucket)
-        let intoProof: Proof = try container.decode(Proof.self, forKey: .intoProof)
+        let bucket = try container.decode(Bucket.self, forKey: .bucket)
+        let proof = try container.decode(Proof.self, forKey: .intoProof)
         
-        self = Self(from: bucket, intoProof: intoProof)
+        self.init(bucket: bucket, proof: proof)
     }
 }

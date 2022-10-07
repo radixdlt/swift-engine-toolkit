@@ -1,8 +1,11 @@
 import Foundation
 
-public struct CreateProofFromAuthZoneByAmount: Sendable, Codable, Hashable {
+public struct CreateProofFromAuthZoneByAmount: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .createProofFromAuthZoneByAmount
+    public func embed() -> Instruction {
+        .createProofFromAuthZoneByAmount(self)
+    }
     
     // ===============
     // Struct members

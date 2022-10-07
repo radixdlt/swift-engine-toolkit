@@ -1,13 +1,17 @@
 import Foundation
 
-public enum Identifier: Sendable, Codable, Hashable {
+public enum Identifier: Sendable, Codable, Hashable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
     // ==============
     // Enum Variants
     // ==============
-    
     case string(String)
     case u32(UInt32)
-
+    public init(stringLiteral value: String) {
+        self = .string(value)
+    }
+    public init(integerLiteral value: UInt32) {
+        self = .u32(value)
+    }
 }
 
 public extension Identifier {

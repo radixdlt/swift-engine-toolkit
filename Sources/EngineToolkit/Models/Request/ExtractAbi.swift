@@ -12,8 +12,8 @@ public struct ExtractAbiRequest: Sendable, Codable, Hashable {
         self.packageWasm = packageWasm
     }
     
-    public init(from packageWasm: String) {
-        self.packageWasm = [UInt8](hex: packageWasm)
+    public init(from packageWasm: String) throws {
+        self.packageWasm = try [UInt8](hex: packageWasm)
     }
 
 }
@@ -39,7 +39,7 @@ public extension ExtractAbiRequest {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try container.decode(String.self, forKey: .packageWasm))
+        self = try Self(from: container.decode(String.self, forKey: .packageWasm))
     }
 }
 
@@ -59,9 +59,9 @@ public struct ExtractAbiResponse: Sendable, Codable, Hashable {
         self.abi = abi
     }
     
-    public init(from code: String, abi: String) {
-        self.code = [UInt8](hex: code)
-        self.abi = [UInt8](hex: abi)
+    public init(from code: String, abi: String) throws {
+        self.code = try [UInt8](hex: code)
+        self.abi = try [UInt8](hex: abi)
     }
 
 }
@@ -89,6 +89,6 @@ public extension ExtractAbiResponse {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try container.decode(String.self, forKey: .code), abi: try container.decode(String.self, forKey: .code))
+        self = try Self(from: container.decode(String.self, forKey: .code), abi: container.decode(String.self, forKey: .code))
     }
 }

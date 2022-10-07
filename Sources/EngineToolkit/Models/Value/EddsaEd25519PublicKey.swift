@@ -8,19 +8,19 @@ public struct EddsaEd25519PublicKey: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let publicKey: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from publicKey: [UInt8]) {
-        self.publicKey = publicKey
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
     
-    public init(from publicKey: String) throws {
+    public init(hex: String) throws {
         // TODO: Validation of length of array
-        self.publicKey = [UInt8](hex: publicKey)
+        try self.init(bytes: .init(hex: hex))
     }
 
 }
@@ -41,7 +41,7 @@ public extension EddsaEd25519PublicKey {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(publicKey.toHexString(), forKey: .publicKey)
+        try container.encode(bytes.toHexString(), forKey: .publicKey)
     }
     
     init(from decoder: Decoder) throws {
@@ -53,6 +53,6 @@ public extension EddsaEd25519PublicKey {
         }
         
         // Decoding `publicKey`
-        self = try Self(from: try container.decode(String.self, forKey: .publicKey))
+        try self.init(hex: container.decode(String.self, forKey: .publicKey))
     }
 }

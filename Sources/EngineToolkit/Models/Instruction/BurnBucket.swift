@@ -1,8 +1,11 @@
 import Foundation
 
-public struct BurnBucket: Sendable, Codable, Hashable {
+public struct BurnBucket: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .burnBucket
+    public func embed() -> Instruction {
+        .burnBucket(self)
+    }
     
     // ===============
     // Struct members

@@ -5,19 +5,18 @@ public struct EcdsaSecp256k1SignatureString: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: [UInt8]) {
-        self.value = value
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
     
-    public init(from value: String) throws {
-        // TODO: Validation of length of array
-        self.value = [UInt8](hex: value)
+    public init(hex: String) throws {
+        try self.init(bytes: .init(hex: hex))
     }
 }
 
@@ -35,12 +34,12 @@ public extension EcdsaSecp256k1SignatureString {
     // ======================
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
-        try container.encode(value.toHexString())
+        try container.encode(bytes.toHexString())
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self = try Self(from: try container.decode(String.self))
+        try self.init(hex: container.decode(String.self))
     }
 }
 
@@ -49,19 +48,19 @@ public struct EcdsaSecp256k1PublicKeyString: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: [UInt8]) {
-        self.value = value
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
     
-    public init(from value: String) throws {
+    public init(hex: String) throws {
         // TODO: Validation of length of array
-        self.value = [UInt8](hex: value)
+        try self.init(bytes: [UInt8](hex: hex))
     }
 }
 
@@ -79,12 +78,12 @@ public extension EcdsaSecp256k1PublicKeyString {
     // ======================
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
-        try container.encode(value.toHexString())
+        try container.encode(bytes.toHexString())
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self = try Self(from: try container.decode(String.self))
+        try self.init(hex: container.decode(String.self))
     }
 }
 
@@ -93,19 +92,18 @@ public struct EddsaEd25519SignatureString: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: [UInt8]) {
-        self.value = value
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
     
-    public init(from value: String) throws {
-        // TODO: Validation of length of array
-        self.value = [UInt8](hex: value)
+    public init(hex: String) throws {
+        try self.init(bytes: [UInt8](hex: hex))
     }
 }
 
@@ -123,12 +121,12 @@ public extension EddsaEd25519SignatureString {
     // ======================
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
-        try container.encode(value.toHexString())
+        try container.encode(bytes.toHexString())
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self = try Self(from: try container.decode(String.self))
+        try self.init(hex: container.decode(String.self))
     }
 }
 
@@ -137,19 +135,18 @@ public struct EddsaEd25519PublicKeyString: Sendable, Codable, Hashable {
     // Struct members
     // ===============
     
-    public let value: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: [UInt8]) {
-        self.value = value
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
     
-    public init(from value: String) throws {
-        // TODO: Validation of length of array
-        self.value = [UInt8](hex: value)
+    public init(hex: String) throws {
+        try self.init(bytes: [UInt8](hex: hex))
     }
   
 }
@@ -168,12 +165,12 @@ public extension EddsaEd25519PublicKeyString {
     // ======================
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
-        try container.encode(value.toHexString())
+        try container.encode(bytes.toHexString())
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self = try Self(from: try container.decode(String.self))
+        try self.init(hex: container.decode(String.self))
     }
 }
 

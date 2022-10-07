@@ -9,14 +9,13 @@ public struct DeriveNonFungibleAddressRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from resourceAddress: String, nonFungibleId: [UInt8]) {
+    public init(resourceAddress: String, nonFungibleId: [UInt8]) {
         self.resourceAddress = resourceAddress
         self.nonFungibleId = nonFungibleId
     }
     
-    public init(from resourceAddress: String, nonFungibleId: String) {
-        self.resourceAddress = resourceAddress
-        self.nonFungibleId = [UInt8](hex: nonFungibleId)
+    public init(resourceAddress: String, nonFungibleIdHex: String) throws {
+        try self.init(resourceAddress: resourceAddress, nonFungibleId: [UInt8](hex: nonFungibleIdHex))
     }
 }
 
@@ -42,7 +41,8 @@ public extension DeriveNonFungibleAddressRequest {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try container.decode(String.self, forKey: .resourceAddress), nonFungibleId: try container.decode(String.self, forKey: .nonFungibleId))
+       
+        try self.init(resourceAddress:  container.decode(String.self, forKey: .resourceAddress), nonFungibleIdHex: container.decode(String.self, forKey: .nonFungibleId))
         
     }
 }

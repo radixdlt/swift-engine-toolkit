@@ -1,23 +1,26 @@
 import Foundation
 
-public struct TakeFromWorktop: Sendable, Codable, Hashable {
+public struct TakeFromWorktop: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .takeFromWorktop
+    public func embed() -> Instruction {
+        .takeFromWorktop(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
     public let resourceAddress: ResourceAddress
-    public let intoBucket: Bucket
+    public let bucket: Bucket
     
     // =============
     // Constructors
     // =============
     
-    public init(from resourceAddress: ResourceAddress, intoBucket: Bucket) {
+    public init(resourceAddress: ResourceAddress, bucket: Bucket) {
         self.resourceAddress = resourceAddress
-        self.intoBucket = intoBucket
+        self.bucket = bucket
     }
 
 }
@@ -41,7 +44,7 @@ public extension TakeFromWorktop {
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(resourceAddress, forKey: .resourceAddress)
-        try container.encode(intoBucket, forKey: .intoBucket)
+        try container.encode(bucket, forKey: .intoBucket)
     }
     
     init(from decoder: Decoder) throws {
@@ -52,9 +55,9 @@ public extension TakeFromWorktop {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let intoBucket: Bucket = try container.decode(Bucket.self, forKey: .intoBucket)
+        let resourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
+        let bucket = try container.decode(Bucket.self, forKey: .intoBucket)
         
-        self = Self(from: resourceAddress, intoBucket: intoBucket)
+        self.init(resourceAddress: resourceAddress, bucket: bucket)
     }
 }

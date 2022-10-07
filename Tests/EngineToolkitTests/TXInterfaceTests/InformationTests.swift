@@ -5,3 +5,5 @@ final class InformationTests: TestCase {
         XCTAssertEqual(information, .init(packageVersion: "0.1.0"))
     }
 }
+
+

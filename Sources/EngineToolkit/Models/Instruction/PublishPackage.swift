@@ -1,8 +1,11 @@
 import Foundation
 
-public struct PublishPackage: Sendable, Codable, Hashable {
+public struct PublishPackage: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .publishPackage
+    public func embed() -> Instruction {
+        .publishPackage(self)
+    }
     
     // ===============
     // Struct members

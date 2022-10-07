@@ -1,8 +1,11 @@
 import Foundation
 
-public struct CallMethod: Sendable, Codable, Hashable {
+public struct CallMethod: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .callMethod
+    public func embed() -> Instruction {
+        .callMethod(self)
+    }
     
     // ===============
     // Struct members
@@ -16,7 +19,7 @@ public struct CallMethod: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from componentAddress: ComponentAddress, methodName: String_, arguments: [Value]?) {
+    public init(componentAddress: ComponentAddress, methodName: String_, arguments: [Value]?) {
         self.componentAddress = componentAddress
         self.methodName = methodName
         self.arguments = arguments ?? [Value]([])
@@ -59,6 +62,6 @@ public extension CallMethod {
         let methodName: String_ = try container.decode(String_.self, forKey: .methodName)
         let arguments: [Value] = try container.decode([Value].self, forKey: .arguments)
         
-        self = Self(from: componentAddress, methodName: methodName, arguments: arguments)
+        self = Self(componentAddress: componentAddress, methodName: methodName, arguments: arguments)
     }
 }

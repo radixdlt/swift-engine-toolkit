@@ -14,8 +14,8 @@ public struct SborDecodeRequest: Sendable, Codable, Hashable {
         self.networkId = networkId
     }
     
-	public init(encodedHex: String, networkId: NetworkID = .mainnet) {
-		self.init(encodedBytes: [UInt8](hex: encodedHex), networkId: networkId)
+	public init(encodedHex: String, networkId: NetworkID = .mainnet) throws {
+		try self.init(encodedBytes: [UInt8](hex: encodedHex), networkId: networkId)
     }
 }
 

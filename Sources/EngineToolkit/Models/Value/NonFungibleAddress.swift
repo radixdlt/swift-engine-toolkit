@@ -14,12 +14,12 @@ public struct NonFungibleAddress: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from address: [UInt8]) {
-        self.address = address
+    public init(bytes: [UInt8]) {
+        self.address = bytes
     }
     
-    public init(from address: String) throws {
-        self.address = [UInt8](hex: address)
+    public init(hex: String) throws {
+        try self.init(bytes:  [UInt8](hex: hex))
     }
 
 }
@@ -52,6 +52,6 @@ public extension NonFungibleAddress {
         }
         
         // Decoding `address`
-        self = try Self(from: try container.decode(String.self, forKey: .address))
+        try self.init(hex: container.decode(String.self, forKey: .address))
     }
 }

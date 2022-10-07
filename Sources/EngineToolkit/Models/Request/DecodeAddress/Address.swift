@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Address: Sendable, Codable, Hashable, AddressProtocol {
+public enum Address: Sendable, Codable, Hashable, AddressStringConvertible {
     case packageAddress(PackageAddress)
     case componentAddress(ComponentAddress)
     case resourceAddress(ResourceAddress)
@@ -49,9 +49,18 @@ public extension Address {
     }
 }
 
-// MARK: AddressProtocol
-public protocol AddressProtocol {
+// MARK: AddressStringConvertible
+public protocol AddressStringConvertible {
     var address: String { get }
+}
+// MARK: AddressProtocol
+public protocol AddressProtocol: AddressStringConvertible, ExpressibleByStringLiteral {
+    init(address: String)
+}
+public extension AddressProtocol {
+    init(stringLiteral value: String) {
+        self.init(address: value)
+    }
 }
 
 

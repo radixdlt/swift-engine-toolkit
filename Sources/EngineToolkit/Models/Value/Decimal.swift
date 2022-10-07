@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Decimal_: Sendable, Codable, Hashable {
+public struct Decimal_: Sendable, Codable, Hashable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .decimal
     
@@ -9,19 +9,45 @@ public struct Decimal_: Sendable, Codable, Hashable {
     // ===============
     
     // TODO: Convert this to a better numerical type
-    public let value: String
+    public let value: Foundation.Decimal
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: String) {
+    public init(value: Foundation.Decimal) {
         self.value = value
+    }
+    
+    public init(string: String) throws {
+        try self.init(value: Decimal(string, format: .number, lenient: false))
+    }
+    
+    public typealias FloatLiteralType = Double
+    public init(floatLiteral: FloatLiteralType) {
+        self.init(value: Foundation.Decimal(floatLiteral: floatLiteral))
+    }
+    
+    public init(integerLiteral: Decimal.IntegerLiteralType) {
+        self.init(value: Foundation.Decimal(integerLiteral: integerLiteral))
+    }
+    
+    public init(stringLiteral value: String) {
+        guard let self_ = try? Self(string: value) else {
+            fatalError("Failed to create \(Self.self) from string, invalid decimalstring")
+        }
+       self = self_
     }
 
 }
 
 public extension Decimal_ {
+    
+    private var string: String {
+        // FIXME: investigate which `Locale` is being used here.. might need to use `NumberFormatter`, i.e.
+        // does `"\(value)"` use "," or "." for decimals, and what does Scrypto expect?
+        "\(value)"
+    }
     
     // =======================
     // Coding Keys Definition
@@ -37,7 +63,7 @@ public extension Decimal_ {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(String(value), forKey: .value)
+        try container.encode(string, forKey: .value)
     }
     
     init(from decoder: Decoder) throws {
@@ -49,6 +75,7 @@ public extension Decimal_ {
         }
         
         // Decoding `value`
-        value = try container.decode(String.self, forKey: .value)
+        let string = try container.decode(String.self, forKey: .value)
+        try self.init(string: string)
     }
 }

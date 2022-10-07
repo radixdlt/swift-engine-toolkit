@@ -1,6 +1,6 @@
 import Foundation
 
-public struct U32: Sendable, Codable, Hashable {
+public struct U32: Sendable, Codable, Hashable, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .u32
     
@@ -13,10 +13,12 @@ public struct U32: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: UInt32) {
+    public init(value: UInt32) {
         self.value = value
     }
-
+    public init(integerLiteral value: UInt32) {
+        self.init(value: value)
+    }
 }
 
 public extension U32 {

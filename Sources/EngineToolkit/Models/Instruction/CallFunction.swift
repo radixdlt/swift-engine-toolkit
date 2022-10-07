@@ -1,8 +1,11 @@
 import Foundation
 
-public struct CallFunction: Sendable, Codable, Hashable {
+public struct CallFunction: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .callFunction
+    public func embed() -> Instruction {
+        .callFunction(self)
+    }
     
     // ===============
     // Struct members

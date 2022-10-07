@@ -1,7 +1,7 @@
 import Foundation
 
 // TODO: The underscore is added here to avoid name collisions. Something better is needed.
-public struct String_: Sendable, Codable, Hashable {
+public struct String_: Sendable, Codable, Hashable, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .string
     
@@ -15,8 +15,11 @@ public struct String_: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: String) {
+    public init(value: String) {
         self.value = value
+    }
+    public init(stringLiteral value: StringLiteralType) {
+        self.init(value: value)
     }
 }
 
@@ -48,6 +51,6 @@ public extension String_ {
         }
         
         // Decoding `value`
-        value = try container.decode(String.self, forKey: .value)
+        try self.init(value: container.decode(String.self, forKey: .value))
     }
 }

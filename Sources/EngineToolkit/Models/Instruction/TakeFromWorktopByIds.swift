@@ -1,8 +1,11 @@
 import Foundation
 
-public struct TakeFromWorktopByIds: Sendable, Codable, Hashable {
+public struct TakeFromWorktopByIds: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .takeFromWorktopByIds
+    public func embed() -> Instruction {
+        .takeFromWorktopByIds(self)
+    }
     
     // ===============
     // Struct members
@@ -10,16 +13,21 @@ public struct TakeFromWorktopByIds: Sendable, Codable, Hashable {
     
     public let resourceAddress: ResourceAddress
     public let ids: Set<NonFungibleId>
-    public let intoBucket: Bucket
+    public let bucket: Bucket
     
     // =============
     // Constructors
     // =============
     
-    public init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>, intoBucket: Bucket) {
+    // Same order as scrypto: IDS, Address, Bucket
+    public init(
+        _ ids: Set<NonFungibleId>,
+        resourceAddress: ResourceAddress,
+        bucket: Bucket
+    ) {
         self.resourceAddress = resourceAddress
         self.ids = ids
-        self.intoBucket = intoBucket
+        self.bucket = bucket
     }
 
 }
@@ -45,7 +53,7 @@ public extension TakeFromWorktopByIds {
         
         try container.encode(resourceAddress, forKey: .resourceAddress)
         try container.encode(ids, forKey: .ids)
-        try container.encode(intoBucket, forKey: .intoBucket)
+        try container.encode(bucket, forKey: .intoBucket)
     }
     
     init(from decoder: Decoder) throws {
@@ -56,10 +64,10 @@ public extension TakeFromWorktopByIds {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let ids: Set<NonFungibleId> = try container.decode(Set<NonFungibleId>.self, forKey: .ids)
-        let intoBucket: Bucket = try container.decode(Bucket.self, forKey: .intoBucket)
+        let resourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
+        let ids = try container.decode(Set<NonFungibleId>.self, forKey: .ids)
+        let bucket = try container.decode(Bucket.self, forKey: .intoBucket)
         
-        self = Self(from: resourceAddress, ids: ids, intoBucket: intoBucket)
+        self.init(ids, resourceAddress: resourceAddress, bucket: bucket)
     }
 }

@@ -12,7 +12,9 @@ let package = Package(
             name: "EngineToolkit",
             targets: ["EngineToolkit"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/krzysztofzablocki/Difference.git", from: "1.0.1")
+    ],
     targets: [
         .binaryTarget(
             name: "RadixEngineToolkit",
@@ -24,7 +26,10 @@ let package = Package(
         ),
         .testTarget(
             name: "EngineToolkitTests",
-            dependencies: ["EngineToolkit"]
+            dependencies: [
+                "EngineToolkit",
+                "Difference"
+            ]
         ),
     ]
 )

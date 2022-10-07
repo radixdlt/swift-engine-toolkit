@@ -1,6 +1,32 @@
 import Foundation
 
-public struct Proof: Sendable, Codable, Hashable {
+public protocol IdentifierConvertible: ExpressibleByStringLiteral, ExpressibleByIntegerLiteral {
+    var identifier: Identifier { get }
+    init(identifier: Identifier)
+}
+public extension IdentifierConvertible {
+    
+    init(_ identifier: Identifier) {
+        self.init(identifier: identifier)
+    }
+    
+    init(identifier: String) {
+        self.init(identifier: .string(identifier))
+    }
+    
+    init(identifier: UInt32) {
+        self.init(identifier: .u32(identifier))
+    }
+    
+    init(stringLiteral value: String) {
+        self.init(identifier: value)
+    }
+    init(integerLiteral value: UInt32) {
+        self.init(identifier: value)
+    }
+}
+
+public struct Proof: Sendable, Codable, Hashable, IdentifierConvertible {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .proof
     
@@ -14,19 +40,11 @@ public struct Proof: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from identifier: Identifier) {
+    public init(identifier: Identifier) {
         self.identifier = identifier
     }
-    
-    public init(from identifier: String) {
-        self.identifier = .string(identifier)
-    }
-    
-    public init(from identifier: UInt32) {
-        self.identifier = .u32(identifier)
-    }
-
 }
+
 
 public extension Proof {
     
@@ -56,6 +74,6 @@ public extension Proof {
         }
         
         // Decoding `identifier`
-        self = Self(from: try container.decode(Identifier.self, forKey: .identifier))
+        try self.init(identifier: container.decode(Identifier.self, forKey: .identifier))
     }
 }

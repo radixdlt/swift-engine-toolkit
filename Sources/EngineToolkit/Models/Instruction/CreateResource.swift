@@ -1,8 +1,11 @@
 import Foundation
 
-public struct CreateResource: Sendable, Codable, Hashable {
+public struct CreateResource: InstructionProtocol, ExpressibleByArrayLiteral {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .createResource
+    public func embed() -> Instruction {
+        .createResource(self)
+    }
     
     // ===============
     // Struct members
@@ -14,10 +17,15 @@ public struct CreateResource: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from args: [Value]) {
+    public init(_ args: [Value]) {
         self.args = args
     }
+}
 
+public extension CreateResource {
+    init(arrayLiteral elements: Value...) {
+        self.init(elements)
+    }
 }
 
 public extension CreateResource {
@@ -48,8 +56,6 @@ public extension CreateResource {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let args: [Value] = try container.decode([Value].self, forKey: .args)
-        
-        self = Self(from: args)
+        try self.init(container.decode([Value].self, forKey: .args))
     }
 }
