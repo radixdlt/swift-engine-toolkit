@@ -17,12 +17,6 @@ func XCTAssertThrowsFailure<Success, Failure: Swift.Error & Equatable>(
     _ errorHandler: (_ failure: Failure) -> Void = { _ in }
 ) {
     let result = expression()
-//    do {
-//        _ = try result.get()
-//        XCTFail()
-//    } catch {
-//
-//    }
     
     let assertFailureTypeResult = result.mapError { (failure: Failure) -> Failure in
         errorHandler(failure)
@@ -70,15 +64,42 @@ func XCTAssert<Success>(
     }
 }
 
-final class FailingJSONEncoder: JSONEncoder {}
+enum ManualJSONError: String, Error {
+    case encodeFail
+    case decodeFail
+}
+final class FailingJSONEncoder: JSONEncoder {
+    override func encode<T>(_ value: T) throws -> Data where T : Encodable {
+        throw ManualJSONError.encodeFail
+    }
+}
+struct ManualDecodeFailure: Error {}
+final class FailingJSONDecoder: JSONDecoder {
+    override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
+        throw ManualJSONError.decodeFail
+    }
+    
+}
 
 final class TestOfErrors: TestCase {
-    func test_errors() throws {
+    func test_json_encode_fail_errors() throws {
         let sut = EngineToolkit(jsonEncoder: FailingJSONEncoder())
-        let badRequest = DecodeAddressRequest(address: "bad_address")
         XCTAssert(
-            sut.decodeAddressRequest(request: badRequest),
+            sut.information(),
             throwsSpecificError: .serializeRequestFailure(.jsonEncodeRequestFailed)
+        )
+    }
+    
+    func test_json_decode_fail_errors() throws {
+        let sut = EngineToolkit(jsonDecoder: FailingJSONDecoder())
+        XCTAssert(
+            sut.information(),
+            throwsSpecificError: .deserializeResponseFailure(
+                .decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(
+                    responseType: "\(InformationResponse.self)",
+                    decodingFailure: ManualJSONError.decodeFail.rawValue
+                )
+            )
         )
     }
 }

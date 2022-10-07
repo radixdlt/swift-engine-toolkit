@@ -9,21 +9,35 @@ public struct EngineToolkit {
 	
 	private let jsonEncoder: JSONEncoder
 	private let jsonDecoder: JSONDecoder
+    
+    private let jsonStringFromJSONData: JSONStringFromJSONData
+    private let cCharsFromJSONString: CCharsFromJSONString
+    private let jsonDataFromJSONString: JSONDataFromJSONString
 	
-	public init(
+    public init() {
+        self.init(jsonEncoder: .init())
+    }
+    
+	internal init(
 		jsonEncoder: JSONEncoder = .init(),
 		jsonDecoder: JSONDecoder = .init(),
         jsonStringFromJSONData: @escaping JSONStringFromJSONData = { String(data: $0, encoding: .utf8) },
-        cCharsFromJSONString: @Sendable @escaping (String) -> [CChar]? = { $0.cString(using: .utf8) },
-        jsonDataFromJSONString: @Sendable @escaping (String) -> Data? = { $0.data(using: .utf8) }
+        cCharsFromJSONString: @escaping CCharsFromJSONString = { $0.cString(using: .utf8) },
+        jsonDataFromJSONString: @escaping JSONDataFromJSONString = { $0.data(using: .utf8) }
 	) {
 		self.jsonEncoder = jsonEncoder
 		self.jsonDecoder = jsonDecoder
+        self.jsonStringFromJSONData = jsonStringFromJSONData
+        self.cCharsFromJSONString = cCharsFromJSONString
+        self.jsonDataFromJSONString = jsonDataFromJSONString
+        
 	}
 }
 
 internal extension EngineToolkit {
     typealias JSONStringFromJSONData = @Sendable (Data) -> String?
+    typealias CCharsFromJSONString = @Sendable (String) -> [CChar]?
+    typealias JSONDataFromJSONString = @Sendable (String) -> Data?
 }
 
 // MARK: Public
@@ -247,7 +261,7 @@ private extension EngineToolkit {
         } catch {
             return .failure(.jsonEncodeRequestFailed)
         }
-		guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+		guard let jsonString = jsonStringFromJSONData(jsonData) else {
             return .failure(.utf8EncodingFailed)
 		}
         return .success(jsonString)
@@ -264,7 +278,7 @@ private extension EngineToolkit {
         where Response: Decodable
     {
         
-		guard let jsonData = jsonString.data(using: .utf8) else {
+		guard let jsonData = jsonDataFromJSONString(jsonString) else {
             return .failure(.beforeDecodingError(.failedToUTF8EncodeResponseJSONString))
 		}
         
@@ -297,7 +311,7 @@ private extension EngineToolkit {
     func allocateMemoryForJSONStringOf(request requestJSONString: String) -> Result<UnsafeMutablePointer<CChar>, Error.CallLibraryFunctionFailure> {
         // Get the byte count of the C-String representation of the utf-8 encoded
         // string.
-		guard let cString = requestJSONString.cString(using: .utf8) else {
+		guard let cString = cCharsFromJSONString(requestJSONString) else {
             return .failure(.allocatedMemoryForResponseFailedCouldNotUTF8EncodeCString)
 		}
         
