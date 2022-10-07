@@ -126,11 +126,10 @@ enum SborDecodeEncodeTestVectors {
             encoded: "13000000",
             decoded: .resultType(.ok(.unitType(Unit())))
         ),
-        // TODO: Waiting on Alex's PR to be merged and will then update this
-//        (
-//            encoded: "13010000",
-//            decoded: .resultType(.err(.unitType(Unit())))
-//        ),
+        (
+            encoded: "13010000",
+            decoded: .resultType(.err(.unitType(Unit())))
+        ),
         
         (
             encoded: "2007020000000c00",
