@@ -1,6 +1,6 @@
 import Foundation
 
-public struct NonFungibleId: Codable, Hashable, Sendable, ExpressibleByStringLiteral {
+public struct NonFungibleId: Codable, Hashable, Sendable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .nonFungibleId
     
@@ -23,14 +23,6 @@ public extension NonFungibleId {
     
     init(hex: String) throws {
         try self.init(bytes: [UInt8](hex: hex))
-    }
-
-    // FIXME maybe we wanna move `ExpressibleByStringLiteral` to test since this can fatalError.
-    init(stringLiteral hexString: String) {
-        guard let bytes = try? [UInt8](hex: hexString) else {
-            fatalError("Failed to create \(Self.self) from string, invalid hex.")
-        }
-        self.init(bytes: bytes)
     }
 }
 

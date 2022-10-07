@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Decimal_: Sendable, Codable, Hashable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
+public struct Decimal_: Sendable, Codable, Hashable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .decimal
     
@@ -31,14 +31,6 @@ public struct Decimal_: Sendable, Codable, Hashable, ExpressibleByFloatLiteral, 
     public init(integerLiteral: Decimal.IntegerLiteralType) {
         self.init(value: Foundation.Decimal(integerLiteral: integerLiteral))
     }
-    
-    public init(stringLiteral value: String) {
-        guard let self_ = try? Self(string: value) else {
-            fatalError("Failed to create \(Self.self) from string, invalid decimalstring")
-        }
-       self = self_
-    }
-
 }
 
 public extension Decimal_ {

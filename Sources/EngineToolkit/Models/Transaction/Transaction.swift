@@ -65,17 +65,17 @@ extension TransactionManifest {
         }
     }
     
-    init(@InstructionsBuilder makeInstructions: () -> [Instruction]) {
-        self.init(instructions: makeInstructions())
+    init(@InstructionsBuilder makeInstructions: () throws -> [Instruction]) rethrows{
+        try self.init(instructions: makeInstructions())
     }
-    init(@InstructionsBuilder makeInstruction: () -> Instruction) {
-        self.init(instructions: [makeInstruction()])
+    init(@InstructionsBuilder makeInstruction: () throws -> Instruction) rethrows {
+        try self.init(instructions: [makeInstruction()])
     }
     
-    init(@SpecificInstructionsBuilder makeInstructions: () -> [any InstructionProtocol]) {
-        self.init(instructions: makeInstructions())
+    init(@SpecificInstructionsBuilder makeInstructions: () throws -> [any InstructionProtocol]) rethrows {
+        try self.init(instructions: makeInstructions())
     }
-    init(@SpecificInstructionsBuilder makeInstruction: () -> any InstructionProtocol) {
-        self.init(instructions: [makeInstruction()])
+    init(@SpecificInstructionsBuilder makeInstruction: () throws -> any InstructionProtocol) rethrows {
+        try self.init(instructions: [makeInstruction()])
     }
 }

@@ -12,7 +12,7 @@ final class ManifestResultBuilderTest: TestCase {
     func test__complex_resultBuilded() throws {
         let expected = try sut.convertManifest(request: makeRequest(outputFormat: .json, manifest: .complex)).get()
         
-        let built = TransactionManifest {
+        let built = try TransactionManifest {
             
             // Withdraw XRD from account
             CallMethod(
@@ -59,7 +59,10 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Return a bucket to worktop
             ReturnToWorktop(bucket: "some_xrd")
-            TakeFromWorktopByIds([NonFungibleId("0905000000"), "0907000000"], resourceAddress: "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag", bucket: "nfts")
+            TakeFromWorktopByIds([
+                try NonFungibleId(hex: "0905000000"),
+                try NonFungibleId(hex: "0907000000")
+            ], resourceAddress: "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag", bucket: "nfts")
             
             // Create a new fungible resource
             CreateResource([
