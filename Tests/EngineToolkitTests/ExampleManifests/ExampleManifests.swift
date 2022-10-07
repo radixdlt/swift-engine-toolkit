@@ -50,4 +50,3 @@ DROP_ALL_PROOFS;
 # Complicated method that takes all of the number types
 CALL_METHOD ComponentAddress("component_sim1q2f9vmyrmeladvz0ejfttcztqv3genlsgpu9vue83mcs835hum") "complicated_method" Decimal("1") PreciseDecimal("2");
 """
-

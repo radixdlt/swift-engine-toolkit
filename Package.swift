@@ -24,7 +24,10 @@ let package = Package(
         ),
         .testTarget(
             name: "EngineToolkitTests",
-            dependencies: ["EngineToolkit"]
+            dependencies: ["EngineToolkit"],
+            resources: [
+                .copy("Resources"),
+            ]
         ),
     ]
 )

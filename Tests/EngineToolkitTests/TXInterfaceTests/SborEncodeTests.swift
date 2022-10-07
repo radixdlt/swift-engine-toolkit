@@ -1,4 +1,4 @@
-@_exported @testable import EngineToolkit
+@testable import EngineToolkit
 
 final class SborEncodeDecodeRequestTests: TestCase {
     
