@@ -17,7 +17,7 @@ private extension SborEncodeDecodeRequestTests {
         let decodeRequest = SborDecodeRequest(
             encodedHex: vector.encoded
         )
-        let decoded: Value = try sut.sborDecodeRequest(request: decodeRequest).get()
+        let decoded = try sut.sborDecodeRequest(request: decodeRequest).get()
         XCTAssertEqual(decoded, vector.decoded, line: line)
         
         let encodeRequest = vector.decoded
