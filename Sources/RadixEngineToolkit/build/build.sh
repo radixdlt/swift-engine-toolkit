@@ -1,6 +1,9 @@
 #!/bin/sh -e
+
 XCFRAMEWORKNAME=RadixEngineToolkit
+
 echo "🔮 ✨ Building $XCFRAMEWORKNAME...";
+
 XCFRAMEWORK="$XCFRAMEWORKNAME.xcframework"
 
 cd $(dirname $0)
@@ -23,6 +26,8 @@ cargo build --target aarch64-apple-darwin --release # Apple Silicon Mac
 cargo build --target x86_64-apple-darwin --release # Intel Mac
 
 RET_RUST_CRATE_NAME=radix-engine-toolkit
+
+# replace "-" with "_"
 LIB_NAME=`(echo $RET_RUST_CRATE_NAME | tr "-" "_")`
 
 # MUST start with "lib", otherwise we get an error when running `swift test` in CLI (actually only via CLI)
@@ -43,12 +48,6 @@ LIB_BINARY_NAME="$LIB_BINARY_REQUIRED_PREFIX$LIB_NAME.a"
 
 HEADER_NAME="$LIB_NAME.h"
 MODULEMAP_FILE_NAME=module.modulemap
-
-echo "💡 XCFRAMEWORK=$XCFRAMEWORK"
-echo "💡 LIB_NAME=$LIB_NAME"
-echo "💡 HEADER_NAME=$HEADER_NAME"
-echo "💡 LIB_BINARY_NAME=$LIB_BINARY_NAME"
-echo "💡 TARGET_BINARY_NAME=$TARGET_BINARY_NAME"
 
 echo "🔮 🛠 🎯 Finished building all targets ✅"
 
@@ -96,6 +95,8 @@ echo "🔮 🛠 🎯 Finished building all targets ✅"
     echo "🔮 🗺 Creating and populating file $MODULEMAP_FILE_NAME"
     rm -rf $MODULEMAP_FILE_NAME
     touch $MODULEMAP_FILE_NAME
+    
+    # Populate the `module.modulemap` using variables declared above.
     tee -a $MODULEMAP_FILE_NAME << END
 module $XCFRAMEWORKNAME {
     umbrella header "$HEADER_NAME"
