@@ -12,11 +12,6 @@ import XCTest
 
 final class TestOfErrors: TestCase {
     
-    override func setUp() {
-        debugPrint = true
-        super.setUp()
-    }
-    
     // MARK: From EngineToolkit
     func test_error_serializeRequestFailure_utf8Decode() throws {
         let sut = EngineToolkit(jsonStringFromJSONData: { _ in nil /* utf8 decode fail */ })

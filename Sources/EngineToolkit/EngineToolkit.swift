@@ -1,5 +1,5 @@
 import Foundation
-import libTX
+import RadixEngineToolkit
 
 /// A type provides a high level functions and method for the
 /// interaction with the transaction library and abstracting away
@@ -52,7 +52,7 @@ public extension EngineToolkit {
     func information() -> Result<InformationResponse, Error> {
         callLibraryFunction(
             request: InformationRequest(),
-            function: libTX.information
+            function: RadixEngineToolkit.information
         )
     }
     
@@ -61,7 +61,7 @@ public extension EngineToolkit {
 	) -> Result<ConvertManifestResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.convert_manifest
+            function: convert_manifest
         )
     }
 
@@ -70,7 +70,7 @@ public extension EngineToolkit {
 	) -> Result<CompileTransactionIntentResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.compile_transaction_intent
+            function: compile_transaction_intent
         )
     }
 
@@ -79,7 +79,7 @@ public extension EngineToolkit {
 	) -> Result<DecompileTransactionIntentResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.decompile_transaction_intent
+            function: decompile_transaction_intent
         )
     }
 
@@ -88,7 +88,7 @@ public extension EngineToolkit {
 	) -> Result<CompileSignedTransactionIntentResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.compile_signed_transaction_intent
+            function: compile_signed_transaction_intent
         )
     }
 
@@ -97,7 +97,7 @@ public extension EngineToolkit {
 	) -> Result<DecompileSignedTransactionIntentResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.decompile_signed_transaction_intent
+            function: decompile_signed_transaction_intent
         )
     }
 
@@ -106,7 +106,7 @@ public extension EngineToolkit {
 	) -> Result<CompileNotarizedTransactionIntentResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.compile_notarized_transaction_intent
+            function: compile_notarized_transaction_intent
         )
     }
 
@@ -115,7 +115,7 @@ public extension EngineToolkit {
 	) -> Result<DecompileNotarizedTransactionIntentResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.decompile_notarized_transaction_intent
+            function: decompile_notarized_transaction_intent
         )
     }
 
@@ -124,7 +124,7 @@ public extension EngineToolkit {
 	) -> Result<DecompileUnknownTransactionIntentResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.decompile_unknown_transaction_intent
+            function: decompile_unknown_transaction_intent
         )
     }
 
@@ -133,7 +133,7 @@ public extension EngineToolkit {
 	) -> Result<DecodeAddressResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.decode_address
+            function: decode_address
         )
     }
 
@@ -142,7 +142,7 @@ public extension EngineToolkit {
 	) -> Result<EncodeAddressResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.encode_address
+            function: encode_address
         )
     }
 
@@ -151,7 +151,7 @@ public extension EngineToolkit {
 	) -> Result<SborDecodeResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.sbor_decode
+            function: sbor_decode
         )
     }
 
@@ -160,7 +160,7 @@ public extension EngineToolkit {
 	) -> Result<SborEncodeResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.sbor_encode
+            function: sbor_encode
         )
     }
 
@@ -169,7 +169,7 @@ public extension EngineToolkit {
 	) -> Result<ExtractAbiResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.extract_abi
+            function: extract_abi
         )
     }
 
@@ -178,7 +178,7 @@ public extension EngineToolkit {
 	) -> Result<DeriveNonFungibleAddressFromPublicKeyResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.derive_non_fungible_address_from_public_key
+            function: derive_non_fungible_address_from_public_key
         )
     }
 
@@ -187,7 +187,7 @@ public extension EngineToolkit {
 	) -> Result<DeriveNonFungibleAddressResponse, Error> {
         callLibraryFunction(
             request: request,
-            function: libTX.derive_non_fungible_address
+            function: derive_non_fungible_address
         )
     }
 }

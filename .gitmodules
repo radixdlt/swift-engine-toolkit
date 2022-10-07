@@ -1,3 +1,3 @@
-[submodule "Sources/libTX/build/transaction-library"]
-	path = Sources/libTX/build/transaction-library
-	url = git@github.com:radixdlt/transaction-library.git
+[submodule "Sources/RadixEngineToolkit/build/radix-engine-toolkit"]
+	path = Sources/RadixEngineToolkit/build/radix-engine-toolkit
+	url = git@github.com:radixdlt/radix-engine-toolkit.git

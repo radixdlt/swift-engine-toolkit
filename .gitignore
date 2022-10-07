@@ -8,6 +8,6 @@ DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .netrc
 
-Sources/libTX/libTX.xcframework/macos-arm64_x86_64/libTX.a
-Sources/libTX/libTX.xcframework/ios-arm64/libTX.a
-Sources/libTX/libTX.xcframework/ios-arm64-simulator/libTX.a
+Sources/RadixEngineToolkit/RadixEngineToolkit.xcframework/macos-arm64_x86_64/libradix_engine_toolkit.a
+Sources/RadixEngineToolkit/RadixEngineToolkit.xcframework/ios-arm64/libradix_engine_toolkit.a
+Sources/RadixEngineToolkit/RadixEngineToolkit.xcframework/ios-arm64-simulator/libradix_engine_toolkit.a
