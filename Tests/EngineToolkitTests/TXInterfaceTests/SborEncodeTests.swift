@@ -17,11 +17,11 @@ private extension SborEncodeDecodeRequestTests {
         let decodeRequest = SborDecodeRequest(
             encodedHex: vector.encoded
         )
-        let decoded: Value = try sut.sborDecodeRequest(request: decodeRequest)
+        let decoded: Value = try sut.sborDecodeRequest(request: decodeRequest).get()
         XCTAssertEqual(decoded, vector.decoded, line: line)
         
         let encodeRequest = vector.decoded
-        let encoded = try sut.sborEncodeRequest(request: encodeRequest)
+        let encoded = try sut.sborEncodeRequest(request: encodeRequest).get()
         XCTAssertEqual(encoded.encodedValue, [UInt8](hex: vector.encoded), line: line)
         
     }
@@ -124,11 +124,11 @@ enum SborDecodeEncodeTestVectors {
         
         (
             encoded: "13000000",
-            decoded: .resultType(.ok(.unitType(Unit())))
+            decoded: .resultType(.success(.unitType(Unit())))
         ),
         (
             encoded: "13010000",
-            decoded: .resultType(.err(.unitType(Unit())))
+            decoded: .resultType(.failure(.unitType(Unit())))
         ),
         
         (
