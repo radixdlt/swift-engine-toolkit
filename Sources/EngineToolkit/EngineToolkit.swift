@@ -193,8 +193,8 @@ public extension EngineToolkit {
 }
 
 
-// MARK: Private
-private extension EngineToolkit {
+// MARK: Private (But Internal For Tests)
+internal extension EngineToolkit {
     /// Calls the transaction library with a given input and returns the output back.
     ///
     /// This function abstracts away how the transaction library is called and provides a high level interface for
@@ -207,9 +207,9 @@ private extension EngineToolkit {
         serialize(request: request)
             .mapError(Error.serializeRequestFailure)
             .flatMap { (requestString: String) in
-                #if DEBUG
+#if DEBUG
                 prettyPrintRequest(jsonString: requestString)
-                #endif
+#endif
                 
                 // Allocate enough memory for the request string and then write it to
                 // that memory location
@@ -218,27 +218,26 @@ private extension EngineToolkit {
                         writeJSONString(of: requestString, to: requestPointer)
                     }
                     .mapError(Error.callLibraryFunctionFailure)
-                   
+                
             }
             .flatMap { (requestPointer: UnsafeMutablePointer<CChar>) in
                 // Calling the underlying transaction library function and getting a pointer
                 // response. We cannot deallocated the `responsePointer`, it results in a crash.
                 guard let responsePointer = function(requestPointer) else {
-                    // Deallocate memory on failure.
+                    // Deallocate memory on failure (no response).
                     deallocateMemory(pointer: requestPointer)
                     
                     return .failure(Error.callLibraryFunctionFailure(.noReturnedOutputFromLibraryFunction))
                 }
-                
                 return .success((requestPointer, responsePointer))
             }
             .flatMap { (requestPointer: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) in
                 
                 let responseJSONString = jsonStringOfResponse(at: responsePointer)
                 
-                #if DEBUG
+#if DEBUG
                 prettyPrintResponse(jsonString: responseJSONString)
-                #endif
+#endif
                 
                 // Deallocating the request and response memory
                 deallocateMemory(pointer: requestPointer)
@@ -248,7 +247,9 @@ private extension EngineToolkit {
                     .mapError(Error.deserializeResponseFailure)
             }
     }
-    
+}
+
+private extension EngineToolkit {
     /// Serializes an object to a JSON string.
     ///
     /// This private function takes an object and serializes it to a JSON string. In the current implementation, this
@@ -262,7 +263,7 @@ private extension EngineToolkit {
             return .failure(.jsonEncodeRequestFailed)
         }
 		guard let jsonString = jsonStringFromJSONData(jsonData) else {
-            return .failure(.utf8EncodingFailed)
+            return .failure(.utf8DecodingFailed)
 		}
         return .success(jsonString)
     }

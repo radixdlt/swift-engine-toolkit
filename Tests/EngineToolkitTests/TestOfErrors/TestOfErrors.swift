@@ -9,80 +9,24 @@ import Foundation
 @testable import EngineToolkit
 import XCTest
 
-func XCTAssertThrowsFailure<Success, Failure: Swift.Error & Equatable>(
-    _ expression: @autoclosure () -> Result<Success, Failure>,
-    _ message: @autoclosure () -> String = "",
-    file: StaticString = #filePath,
-    line: UInt = #line,
-    _ errorHandler: (_ failure: Failure) -> Void = { _ in }
-) {
-    let result = expression()
-    
-    let assertFailureTypeResult = result.mapError { (failure: Failure) -> Failure in
-        errorHandler(failure)
-        return failure
-    }
-    
-    XCTAssertThrowsError(
-        try assertFailureTypeResult.get(),
-        message(),
-        file: file,
-        line: line
-    )
-}
-
-func XCTAssertThrowsEngineError<Success>(
-    _ expression: @autoclosure () -> Result<Success, EngineToolkit.Error>,
-    _ message: @autoclosure () -> String = "",
-    file: StaticString = #filePath,
-    line: UInt = #line,
-    _ errorHandler: (_ failure: EngineToolkit.Error) -> Void = { _ in }
-) {
-    XCTAssertThrowsFailure(
-        expression(),
-        message(),
-        file: file,
-        line: line,
-        errorHandler
-    )
-}
-
-func XCTAssert<Success>(
-    _ expression: @autoclosure () -> Result<Success, EngineToolkit.Error>,
-    throwsSpecificError specificError: EngineToolkit.Error,
-    _ message: @autoclosure () -> String = "",
-    file: StaticString = #filePath,
-    line: UInt = #line
-) {
-    XCTAssertThrowsFailure(
-        expression(),
-        message(),
-        file: file,
-        line: line
-    ) { failure in
-        XCTAssertEqual(failure, specificError, message(), file: file, line: line)
-    }
-}
-
-enum ManualJSONError: String, Error {
-    case encodeFail
-    case decodeFail
-}
-final class FailingJSONEncoder: JSONEncoder {
-    override func encode<T>(_ value: T) throws -> Data where T : Encodable {
-        throw ManualJSONError.encodeFail
-    }
-}
-struct ManualDecodeFailure: Error {}
-final class FailingJSONDecoder: JSONDecoder {
-    override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
-        throw ManualJSONError.decodeFail
-    }
-    
-}
 
 final class TestOfErrors: TestCase {
-    func test_json_encode_fail_errors() throws {
+    
+    override func setUp() {
+        debugPrint = true
+        super.setUp()
+    }
+    
+    // MARK: From EngineToolkit
+    func test_error_serializeRequestFailure_utf8Decode() throws {
+        let sut = EngineToolkit(jsonStringFromJSONData: { _ in nil /* utf8 decode fail */ })
+        XCTAssert(
+            sut.information(),
+            throwsSpecificError: .serializeRequestFailure(.utf8DecodingFailed)
+        )
+    }
+  
+    func test_error_serializeRequestFailure_jsonEncodeRequestFailed() throws {
         let sut = EngineToolkit(jsonEncoder: FailingJSONEncoder())
         XCTAssert(
             sut.information(),
@@ -90,16 +34,119 @@ final class TestOfErrors: TestCase {
         )
     }
     
-    func test_json_decode_fail_errors() throws {
+    func test_error_callLibraryFunctionFailure_cChar_encode_fail() throws {
+        let sut = EngineToolkit(cCharsFromJSONString: { _ in nil /* CChar from JSON failed => allocation fail */ })
+        XCTAssert(
+            sut.information(),
+            throwsSpecificError: .callLibraryFunctionFailure(.allocatedMemoryForResponseFailedCouldNotUTF8EncodeCString)
+        )
+    }
+    
+    func test_error_callLibraryFunctionFailure_no_output_from_function() throws {
+        let sut = EngineToolkit()
+
+        // Have to use otherwise private method `callLibraryFunction` to mock mo response from `function`.
+        let emptyResult: Result<InformationResponse, EngineToolkit.Error> = sut.callLibraryFunction(
+            request: InformationRequest(),
+            function: {  _ in nil /* mock nil response */ }
+        )
+
+        XCTAssert(
+            emptyResult,
+            throwsSpecificError: .callLibraryFunctionFailure(.noReturnedOutputFromLibraryFunction)
+        )
+    }
+    
+    func test_error_deserializeResponseFailure_utf8EncodingFailed() throws {
+        let sut = EngineToolkit(jsonDataFromJSONString: { _ in nil /* utf8 encode fail */ })
+        XCTAssert(
+            sut.information(),
+            throwsSpecificError: .deserializeResponseFailure(.beforeDecodingError(.failedToUTF8EncodeResponseJSONString))
+        )
+    }
+    
+    func test_error_deserializeResponseFailure_jsonDecodeFail() throws {
         let sut = EngineToolkit(jsonDecoder: FailingJSONDecoder())
         XCTAssert(
             sut.information(),
             throwsSpecificError: .deserializeResponseFailure(
                 .decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(
                     responseType: "\(InformationResponse.self)",
-                    decodingFailure: ManualJSONError.decodeFail.rawValue
+                    decodingFailure: MockError.jsonDecodeFail.rawValue
                 )
             )
         )
     }
+    
+    func test_json_parse_address_error() throws {
+        let json = """
+        {
+          "error" : "AddressError",
+          "value" : "DecodingError(MissingSeparator)"
+        }
+        """.data(using: .utf8)!
+        let addressError = try JSONDecoder().decode(AddressError.self, from: json)
+        XCTAssertEqual(addressError, .init(nested: DecodingError(value: "MissingSeparator")))
+        XCTAssertEqual(AddressError(value: "DecodingError(MissingSeparator)"), .init(nested: DecodingError(value: "MissingSeparator")))
+    }
+    
+    func test_json_parse_errorResponse() throws {
+        let json = """
+        {
+          "error" : "AddressError",
+          "value" : "DecodingError(MissingSeparator)"
+        }
+        """.data(using: .utf8)!
+        let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: json)
+        XCTAssertEqual(errorResponse, .addressError(AddressError(nested: DecodingError(value: "MissingSeparator"))))
+    }
+    
+    // MARK: ErrorResponse (from RET)
+    func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_missing_separator() throws {
+        let badRequest = DecodeAddressRequest(address: "missing separator")
+        let result = sut.decodeAddressRequest(request: badRequest)
+        let expectedErrorResponse: ErrorResponse = .addressError(.init(nested: DecodingError(value: "MissingSeparator")))
+        XCTAssert(
+            result,
+            throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))
+        )
+    }
+    
+    
+    func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_invalid_char_space() throws {
+        let badRequest = DecodeAddressRequest(address: "bad1 invalid char spaces")
+        let result = sut.decodeAddressRequest(request: badRequest)
+        let expectedErrorResponse: ErrorResponse = .addressError(.init(nested: DecodingError(value: "InvalidChar(' ')")))
+        XCTAssert(
+            result,
+            throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))
+        )
+    }
+    
+    func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_invalid_checksum() throws {
+        let badRequest = DecodeAddressRequest(address: "invalid1checksum")
+        let result = sut.decodeAddressRequest(request: badRequest)
+        let expectedErrorResponse: ErrorResponse = .addressError(.init(nested: DecodingError(value: "InvalidChecksum")))
+        XCTAssert(
+            result,
+            throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))
+        )
+    }
+}
+
+enum MockError: String, Error {
+    case jsonEncodeFail
+    case jsonDecodeFail
+}
+final class FailingJSONEncoder: JSONEncoder {
+    override func encode<T>(_ value: T) throws -> Data where T : Encodable {
+        throw MockError.jsonEncodeFail
+    }
+}
+struct ManualDecodeFailure: Error {}
+final class FailingJSONDecoder: JSONDecoder {
+    override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
+        throw MockError.jsonDecodeFail
+    }
+    
 }

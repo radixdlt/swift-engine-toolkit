@@ -32,7 +32,7 @@ public extension EngineToolkit.Error {
     /// We failed to call serialize the request, so we did not even get
     /// a chance to call the function in the Radix Engine Toolkit.
     enum SerializeRequestFailure: String, Sendable, LocalizedError, Equatable {
-        case utf8EncodingFailed
+        case utf8DecodingFailed
         case jsonEncodeRequestFailed
     }
 }
