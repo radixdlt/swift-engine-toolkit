@@ -9,21 +9,30 @@ import SwiftUI
 import EngineToolkit
 
 struct ContentView: View {
+    @State var information = ""
     var body: some View {
         VStack {
-            Text(getInformation())
+            Text(information)
                 .padding()
+        }
+        .onAppear {
+            do {
+                information = try getInformation()
+            } catch {
+                information = "❗️⚠️ Failed to get information, error: \(error)"
+            }
         }
         .padding()
     }
 }
 
 private extension ContentView {
-    func getInformation() -> String {
+    func getInformation() throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted]
-        let encoded_data: Data = try! encoder.encode(TX().information());
-        let encoded_string: String = String(data: encoded_data, encoding: .utf8)!;
+        let information = try EngineToolkit().information().get()
+        let encoded_data: Data = try encoder.encode(information)
+        let encoded_string: String = String(data: encoded_data, encoding: .utf8)!
         return encoded_string
     }
 

@@ -11,16 +11,16 @@
 
 class TestCase: XCTestCase {
     
-    var sut = TX()
+    var sut = EngineToolkit()
     var debugPrint = true
     
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        TX._debugPrint = debugPrint
+        EngineToolkit._debugPrint = debugPrint
     }
     override func tearDown() {
-        TX._debugPrint = false
+        EngineToolkit._debugPrint = false
     }
     
     

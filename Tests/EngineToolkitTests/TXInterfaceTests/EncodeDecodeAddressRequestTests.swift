@@ -15,14 +15,14 @@ private extension EncodeDecodeAddressRequestTests {
         let decodeRequest = DecodeAddressRequest(
             address: vector.encoded
         )
-        let decoded = try sut.decodeAddressRequest(request: decodeRequest)
+        let decoded = try sut.decodeAddressRequest(request: decodeRequest).get()
         XCTAssertEqual(decoded.address.address, vector.encoded, line: line)
         
         let encodeRequest = EncodeAddressRequest(
             addressHex: vector.decoded,
             networkId: .simulator
         )
-        let encoded = try sut.encodeAddressRequest(request: encodeRequest)
+        let encoded = try sut.encodeAddressRequest(request: encodeRequest).get()
         XCTAssertEqual(encoded.address, vector.encoded)
         
     }
