@@ -9,14 +9,35 @@ public struct EngineToolkit {
 	
 	private let jsonEncoder: JSONEncoder
 	private let jsonDecoder: JSONDecoder
+    
+    private let jsonStringFromJSONData: JSONStringFromJSONData
+    private let cCharsFromJSONString: CCharsFromJSONString
+    private let jsonDataFromJSONString: JSONDataFromJSONString
 	
-	public init(
+    public init() {
+        self.init(jsonEncoder: .init())
+    }
+    
+	internal init(
 		jsonEncoder: JSONEncoder = .init(),
-		jsonDecoder: JSONDecoder = .init()
+		jsonDecoder: JSONDecoder = .init(),
+        jsonStringFromJSONData: @escaping JSONStringFromJSONData = { String(data: $0, encoding: .utf8) },
+        cCharsFromJSONString: @escaping CCharsFromJSONString = { $0.cString(using: .utf8) },
+        jsonDataFromJSONString: @escaping JSONDataFromJSONString = { $0.data(using: .utf8) }
 	) {
 		self.jsonEncoder = jsonEncoder
 		self.jsonDecoder = jsonDecoder
+        self.jsonStringFromJSONData = jsonStringFromJSONData
+        self.cCharsFromJSONString = cCharsFromJSONString
+        self.jsonDataFromJSONString = jsonDataFromJSONString
+        
 	}
+}
+
+internal extension EngineToolkit {
+    typealias JSONStringFromJSONData = @Sendable (Data) -> String?
+    typealias CCharsFromJSONString = @Sendable (String) -> [CChar]?
+    typealias JSONDataFromJSONString = @Sendable (String) -> Data?
 }
 
 // MARK: Public
@@ -30,7 +51,7 @@ public extension EngineToolkit {
     /// request works then you can be assured that all of the other lower level operations work as well.
     func information() -> Result<InformationResponse, Error> {
         callLibraryFunction(
-            input: InformationRequest(),
+            request: InformationRequest(),
             function: libTX.information
         )
     }
@@ -39,7 +60,7 @@ public extension EngineToolkit {
 		request: ConvertManifestRequest
 	) -> Result<ConvertManifestResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.convert_manifest
         )
     }
@@ -48,7 +69,7 @@ public extension EngineToolkit {
 		request: CompileTransactionIntentRequest
 	) -> Result<CompileTransactionIntentResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.compile_transaction_intent
         )
     }
@@ -57,7 +78,7 @@ public extension EngineToolkit {
 		request: DecompileTransactionIntentRequest
 	) -> Result<DecompileTransactionIntentResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.decompile_transaction_intent
         )
     }
@@ -66,7 +87,7 @@ public extension EngineToolkit {
 		request: CompileSignedTransactionIntentRequest
 	) -> Result<CompileSignedTransactionIntentResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.compile_signed_transaction_intent
         )
     }
@@ -75,7 +96,7 @@ public extension EngineToolkit {
 		request: DecompileSignedTransactionIntentRequest
 	) -> Result<DecompileSignedTransactionIntentResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.decompile_signed_transaction_intent
         )
     }
@@ -84,7 +105,7 @@ public extension EngineToolkit {
 		request: CompileNotarizedTransactionIntentRequest
 	) -> Result<CompileNotarizedTransactionIntentResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.compile_notarized_transaction_intent
         )
     }
@@ -93,7 +114,7 @@ public extension EngineToolkit {
 		request: DecompileNotarizedTransactionIntentRequest
 	) -> Result<DecompileNotarizedTransactionIntentResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.decompile_notarized_transaction_intent
         )
     }
@@ -102,7 +123,7 @@ public extension EngineToolkit {
 		request: DecompileUnknownTransactionIntentRequest
 	) -> Result<DecompileUnknownTransactionIntentResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.decompile_unknown_transaction_intent
         )
     }
@@ -111,7 +132,7 @@ public extension EngineToolkit {
 		request: DecodeAddressRequest
 	) -> Result<DecodeAddressResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.decode_address
         )
     }
@@ -120,7 +141,7 @@ public extension EngineToolkit {
 		request: EncodeAddressRequest
 	) -> Result<EncodeAddressResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.encode_address
         )
     }
@@ -129,7 +150,7 @@ public extension EngineToolkit {
 		request: SborDecodeRequest
 	) -> Result<SborDecodeResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.sbor_decode
         )
     }
@@ -138,7 +159,7 @@ public extension EngineToolkit {
 		request: SborEncodeRequest
 	) -> Result<SborEncodeResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.sbor_encode
         )
     }
@@ -147,7 +168,7 @@ public extension EngineToolkit {
 		request: ExtractAbiRequest
 	) -> Result<ExtractAbiResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.extract_abi
         )
     }
@@ -156,7 +177,7 @@ public extension EngineToolkit {
 		request: DeriveNonFungibleAddressFromPublicKeyRequest
 	) -> Result<DeriveNonFungibleAddressFromPublicKeyResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.derive_non_fungible_address_from_public_key
         )
     }
@@ -165,84 +186,84 @@ public extension EngineToolkit {
 		request: DeriveNonFungibleAddressRequest
 	) -> Result<DeriveNonFungibleAddressResponse, Error> {
         callLibraryFunction(
-            input: request,
+            request: request,
             function: libTX.derive_non_fungible_address
         )
     }
 }
 
 
-// MARK: Private
-private extension EngineToolkit {
+// MARK: Private (But Internal For Tests)
+internal extension EngineToolkit {
     /// Calls the transaction library with a given input and returns the output back.
     ///
     /// This function abstracts away how the transaction library is called and provides a high level interface for
     /// communicating and getting responses back from the library.
-    func callLibraryFunction<I: Encodable, O: Decodable>(
-        input: I,
+    func callLibraryFunction<Request, Response>(
+        request: Request,
         function: (UnsafePointer<CChar>?) -> UnsafePointer<CChar>?
-    ) -> Result<O, Error> {
+    ) -> Result<Response, Error> where Request: Encodable, Response: Decodable {
         // Serialize the given request to a JSON string.
-        serialize(object: input)
+        serialize(request: request)
             .mapError(Error.serializeRequestFailure)
             .flatMap { (requestString: String) in
-                #if DEBUG
+#if DEBUG
                 prettyPrintRequest(jsonString: requestString)
-                #endif
+#endif
                 
                 // Allocate enough memory for the request string and then write it to
                 // that memory location
-                return allocateMemory(string: requestString)
-                    .map { allocatedMemory in
-                        writeStringToMemory(string: requestString, pointer: allocatedMemory)
-                        return allocatedMemory
+                return allocateMemoryForJSONStringOf(request: requestString)
+                    .map { requestPointer in
+                        writeJSONString(of: requestString, to: requestPointer)
                     }
                     .mapError(Error.callLibraryFunctionFailure)
-                   
+                
             }
-            .flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>) in
+            .flatMap { (requestPointer: UnsafeMutablePointer<CChar>) in
                 // Calling the underlying transaction library function and getting a pointer
                 // response. We cannot deallocated the `responsePointer`, it results in a crash.
-                guard let responsePointer = function(allocatedMemory) else {
-                    // Deallocate memory on failure.
-                    deallocateMemory(pointer: allocatedMemory)
+                guard let responsePointer = function(requestPointer) else {
+                    // Deallocate memory on failure (no response).
+                    deallocateMemory(pointer: requestPointer)
                     
                     return .failure(Error.callLibraryFunctionFailure(.noReturnedOutputFromLibraryFunction))
                 }
-                
-                return .success((allocatedMemory, responsePointer))
+                return .success((requestPointer, responsePointer))
             }
-            .flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) in
+            .flatMap { (requestPointer: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) in
                 
-                let responseString = readStringFromMemory(pointer: responsePointer)
+                let responseJSONString = jsonStringOfResponse(at: responsePointer)
                 
-                #if DEBUG
-                prettyPrintResponse(jsonString: responseString)
-                #endif
+#if DEBUG
+                prettyPrintResponse(jsonString: responseJSONString)
+#endif
                 
                 // Deallocating the request and response memory
-                deallocateMemory(pointer: allocatedMemory)
+                deallocateMemory(pointer: requestPointer)
                 
                 // Deserialize response
-                return deserialize(jsonString: responseString)
+                return deserialize(jsonString: responseJSONString)
                     .mapError(Error.deserializeResponseFailure)
             }
     }
-    
+}
+
+private extension EngineToolkit {
     /// Serializes an object to a JSON string.
     ///
     /// This private function takes an object and serializes it to a JSON string. In the current implementation, this
     /// object needs to be `Encodable`, therefore, this function abstracts the serialization logic away from the
     /// transaction library operations and into an individual function.
-    func serialize<T: Encodable>(object: T) -> Result<String, Error.SerializeRequestFailure> {
+    func serialize(request: any Encodable) -> Result<String, Error.SerializeRequestFailure> {
         let jsonData: Data
         do {
-           jsonData = try jsonEncoder.encode(object)
+           jsonData = try jsonEncoder.encode(request)
         } catch {
             return .failure(.jsonEncodeRequestFailed)
         }
-		guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-            return .failure(.utf8EncodingFailed)
+		guard let jsonString = jsonStringFromJSONData(jsonData) else {
+            return .failure(.utf8DecodingFailed)
 		}
         return .success(jsonString)
     }
@@ -254,13 +275,16 @@ private extension EngineToolkit {
     ///
     /// TODO: In the future, it would be better to have this a `Result<T, Error>` since there is a chance
     /// that this could be an error type as well and not an Ok response.
-    func deserialize<T: Decodable>(jsonString: String) -> Result<T, Error.DeserializeResponseFailure> {
-		guard let jsonData = jsonString.data(using: .utf8) else {
+    func deserialize<Response>(jsonString: String) -> Result<Response, Error.DeserializeResponseFailure>
+        where Response: Decodable
+    {
+        
+		guard let jsonData = jsonDataFromJSONString(jsonString) else {
             return .failure(.beforeDecodingError(.failedToUTF8EncodeResponseJSONString))
 		}
         
         do {
-            let response = try jsonDecoder.decode(T.self, from: jsonData)
+            let response = try jsonDecoder.decode(Response.self, from: jsonData)
             return .success(response)
         } catch {
             do {
@@ -268,11 +292,13 @@ private extension EngineToolkit {
                 /// try decoding jsonData to that instead.
                 let errorResponse = try jsonDecoder.decode(ErrorResponse.self, from: jsonData)
                 return .failure(.errorResponse(errorResponse))
-            } catch {
+            } catch let decodingError as Swift.DecodingError {
                 #if DEBUG
-                prettyPrint(responseJSONString: jsonString, error: error, failedToDecodeInto: T.self)
+                prettyPrint(responseJSONString: jsonString, error: error, failedToDecodeInto: Response.self)
                 #endif
-                return .failure(.decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(responseType: "\(T.self)", decodingFailure: String(describing: error)))
+                return .failure(.decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(responseType: "\(Response.self)", decodingError: decodingError))
+            } catch {
+                return .failure(.decodeResponseFailedAndCouldNotDecodeAsErrorResponseEitherNorAsSwiftDecodingError(responseType: "\(Response.self)", nonSwiftDecodingError: String(describing: error)))
             }
         }
     }
@@ -285,12 +311,13 @@ private extension EngineToolkit {
     /// memory allocator and pass pointers to memory allocated by swift, or alternativly you may choose to use the
     /// memory allocator used in the transaction library. However, it is not recommended to use both at the same
     /// time as it can lead to heap corruption and other undefined behavior.
-    func allocateMemory(string: String) -> Result<UnsafeMutablePointer<CChar>, Error.CallLibraryFunctionFailure> {
+    func allocateMemoryForJSONStringOf(request requestJSONString: String) -> Result<UnsafeMutablePointer<CChar>, Error.CallLibraryFunctionFailure> {
         // Get the byte count of the C-String representation of the utf-8 encoded
         // string.
-		guard let cString = string.cString(using: .utf8) else {
+		guard let cString = cCharsFromJSONString(requestJSONString) else {
             return .failure(.allocatedMemoryForResponseFailedCouldNotUTF8EncodeCString)
 		}
+        
         let byteCount: Int = cString.count
         let allocatedMemory = UnsafeMutablePointer<CChar>.allocate(capacity: byteCount)
         return .success(allocatedMemory)
@@ -308,24 +335,27 @@ private extension EngineToolkit {
     ///
     /// This function writes the C-String representation of the passed string to the provided pointer. Since this is a C-String
     /// representation, this means that an additional byte is added at the end with the null terminator.
-    func writeStringToMemory(
-        string: String,
-        pointer: UnsafeMutablePointer<CChar>
-    ) {
-        // Converting the string to an array of UTF-8 bytes
-        let stringBytes: [CChar] = Array(string.utf8CString)
+    @discardableResult
+    func writeJSONString(
+        of requestJSONString: String,
+        to pointer: UnsafeMutablePointer<CChar>
+    ) -> UnsafeMutablePointer<CChar> {
+        // Converting the request JSON string to an array of UTF-8 bytes
+        let requestChars: [CChar] = Array(requestJSONString.utf8CString)
         
         // Iterating over the array and writing all of the bytes to memory
-        for (index, value) in stringBytes.enumerated() {
-            pointer.advanced(by: index).pointee = value
+        for (charIndex, cChar) in requestChars.enumerated() {
+            pointer.advanced(by: charIndex).pointee = cChar
         }
+        
+        return pointer
     }
     
     /// Reads a string from the provided memory location.
     ///
     /// This function reads a C-String, null terminated, string from the provided memory location and returns it.
-    func readStringFromMemory(
-        pointer: UnsafePointer<CChar>
+    func jsonStringOfResponse(
+        at pointer: UnsafePointer<CChar>
     ) -> String {
         String(cString: pointer)
     }

@@ -21,7 +21,7 @@ iOS x86 is not supported since [it is obsolete][iphonearchs] and runs on iPhones
 ```sh
 rustup update
 rustup toolchain install nightly
-rustup target add x86_64-apple-ios aarch64-apple-ios aarch64-apple-ios-sim aarch64-apple-darwin x86_64-apple-darwin
+rustup target add aarch64-apple-ios aarch64-apple-ios-sim aarch64-apple-darwin x86_64-apple-darwin
 cargo install cargo-lipo
 cargo install --force cbindgen
 ```
