@@ -1,5 +1,4 @@
 import Foundation
-import Collections
 
 // TODO: Replace with `Swift.Dictionary`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
 public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {

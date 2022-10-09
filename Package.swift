@@ -13,7 +13,6 @@ let package = Package(
             targets: ["EngineToolkit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.3"),
         .package(url: "https://github.com/krzysztofzablocki/Difference.git", from: "1.0.1")
     ],
     targets: [
@@ -24,7 +23,6 @@ let package = Package(
         .target(
             name: "EngineToolkit",
             dependencies: [
-                .product(name: "Collections", package: "swift-collections"),
                 "RadixEngineToolkit"
             ]
         ),
