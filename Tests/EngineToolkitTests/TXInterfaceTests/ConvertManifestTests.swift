@@ -2,10 +2,6 @@
 
 final class ConvertManifestTests: TestCase {
 	
-    override func setUp() {
-        debugPrint = false // set before calling super.
-        super.setUp()
-    }
     
     func test__convertManifest_from_string_to_json_does_not_throw() throws {
 		let request = makeRequest(outputFormat: .json)
