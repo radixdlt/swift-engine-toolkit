@@ -9,7 +9,6 @@ import Foundation
 @testable import EngineToolkit
 import XCTest
 
-
 final class TestOfErrors: TestCase {
     
     // MARK: From EngineToolkit
@@ -96,8 +95,7 @@ final class TestOfErrors: TestCase {
         }
         """.data(using: .utf8)!
         let addressError = try JSONDecoder().decode(AddressError.self, from: json)
-        XCTAssertEqual(addressError, .init(nested: DecodingError(value: "MissingSeparator")))
-        XCTAssertEqual(AddressError(value: "DecodingError(MissingSeparator)"), .init(nested: DecodingError(value: "MissingSeparator")))
+        XCTAssertEqual(addressError, AddressError(value: "DecodingError(MissingSeparator)"))
     }
     
     func test_json_parse_errorResponse() throws {
@@ -108,14 +106,14 @@ final class TestOfErrors: TestCase {
         }
         """.data(using: .utf8)!
         let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: json)
-        XCTAssertEqual(errorResponse, .addressError(AddressError(nested: DecodingError(value: "MissingSeparator"))))
+        XCTAssertEqual(errorResponse, .addressError(AddressError(value: "DecodingError(MissingSeparator)")))
     }
     
     // MARK: ErrorResponse (from RET)
     func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_missing_separator() throws {
         let badRequest = DecodeAddressRequest(address: "missing separator")
         let result = sut.decodeAddressRequest(request: badRequest)
-        let expectedErrorResponse: ErrorResponse = .addressError(.init(nested: DecodingError(value: "MissingSeparator")))
+        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "DecodingError(MissingSeparator)"))
         XCTAssert(
             result,
             throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))
@@ -125,7 +123,7 @@ final class TestOfErrors: TestCase {
     func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_invalid_char_space() throws {
         let badRequest = DecodeAddressRequest(address: "bad1 invalid char spaces")
         let result = sut.decodeAddressRequest(request: badRequest)
-        let expectedErrorResponse: ErrorResponse = .addressError(.init(nested: DecodingError(value: "InvalidChar(' ')")))
+        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "DecodingError(InvalidChar(' '))"))
         XCTAssert(
             result,
             throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))
@@ -135,7 +133,7 @@ final class TestOfErrors: TestCase {
     func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_invalid_checksum() throws {
         let badRequest = DecodeAddressRequest(address: "invalid1checksum")
         let result = sut.decodeAddressRequest(request: badRequest)
-        let expectedErrorResponse: ErrorResponse = .addressError(.init(nested: DecodingError(value: "InvalidChecksum")))
+        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "DecodingError(InvalidChecksum)"))
         XCTAssert(
             result,
             throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))

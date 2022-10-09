@@ -42,7 +42,7 @@ public enum ErrorResponse: Swift.Error, Sendable, Equatable, Decodable {
     case unrecognizedAddressFormat(UnrecognizedAddressFormat)
     
     /// Not to be confused with `InternalDecodingFailure`
-    case decodingError(DecodingError)
+    case decodeError(DecodeError)
     case deserializationError(DeserializationError)
     case invalidRequestString(InvalidRequestString)
     case unexpectedContents(UnexpectedContents)
@@ -70,8 +70,8 @@ public extension ErrorResponse {
             self = try .addressError(.init(from: decoder))
         case .unrecognizedAddressFormat:
             self = try .unrecognizedAddressFormat(.init(from: decoder))
-        case .decodingError:
-            self = try .decodingError(.init(from: decoder))
+        case .decodeError:
+            self = try .decodeError(.init(from: decoder))
         case .deserializationError:
             self = try .deserializationError(.init(from: decoder))
         case .invalidRequestString:
@@ -113,7 +113,7 @@ public extension ErrorResponse {
         switch self {
         case .addressError: return .addressError
         case .unrecognizedAddressFormat: return .unrecognizedAddressFormat
-        case .decodingError: return .decodingError
+        case .decodeError: return .decodeError
         case .deserializationError: return .deserializationError
         case .invalidRequestString: return .invalidRequestString
         case .unexpectedContents: return .unexpectedContents
@@ -137,7 +137,7 @@ public extension ErrorResponse {
 public enum ErrorKind: String, Swift.Error, Sendable, Equatable, Codable, CustomStringConvertible {
     case addressError = "AddressError"
     case unrecognizedAddressFormat = "UnrecognizedAddressFormat"
-    case decodingError = "DecodingError"
+    case decodeError = "DecodeError"
     case deserializationError = "DeserializationError"
     case invalidRequestString = "InvalidRequestString"
     case unexpectedContents = "UnexpectedContents"
@@ -162,11 +162,6 @@ public struct AddressError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .addressError
     public let value: String
 }
-internal extension ErrorResponseWithStringValueProtocol {
-    init(nested: any ErrorResponseWithStringValueProtocol) {
-        self.init(value: String(describing: nested))
-    }
-}
 
 // MARK: UnrecognizedAddressFormat
 public struct UnrecognizedAddressFormat: EmptyErrorResponseProtocol {
@@ -175,8 +170,8 @@ public struct UnrecognizedAddressFormat: EmptyErrorResponseProtocol {
 
 // MARK: DecodeError
 /// Not to be confused with `InternalDecodingFailure` nor `DeserializationError`
-public struct DecodingError: ErrorResponseWithStringValueProtocol {
-    public static let errorKind: ErrorKind = .decodingError
+public struct DecodeError: ErrorResponseWithStringValueProtocol {
+    public static let errorKind: ErrorKind = .decodeError
     public let value: String
 }
 
