@@ -1,9 +1,12 @@
 import Foundation
 
-// TODO: The underscore is added here to avoid name collisions. Something better is needed.
-public struct Set_: Sendable, Codable, Hashable {
+// TODO: Replace with `Swift.Set`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
+public struct Set_: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .set
+    public func embedValue() -> Value {
+        .set(self)
+    }
     
     // ===============
     // Struct members
@@ -15,14 +18,47 @@ public struct Set_: Sendable, Codable, Hashable {
     // =============
     // Constructors
     // =============
-    
-    public init(from elementType: ValueKind, elements: [Value]) {
-        // TODO: Validate that all elements are of type `elementType`
+    public init(
+        elementType: ValueKind,
+        elements: [Value]
+    ) throws {
+        guard elements.allSatisfy({ $0.kind() == elementType }) else {
+            throw Error.homogeneousArrayRequired
+        }
         self.elementType = elementType
         self.elements = elements
     }
+    
+    public init(
+        elementType: ValueKind,
+        @ValuesBuilder buildValues: () throws -> [any ValueProtocol]
+    ) throws {
+        try self.init(
+            elementType: elementType,
+            elements: buildValues().map { $0.embedValue() }
+        )
+    }
+
+    public init(
+        elementType: ValueKind,
+        @SpecificValuesBuilder buildValues: () throws -> [Value]
+    ) throws {
+        try self.init(
+            elementType: elementType,
+            elements: buildValues()
+        )
+    }
 
 }
+
+
+
+public extension Set_ {
+    enum Error: String, Swift.Error, Sendable, Hashable {
+        case homogeneousArrayRequired
+    }
+}
+
 
 public extension Set_ {
     
@@ -52,11 +88,9 @@ public extension Set_ {
             throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        // Decoding `elementType`
-        elementType = try container.decode(ValueKind.self, forKey: .elementType)
-        
-        // Decoding `elements`
-        // TODO: Validate that all elements are of type `elementType`
-        elements = try container.decode([Value].self, forKey: .elements)
+        try self.init(
+            elementType: container.decode(ValueKind.self, forKey: .elementType),
+            elements:  container.decode([Value].self, forKey: .elements)
+        )
     }
 }

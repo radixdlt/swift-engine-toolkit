@@ -1,8 +1,11 @@
 import Foundation
 
-public struct U128: Sendable, Codable, Hashable {
+public struct U128: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .u128
+    public func embedValue() -> Value {
+        .u128(self)
+    }
     
     // ===============
     // Struct members

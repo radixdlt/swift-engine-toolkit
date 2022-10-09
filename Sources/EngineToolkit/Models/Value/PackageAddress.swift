@@ -1,8 +1,11 @@
 import Foundation
 
-public struct PackageAddress: Sendable, Codable, Hashable, AddressProtocol {
+public struct PackageAddress: ValueProtocol, AddressProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .packageAddress
+    public func embedValue() -> Value {
+        .packageAddress(self)
+    }
     
     // ===============
     // Struct members

@@ -31,6 +31,36 @@ public struct CallFunction: InstructionProtocol {
         self.functionName = functionName
         self.arguments = arguments
     }
+    
+    public init(
+        packageAddress: PackageAddress,
+        blueprintName: String_,
+        functionName: String_,
+        @ValuesBuilder buildValues: () throws -> [any ValueProtocol]
+    ) rethrows {
+        try self.init(
+            packageAddress: packageAddress,
+            blueprintName: blueprintName,
+            functionName: functionName,
+            arguments: buildValues().map { $0.embedValue() }
+        )
+    }
+
+    public init(
+        packageAddress: PackageAddress,
+        blueprintName: String_,
+        functionName: String_,
+        @SpecificValuesBuilder buildValues: () throws -> [Value]
+    ) rethrows {
+        try self.init(
+            packageAddress: packageAddress,
+            blueprintName: blueprintName,
+            functionName: functionName,
+            arguments: buildValues()
+        )
+    }
+    
+
 }
 
 public extension CallFunction {

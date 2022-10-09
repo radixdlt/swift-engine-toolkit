@@ -50,6 +50,9 @@ extension TransactionManifest {
         static func buildBlock(_ instructions: Instruction...) -> [Instruction] {
             instructions
         }
+        static func buildBlock(_ instruction: Instruction) -> [Instruction] {
+            [instruction]
+        }
         static func buildBlock(_ instruction: Instruction) -> Instruction {
             instruction
         }
@@ -60,22 +63,20 @@ extension TransactionManifest {
         static func buildBlock(_ instructions: any InstructionProtocol...) -> [any InstructionProtocol] {
             instructions
         }
+        static func buildBlock(_ instruction: any InstructionProtocol) -> [any InstructionProtocol] {
+            [instruction]
+        }
         static func buildBlock(_ instruction: any InstructionProtocol) -> any InstructionProtocol {
             instruction
         }
     }
     
-    init(@InstructionsBuilder makeInstructions: () throws -> [Instruction]) rethrows{
-        try self.init(instructions: makeInstructions())
+    init(@InstructionsBuilder buildInstructions: () throws -> [Instruction]) rethrows{
+        try self.init(instructions: buildInstructions())
     }
-    init(@InstructionsBuilder makeInstruction: () throws -> Instruction) rethrows {
-        try self.init(instructions: [makeInstruction()])
+ 
+    init(@SpecificInstructionsBuilder buildInstructions: () throws -> [any InstructionProtocol]) rethrows {
+        try self.init(instructions: buildInstructions())
     }
-    
-    init(@SpecificInstructionsBuilder makeInstructions: () throws -> [any InstructionProtocol]) rethrows {
-        try self.init(instructions: makeInstructions())
-    }
-    init(@SpecificInstructionsBuilder makeInstruction: () throws -> any InstructionProtocol) rethrows {
-        try self.init(instructions: [makeInstruction()])
-    }
+ 
 }

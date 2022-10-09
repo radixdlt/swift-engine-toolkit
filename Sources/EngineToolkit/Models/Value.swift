@@ -1,5 +1,10 @@
 import Foundation
 
+public protocol ValueProtocol: Sendable, Codable, Hashable {
+    static var kind: ValueKind { get }
+    func embedValue() -> Value
+}
+
 public indirect enum Value: Sendable, Codable, Hashable {
     // ==============
     // Enum Variants

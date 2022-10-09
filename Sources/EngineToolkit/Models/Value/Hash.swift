@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Hash: Sendable, Codable, Hashable {
+public struct Hash: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .hash
+    public func embedValue() -> Value {
+        .hash(self)
+    }
     
     // ===============
     // Struct members
@@ -20,7 +23,7 @@ public struct Hash: Sendable, Codable, Hashable {
     
     public init(hex: String) throws {
         // TODO: Validation of length of Hash
-        try self.init(bytes: [UInt8](hex: hex))
+        self.init(bytes: try [UInt8](hex: hex))
     }
 
 }

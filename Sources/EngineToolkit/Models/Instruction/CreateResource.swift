@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CreateResource: InstructionProtocol, ExpressibleByArrayLiteral {
+public struct CreateResource: InstructionProtocol, ExpressibleByRadixEngineValues {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .createResource
     public func embed() -> Instruction {
@@ -11,20 +11,14 @@ public struct CreateResource: InstructionProtocol, ExpressibleByArrayLiteral {
     // Struct members
     // ===============
     
-    public let args: [Value]
+    public let values: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(_ args: [Value]) {
-        self.args = args
-    }
-}
-
-public extension CreateResource {
-    init(arrayLiteral elements: Value...) {
-        self.init(elements)
+    public init(values: [Value]) {
+        self.values = values
     }
 }
 
@@ -45,7 +39,7 @@ public extension CreateResource {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(args, forKey: .args)
+        try container.encode(values, forKey: .args)
     }
     
     init(from decoder: Decoder) throws {
@@ -56,6 +50,6 @@ public extension CreateResource {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        try self.init(container.decode([Value].self, forKey: .args))
+        try self.init(values: container.decode([Value].self, forKey: .args))
     }
 }

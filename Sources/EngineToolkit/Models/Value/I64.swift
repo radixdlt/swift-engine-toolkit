@@ -1,8 +1,11 @@
 import Foundation
 
-public struct I64: Sendable, Codable, Hashable {
+public struct I64: ValueProtocol, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .i64
+    public func embedValue() -> Value {
+        .i64(self)
+    }
     
     // ===============
     // Struct members
@@ -13,10 +16,13 @@ public struct I64: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: Int64) {
+    public init(value: Int64) {
         self.value = value
     }
 
+    public init(integerLiteral value: Int64) {
+        self.init(value: value)
+    }
 }
 
 public extension I64 {
@@ -49,7 +55,7 @@ public extension I64 {
         // Decoding `value`
         let valueString: String = try container.decode(String.self, forKey: .value)
         if let value = Int64(valueString) {
-            self.value = value
+            self.init(value: value)
         } else {
             throw InternalDecodingFailure.parsingError
         }

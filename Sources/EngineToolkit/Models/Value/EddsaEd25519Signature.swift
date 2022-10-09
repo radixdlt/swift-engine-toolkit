@@ -1,8 +1,11 @@
 import Foundation
 
-public struct EddsaEd25519Signature: Sendable, Codable, Hashable {
+public struct EddsaEd25519Signature: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .eddsaEd25519Signature
+    public func embedValue() -> Value {
+        .eddsaEd25519Signature(self)
+    }
     
     // ===============
     // Struct members
@@ -20,7 +23,7 @@ public struct EddsaEd25519Signature: Sendable, Codable, Hashable {
     
     public init(hex: String) throws {
         // TODO: Validation of length of array
-        try self.init(bytes: [UInt8](hex: hex))
+        self.init(bytes: try [UInt8](hex: hex))
     }
  
 }

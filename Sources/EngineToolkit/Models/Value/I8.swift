@@ -1,8 +1,11 @@
 import Foundation
 
-public struct I8: Sendable, Codable, Hashable {
+public struct I8: ValueProtocol, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .i8
+    public func embedValue() -> Value {
+        .i8(self)
+    }
     
     // ===============
     // Struct members
@@ -13,8 +16,12 @@ public struct I8: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: Int8) {
+    public init(value: Int8) {
         self.value = value
+    }
+    
+    public init(integerLiteral value: Int8) {
+        self.init(value: value)
     }
 
 }
@@ -49,7 +56,7 @@ public extension I8 {
         // Decoding `value`
         let valueString: String = try container.decode(String.self, forKey: .value)
         if let value = Int8(valueString) {
-            self.value = value
+            self.init(value: value)
         } else {
             throw InternalDecodingFailure.parsingError
         }

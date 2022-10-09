@@ -15,7 +15,7 @@ public struct SborEncodeResponse: Sendable, Codable, Hashable {
     }
     
     public init(hex: String) throws {
-        try self.init(bytes: [UInt8](hex: hex))
+        self.init(bytes: try [UInt8](hex: hex))
     }
 
 }

@@ -1,8 +1,11 @@
 import Foundation
 
-public struct U32: Sendable, Codable, Hashable, ExpressibleByIntegerLiteral {
+public struct U32: ValueProtocol, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .u32
+    public func embedValue() -> Value {
+        .u32(self)
+    }
     
     // ===============
     // Struct members

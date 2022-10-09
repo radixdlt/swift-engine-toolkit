@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Struct: Sendable, Codable, Hashable {
+public struct Struct: ValueProtocol, ExpressibleByRadixEngineValues {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .struct
+    public func embedValue() -> Value {
+        .struct(self)
+    }
     
     // ===============
     // Struct members
@@ -14,10 +17,16 @@ public struct Struct: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from fields: [Value]) {
+    public init(fields: [Value]) {
         self.fields = fields
     }
 
+}
+
+public extension Struct {
+    init(values fields: [Value]) {
+        self.init(fields: fields)
+    }
 }
 
 public extension Struct {
@@ -47,7 +56,6 @@ public extension Struct {
             throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        // Decoding `fields`
-        fields = try container.decode([Value].self, forKey: .fields)
+        try self.init(fields: container.decode([Value].self, forKey: .fields))
     }
 }

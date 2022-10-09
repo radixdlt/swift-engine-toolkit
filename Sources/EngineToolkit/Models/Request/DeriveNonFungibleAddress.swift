@@ -15,7 +15,7 @@ public struct DeriveNonFungibleAddressRequest: Sendable, Codable, Hashable {
     }
     
     public init(resourceAddress: String, nonFungibleIdHex: String) throws {
-        try self.init(resourceAddress: resourceAddress, nonFungibleId: [UInt8](hex: nonFungibleIdHex))
+        self.init(resourceAddress: resourceAddress, nonFungibleId: try [UInt8](hex: nonFungibleIdHex))
     }
 }
 

@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Bucket: Sendable, Codable, Hashable, IdentifierConvertible {
+public struct Bucket: ValueProtocol, IdentifierConvertible {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .bucket
+    public func embedValue() -> Value {
+        .bucket(self)
+    }
     
     // ===============
     // Struct members

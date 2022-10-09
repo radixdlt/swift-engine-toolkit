@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Boolean: Sendable, Codable, Hashable {
+public struct Boolean: ValueProtocol, ExpressibleByBooleanLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .bool
+    public func embedValue() -> Value {
+        .boolean(self)
+    }
     
     // ===============
     // Struct members
@@ -13,8 +16,12 @@ public struct Boolean: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: Bool) {
+    public init(value: Bool) {
         self.value = value
+    }
+    
+    public init(booleanLiteral value: Bool) {
+        self.init(value: value)
     }
 }
 
@@ -46,6 +53,6 @@ public extension Boolean {
         }
         
         // Decoding `value`
-        value = try container.decode(Bool.self, forKey: .value)
+        try self.init(value: container.decode(Bool.self, forKey: .value))
     }
 }

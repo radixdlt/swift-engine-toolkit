@@ -1,8 +1,11 @@
 import Foundation
 
-public struct U8: Sendable, Codable, Hashable, ExpressibleByIntegerLiteral {
+public struct U8: ValueProtocol, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .u8
+    public func embedValue() -> Value {
+        .u8(self)
+    }
     
     // ===============
     // Struct members

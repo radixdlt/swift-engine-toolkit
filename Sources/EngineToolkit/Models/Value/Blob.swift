@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Blob: Sendable, Codable, Hashable {
+public struct Blob: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .blob
+    public func embedValue() -> Value {
+        .blob(self)
+    }
     
     // ===============
     // Struct members

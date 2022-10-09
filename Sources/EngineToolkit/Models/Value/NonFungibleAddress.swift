@@ -1,8 +1,11 @@
 import Foundation
 
-public struct NonFungibleAddress: Sendable, Codable, Hashable {
+public struct NonFungibleAddress: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .nonFungibleAddress
+    public func embedValue() -> Value {
+        .nonFungibleAddress(self)
+    }
     
     // ===============
     // Struct members

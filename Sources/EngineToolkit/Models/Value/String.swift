@@ -1,9 +1,12 @@
 import Foundation
 
 // TODO: The underscore is added here to avoid name collisions. Something better is needed.
-public struct String_: Sendable, Codable, Hashable, ExpressibleByStringLiteral {
+public struct String_: ValueProtocol, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .string
+    public func embedValue() -> Value {
+        .string(self)
+    }
     
     // ===============
     // Struct members

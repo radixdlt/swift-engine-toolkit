@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Decimal_: Sendable, Codable, Hashable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
+public struct Decimal_: ValueProtocol, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .decimal
+    public func embedValue() -> Value {
+        .decimal(self)
+    }
     
     // ===============
     // Struct members
