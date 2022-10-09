@@ -10,24 +10,6 @@
       }
     },
     {
-      "identity" : "cryptoswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/krzyzanowskim/CryptoSwift.git",
-      "state" : {
-        "revision" : "19b3c3ceed117c5cc883517c4e658548315ba70b",
-        "version" : "1.6.0"
-      }
-    },
-    {
-      "identity" : "ed25519swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pebble8888/ed25519swift.git",
-      "state" : {
-        "revision" : "1e821f5516049f5b83aca8cb3b982910cf8c028c",
-        "version" : "1.2.8"
-      }
-    },
-    {
       "identity" : "k1",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Sajjon/K1.git",

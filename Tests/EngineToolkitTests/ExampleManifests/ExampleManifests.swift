@@ -7,7 +7,6 @@
 
 import Foundation
 import CryptoKit
-import ed25519swift
 @testable import EngineToolkit
 
 private let complexManifestString = """
@@ -66,8 +65,8 @@ func testTransaction(
     let sut = EngineToolkit()
     
     // Creating the private keys of the notary and the other signers
-    let (notaryPublicKey, notaryPrivateKey) = Ed25519.generateKeyPair()
-    let signerKeyPairs = (0...signerCount).map({ _ in Ed25519.generateKeyPair() })
+    let notaryPrivateKey = Curve25519.Signing.PrivateKey.init()
+    let signerPrivateKeys = (0...signerCount).map({ _ in Curve25519.Signing.PrivateKey.init() })
     
     let transactionManifest = TransactionManifest(instructions: .string(complexManifestString))
     let transactionHeader = TransactionHeader(
@@ -77,7 +76,7 @@ func testTransaction(
         endEpochExclusive: 10,
         nonce: 0,
         publicKey: .eddsaEd25519(
-            EddsaEd25519PublicKeyString(from: notaryPublicKey)
+            EddsaEd25519PublicKeyString(from: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
         ),
         notaryAsSignature: notaryAsSigner,
         costUnitLimit: 100_000_000,
@@ -91,11 +90,11 @@ func testTransaction(
     let compiledTransactionIntent = try sut.compileTransactionIntentRequest(request: transactionIntent).get().compiledIntent
     
     // Signing the doubleHashedCompiledTransactionIntent using the private key of all of the signers
-    let signatures = signerKeyPairs.map({ Ed25519.sign(message: compiledTransactionIntent, secretKey: $0.secretKey) })
+    let signatures = try signerPrivateKeys.map({ [UInt8](try $0.signature(for: compiledTransactionIntent)) })
     let signedTransactionIntent = SignedTransactionIntent(
         transactionIntent: transactionIntent,
-        signatures: zip(signatures, signerKeyPairs).map({ .eddsaEd25519(
-            EddsaEd25519PublicKeyString(from: $1.publicKey),
+        signatures: zip(signatures, signerPrivateKeys).map({ SignatureWithPublicKey.eddsaEd25519(
+            EddsaEd25519PublicKeyString(from: [UInt8]($1.publicKey.rawRepresentation)),
             EddsaEd25519SignatureString(from: $0)
         ) })
     )
@@ -105,7 +104,7 @@ func testTransaction(
     ).get().compiledSignedIntent
     
     // Notarize the signed intent to create a notarized transaction
-    let notarySignature = Ed25519.sign(message: compiledSignedTransactionIntent, secretKey: notaryPrivateKey)
+    let notarySignature = [UInt8](try notaryPrivateKey.signature(for: compiledSignedTransactionIntent))
     let notarizedTransaction = NotarizedTransaction(
         signedIntent: signedTransactionIntent,
         notarySignature: .eddsaEd25519(EddsaEd25519SignatureString(from: notarySignature))
