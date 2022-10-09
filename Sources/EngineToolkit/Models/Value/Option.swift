@@ -1,7 +1,7 @@
 import Foundation
 
 // TODO: Replace with `Swift.Optional`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
-public enum Option: ValueProtocol {
+public enum Option: ValueProtocol, ExpressibleByNilLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .option
     public func embedValue() -> Value {
@@ -26,6 +26,9 @@ public extension Option {
     
     init(@SpecificValuesBuilder buildSome: () throws -> Value) rethrows {
         self = Self.some(try buildSome())
+    }
+    init(nilLiteral: ()) {
+        self = .none
     }
 }
 

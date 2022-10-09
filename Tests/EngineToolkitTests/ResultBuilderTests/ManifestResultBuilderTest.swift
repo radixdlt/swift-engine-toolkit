@@ -9,7 +9,7 @@ import Foundation
 @testable import EngineToolkit
 
 final class ManifestResultBuilderTest: TestCase {
-    func test__complex_resultBuilded() throws {
+    func test__complex_resultBuilder() throws {
         let expected = try sut.convertManifest(request: makeRequest(outputFormat: .json, manifest: .complex)).get()
         
         let built = try TransactionManifest {

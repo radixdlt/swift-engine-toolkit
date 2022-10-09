@@ -2,7 +2,7 @@ import Foundation
 import Collections
 
 // TODO: Replace with `Swift.Dictionary`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
-public struct Map: ValueProtocol {
+public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .map
     public func embedValue() -> Value {
@@ -50,7 +50,9 @@ public struct Map: ValueProtocol {
         self.keyType = keyType
         self.valueType = valueType
         let keyValuePairs = zip(keys, values).map { KeyValuePair(key: $0, value: $1) }
-        guard keyValuePairs.count == keyValuePairsInterleaved.count else {
+        
+        // Divide by 2 since we go from `[key, value] -> [(key, value)]`
+        guard keyValuePairs.count == (keyValuePairsInterleaved.count / 2) else {
             throw Error.nonKeyNorValueTypeFound
         }
         self.keyValuePairs = keyValuePairs
@@ -81,6 +83,13 @@ public struct Map: ValueProtocol {
 }
 
 public extension Map {
+    typealias Key = Value
+    init(dictionaryLiteral elements: (Key, Value)...) {
+        precondition(!elements.isEmpty)
+        self.keyType = elements.first!.0.kind()
+        self.valueType = elements.first!.1.kind()
+        self.keyValuePairs = elements.map { KeyValuePair(key: $0.0, value: $0.1) }
+    }
     
     struct KeyValuePair: Sendable, Hashable {
         public let key: Value

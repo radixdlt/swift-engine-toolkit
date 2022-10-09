@@ -63,3 +63,44 @@ func XCTAssert<Success>(
         XCTAssertEqual(failure, specificError, message(), file: file, line: line)
     }
 }
+
+
+func XCTCast<To>(
+    to _: To.Type,
+    from any: Any,
+    file: StaticString = #file,
+    line: UInt = #line
+) -> To? {
+    guard let to = any as? To else {
+        XCTFail("Failed to cast to: \(To.self) from: \(any)", file: file, line: line)
+        return nil
+    }
+    return to
+}
+
+
+func XCTCast<To>(
+    from any: Any,
+    file: StaticString = #file,
+    line: UInt = #line
+) -> To? {
+    XCTCast(to: To.self, from: any, file: file, line: line)
+}
+
+
+func XCTAssert<T, E: Swift.Error & Equatable>(
+    error expectedError: E,
+    thrownBy expression: @autoclosure () throws -> T,
+    _ message: @autoclosure () -> String = "",
+    file: StaticString = #file,
+    line: UInt = #line
+) {
+    XCTAssertThrowsError(
+        try expression(),
+        message(),
+        file: file,
+        line: line
+    ) {
+        XCTAssertEqual(expectedError, XCTCast(to: E.self, from: $0))
+    }
+}
