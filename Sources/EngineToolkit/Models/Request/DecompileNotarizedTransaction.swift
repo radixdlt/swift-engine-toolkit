@@ -36,6 +36,7 @@ public extension DecompileNotarizedTransactionIntentRequest {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(compiledNotarizedIntent.toHexString(), forKey: .compiledNotarizedIntent)
+        try container.encode(manifestInstructionsOutputFormat, forKey: .manifestInstructionsOutputFormat)
     }
     
     init(from decoder: Decoder) throws {

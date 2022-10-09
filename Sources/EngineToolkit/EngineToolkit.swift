@@ -186,6 +186,7 @@ private extension EngineToolkit {
         serialize(object: input)
             .mapError(Error.serializeRequestFailure)
             .flatMap { (requestString: String) in
+                print(requestString)
                 #if DEBUG
                 prettyPrintRequest(jsonString: requestString)
                 #endif
@@ -215,6 +216,7 @@ private extension EngineToolkit {
             .flatMap { (allocatedMemory: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) in
                 
                 let responseString = readStringFromMemory(pointer: responsePointer)
+                print(responseString)
                 
                 #if DEBUG
                 prettyPrintResponse(jsonString: responseString)

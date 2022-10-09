@@ -12,7 +12,10 @@ let package = Package(
             name: "EngineToolkit",
             targets: ["EngineToolkit"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/Sajjon/K1.git", .upToNextMajor(from: "0.0.1")),
+        .package(url: "https://github.com/pebble8888/ed25519swift.git", from: "1.2.7")
+    ],
     targets: [
         .binaryTarget(
             name: "libTX",
@@ -24,7 +27,11 @@ let package = Package(
         ),
         .testTarget(
             name: "EngineToolkitTests",
-            dependencies: ["EngineToolkit"],
+            dependencies: [
+                "EngineToolkit",
+                "K1",
+                "ed25519swift"
+            ],
             resources: [
                 .copy("Resources"),
             ]
