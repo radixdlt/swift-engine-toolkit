@@ -4,7 +4,7 @@ import Foundation
 public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .map
-    public func embedValue() -> Value {
+    public func embedValue() -> Value_ {
         .map(self)
     }
     
@@ -26,19 +26,19 @@ public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
         self.keyValuePairs = []
     }
     
-    public init(keyType: ValueKind, valueType: ValueKind, keyValuePairsInterleaved: [Value]) throws {
+    public init(keyType: ValueKind, valueType: ValueKind, keyValuePairsInterleaved: [Value_]) throws {
         
         guard keyValuePairsInterleaved.count.isMultiple(of: 2) else {
             throw Error.requiredEvenNumberOfValues
         }
-        let keys: [Value] = try keyValuePairsInterleaved.enumerated().compactMap { offset, value in
+        let keys: [Value_] = try keyValuePairsInterleaved.enumerated().compactMap { offset, value in
             guard offset.isMultiple(of: 2) else { return nil }
             guard value.kind() == keyType else {
                 throw Error.unexpectedKeyTypeInKeyValuePairs
             }
             return value
         }
-        let values: [Value] = try keyValuePairsInterleaved.enumerated().compactMap { offset, value in
+        let values: [Value_] = try keyValuePairsInterleaved.enumerated().compactMap { offset, value in
             guard !offset.isMultiple(of: 2) else { return nil }
             guard value.kind() == valueType else {
                 throw Error.unexpectedValueTypeInKeyValuePairs
@@ -71,7 +71,7 @@ public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
     public init(
         keyType: ValueKind,
         valueType: ValueKind,
-        @ValuesBuilder buildKeyValuePairsInterleaved: () throws -> [Value]
+        @ValuesBuilder buildKeyValuePairsInterleaved: () throws -> [Value_]
     ) throws {
         try self.init(
             keyType: keyType,
@@ -81,19 +81,43 @@ public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
     }
 }
 
+// MARK: ExpressibleByDictionaryLiteral
 public extension Map {
-    typealias Key = Value
-    init(dictionaryLiteral elements: (Key, Value)...) {
+    
+    /// ExpressibleByDictionaryLiteral enables us to initialize this
+    /// type like this:
+    ///
+    ///     [
+    ///         String_("key0"): U8(0),
+    ///         String_("key1"): U8(2)
+    ///     ]
+    ///
+    /// instead of this:
+    ///
+    ///     try Map(
+    ///         keyType: .string,
+    ///         valueType: .u8
+    ///     ) {
+    ///         String_("key0")
+    ///         U8(0)
+    ///         String_("key1")
+    ///         U8(2)
+    ///     }
+    ///
+    init(dictionaryLiteral elements: (any ValueProtocol, any ValueProtocol)...) {
         precondition(!elements.isEmpty)
-        self.keyType = elements.first!.0.kind()
-        self.valueType = elements.first!.1.kind()
-        self.keyValuePairs = elements.map { KeyValuePair(key: $0.0, value: $0.1) }
+        self.keyType = elements.first!.0.kind
+        self.valueType = elements.first!.1.kind
+        self.keyValuePairs = elements.map { KeyValuePair(key: $0.0.embedValue(), value: $0.1.embedValue()) }
     }
+}
+
+public extension Map {
     
     struct KeyValuePair: Sendable, Hashable {
-        public let key: Value
-        public let value: Value
-        public init(key: Value, value: Value) {
+        public let key: Value_
+        public let value: Value_
+        public init(key: Value_, value: Value_) {
             self.key = key
             self.value = value
         }
@@ -109,7 +133,7 @@ public extension Map {
     
     /// Returnes a mapping of the key value pairs:
     /// `[(key: Value, value: Value)] -> [key0, value0, key1, value1, ..., keyN, valueN]`
-    var keyValuePairsInterleaved: [Value] {
+    var keyValuePairsInterleaved: [Value_] {
         keyValuePairs.flatMap { [$0.key, $0.value] }
     }
     
@@ -147,7 +171,7 @@ public extension Map {
         try self.init(
             keyType: container.decode(ValueKind.self, forKey: .keyType),
             valueType: container.decode(ValueKind.self, forKey: .valueType),
-            keyValuePairsInterleaved: container.decode([Value].self, forKey: .keyValuePairsInterleaved)
+            keyValuePairsInterleaved: container.decode([Value_].self, forKey: .keyValuePairsInterleaved)
         )
     }
 }

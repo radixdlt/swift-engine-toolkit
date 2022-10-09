@@ -61,6 +61,24 @@ final class MapTests: TestCase {
         })
     }
     
+    
+    func test_expressible_by_dictionary_literal_for_two_value_pairs() throws {
+        XCTAssertEqual(try Map(
+            keyType: .string,
+            valueType: .u8
+        ) {
+            String_("key0")
+            U8(0)
+            String_("key1")
+            U8(2)
+        },
+            [
+                String_("key0"): U8(0),
+                String_("key1"): U8(2)
+            ]
+        )
+    }
+    
     func test_error_is_thrown_for_incorrect_key_type_single_value_pair() throws {
         
         XCTAssert(

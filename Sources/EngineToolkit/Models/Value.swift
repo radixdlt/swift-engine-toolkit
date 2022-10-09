@@ -4,8 +4,13 @@ public protocol ValueProtocol: Sendable, Codable, Hashable {
     static var kind: ValueKind { get }
     func embedValue() -> Value
 }
+public extension ValueProtocol {
+    var kind: ValueKind { Self.kind }
+}
 
-public indirect enum Value: Sendable, Codable, Hashable {
+public typealias Value = Value_
+// We name this `Value_` to be able to disambiguate between associatedtype `Value` and this type in `ExpressibleByDictionaryLiteral` e.g. in `Map`.
+public indirect enum Value_: Sendable, Codable, Hashable {
     // ==============
     // Enum Variants
     // ==============
