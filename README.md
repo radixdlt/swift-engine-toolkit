@@ -3,7 +3,7 @@
 Swift EngineToolkit provides a high level functions and method for the interaction with the [Radix Engine Toolkit][ret].
 
 # Binaries exluded
-Binaries total size is 50+50+100 (iOS, iOS Sim, macOS (Intel/Apple Silicon)) mb for the three different `libTX.a` files.
+Binaries total size is 50+50+100 (iOS, iOS Sim, macOS (Intel/Apple Silicon)) mb for the three different `RadixEngineToolkit.a` files.
 
 For now you need to build the [Radix Engine Toolkit][ret] yourself, using `build.sh`
 
@@ -21,7 +21,7 @@ iOS x86 is not supported since [it is obsolete][iphonearchs] and runs on iPhones
 ```sh
 rustup update
 rustup toolchain install nightly
-rustup target add x86_64-apple-ios aarch64-apple-ios aarch64-apple-ios-sim aarch64-apple-darwin x86_64-apple-darwin
+rustup target add aarch64-apple-ios aarch64-apple-ios-sim aarch64-apple-darwin x86_64-apple-darwin
 cargo install cargo-lipo
 cargo install --force cbindgen
 ```
@@ -32,7 +32,7 @@ Then run:
 ./build.sh
 ```
 
-Which should create a working `libTX.xcframework` references from the `Package.swift`
+Which should create a working `RadixEngineToolkit.xcframework` references from the `Package.swift`
 
 # Example
 In order to run the example app, make sure to close down any other Xcode window which might have opened this SPM package and then standing in the root run:

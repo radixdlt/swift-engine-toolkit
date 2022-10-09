@@ -18,12 +18,12 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(
-            name: "libTX",
-            path: "Sources/libTX/libTX.xcframework"
+            name: "RadixEngineToolkit",
+            path: "Sources/RadixEngineToolkit/RadixEngineToolkit.xcframework"
         ),
         .target(
             name: "EngineToolkit",
-            dependencies: ["libTX"]
+            dependencies: ["RadixEngineToolkit"]
         ),
         .testTarget(
             name: "EngineToolkitTests",

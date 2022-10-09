@@ -3,4 +3,4 @@
 git submodule init
 git submodule update
 
-./Sources/libTX/build/build.sh
+./Sources/RadixEngineToolkit/build/build.sh
