@@ -1,6 +1,6 @@
 import Foundation
 
-public struct I128: ValueProtocol {
+public struct I128: ValueProtocol, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .i128
     public func embedValue() -> Value {
@@ -20,6 +20,10 @@ public struct I128: ValueProtocol {
     
     public init(value: String) {
         self.value = value
+    }
+    
+    public init(stringLiteral value: String) {
+        self.init(value: value)
     }
 
 }
