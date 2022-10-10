@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EddsaEd25519PublicKey: ValueProtocol {
+public struct EddsaEd25519PublicKey: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .eddsaEd25519PublicKey
     public func embedValue() -> Value {

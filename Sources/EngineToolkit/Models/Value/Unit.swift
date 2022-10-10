@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Unit: ValueProtocol {
+public struct Unit: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .unit
     public func embedValue() -> Value {

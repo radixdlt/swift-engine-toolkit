@@ -1,6 +1,6 @@
 import Foundation
 
-public struct U16: ValueProtocol, ExpressibleByIntegerLiteral {
+public struct U16: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .u16
     public func embedValue() -> Value {

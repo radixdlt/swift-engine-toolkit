@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Tuple: ValueProtocol, ExpressibleByRadixEngineValues {
+public struct Tuple: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByRadixEngineValues {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .tuple
     public func embedValue() -> Value {

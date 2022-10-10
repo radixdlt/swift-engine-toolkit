@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol ValueProtocol: Sendable, Codable, Hashable {
+public protocol ValueProtocol {
     static var kind: ValueKind { get }
     func embedValue() -> Value
 }

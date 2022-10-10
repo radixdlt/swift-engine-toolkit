@@ -1,7 +1,7 @@
 import Foundation
 
 // TODO: Replace with `Swift.Dictionary`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
-public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
+public struct Map: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByDictionaryLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .map
     public func embedValue() -> Value_ {
@@ -60,7 +60,7 @@ public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
     public init(
         keyType: ValueKind,
         valueType: ValueKind,
-        @ValuesBuilder buildKeyValuePairsInterleaved: () throws -> [any ValueProtocol]
+        @ValuesBuilder buildKeyValuePairsInterleaved: () throws -> [ValueProtocol]
     ) throws {
         try self.init(
             keyType: keyType,
@@ -104,7 +104,7 @@ public extension Map {
     ///         U8(2)
     ///     }
     ///
-    init(dictionaryLiteral elements: (any ValueProtocol, any ValueProtocol)...) {
+    init(dictionaryLiteral elements: (ValueProtocol, ValueProtocol)...) {
         precondition(!elements.isEmpty)
         self.keyType = elements.first!.0.kind
         self.valueType = elements.first!.1.kind

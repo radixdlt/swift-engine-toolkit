@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Enum: ValueProtocol {
+public struct Enum: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .enum
     public func embedValue() -> Value {
@@ -25,7 +25,7 @@ public struct Enum: ValueProtocol {
     
     public init(
         _ variant: String,
-        @ValuesBuilder fields: () throws -> [any ValueProtocol]
+        @ValuesBuilder fields: () throws -> [ValueProtocol]
     ) rethrows {
         try self.init(variant, fields: fields().map { $0.embedValue() })
     }

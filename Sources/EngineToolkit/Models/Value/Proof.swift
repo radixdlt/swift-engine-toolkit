@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Proof: ValueProtocol, IdentifierConvertible {
+public struct Proof: ValueProtocol, Sendable, Codable, Hashable, IdentifierConvertible {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .proof
     public func embedValue() -> Value {

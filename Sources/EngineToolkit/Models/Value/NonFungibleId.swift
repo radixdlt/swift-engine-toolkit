@@ -1,6 +1,6 @@
 import Foundation
 
-public struct NonFungibleId: ValueProtocol {
+public struct NonFungibleId: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .nonFungibleId
     public func embedValue() -> Value {

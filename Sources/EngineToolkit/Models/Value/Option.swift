@@ -26,11 +26,11 @@ extension Optional: ValueProtocol where Wrapped == Value {
     }
 }
 public extension Optional where Wrapped == Value {
-    static func some(_ value: any ValueProtocol) -> Self {
+    static func some(_ value: ValueProtocol) -> Self {
         Self.some(value.embedValue())
     }
 
-    init(@ValuesBuilder buildSome: () throws -> any ValueProtocol) rethrows {
+    init(@ValuesBuilder buildSome: () throws -> ValueProtocol) rethrows {
         self = Self.some(try buildSome())
     }
     

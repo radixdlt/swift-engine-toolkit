@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Decimal_: ValueProtocol, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
+public struct Decimal_: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .decimal
     public func embedValue() -> Value {

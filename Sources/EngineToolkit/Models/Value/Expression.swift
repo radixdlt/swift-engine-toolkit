@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Expression: ValueProtocol, ExpressibleByStringLiteral {
+public struct Expression: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .expression
     public func embedValue() -> Value {

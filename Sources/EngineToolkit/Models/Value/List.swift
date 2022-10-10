@@ -1,7 +1,7 @@
 import Foundation
 
 // TODO: Replace with `Swift.Array`? What is the difference between `List` and `Array_`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
-public struct List: ValueProtocol {
+public struct List: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .list
     public func embedValue() -> Value {
@@ -32,7 +32,7 @@ public struct List: ValueProtocol {
     
     public init(
         elementType: ValueKind,
-        @ValuesBuilder buildValues: () throws -> [any ValueProtocol]
+        @ValuesBuilder buildValues: () throws -> [ValueProtocol]
     ) throws {
         try self.init(
             elementType: elementType,

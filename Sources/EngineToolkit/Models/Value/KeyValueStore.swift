@@ -1,6 +1,6 @@
 import Foundation
 
-public struct KeyValueStore: ValueProtocol, ExpressibleByStringLiteral {
+public struct KeyValueStore: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .keyValueStore
     public func embedValue() -> Value {

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EcdsaSecp256k1Signature: ValueProtocol {
+public struct EcdsaSecp256k1Signature: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .ecdsaSecp256k1Signature
     public func embedValue() -> Value {
