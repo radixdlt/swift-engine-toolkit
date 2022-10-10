@@ -11,7 +11,7 @@ import Foundation
 final class OptionalCodingTests: TestCase {
     
     func test_json_encode() throws {
-        let encoder = EngineJSONEncoder()
+        let encoder = JSONEncoder()
         let json = try encoder.encode(Value.option(.some(.string("hey"))))
         let expected = """
         {
@@ -30,7 +30,7 @@ final class OptionalCodingTests: TestCase {
     }
     
     func test_json_decode() throws {
-        let decoder = EngineJSONDecoder()
+        let decoder = JSONDecoder()
         let json = """
         {
           "type" : "Option",

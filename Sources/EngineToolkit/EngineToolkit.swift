@@ -7,8 +7,8 @@ import RadixEngineToolkit
 public struct EngineToolkit {
     internal static var _debugPrint = false
 	
-	private let jsonEncoder: EngineJSONEncoder
-	private let jsonDecoder: EngineJSONDecoder
+	private let jsonEncoder: JSONEncoder
+	private let jsonDecoder: JSONDecoder
     
     private let jsonStringFromJSONData: JSONStringFromJSONData
     private let cCharsFromJSONString: CCharsFromJSONString
@@ -16,14 +16,14 @@ public struct EngineToolkit {
 	
     public init() {
         self.init(
-            jsonEncoder: EngineJSONEncoder(),
-            jsonDecoder: EngineJSONDecoder()
+            jsonEncoder: JSONEncoder(),
+            jsonDecoder: JSONDecoder()
         )
     }
     
 	internal init(
-		jsonEncoder: EngineJSONEncoder = .init(),
-		jsonDecoder: EngineJSONDecoder = .init(),
+		jsonEncoder: JSONEncoder = .init(),
+		jsonDecoder: JSONDecoder = .init(),
         jsonStringFromJSONData: @escaping JSONStringFromJSONData = { String(data: $0, encoding: .utf8) },
         cCharsFromJSONString: @escaping CCharsFromJSONString = { $0.cString(using: .utf8) },
         jsonDataFromJSONString: @escaping JSONDataFromJSONString = { $0.data(using: .utf8) }
