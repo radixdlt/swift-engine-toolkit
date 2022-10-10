@@ -29,7 +29,7 @@ final class MapTests: TestCase {
                 valueType: .u8
             ) {
                 String_("key0")
-                U8(0)
+                UInt8(0)
                 String_("key1")
             }
             
@@ -43,7 +43,7 @@ final class MapTests: TestCase {
             valueType: .u8
         ) {
             String_("key0")
-            U8(0)
+            UInt8(0)
         })
     }
     
@@ -55,9 +55,9 @@ final class MapTests: TestCase {
             valueType: .u8
         ) {
             String_("key0")
-            U8(0)
+            UInt8(0)
             String_("key1")
-            U8(2)
+            UInt8(2)
         })
     }
     
@@ -68,13 +68,13 @@ final class MapTests: TestCase {
             valueType: .u8
         ) {
             String_("key0")
-            U8(0)
+            UInt8(0)
             String_("key1")
-            U8(2)
+            UInt8(2)
         },
             [
-                String_("key0"): U8(0),
-                String_("key1"): U8(2)
+                String_("key0"): UInt8(0),
+                String_("key1"): UInt8(2)
             ]
         )
     }
@@ -87,8 +87,8 @@ final class MapTests: TestCase {
                 keyType: .string,
                 valueType: .u8
             ) {
-                I32(1337)
-                U8(1)
+                Int32(1337)
+                UInt8(1)
             }
             
         )
@@ -103,7 +103,7 @@ final class MapTests: TestCase {
                 valueType: .u8
             ) {
                 String_("key0")
-                I8(1)
+                Int8(1)
             }
             
         )
@@ -118,9 +118,9 @@ final class MapTests: TestCase {
                 valueType: .u8
             ) {
                 String_("key0")
-                U8(0)
-                I32(1337)
-                U8(1)
+                UInt8(0)
+                Int32(1337)
+                UInt8(1)
             }
         )
     }
@@ -134,9 +134,9 @@ final class MapTests: TestCase {
                 valueType: .u8
             ) {
                 String_("key0")
-                U8(0)
+                UInt8(0)
                 String_("key1")
-                I8(1)
+                Int8(1)
             }
         )
     }

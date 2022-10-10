@@ -24,7 +24,7 @@ public struct Array_: ValueProtocol, Sendable, Codable, Hashable {
         elements: [Value]
     ) throws {
         self.elementType = elementType
-        guard elements.allSatisfy({ $0.kind() == elementType }) else {
+        guard elements.allSatisfy({ $0.kind == elementType }) else {
             throw Error.homogeneousArrayRequired
         }
         self.elements = elements

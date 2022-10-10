@@ -33,14 +33,14 @@ public struct Map: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByDict
         }
         let keys: [Value_] = try keyValuePairsInterleaved.enumerated().compactMap { offset, value in
             guard offset.isMultiple(of: 2) else { return nil }
-            guard value.kind() == keyType else {
+            guard value.kind == keyType else {
                 throw Error.unexpectedKeyTypeInKeyValuePairs
             }
             return value
         }
         let values: [Value_] = try keyValuePairsInterleaved.enumerated().compactMap { offset, value in
             guard !offset.isMultiple(of: 2) else { return nil }
-            guard value.kind() == valueType else {
+            guard value.kind == valueType else {
                 throw Error.unexpectedValueTypeInKeyValuePairs
             }
             return value
@@ -88,8 +88,8 @@ public extension Map {
     /// type like this:
     ///
     ///     [
-    ///         String_("key0"): U8(0),
-    ///         String_("key1"): U8(2)
+    ///         String_("key0"): Uint8(0),
+    ///         String_("key1"): Uint8(2)
     ///     ]
     ///
     /// instead of this:
@@ -99,9 +99,9 @@ public extension Map {
     ///         valueType: .u8
     ///     ) {
     ///         String_("key0")
-    ///         U8(0)
+    ///         Uint8(0)
     ///         String_("key1")
-    ///         U8(2)
+    ///         Uint8(2)
     ///     }
     ///
     init(dictionaryLiteral elements: (ValueProtocol, ValueProtocol)...) {

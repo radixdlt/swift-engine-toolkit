@@ -18,16 +18,16 @@ public indirect enum Value_: Sendable, Codable, Hashable {
     case unit(Unit)
     case boolean(Bool)
     
-    case i8(I8)
-    case i16(I16)
-    case i32(I32)
-    case i64(I64)
+    case i8(Int8)
+    case i16(Int16)
+    case i32(Int32)
+    case i64(Int64)
     case i128(I128)
     
-    case u8(U8)
-    case u16(U16)
-    case u32(U32)
-    case u64(U64)
+    case u8(UInt8)
+    case u16(UInt16)
+    case u32(UInt32)
+    case u64(UInt64)
     case u128(U128)
     
     case string(String_)
@@ -78,7 +78,7 @@ public extension Value {
     // Value Kind
     // ===========
     
-    func kind() -> ValueKind {
+    var kind: ValueKind {
         switch self {
         case .unit:
             return .unit
@@ -227,31 +227,39 @@ public extension Value {
             try value.proxyEncodable.encode(to: encoder)
             
         case .i8(let value):
-            try value.encode(to: encoder)
+            // `Int8` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
         
         case .i16(let value):
-            try value.encode(to: encoder)
+            // `Int16` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
         
         case .i32(let value):
-            try value.encode(to: encoder)
+            // `Int32` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
         
         case .i64(let value):
-            try value.encode(to: encoder)
+            // `Int64` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
         
         case .i128(let value):
             try value.encode(to: encoder)
             
         case .u8(let value):
-            try value.encode(to: encoder)
+            // `UInt8` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
         
         case .u16(let value):
-            try value.encode(to: encoder)
+            // `UInt16` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
         
         case .u32(let value):
-            try value.encode(to: encoder)
+            // `UInt32` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
         
         case .u64(let value):
-            try value.encode(to: encoder)
+            // `UInt64` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
         
         case .u128(let value):
             try value.encode(to: encoder)
@@ -361,31 +369,39 @@ public extension Value {
             self = try .boolean(Bool.ProxyDecodable(from: decoder).decoded)
             
         case .i8:
-            self = try .i8(.init(from: decoder))
+            // `Int8` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .i8(Int8.ProxyDecodable(from: decoder).decoded)
             
         case .i16:
-            self = try .i16(.init(from: decoder))
+            // `Int16` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .i16(Int16.ProxyDecodable(from: decoder).decoded)
             
         case .i32:
-            self = try .i32(.init(from: decoder))
+            // `Int32` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .i32(Int32.ProxyDecodable(from: decoder).decoded)
             
         case .i64:
-            self = try .i64(.init(from: decoder))
+            // `Int64` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .i64(Int64.ProxyDecodable(from: decoder).decoded)
             
         case .i128:
             self = try .i128(.init(from: decoder))
             
         case .u8:
-            self = try .u8(.init(from: decoder))
+            // `UInt8` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .u8(UInt8.ProxyDecodable(from: decoder).decoded)
             
         case .u16:
-            self = try .u16(.init(from: decoder))
+            // `UInt16` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .u16(UInt16.ProxyDecodable(from: decoder).decoded)
             
         case .u32:
-            self = try .u32(.init(from: decoder))
+            // `UInt32` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .u32(UInt32.ProxyDecodable(from: decoder).decoded)
             
         case .u64:
-            self = try .u64(.init(from: decoder))
+            // `UInt64` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .u64(UInt64.ProxyDecodable(from: decoder).decoded)
             
         case .u128:
             self = try .u128(.init(from: decoder))

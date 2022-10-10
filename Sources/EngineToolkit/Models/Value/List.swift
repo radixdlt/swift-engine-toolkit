@@ -23,7 +23,7 @@ public struct List: ValueProtocol, Sendable, Codable, Hashable {
         elementType: ValueKind,
         elements: [Value]
     ) throws {
-        guard elements.allSatisfy({ $0.kind() == elementType }) else {
+        guard elements.allSatisfy({ $0.kind == elementType }) else {
             throw Error.homogeneousArrayRequired
         }
         self.elementType = elementType

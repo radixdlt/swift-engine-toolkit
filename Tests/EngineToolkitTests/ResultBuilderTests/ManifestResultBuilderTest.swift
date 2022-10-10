@@ -75,7 +75,7 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Create a new fungible resource
             CreateResource {
-                Enum("Fungible") { U8(0) }
+                Enum("Fungible") { UInt8(0) }
                 Map(keyType: .string, valueType: .string)
                 Map(keyType: .enum, valueType: .tuple)
                 Optional {
