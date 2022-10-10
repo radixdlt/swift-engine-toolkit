@@ -29,7 +29,7 @@ private extension SborEncodeDecodeRequestTests {
         
         let encodeRequest = vector.decoded
         let encoded = try sut.sborEncodeRequest(request: encodeRequest).get()
-        XCTAssertEqual(encoded.encodedValue, try [UInt8](hex: vector.encoded))//, line: line)
+        XCTAssertEqual(encoded.encodedValue, try [UInt8](hex: vector.encoded), line: line)
         
     }
     typealias TestSuite = SborDecodeEncodeTestVectors
