@@ -8,5 +8,4 @@ DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .netrc
 
-Sources/RadixEngineToolkit/build/radix-engine-toolkit/
 Sources/RadixEngineToolkit/*.xcframework
