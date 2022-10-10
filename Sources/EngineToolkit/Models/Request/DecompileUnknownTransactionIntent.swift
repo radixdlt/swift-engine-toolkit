@@ -36,12 +36,16 @@ public extension DecompileUnknownTransactionIntentRequest {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(compiledUnknownIntent.toHexString(), forKey: .compiledUnknownIntent)
+        try container.encode(manifestInstructionsOutputFormat, forKey: .manifestInstructionsOutputFormat)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try container.decode(String.self, forKey: .compiledUnknownIntent), manifestInstructionsOutputFormat: try container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat))
+        self = try Self(
+            from: try container.decode(String.self, forKey: .compiledUnknownIntent),
+            manifestInstructionsOutputFormat: try container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat)
+        )
     }
 }
 

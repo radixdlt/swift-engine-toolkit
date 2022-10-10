@@ -12,7 +12,9 @@ let package = Package(
             name: "EngineToolkit",
             targets: ["EngineToolkit"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/Sajjon/K1.git", .upToNextMajor(from: "0.0.1")),
+    ],
     targets: [
         .binaryTarget(
             name: "RadixEngineToolkit",
@@ -24,7 +26,13 @@ let package = Package(
         ),
         .testTarget(
             name: "EngineToolkitTests",
-            dependencies: ["EngineToolkit"]
+            dependencies: [
+                "EngineToolkit",
+                "K1",
+            ],
+            resources: [
+                .copy("Resources"),
+            ]
         ),
     ]
 )
