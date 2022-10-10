@@ -35,7 +35,7 @@ public indirect enum Value_: Sendable, Codable, Hashable {
     case `struct`(Struct)
     case `enum`(Enum)
     
-    case option(Option)
+    case option(Optional<Value>)
     case array(Array_)
     case tuple(Tuple)
     case result(Result<Value, Value>)
@@ -346,7 +346,9 @@ public extension Value {
             self = try .enum(.init(from: decoder))
 
         case .option:
-            self = try .option(.init(from: decoder))
+            // `Optional` is already `Codable` so we have to go through our declared "proxy" type
+            // `Optional<Value>.ProxyDecodable` for JSON decoding.
+            self = try .option(Optional<Value>.ProxyDecodable(from: decoder).decoded)
         
         case .array:
             self = try .array(.init(from: decoder))

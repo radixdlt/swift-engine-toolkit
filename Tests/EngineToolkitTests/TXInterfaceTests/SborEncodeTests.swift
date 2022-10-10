@@ -2,27 +2,34 @@
 
 final class SborEncodeDecodeRequestTests: TestCase {
     
+    override func setUp() {
+        debugPrint = true
+        super.setUp()
+    }
+    
     func test__encodeDecodeAddressRequest() throws {
-        try TestSuite.vectors.forEach { try doTest(vector: $0) }
+        try TestSuite.vectors.enumerated().forEach { try doTest(vector: $1, index: $0) }
     }
 }
 
 private extension SborEncodeDecodeRequestTests {
     func doTest(
         vector: SborDecodeEncodeTestVectors.Vector,
+        index: Int,
         networkID: NetworkID = .simulator,
         line: UInt = #line
     ) throws {
-   
+        guard index == 16 else { return }
+        print("✨ vector @ \(index)")
         let decodeRequest = try SborDecodeRequest(
             encodedHex: vector.encoded
         )
         let decoded = try sut.sborDecodeRequest(request: decodeRequest).get()
-        XCTAssertEqual(decoded, vector.decoded, line: line)
+        XCTAssertEqual(decoded, vector.decoded)//, line: line)
         
         let encodeRequest = vector.decoded
         let encoded = try sut.sborEncodeRequest(request: encodeRequest).get()
-        XCTAssertEqual(encoded.encodedValue, try [UInt8](hex: vector.encoded), line: line)
+        XCTAssertEqual(encoded.encodedValue, try [UInt8](hex: vector.encoded))//, line: line)
         
     }
     typealias TestSuite = SborDecodeEncodeTestVectors
@@ -45,7 +52,6 @@ enum SborDecodeEncodeTestVectors {
             encoded: "0101",
             decoded: .boolean(true)
         ),
-        
         (
             encoded: "0701",
             decoded: .u8(1)

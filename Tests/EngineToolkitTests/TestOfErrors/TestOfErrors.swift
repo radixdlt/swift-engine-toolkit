@@ -145,19 +145,19 @@ enum MockError: String, Error {
     case jsonEncodeFail
     case jsonDecodeFail
 }
-final class FailingJSONEncoder: JSONEncoder {
+final class FailingJSONEncoder: EngineJSONEncoder {
     override func encode<T>(_ value: T) throws -> Data where T : Encodable {
         throw MockError.jsonEncodeFail
     }
 }
 struct ManualDecodeFailure: Error {}
-final class FailingJSONDecoder: JSONDecoder {
+final class FailingJSONDecoder: EngineJSONDecoder {
     override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
         throw MockError.jsonDecodeFail
     }
     
 }
-final class FailingJSONDecoderSwiftDecodingError: JSONDecoder {
+final class FailingJSONDecoderSwiftDecodingError: EngineJSONDecoder {
     override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
         throw Swift.DecodingError.mock
     }

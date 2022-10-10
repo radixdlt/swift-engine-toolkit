@@ -78,7 +78,7 @@ final class ManifestResultBuilderTest: TestCase {
                 Enum("Fungible") { U8(0) }
                 Map(keyType: .string, valueType: .string)
                 Map(keyType: .enum, valueType: .tuple)
-                Option {
+                Optional {
                     Enum("Fungible") { Decimal_(1.0) }
                 }
             }
