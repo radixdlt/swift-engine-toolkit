@@ -8,12 +8,12 @@ public struct ExtractAbiRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from packageWasm: [UInt8]) {
+    public init(packageWasm: [UInt8]) {
         self.packageWasm = packageWasm
     }
     
-    public init(from packageWasm: String) throws {
-        self.packageWasm = try [UInt8](hex: packageWasm)
+    public init(packageWasmHex: String) throws {
+        try self.init(packageWasm: [UInt8](hex: packageWasmHex))
     }
 
 }
@@ -39,7 +39,7 @@ public extension ExtractAbiRequest {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = try Self(from: container.decode(String.self, forKey: .packageWasm))
+        try self.init(packageWasmHex: container.decode(String.self, forKey: .packageWasm))
     }
 }
 
