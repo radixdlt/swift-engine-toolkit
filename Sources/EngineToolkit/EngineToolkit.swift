@@ -289,7 +289,7 @@ private extension EngineToolkit {
         do {
             let response = try jsonDecoder.decode(Response.self, from: jsonData)
             return .success(response)
-        } catch {
+        } catch let firstError {
             do {
                 /// We might have got an **ErrorResponse** from the Radix Engine Toolkit,
                 /// try decoding jsonData to that instead.
@@ -297,11 +297,11 @@ private extension EngineToolkit {
                 return .failure(.errorResponse(errorResponse))
             } catch let decodingError as Swift.DecodingError {
                 #if DEBUG
-                prettyPrint(responseJSONString: jsonString, error: error, failedToDecodeInto: Response.self)
+                prettyPrint(responseJSONString: jsonString, error: firstError, failedToDecodeInto: Response.self)
                 #endif
                 return .failure(.decodeResponseFailedAndCouldNotDecodeAsErrorResponseEither(responseType: "\(Response.self)", decodingError: decodingError))
             } catch {
-                return .failure(.decodeResponseFailedAndCouldNotDecodeAsErrorResponseEitherNorAsSwiftDecodingError(responseType: "\(Response.self)", nonSwiftDecodingError: String(describing: error)))
+                return .failure(.decodeResponseFailedAndCouldNotDecodeAsErrorResponseEitherNorAsSwiftDecodingError(responseType: "\(Response.self)", nonSwiftDecodingError: String(describing: firstError)))
             }
         }
     }

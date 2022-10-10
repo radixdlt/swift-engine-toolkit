@@ -100,14 +100,14 @@ enum SborDecodeEncodeTestVectors {
             encoded: "1002000000070c0c050000005261646978",
             decoded: .struct(Struct {
                 UInt8(12)
-                String_("Radix")
+                String("Radix")
             })
         ),
         (
             encoded: "11070000004661737443617202000000070c0c050000005261646978",
             decoded: .enum(Enum("FastCar") {
                     UInt8(12)
-                    String_("Radix")
+                    String("Radix")
                 })
         ),
         (

@@ -12,14 +12,14 @@ public struct CallMethod: InstructionProtocol {
     // ===============
     
     public let componentAddress: ComponentAddress
-    public let methodName: String_
+    public let methodName: String
     public let arguments: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(componentAddress: ComponentAddress, methodName: String_, arguments: [Value] = []) {
+    public init(componentAddress: ComponentAddress, methodName: String, arguments: [Value] = []) {
         self.componentAddress = componentAddress
         self.methodName = methodName
         self.arguments = arguments
@@ -27,7 +27,7 @@ public struct CallMethod: InstructionProtocol {
     
     public init(
         componentAddress: ComponentAddress,
-        methodName: String_,
+        methodName: String,
         @ValuesBuilder buildValues: () throws -> [any ValueProtocol]
     ) rethrows {
         self.init(
@@ -39,7 +39,7 @@ public struct CallMethod: InstructionProtocol {
     
     public init(
         componentAddress: ComponentAddress,
-        methodName: String_,
+        methodName: String,
         @SpecificValuesBuilder buildValues: () throws -> [Value]
     ) rethrows {
         self.init(
@@ -84,9 +84,13 @@ public extension CallMethod {
         }
         
         let componentAddress = try container.decode(ComponentAddress.self, forKey: .componentAddress)
-        let methodName = try container.decode(String_.self, forKey: .methodName)
+        let methodName = try container.decode(String.ProxyDecodable.self, forKey: .methodName).decoded
         let arguments = try container.decode([Value].self, forKey: .arguments)
         
-        self = Self(componentAddress: componentAddress, methodName: methodName, arguments: arguments)
+        self.init(
+            componentAddress: componentAddress,
+            methodName: methodName,
+            arguments: arguments
+        )
     }
 }

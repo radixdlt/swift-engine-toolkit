@@ -10,13 +10,6 @@ extension Bool: ValueProtocol {
 
 extension Bool: ProxyCodable {
     
-    public var proxyEncodable: ProxyEncodable { .init(toEncode: self) }
-    
-    public init(decodedProxy: ProxyDecodable) {
-        self = decodedProxy.decoded
-    }
-    
-    
     // =======================
     // Coding Keys Definition
     // =======================

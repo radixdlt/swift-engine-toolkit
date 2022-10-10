@@ -30,7 +30,7 @@ public indirect enum Value_: Sendable, Codable, Hashable {
     case u64(UInt64)
     case u128(U128)
     
-    case string(String_)
+    case string(String)
     
     case `struct`(Struct)
     case `enum`(Enum)
@@ -265,7 +265,8 @@ public extension Value {
             try value.encode(to: encoder)
             
         case .string(let value):
-            try value.encode(to: encoder)
+            // `String` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
             
         case .struct(let value):
             try value.encode(to: encoder)
@@ -407,7 +408,8 @@ public extension Value {
             self = try .u128(.init(from: decoder))
             
         case .string:
-            self = try .string(.init(from: decoder))
+            // `String` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .string(String.ProxyDecodable(from: decoder).decoded)
             
         case .struct:
             self = try .struct(.init(from: decoder))

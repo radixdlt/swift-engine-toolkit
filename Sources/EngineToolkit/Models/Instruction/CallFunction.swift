@@ -12,8 +12,8 @@ public struct CallFunction: InstructionProtocol {
     // ===============
     
     public let packageAddress: PackageAddress
-    public let blueprintName: String_
-    public let functionName: String_
+    public let blueprintName: String
+    public let functionName: String
     public let arguments: [Value]
     
     // =============
@@ -22,8 +22,8 @@ public struct CallFunction: InstructionProtocol {
     
     public init(
         packageAddress: PackageAddress,
-        blueprintName: String_,
-        functionName: String_,
+        blueprintName: String,
+        functionName: String,
         arguments: [Value] = []
     ) {
         self.packageAddress = packageAddress
@@ -34,8 +34,8 @@ public struct CallFunction: InstructionProtocol {
     
     public init(
         packageAddress: PackageAddress,
-        blueprintName: String_,
-        functionName: String_,
+        blueprintName: String,
+        functionName: String,
         @ValuesBuilder buildValues: () throws -> [any ValueProtocol]
     ) rethrows {
         try self.init(
@@ -48,8 +48,8 @@ public struct CallFunction: InstructionProtocol {
 
     public init(
         packageAddress: PackageAddress,
-        blueprintName: String_,
-        functionName: String_,
+        blueprintName: String,
+        functionName: String,
         @SpecificValuesBuilder buildValues: () throws -> [Value]
     ) rethrows {
         try self.init(
@@ -98,8 +98,8 @@ public extension CallFunction {
         }
         
         let packageAddress = try container.decode(PackageAddress.self, forKey: .packageAddress)
-        let blueprintName = try container.decode(String_.self, forKey: .blueprintName)
-        let functionName = try container.decode(String_.self, forKey: .functionName)
+        let blueprintName = try container.decode(String.ProxyDecodable.self, forKey: .blueprintName).decoded
+        let functionName = try container.decode(String.ProxyDecodable.self, forKey: .functionName).decoded
         let arguments = try container.decode([Value].self, forKey: .arguments)
         
         self.init(

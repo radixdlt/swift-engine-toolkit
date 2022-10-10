@@ -88,8 +88,8 @@ public extension Map {
     /// type like this:
     ///
     ///     [
-    ///         String_("key0"): Uint8(0),
-    ///         String_("key1"): Uint8(2)
+    ///         "key0": Uint8(0),
+    ///         "key1": Uint8(2)
     ///     ]
     ///
     /// instead of this:
@@ -98,9 +98,9 @@ public extension Map {
     ///         keyType: .string,
     ///         valueType: .u8
     ///     ) {
-    ///         String_("key0")
+    ///         "key0"
     ///         Uint8(0)
-    ///         String_("key1")
+    ///         "key1"
     ///         Uint8(2)
     ///     }
     ///

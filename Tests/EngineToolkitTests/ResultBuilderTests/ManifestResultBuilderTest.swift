@@ -9,6 +9,12 @@ import Foundation
 @testable import EngineToolkit
 
 final class ManifestResultBuilderTest: TestCase {
+    
+    override func setUp() {
+        debugPrint = true
+        super.setUp()
+    }
+    
     func test__complex_resultBuilder() throws {
         let expected = try sut.convertManifest(request: makeRequest(outputFormat: .json, manifest: .complex)).get()
         

@@ -1,30 +1,5 @@
 import Foundation
 
-public protocol EncodableProxy: Encodable {
-    associatedtype ToEncode: Encodable
-    var toEncode: ToEncode { get }
-    init(toEncode: ToEncode)
-}
-public protocol DecodableProxy: Decodable {
-    associatedtype Decoded: Decodable
-    var decoded: Decoded { get }
-}
-
-public protocol ProxyCodable: Codable where ProxyEncodable.ToEncode == Self, ProxyDecodable.Decoded == Self {
-    associatedtype ProxyEncodable: EncodableProxy
-    associatedtype ProxyDecodable: DecodableProxy
-    var proxyEncodable: ProxyEncodable { get }
-    init(decodedProxy: ProxyDecodable)
-}
-public extension ProxyCodable {
-    var proxyEncodable: ProxyEncodable { .init(toEncode: self) }
-    
-    init(decodedProxy: ProxyDecodable) {
-        self = decodedProxy.decoded
-    }
-    
-}
-
 // TODO: Replace with `Swift.Optional`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
 extension Optional: ValueProtocol where Wrapped == Value {
     // Type name, used as a discriminator
@@ -49,13 +24,7 @@ public extension Optional where Wrapped == Value {
 
 // MARK: Codable
 extension Optional: ProxyCodable where Wrapped == Value {
-
-    public var proxyEncodable: ProxyEncodable { .init(toEncode: self) }
-
-    public init(decodedProxy: ProxyDecodable) {
-        self = decodedProxy.decoded
-    }
-    
+  
     // =======================
     // Coding Keys Definition
     // =======================
