@@ -1,8 +1,11 @@
 import Foundation
 
-public struct MintFungible: Sendable, Codable, Hashable {
+public struct MintFungible: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .mintFungible
+    public func embed() -> Instruction {
+        .mintFungible(self)
+    }
     
     // ===============
     // Struct members

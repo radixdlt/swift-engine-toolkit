@@ -14,9 +14,9 @@ private extension DeriveNonFungibleAddressRequestTests {
         line: UInt = #line
     ) throws {
    
-        let nonFungibleAddress = try NonFungibleAddress(from: vector.nonFungibleAddress)
+        let nonFungibleAddress = try NonFungibleAddress(hex: vector.nonFungibleAddress)
         
-        let request = DeriveNonFungibleAddressRequest(from: vector.resourceAddress, nonFungibleId: vector.nonFungibleId)
+        let request = try DeriveNonFungibleAddressRequest(resourceAddress: vector.resourceAddress, nonFungibleIdHex: vector.nonFungibleId)
         let derivedNonfungibleAddress = try sut.deriveNonFungibleAddressRequest(request: request).get()
         XCTAssertEqual(derivedNonfungibleAddress.nonFungibleAddress, nonFungibleAddress.address.toHexString(), line: line)
         

@@ -1,9 +1,11 @@
 import Foundation
 
-public struct DropAllProofs: Sendable, Codable, Hashable {
+public struct DropAllProofs: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .dropAllProofs
-
+    public func embed() -> Instruction {
+        .dropAllProofs(self)
+    }
 }
 
 public extension DropAllProofs {

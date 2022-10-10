@@ -1,8 +1,11 @@
 import Foundation
 
-public struct U128: Sendable, Codable, Hashable {
+public struct U128: ValueProtocol, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .u128
+    public func embedValue() -> Value {
+        .u128(self)
+    }
     
     // ===============
     // Struct members
@@ -15,8 +18,12 @@ public struct U128: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: String) {
+    public init(value: String) {
         self.value = value
+    }
+    
+    public init(stringLiteral value: String) {
+        self.init(value: value)
     }
 
 }
@@ -50,6 +57,6 @@ public extension U128 {
         
         // Decoding `value`
         // TODO: Validation is needed here to ensure that this numeric and in the range of an Unsigned 128 bit number
-        value = try container.decode(String.self, forKey: .value)
+        try self.init(value: container.decode(String.self, forKey: .value))
     }
 }

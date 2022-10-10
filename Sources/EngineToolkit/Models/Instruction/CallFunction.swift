@@ -1,8 +1,11 @@
 import Foundation
 
-public struct CallFunction: Sendable, Codable, Hashable {
+public struct CallFunction: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .callFunction
+    public func embed() -> Instruction {
+        .callFunction(self)
+    }
     
     // ===============
     // Struct members
@@ -28,6 +31,36 @@ public struct CallFunction: Sendable, Codable, Hashable {
         self.functionName = functionName
         self.arguments = arguments
     }
+    
+    public init(
+        packageAddress: PackageAddress,
+        blueprintName: String_,
+        functionName: String_,
+        @ValuesBuilder buildValues: () throws -> [any ValueProtocol]
+    ) rethrows {
+        try self.init(
+            packageAddress: packageAddress,
+            blueprintName: blueprintName,
+            functionName: functionName,
+            arguments: buildValues().map { $0.embedValue() }
+        )
+    }
+
+    public init(
+        packageAddress: PackageAddress,
+        blueprintName: String_,
+        functionName: String_,
+        @SpecificValuesBuilder buildValues: () throws -> [Value]
+    ) rethrows {
+        try self.init(
+            packageAddress: packageAddress,
+            blueprintName: blueprintName,
+            functionName: functionName,
+            arguments: buildValues()
+        )
+    }
+    
+
 }
 
 public extension CallFunction {

@@ -61,3 +61,8 @@ extension Result: Codable where Success == Value, Failure == Value {
     public static var kind: ValueKind { .result }
 }
 
+extension Result: ValueProtocol where Success == Value, Failure == Value {
+    public func embedValue() -> Value {
+        .result(self)
+    }
+}

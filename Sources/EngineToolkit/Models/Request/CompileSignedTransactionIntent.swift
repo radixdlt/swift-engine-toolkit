@@ -15,7 +15,7 @@ public struct CompileSignedTransactionIntentResponse: Sendable, Codable, Hashabl
     }
     
     public init(from compiledIntent: String) throws {
-        self.compiledSignedIntent = [UInt8](hex: compiledIntent)
+        self.compiledSignedIntent = try [UInt8](hex: compiledIntent)
     }
 }
 

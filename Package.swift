@@ -13,6 +13,7 @@ let package = Package(
             targets: ["EngineToolkit"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/krzysztofzablocki/Difference.git", from: "1.0.1"),
         .package(url: "https://github.com/Sajjon/K1.git", .upToNextMajor(from: "0.0.1")),
     ],
     targets: [
@@ -27,12 +28,13 @@ let package = Package(
         .testTarget(
             name: "EngineToolkitTests",
             dependencies: [
+                "Difference",
                 "EngineToolkit",
                 "K1",
             ],
             resources: [
                 .copy("Resources"),
             ]
-        ),
+        )
     ]
 )

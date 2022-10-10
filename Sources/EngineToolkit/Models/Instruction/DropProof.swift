@@ -1,8 +1,11 @@
 import Foundation
 
-public struct DropProof: Sendable, Codable, Hashable {
+public struct DropProof: InstructionProtocol, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .dropProof
+    public func embed() -> Instruction {
+        .dropProof(self)
+    }
     
     // ===============
     // Struct members
@@ -14,10 +17,16 @@ public struct DropProof: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from proof: Proof) {
+    public init(_ proof: Proof) {
         self.proof = proof
     }
-
+    
+    public init(integerLiteral value: Proof.IntegerLiteralType) {
+        self.init(Proof(integerLiteral: value))
+    }
+    public init(stringLiteral value: Proof.StringLiteralType) {
+        self.init(Proof(stringLiteral: value))
+    }
 }
 
 public extension DropProof {
@@ -48,8 +57,6 @@ public extension DropProof {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let proof: Proof = try container.decode(Proof.self, forKey: .proof)
-        
-        self = Self(from: proof)
+        try self.init(container.decode(Proof.self, forKey: .proof))
     }
 }

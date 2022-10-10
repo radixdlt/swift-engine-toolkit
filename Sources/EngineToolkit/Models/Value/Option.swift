@@ -1,8 +1,12 @@
 import Foundation
 
-public enum Option: Sendable, Codable, Hashable {
+// TODO: Replace with `Swift.Optional`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
+public enum Option: ValueProtocol, ExpressibleByNilLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .option
+    public func embedValue() -> Value {
+        .option(self)
+    }
     
     // ==============
     // Enum Variants
@@ -10,6 +14,22 @@ public enum Option: Sendable, Codable, Hashable {
     
     case some(Value)
     case none
+}
+public extension Option {
+    static func some(_ value: any ValueProtocol) -> Self {
+        .some(value.embedValue())
+    }
+
+    init(@ValuesBuilder buildSome: () throws -> any ValueProtocol) rethrows {
+        self = Self.some(try buildSome())
+    }
+    
+    init(@SpecificValuesBuilder buildSome: () throws -> Value) rethrows {
+        self = Self.some(try buildSome())
+    }
+    init(nilLiteral: ()) {
+        self = .none
+    }
 }
 
 public extension Option {

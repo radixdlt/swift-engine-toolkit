@@ -9,14 +9,13 @@ public struct DecompileSignedTransactionIntentRequest: Sendable, Codable, Hashab
     // Constructors
     // =============
     
-    public init(from compiledSignedIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(compiledSignedIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledSignedIntent = compiledSignedIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
-    public init(from compiledSignedIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
-        self.compiledSignedIntent = [UInt8](hex: compiledSignedIntent)
-        self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
+    public init(compiledSignedIntentHex: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
+        try self.init(compiledSignedIntent: [UInt8](hex: compiledSignedIntentHex), manifestInstructionsOutputFormat: manifestInstructionsOutputFormat)
     }
 }
 
@@ -42,7 +41,11 @@ public extension DecompileSignedTransactionIntentRequest {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try container.decode(String.self, forKey: .compiledSignedIntent), manifestInstructionsOutputFormat: try container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat))
+      
+        try self.init(
+            compiledSignedIntentHex: container.decode(String.self, forKey: .compiledSignedIntent),
+            manifestInstructionsOutputFormat: try container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat)
+        )
     }
 }
 

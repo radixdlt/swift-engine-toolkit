@@ -9,14 +9,13 @@ public struct DecompileTransactionIntentRequest: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from compiledIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(compiledIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledIntent = compiledIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
-    public init(from compiledIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
-        self.compiledIntent = [UInt8](hex: compiledIntent)
-        self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
+    public init(compiledIntentHex: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
+        try self.init(compiledIntent: [UInt8](hex: compiledIntentHex), manifestInstructionsOutputFormat: manifestInstructionsOutputFormat)
     }
 }
 
@@ -42,7 +41,12 @@ public extension DecompileTransactionIntentRequest {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try container.decode(String.self, forKey: .compiledIntent), manifestInstructionsOutputFormat: try container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat))
+        
+       
+        try self.init(
+            compiledIntentHex: container.decode(String.self, forKey: .compiledIntent),
+            manifestInstructionsOutputFormat: container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat)
+        )
     }
 }
 

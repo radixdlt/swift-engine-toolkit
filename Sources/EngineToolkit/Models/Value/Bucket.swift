@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Bucket: Sendable, Codable, Hashable {
+public struct Bucket: ValueProtocol, IdentifierConvertible {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .bucket
+    public func embedValue() -> Value {
+        .bucket(self)
+    }
     
     // ===============
     // Struct members
@@ -14,18 +17,9 @@ public struct Bucket: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from identifier: Identifier) {
+    public init(identifier: Identifier) {
         self.identifier = identifier
     }
-    
-    public init(from identifier: String) {
-        self.identifier = .string(identifier)
-    }
-    
-    public init(from identifier: UInt32) {
-        self.identifier = .u32(identifier)
-    }
-
 }
 
 public extension Bucket {
@@ -56,6 +50,6 @@ public extension Bucket {
         }
         
         // Decoding `identifier`
-        self = Self(from: try container.decode(Identifier.self, forKey: .identifier))
+        try self.init(identifier: container.decode(Identifier.self, forKey: .identifier))
     }
 }

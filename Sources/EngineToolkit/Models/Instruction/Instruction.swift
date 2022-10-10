@@ -1,42 +1,48 @@
 import Foundation
 
+/// Simple protocol for instructions.
+public protocol InstructionProtocol: Sendable, Codable, Hashable {
+    static var kind: InstructionKind { get }
+    func embed() -> Instruction
+}
+
 public indirect enum Instruction: Sendable, Codable, Hashable {
     // ==============
     // Enum Variants
     // ==============
     
-    case callFunctionType(CallFunction)
-    case callMethodType(CallMethod)
+    case callFunction(CallFunction)
+    case callMethod(CallMethod)
     
-    case takeFromWorktopType(TakeFromWorktop)
-    case takeFromWorktopByAmountType(TakeFromWorktopByAmount)
-    case takeFromWorktopByIdsType(TakeFromWorktopByIds)
+    case takeFromWorktop(TakeFromWorktop)
+    case takeFromWorktopByAmount(TakeFromWorktopByAmount)
+    case takeFromWorktopByIds(TakeFromWorktopByIds)
     
-    case returnToWorktopType(ReturnToWorktop)
+    case returnToWorktop(ReturnToWorktop)
     
-    case assertWorktopContainsType(AssertWorktopContains)
-    case assertWorktopContainsByAmountType(AssertWorktopContainsByAmount)
-    case assertWorktopContainsByIdsType(AssertWorktopContainsByIds)
+    case assertWorktopContains(AssertWorktopContains)
+    case assertWorktopContainsByAmount(AssertWorktopContainsByAmount)
+    case assertWorktopContainsByIds(AssertWorktopContainsByIds)
     
-    case popFromAuthZoneType(PopFromAuthZone)
-    case pushToAuthZoneType(PushToAuthZone)
-    case clearAuthZoneType(ClearAuthZone)
+    case popFromAuthZone(PopFromAuthZone)
+    case pushToAuthZone(PushToAuthZone)
+    case clearAuthZone(ClearAuthZone)
     
-    case createProofFromAuthZoneType(CreateProofFromAuthZone)
-    case createProofFromAuthZoneByAmountType(CreateProofFromAuthZoneByAmount)
-    case createProofFromAuthZoneByIdsType(CreateProofFromAuthZoneByIds)
-    case createProofFromBucketType(CreateProofFromBucket)
+    case createProofFromAuthZone(CreateProofFromAuthZone)
+    case createProofFromAuthZoneByAmount(CreateProofFromAuthZoneByAmount)
+    case createProofFromAuthZoneByIds(CreateProofFromAuthZoneByIds)
+    case createProofFromBucket(CreateProofFromBucket)
     
-    case cloneProofType(CloneProof)
+    case cloneProof(CloneProof)
     
-    case dropProofType(DropProof)
-    case dropAllProofsType(DropAllProofs)
+    case dropProof(DropProof)
+    case dropAllProofs(DropAllProofs)
     
-    case publishPackageType(PublishPackage)
+    case publishPackage(PublishPackage)
     
-    case createResourceType(CreateResource)
-    case burnBucketType(BurnBucket)
-    case mintFungibleType(MintFungible)
+    case createResource(CreateResource)
+    case burnBucket(BurnBucket)
+    case mintFungible(MintFungible)
 }
 
 public extension Instruction {
@@ -45,82 +51,82 @@ public extension Instruction {
     // =============
     
     init(from instruction: CallFunction) {
-        self = .callFunctionType(instruction)
+        self = .callFunction(instruction)
     }
     init(from instruction: CallMethod) {
-        self = .callMethodType(instruction)
+        self = .callMethod(instruction)
     }
     
     init(from instruction: TakeFromWorktop) {
-        self = .takeFromWorktopType(instruction)
+        self = .takeFromWorktop(instruction)
     }
     init(from instruction: TakeFromWorktopByAmount) {
-        self = .takeFromWorktopByAmountType(instruction)
+        self = .takeFromWorktopByAmount(instruction)
     }
     init(from instruction: TakeFromWorktopByIds) {
-        self = .takeFromWorktopByIdsType(instruction)
+        self = .takeFromWorktopByIds(instruction)
     }
     
     init(from instruction: ReturnToWorktop) {
-        self = .returnToWorktopType(instruction)
+        self = .returnToWorktop(instruction)
     }
     
     init(from instruction: AssertWorktopContains) {
-        self = .assertWorktopContainsType(instruction)
+        self = .assertWorktopContains(instruction)
     }
     init(from instruction: AssertWorktopContainsByAmount) {
-        self = .assertWorktopContainsByAmountType(instruction)
+        self = .assertWorktopContainsByAmount(instruction)
     }
     init(from instruction: AssertWorktopContainsByIds) {
-        self = .assertWorktopContainsByIdsType(instruction)
+        self = .assertWorktopContainsByIds(instruction)
     }
     
     init(from instruction: PopFromAuthZone) {
-        self = .popFromAuthZoneType(instruction)
+        self = .popFromAuthZone(instruction)
     }
     init(from instruction: PushToAuthZone) {
-        self = .pushToAuthZoneType(instruction)
+        self = .pushToAuthZone(instruction)
     }
     
     init(from instruction: ClearAuthZone) {
-        self = .clearAuthZoneType(instruction)
+        self = .clearAuthZone(instruction)
     }
     
     init(from instruction: CreateProofFromAuthZone) {
-        self = .createProofFromAuthZoneType(instruction)
+        self = .createProofFromAuthZone(instruction)
     }
     init(from instruction: CreateProofFromAuthZoneByAmount) {
-        self = .createProofFromAuthZoneByAmountType(instruction)
+        self = .createProofFromAuthZoneByAmount(instruction)
     }
     init(from instruction: CreateProofFromAuthZoneByIds) {
-        self = .createProofFromAuthZoneByIdsType(instruction)
+        self = .createProofFromAuthZoneByIds(instruction)
     }
     init(from instruction: CreateProofFromBucket) {
-        self = .createProofFromBucketType(instruction)
+        self = .createProofFromBucket(instruction)
     }
     
     init(from instruction: CloneProof) {
-        self = .cloneProofType(instruction)
+        self = .cloneProof(instruction)
     }
     init(from instruction: DropProof) {
-        self = .dropProofType(instruction)
+        self = .dropProof(instruction)
     }
     init(from instruction: DropAllProofs) {
-        self = .dropAllProofsType(instruction)
+        self = .dropAllProofs(instruction)
     }
     
     init(from instruction: PublishPackage) {
-        self = .publishPackageType(instruction)
+        self = .publishPackage(instruction)
     }
     
     init(from instruction: CreateResource) {
-        self = .createResourceType(instruction)
+        self = .createResource(instruction)
     }
     init(from instruction: BurnBucket) {
-        self = .burnBucketType(instruction)
+        self = .burnBucket(instruction)
     }
     init(from instruction: MintFungible) {
-        self = .mintFungibleType(instruction)
+        self = .mintFungible(instruction)
     }
 }
 
@@ -133,60 +139,60 @@ public extension Instruction {
     
     func kind() -> InstructionKind {
         switch self {
-        case .callFunctionType(_):
+        case .callFunction:
             return .callFunction
-        case .callMethodType(_):
+        case .callMethod:
             return .callMethod
             
-        case .takeFromWorktopType(_):
+        case .takeFromWorktop:
             return .takeFromWorktop
-        case .takeFromWorktopByAmountType(_):
+        case .takeFromWorktopByAmount:
             return .takeFromWorktopByAmount
-        case .takeFromWorktopByIdsType(_):
+        case .takeFromWorktopByIds:
             return .takeFromWorktopByIds
             
-        case .returnToWorktopType(_):
+        case .returnToWorktop:
             return .returnToWorktop
             
-        case .assertWorktopContainsType(_):
+        case .assertWorktopContains:
             return .assertWorktopContains
-        case .assertWorktopContainsByAmountType(_):
+        case .assertWorktopContainsByAmount:
             return .assertWorktopContainsByAmount
-        case .assertWorktopContainsByIdsType(_):
+        case .assertWorktopContainsByIds:
             return .assertWorktopContainsByIds
             
-        case .popFromAuthZoneType(_):
+        case .popFromAuthZone:
             return .popFromAuthZone
-        case .pushToAuthZoneType(_):
+        case .pushToAuthZone:
             return .pushToAuthZone
             
-        case .clearAuthZoneType(_):
+        case .clearAuthZone:
             return .clearAuthZone
             
-        case .createProofFromAuthZoneType(_):
+        case .createProofFromAuthZone:
             return .createProofFromAuthZone
-        case .createProofFromAuthZoneByAmountType(_):
+        case .createProofFromAuthZoneByAmount:
             return .createProofFromAuthZoneByAmount
-        case .createProofFromAuthZoneByIdsType(_):
+        case .createProofFromAuthZoneByIds:
             return .createProofFromAuthZoneByIds
-        case .createProofFromBucketType(_):
+        case .createProofFromBucket:
             return .createProofFromBucket
             
-        case .cloneProofType(_):
+        case .cloneProof:
             return .cloneProof
-        case .dropProofType(_):
+        case .dropProof:
             return .dropProof
-        case .dropAllProofsType(_):
+        case .dropAllProofs:
             return .dropAllProofs
             
-        case .publishPackageType(_):
+        case .publishPackage:
             return .publishPackage
             
-        case .createResourceType(_):
+        case .createResource:
             return .createResource
-        case .burnBucketType(_):
+        case .burnBucket:
             return .burnBucket
-        case .mintFungibleType(_):
+        case .mintFungible:
             return .mintFungible
         }
     }
@@ -206,60 +212,60 @@ public extension Instruction {
     // ======================
     func encode(to encoder: Encoder) throws {
         switch self {
-            case .callFunctionType(let instruction):
+            case .callFunction(let instruction):
                 try instruction.encode(to: encoder)
-            case .callMethodType(let instruction):
-                try instruction.encode(to: encoder)
-
-            case .takeFromWorktopType(let instruction):
-                try instruction.encode(to: encoder)
-            case .takeFromWorktopByAmountType(let instruction):
-                try instruction.encode(to: encoder)
-            case .takeFromWorktopByIdsType(let instruction):
+            case .callMethod(let instruction):
                 try instruction.encode(to: encoder)
 
-            case .returnToWorktopType(let instruction):
+            case .takeFromWorktop(let instruction):
+                try instruction.encode(to: encoder)
+            case .takeFromWorktopByAmount(let instruction):
+                try instruction.encode(to: encoder)
+            case .takeFromWorktopByIds(let instruction):
                 try instruction.encode(to: encoder)
 
-            case .assertWorktopContainsType(let instruction):
-                try instruction.encode(to: encoder)
-            case .assertWorktopContainsByAmountType(let instruction):
-                try instruction.encode(to: encoder)
-            case .assertWorktopContainsByIdsType(let instruction):
+            case .returnToWorktop(let instruction):
                 try instruction.encode(to: encoder)
 
-            case .popFromAuthZoneType(let instruction):
+            case .assertWorktopContains(let instruction):
                 try instruction.encode(to: encoder)
-            case .pushToAuthZoneType(let instruction):
+            case .assertWorktopContainsByAmount(let instruction):
                 try instruction.encode(to: encoder)
-
-            case .clearAuthZoneType(let instruction):
-                try instruction.encode(to: encoder)
-
-            case .createProofFromAuthZoneType(let instruction):
-                try instruction.encode(to: encoder)
-            case .createProofFromAuthZoneByAmountType(let instruction):
-                try instruction.encode(to: encoder)
-            case .createProofFromAuthZoneByIdsType(let instruction):
-                try instruction.encode(to: encoder)
-            case .createProofFromBucketType(let instruction):
+            case .assertWorktopContainsByIds(let instruction):
                 try instruction.encode(to: encoder)
 
-            case .cloneProofType(let instruction):
+            case .popFromAuthZone(let instruction):
                 try instruction.encode(to: encoder)
-            case .dropProofType(let instruction):
-                try instruction.encode(to: encoder)
-            case .dropAllProofsType(let instruction):
+            case .pushToAuthZone(let instruction):
                 try instruction.encode(to: encoder)
 
-            case .publishPackageType(let instruction):
+            case .clearAuthZone(let instruction):
                 try instruction.encode(to: encoder)
 
-            case .createResourceType(let instruction):
+            case .createProofFromAuthZone(let instruction):
                 try instruction.encode(to: encoder)
-            case .burnBucketType(let instruction):
+            case .createProofFromAuthZoneByAmount(let instruction):
                 try instruction.encode(to: encoder)
-            case .mintFungibleType(let instruction):
+            case .createProofFromAuthZoneByIds(let instruction):
+                try instruction.encode(to: encoder)
+            case .createProofFromBucket(let instruction):
+                try instruction.encode(to: encoder)
+
+            case .cloneProof(let instruction):
+                try instruction.encode(to: encoder)
+            case .dropProof(let instruction):
+                try instruction.encode(to: encoder)
+            case .dropAllProofs(let instruction):
+                try instruction.encode(to: encoder)
+
+            case .publishPackage(let instruction):
+                try instruction.encode(to: encoder)
+
+            case .createResource(let instruction):
+                try instruction.encode(to: encoder)
+            case .burnBucket(let instruction):
+                try instruction.encode(to: encoder)
+            case .mintFungible(let instruction):
                 try instruction.encode(to: encoder)
         }
     }

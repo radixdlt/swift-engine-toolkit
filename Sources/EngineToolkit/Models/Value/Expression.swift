@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Expression: Sendable, Codable, Hashable {
+public struct Expression: ValueProtocol, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .expression
+    public func embedValue() -> Value {
+        .expression(self)
+    }
     
     // ===============
     // Struct members
@@ -14,8 +17,12 @@ public struct Expression: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: String) {
+    public init(value: String) {
         self.value = value
+    }
+    
+    public init(stringLiteral value: StringLiteralType) {
+        self.init(value: value)
     }
 
 }
@@ -48,6 +55,6 @@ public extension Expression {
         }
         
         // Decoding `value`
-        value = try container.decode(String.self, forKey: .value)
+        try self.init(value: container.decode(String.self, forKey: .value))
     }
 }

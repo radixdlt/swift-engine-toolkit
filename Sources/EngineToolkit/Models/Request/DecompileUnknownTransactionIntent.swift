@@ -9,14 +9,16 @@ public struct DecompileUnknownTransactionIntentRequest: Sendable, Codable, Hasha
     // Constructors
     // =============
     
-    public init(from compiledUnknownIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
+    public init(compiledUnknownIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledUnknownIntent = compiledUnknownIntent
         self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
     }
     
-    public init(from compiledUnknownIntent: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
-        self.compiledUnknownIntent = [UInt8](hex: compiledUnknownIntent)
-        self.manifestInstructionsOutputFormat = manifestInstructionsOutputFormat
+    public init(compiledUnknownIntentHex: String, manifestInstructionsOutputFormat: ManifestInstructionsKind) throws {
+        try self.init(
+            compiledUnknownIntent: [UInt8](hex: compiledUnknownIntentHex),
+            manifestInstructionsOutputFormat: manifestInstructionsOutputFormat
+        )
     }
 }
 
@@ -42,9 +44,10 @@ public extension DecompileUnknownTransactionIntentRequest {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(
-            from: try container.decode(String.self, forKey: .compiledUnknownIntent),
-            manifestInstructionsOutputFormat: try container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat)
+       
+        try self.init(
+            compiledUnknownIntentHex:  container.decode(String.self, forKey: .compiledUnknownIntent),
+            manifestInstructionsOutputFormat: container.decode(ManifestInstructionsKind.self, forKey: .manifestInstructionsOutputFormat)
         )
     }
 }

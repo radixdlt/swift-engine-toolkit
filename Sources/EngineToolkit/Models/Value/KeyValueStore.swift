@@ -1,21 +1,27 @@
 import Foundation
 
-public struct KeyValueStore: Sendable, Codable, Hashable {
+public struct KeyValueStore: ValueProtocol, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .keyValueStore
+    public func embedValue() -> Value {
+        .keyValueStore(self)
+    }
     
     // ===============
     // Struct members
     // ===============
-    
     public let identifier: String
     
     // =============
     // Constructors
     // =============
     
-    public init(from identifier: String) {
+    public init(identifier: String) {
         self.identifier = identifier
+    }
+    
+    public init(stringLiteral value: String) {
+        self.init(identifier: value)
     }
 }
 
@@ -46,6 +52,6 @@ public extension KeyValueStore {
         }
         
         // Decoding `identifier`
-        identifier = try container.decode(String.self, forKey: .identifier)
+        try self.init(identifier:  container.decode(String.self, forKey: .identifier))
     }
 }

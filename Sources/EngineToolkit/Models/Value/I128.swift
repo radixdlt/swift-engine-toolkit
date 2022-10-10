@@ -1,8 +1,11 @@
 import Foundation
 
-public struct I128: Sendable, Codable, Hashable {
+public struct I128: ValueProtocol, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .i128
+    public func embedValue() -> Value {
+        .i128(self)
+    }
     
     // ===============
     // Struct members
@@ -15,8 +18,12 @@ public struct I128: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: String) {
+    public init(value: String) {
         self.value = value
+    }
+    
+    public init(stringLiteral value: String) {
+        self.init(value: value)
     }
 
 }
@@ -50,6 +57,6 @@ public extension I128 {
         
         // Decoding `value`
         // TODO: Validation is needed here to ensure that this numeric and in the range of a Signed 128 bit number
-        value = try container.decode(String.self, forKey: .value)
+        try self.init(value: container.decode(String.self, forKey: .value))
     }
 }

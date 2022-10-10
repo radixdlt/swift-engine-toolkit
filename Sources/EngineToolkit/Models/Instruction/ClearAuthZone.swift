@@ -1,9 +1,11 @@
 import Foundation
 
-public struct ClearAuthZone: Sendable, Codable, Hashable {
+public struct ClearAuthZone: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .clearAuthZone
-
+    public func embed() -> Instruction {
+        .clearAuthZone(self)
+    }
 }
 
 public extension ClearAuthZone {

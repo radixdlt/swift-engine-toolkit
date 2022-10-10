@@ -14,8 +14,8 @@ private extension DeriveNonFungibleAddressFromPublicKeyRequestTests {
         line: UInt = #line
     ) throws {
    
-        let nonFungibleAddress = try NonFungibleAddress(from: vector.nonFungibleAddress)
-        let publicKey = try PublicKey.ecdsaSecp256k1(EcdsaSecp256k1PublicKeyString(from: vector.publicKey))
+        let nonFungibleAddress = try NonFungibleAddress(hex: vector.nonFungibleAddress)
+        let publicKey = try PublicKey.ecdsaSecp256k1(EcdsaSecp256k1PublicKeyString(hex: vector.publicKey))
         
         let derivedNonfungibleAddress = try sut.deriveNonFungibleAddressFromPublicKeyRequest(request: publicKey).get()
         XCTAssertEqual(derivedNonfungibleAddress.nonFungibleAddress, nonFungibleAddress.address.toHexString(), line: line)

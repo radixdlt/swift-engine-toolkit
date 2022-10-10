@@ -1,23 +1,26 @@
 import Foundation
 
-public struct CloneProof: Sendable, Codable, Hashable {
+public struct CloneProof: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .cloneProof
+    public func embed() -> Instruction {
+        .cloneProof(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
-    public let proof: Proof
-    public let intoProof: Proof
+    public let source: Proof
+    public let target: Proof
     
     // =============
     // Constructors
     // =============
     
-    public init(from proof: Proof, intoProof: Proof) {
-        self.proof = proof
-        self.intoProof = intoProof
+    public init(from source: Proof, to target: Proof) {
+        self.source = source
+        self.target = target
     }
 }
 
@@ -39,8 +42,8 @@ public extension CloneProof {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(proof, forKey: .proof)
-        try container.encode(intoProof, forKey: .intoProof)
+        try container.encode(source, forKey: .proof)
+        try container.encode(target, forKey: .intoProof)
     }
     
     init(from decoder: Decoder) throws {
@@ -51,9 +54,9 @@ public extension CloneProof {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let proof: Proof = try container.decode(Proof.self, forKey: .proof)
-        let intoProof: Proof = try container.decode(Proof.self, forKey: .intoProof)
+        let source = try container.decode(Proof.self, forKey: .proof)
+        let target = try container.decode(Proof.self, forKey: .intoProof)
         
-        self = Self(from: proof, intoProof: intoProof)
+        self.init(from: source, to: target)
     }
 }

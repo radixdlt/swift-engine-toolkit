@@ -12,7 +12,7 @@
 class TestCase: XCTestCase {
     
     var sut = EngineToolkit()
-    var debugPrint = true
+    var debugPrint = false
     
     override func setUp() {
         super.setUp()

@@ -1,8 +1,11 @@
 import Foundation
 
-public struct U16: Sendable, Codable, Hashable {
+public struct U16: ValueProtocol, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .u16
+    public func embedValue() -> Value {
+        .u16(self)
+    }
     
     // ===============
     // Struct members
@@ -13,10 +16,12 @@ public struct U16: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: UInt16) {
+    public init(value: UInt16) {
         self.value = value
     }
-
+    public init(integerLiteral value: UInt16) {
+        self.init(value: value)
+    }
 }
 
 public extension U16 {

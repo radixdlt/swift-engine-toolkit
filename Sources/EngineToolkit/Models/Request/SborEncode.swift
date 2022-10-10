@@ -10,12 +10,12 @@ public struct SborEncodeResponse: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from encodedValue: [UInt8]) {
-        self.encodedValue = encodedValue
+    public init(bytes: [UInt8]) {
+        self.encodedValue = bytes
     }
     
-    public init(from encodedValue: String) {
-        self.encodedValue = [UInt8](hex: encodedValue)
+    public init(hex: String) throws {
+        self.init(bytes: try [UInt8](hex: hex))
     }
 
 }
@@ -41,7 +41,7 @@ public extension SborEncodeResponse {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = Self(from: try container.decode(String.self, forKey: .encodedValue))
+        try self.init(hex: container.decode(String.self, forKey: .encodedValue))
         
     }
 }

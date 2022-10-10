@@ -1,8 +1,11 @@
 import Foundation
 
-public struct CallMethod: Sendable, Codable, Hashable {
+public struct CallMethod: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .callMethod
+    public func embed() -> Instruction {
+        .callMethod(self)
+    }
     
     // ===============
     // Struct members
@@ -16,11 +19,36 @@ public struct CallMethod: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from componentAddress: ComponentAddress, methodName: String_, arguments: [Value]?) {
+    public init(componentAddress: ComponentAddress, methodName: String_, arguments: [Value] = []) {
         self.componentAddress = componentAddress
         self.methodName = methodName
-        self.arguments = arguments ?? [Value]([])
+        self.arguments = arguments
     }
+    
+    public init(
+        componentAddress: ComponentAddress,
+        methodName: String_,
+        @ValuesBuilder buildValues: () throws -> [any ValueProtocol]
+    ) rethrows {
+        self.init(
+            componentAddress: componentAddress,
+            methodName: methodName,
+            arguments: try buildValues().map { $0.embedValue() }
+        )
+    }
+    
+    public init(
+        componentAddress: ComponentAddress,
+        methodName: String_,
+        @SpecificValuesBuilder buildValues: () throws -> [Value]
+    ) rethrows {
+        self.init(
+            componentAddress: componentAddress,
+            methodName: methodName,
+            arguments: try buildValues()
+        )
+    }
+ 
 }
 
 public extension CallMethod {
@@ -55,10 +83,10 @@ public extension CallMethod {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let componentAddress: ComponentAddress = try container.decode(ComponentAddress.self, forKey: .componentAddress)
-        let methodName: String_ = try container.decode(String_.self, forKey: .methodName)
-        let arguments: [Value] = try container.decode([Value].self, forKey: .arguments)
+        let componentAddress = try container.decode(ComponentAddress.self, forKey: .componentAddress)
+        let methodName = try container.decode(String_.self, forKey: .methodName)
+        let arguments = try container.decode([Value].self, forKey: .arguments)
         
-        self = Self(from: componentAddress, methodName: methodName, arguments: arguments)
+        self = Self(componentAddress: componentAddress, methodName: methodName, arguments: arguments)
     }
 }

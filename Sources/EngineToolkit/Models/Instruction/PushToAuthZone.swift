@@ -1,8 +1,11 @@
 import Foundation
 
-public struct PushToAuthZone: Sendable, Codable, Hashable {
+public struct PushToAuthZone: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .pushToAuthZone
+    public func embed() -> Instruction {
+        .pushToAuthZone(self)
+    }
     
     // ===============
     // Struct members

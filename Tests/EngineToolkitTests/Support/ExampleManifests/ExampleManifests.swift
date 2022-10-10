@@ -9,6 +9,12 @@ import Foundation
 import CryptoKit
 @testable import EngineToolkit
 
+extension TransactionManifest {
+    static let complex = Self(instructions: .string(complexManifestString))
+}
+
+
+
 private let complexManifestString = """
 # Withdraw XRD from account
 CALL_METHOD ComponentAddress("account_sim1q02r73u7nv47h80e30pc3q6ylsj7mgvparm3pnsm780qgsy064") "withdraw_by_amount" Decimal("5.0") ResourceAddress("resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag");
@@ -76,7 +82,7 @@ func testTransaction(
         endEpochExclusive: 10,
         nonce: 0,
         publicKey: .eddsaEd25519(
-            EddsaEd25519PublicKeyString(from: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
+            EddsaEd25519PublicKeyString(bytes: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
         ),
         notaryAsSignature: notaryAsSigner,
         costUnitLimit: 100_000_000,
@@ -94,8 +100,8 @@ func testTransaction(
     let signedTransactionIntent = SignedTransactionIntent(
         transactionIntent: transactionIntent,
         signatures: zip(signatures, signerPrivateKeys).map({ SignatureWithPublicKey.eddsaEd25519(
-            EddsaEd25519PublicKeyString(from: [UInt8]($1.publicKey.rawRepresentation)),
-            EddsaEd25519SignatureString(from: $0)
+            EddsaEd25519PublicKeyString(bytes: [UInt8]($1.publicKey.rawRepresentation)),
+            EddsaEd25519SignatureString(bytes: $0)
         ) })
     )
     
@@ -107,7 +113,7 @@ func testTransaction(
     let notarySignature = [UInt8](try notaryPrivateKey.signature(for: compiledSignedTransactionIntent))
     let notarizedTransaction = NotarizedTransaction(
         signedIntent: signedTransactionIntent,
-        notarySignature: .eddsaEd25519(EddsaEd25519SignatureString(from: notarySignature))
+        notarySignature: .eddsaEd25519(EddsaEd25519SignatureString(bytes: notarySignature))
     )
     let compiledNotarizedTransactionIntent = try sut.compileNotarizedTransactionIntentRequest(request: notarizedTransaction).get().compiledNotarizedIntent
     

@@ -14,7 +14,7 @@ private extension SborEncodeDecodeRequestTests {
         line: UInt = #line
     ) throws {
    
-        let decodeRequest = SborDecodeRequest(
+        let decodeRequest = try SborDecodeRequest(
             encodedHex: vector.encoded
         )
         let decoded = try sut.sborDecodeRequest(request: decodeRequest).get()
@@ -22,7 +22,7 @@ private extension SborEncodeDecodeRequestTests {
         
         let encodeRequest = vector.decoded
         let encoded = try sut.sborEncodeRequest(request: encodeRequest).get()
-        XCTAssertEqual(encoded.encodedValue, [UInt8](hex: vector.encoded), line: line)
+        XCTAssertEqual(encoded.encodedValue, try [UInt8](hex: vector.encoded), line: line)
         
     }
     typealias TestSuite = SborDecodeEncodeTestVectors
@@ -35,151 +35,143 @@ enum SborDecodeEncodeTestVectors {
         // SBOR Primitive Types
         (
             encoded: "0000",
-            decoded: .unitType(Unit())
+            decoded: .unit(Unit())
         ),
         (
             encoded: "0100",
-            decoded: .booleanType(Boolean(from: false))
+            decoded: .boolean(false)
         ),
         (
             encoded: "0101",
-            decoded: .booleanType(Boolean(from: true))
+            decoded: .boolean(true)
         ),
         
         (
             encoded: "0701",
-            decoded: .u8Type(U8(from: 1))
+            decoded: .u8(1)
         ),
         (
             encoded: "080200",
-            decoded: .u16Type(U16(from: 2))
+            decoded: .u16(2)
         ),
         (
             encoded: "0903000000",
-            decoded: .u32Type(U32(from: 3))
+            decoded: .u32(3)
         ),
         (
             encoded: "0a0400000000000000",
-            decoded: .u64Type(U64(from: 4))
+            decoded: .u64(4)
         ),
         (
             encoded: "0b05000000000000000000000000000000",
-            decoded: .u128Type(U128(from: "5"))
+            decoded: .u128("5")
         ),
-        
         (
             encoded: "0206",
-            decoded: .i8Type(I8(from: 6))
+            decoded: .i8(6)
         ),
         (
             encoded: "030700",
-            decoded: .i16Type(I16(from: 7))
+            decoded: .i16(7)
         ),
         (
             encoded: "0408000000",
-            decoded: .i32Type(I32(from: 8))
+            decoded: .i32(8)
         ),
         (
             encoded: "050900000000000000",
-            decoded: .i64Type(I64(from: 9))
+            decoded: .i64(9)
         ),
         (
             encoded: "060a000000000000000000000000000000",
-            decoded: .i128Type(I128(from: "10"))
+            decoded: .i128("10")
         ),
         
         (
             encoded: "0c0c00000048656c6c6f20576f726c6421",
-            decoded: .stringType(String_(from: "Hello World!"))
+            decoded: .string("Hello World!")
         ),
         
         (
             encoded: "1002000000070c0c050000005261646978",
-            decoded: .structType(Struct(
-                from: [
-                    .u8Type(U8(from: 12)),
-                    .stringType(String_(from: "Radix"))
-                ]
-            ))
+            decoded: .struct(Struct {
+                U8(12)
+                String_("Radix")
+            })
         ),
         (
             encoded: "11070000004661737443617202000000070c0c050000005261646978",
-            decoded: .enumType(Enum(
-                from: "FastCar",
-                fields: [
-                    .u8Type(U8(from: 12)),
-                    .stringType(String_(from: "Radix"))
-                ]
-            ))
+            decoded: .enum(Enum("FastCar") {
+                    U8(12)
+                    String_("Radix")
+                })
         ),
         
         (
             encoded: "12000764",
-            decoded: .optionType(.some(.u8Type(U8(from: 100))))
+            decoded: .option(.some(U8(100)))
         ),
         (
             encoded: "1201",
-            decoded: .optionType(.none)
+            decoded: .option(.none)
         ),
         
         (
             encoded: "13000000",
-            decoded: .resultType(.success(.unitType(Unit())))
+            decoded: .result(.success(.unit(Unit())))
         ),
         (
             encoded: "13010000",
-            decoded: .resultType(.failure(.unitType(Unit())))
+            decoded: .result(.failure(.unit(Unit())))
         ),
         
         (
             encoded: "2007020000000c00",
-            decoded: .arrayType(Array_(
-                from: .u8,
-                elements: [
-                    .u8Type(U8(from: 12)),
-                    .u8Type(U8(from: 0)),
-                ]
-            ))
+            decoded: .array(try! Array_(
+                elementType: .u8) {
+                    U8(12)
+                    U8(0)
+                }
+            )
         ),
         (
             encoded: "3107020000000c00",
-            decoded: .setType(Set_(
-                from: .u8,
-                elements: [
-                    .u8Type(U8(from: 12)),
-                    .u8Type(U8(from: 0)),
-                ]
-            ))
+            decoded: .set(try! Set_(
+                elementType: .u8) {
+                    U8(12)
+                    U8(0)
+                }
+            )
         ),
         (
             encoded: "3007020000000c00",
-            decoded: .listType(List(
-                from: .u8,
-                elements: [
-                    .u8Type(U8(from: 12)),
-                    .u8Type(U8(from: 0)),
-                ]
-            ))
+            decoded: .list(try! List(
+                elementType: .u8
+            ) {
+                U8(12)
+                U8(0)
+            }
+            )
         ),
         (
             encoded: "2102000000070c0700",
-            decoded: .tupleType(Tuple(
-                from: [
-                    .u8Type(U8(from: 12)),
-                    .u8Type(U8(from: 0)),
-                ]
-            ))
+            decoded: .tuple(Tuple {
+                U8(12)
+                U8(0)
+            }
+            )
         ),
         (
             encoded: "320707010000000c00",
-            decoded: .mapType(Map(
-                from: .u8,
-                valueType: .u8,
-                elements: [
-                    .u8Type(U8(from: 12)),
-                    .u8Type(U8(from: 0)),
-                ]
-            ))
+            decoded: .map(
+                try! Map(
+                    keyType: .u8,
+                    valueType: .u8
+                ) {
+                    U8(12)
+                    U8(0)
+                }
+            )
         ),
     ]
 }

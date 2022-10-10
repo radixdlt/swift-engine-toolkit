@@ -1,8 +1,11 @@
 import Foundation
 
-public struct PreciseDecimal: Sendable, Codable, Hashable {
+public struct PreciseDecimal: ValueProtocol, ExpressibleByStringLiteral, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .preciseDecimal
+    public func embedValue() -> Value {
+        .preciseDecimal(self)
+    }
     
     // ===============
     // Struct members
@@ -15,8 +18,22 @@ public struct PreciseDecimal: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from value: String) {
+    public init(value: String) {
         self.value = value
+    }
+    
+    public init(integerLiteral value: Int) {
+        self.init(value: "\(value)")
+    }
+    
+    public init(stringLiteral value: StringLiteralType) {
+        self.init(value: value)
+    }
+    
+    // FIXME: investigate which `Locale` is being used here.. might need to use `NumberFormatter`, i.e.
+    // does `"\(value)"` use "," or "." for decimals, and what does Scrypto expect?
+    public init(floatLiteral value: Double) {
+        self.init(value: "\(value)")
     }
 }
 
@@ -48,6 +65,6 @@ public extension PreciseDecimal {
         }
         
         // Decoding `value`
-        value = try container.decode(String.self, forKey: .value)
+        try self.init(value: container.decode(String.self, forKey: .value))
     }
 }

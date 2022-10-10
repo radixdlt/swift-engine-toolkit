@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Vault: Sendable, Codable, Hashable {
+public struct Vault: ValueProtocol, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .vault
+    public func embedValue() -> Value {
+        .vault(self)
+    }
     
     // ===============
     // Struct members
@@ -14,8 +17,12 @@ public struct Vault: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from identifier: String) {
+    public init(identifier: String) {
         self.identifier = identifier
+    }
+    
+    public init(stringLiteral value: String) {
+        self.init(identifier: value)
     }
 }
 
@@ -46,6 +53,6 @@ public extension Vault {
         }
         
         // Decoding `identifier`
-        identifier = try container.decode(String.self, forKey: .identifier)
+        try self.init(identifier: container.decode(String.self, forKey: .identifier))
     }
 }

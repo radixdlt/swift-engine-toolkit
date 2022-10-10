@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Tuple: Sendable, Codable, Hashable {
+public struct Tuple: ValueProtocol, ExpressibleByRadixEngineValues {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .tuple
+    public func embedValue() -> Value {
+        .tuple(self)
+    }
     
     // ===============
     // Struct members
@@ -14,14 +17,12 @@ public struct Tuple: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from elements: [Value]) {
-        self.elements = elements
+    public init(values: [Value]) {
+        self.elements = values
     }
 }
 
 public extension Tuple {
-    
- 
     
     // =======================
     // Coding Keys Definition
@@ -50,6 +51,6 @@ public extension Tuple {
     
         // Decoding `elements`
         // TODO: Validate that all elements are of type `elementType`
-        elements = try container.decode([Value].self, forKey: .elements)
+        try self.init(values: container.decode([Value].self, forKey: .elements))
     }
 }

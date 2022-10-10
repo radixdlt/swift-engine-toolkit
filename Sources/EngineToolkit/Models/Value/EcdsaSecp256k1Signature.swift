@@ -1,26 +1,28 @@
 import Foundation
 
-public struct EcdsaSecp256k1Signature: Sendable, Codable, Hashable {
+public struct EcdsaSecp256k1Signature: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .ecdsaSecp256k1Signature
+    public func embedValue() -> Value {
+        .ecdsaSecp256k1Signature(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
-    public let signature: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from signature: [UInt8]) {
-        self.signature = signature
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
     
-    public init(from signature: String) throws {
-        // TODO: Validation of length of array
-        self.signature = [UInt8](hex: signature)
+    public init(signatureHex: String) throws {
+        try self.init(bytes: [UInt8](hex: signatureHex))
     }
 
 }
@@ -41,7 +43,7 @@ public extension EcdsaSecp256k1Signature {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(signature.toHexString(), forKey: .signature)
+        try container.encode(bytes.toHexString(), forKey: .signature)
     }
     
     init(from decoder: Decoder) throws {
@@ -53,6 +55,6 @@ public extension EcdsaSecp256k1Signature {
         }
         
         // Decoding `signature`
-        self = try Self(from: try container.decode(String.self, forKey: .signature))
+        try self.init(signatureHex: container.decode(String.self, forKey: .signature))
     }
 }

@@ -1,26 +1,29 @@
 import Foundation
 
-public struct Hash: Sendable, Codable, Hashable {
+public struct Hash: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .hash
+    public func embedValue() -> Value {
+        .hash(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
-    public let value: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from value: [UInt8]) {
-        self.value = value
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
     
-    public init(from value: String) throws {
+    public init(hex: String) throws {
         // TODO: Validation of length of Hash
-        self.value = [UInt8](hex: value)
+        self.init(bytes: try [UInt8](hex: hex))
     }
 
 }
@@ -41,7 +44,7 @@ public extension Hash {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(value.toHexString(), forKey: .value)
+        try container.encode(bytes.toHexString(), forKey: .value)
     }
     
     init(from decoder: Decoder) throws {
@@ -53,6 +56,6 @@ public extension Hash {
         }
         
         // Decoding `value`
-        self = try Self(from: try container.decode(String.self, forKey: .value))
+        try self.init(hex: container.decode(String.self, forKey: .value))
     }
 }

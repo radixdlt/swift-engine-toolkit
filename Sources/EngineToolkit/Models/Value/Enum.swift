@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Enum: Sendable, Codable, Hashable {
+public struct Enum: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .enum
+    public func embedValue() -> Value {
+        .enum(self)
+    }
     
     // ===============
     // Struct members
@@ -15,10 +18,24 @@ public struct Enum: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from variant: String, fields: [Value]) {
+    public init(_ variant: String, fields: [Value]) {
         self.variant = variant
         self.fields = fields
     }
+    
+    public init(
+        _ variant: String,
+        @ValuesBuilder fields: () throws -> [any ValueProtocol]
+    ) rethrows {
+        try self.init(variant, fields: fields().map { $0.embedValue() })
+    }
+    public init(
+        _ variant: String,
+        @SpecificValuesBuilder fields: () throws -> [Value]
+    ) rethrows {
+        try self.init(variant, fields: fields())
+    }
+    
 }
 
 public extension Enum {
@@ -50,10 +67,10 @@ public extension Enum {
         if kind != Self.kind {
             throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
-        
-        // Decoding `variant`
-        variant = try container.decode(String.self, forKey: .variant)
-        // Decoding `fields`
-        fields = try container.decode([Value].self, forKey: .fields)
+   
+        try self.init(
+            container.decode(String.self, forKey: .variant),
+            fields: container.decode([Value].self, forKey: .fields)
+        )
     }
 }

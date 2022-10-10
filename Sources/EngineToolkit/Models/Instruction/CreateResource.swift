@@ -1,23 +1,25 @@
 import Foundation
 
-public struct CreateResource: Sendable, Codable, Hashable {
+public struct CreateResource: InstructionProtocol, ExpressibleByRadixEngineValues {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .createResource
+    public func embed() -> Instruction {
+        .createResource(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
-    public let args: [Value]
+    public let values: [Value]
     
     // =============
     // Constructors
     // =============
     
-    public init(from args: [Value]) {
-        self.args = args
+    public init(values: [Value]) {
+        self.values = values
     }
-
 }
 
 public extension CreateResource {
@@ -37,7 +39,7 @@ public extension CreateResource {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(args, forKey: .args)
+        try container.encode(values, forKey: .args)
     }
     
     init(from decoder: Decoder) throws {
@@ -48,8 +50,6 @@ public extension CreateResource {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let args: [Value] = try container.decode([Value].self, forKey: .args)
-        
-        self = Self(from: args)
+        try self.init(values: container.decode([Value].self, forKey: .args))
     }
 }

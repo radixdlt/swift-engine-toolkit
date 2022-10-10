@@ -1,8 +1,11 @@
 import Foundation
 
-public struct AssertWorktopContains: Sendable, Codable, Hashable {
+public struct AssertWorktopContains: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .assertWorktopContains
+    public func embed() -> Instruction {
+        .assertWorktopContains(self)
+    }
     
     // ===============
     // Struct members
@@ -14,7 +17,7 @@ public struct AssertWorktopContains: Sendable, Codable, Hashable {
     // Constructors
     // =============
     
-    public init(from resourceAddress: ResourceAddress) {
+    public init(resourceAddress: ResourceAddress) {
         self.resourceAddress = resourceAddress
     }
 }
@@ -49,6 +52,6 @@ public extension AssertWorktopContains {
         
         let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
         
-        self = Self(from: resourceAddress)
+        self.init(resourceAddress: resourceAddress)
     }
 }

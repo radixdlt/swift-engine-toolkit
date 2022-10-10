@@ -1,23 +1,30 @@
 import Foundation
 
-public struct AssertWorktopContainsByAmount: Sendable, Codable, Hashable {
+public struct AssertWorktopContainsByAmount: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .assertWorktopContainsByAmount
+    public func embed() -> Instruction {
+        .assertWorktopContainsByAmount(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
-    public let resourceAddress: ResourceAddress
     public let amount: Decimal_
+    public let resourceAddress: ResourceAddress
     
     // =============
     // Constructors
     // =============
     
-    public init(from resourceAddress: ResourceAddress, amount: Decimal_) {
-        self.resourceAddress = resourceAddress
+    // Using same order of args as Scrypto: AMOUNT, ADDRESS
+    public init(
+        amount: Decimal_,
+        resourceAddress: ResourceAddress
+    ) {
         self.amount = amount
+        self.resourceAddress = resourceAddress
     }
 }
 
@@ -54,6 +61,9 @@ public extension AssertWorktopContainsByAmount {
         let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
         let amount: Decimal_ = try container.decode(Decimal_.self, forKey: .amount)
         
-        self = Self(from: resourceAddress, amount: amount)
+        self.init(
+            amount: amount,
+            resourceAddress: resourceAddress
+        )
     }
 }

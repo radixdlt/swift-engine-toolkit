@@ -1,26 +1,28 @@
 import Foundation
 
-public struct EcdsaSecp256k1PublicKey: Sendable, Codable, Hashable {
+public struct EcdsaSecp256k1PublicKey: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .ecdsaSecp256k1PublicKey
+    public func embedValue() -> Value {
+        .ecdsaSecp256k1PublicKey(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
-    public let publicKey: [UInt8]
+    public let bytes: [UInt8]
     
     // =============
     // Constructors
     // =============
     
-    public init(from publicKey: [UInt8]) {
-        self.publicKey = publicKey
+    public init(bytes: [UInt8]) {
+        self.bytes = bytes
     }
     
-    public init(from publicKey: String) throws {
-        // TODO: Validation of length of array
-        self.publicKey = [UInt8](hex: publicKey)
+    public init(publicKeyHex: String) throws {
+        try self.init(bytes: [UInt8](hex: publicKeyHex))
     }
 
 }
@@ -41,7 +43,7 @@ public extension EcdsaSecp256k1PublicKey {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(publicKey.toHexString(), forKey: .publicKey)
+        try container.encode(bytes.toHexString(), forKey: .publicKey)
     }
     
     init(from decoder: Decoder) throws {
@@ -53,6 +55,6 @@ public extension EcdsaSecp256k1PublicKey {
         }
         
         // Decoding `publicKey`
-        self = try Self(from: try container.decode(String.self, forKey: .publicKey))
+        try self.init(publicKeyHex: container.decode(String.self, forKey: .publicKey))
     }
 }

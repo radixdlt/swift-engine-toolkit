@@ -14,9 +14,11 @@ public struct EncodeAddressRequest: Sendable, Codable, Hashable {
         self.networkId = networkId
     }
     
-	public init(addressHex: String, networkId: NetworkID = .mainnet) {
-        self.address = [UInt8](hex: addressHex)
-        self.networkId = networkId
+	public init(addressHex: String, networkId: NetworkID = .mainnet) throws {
+        self.init(
+            address: try [UInt8](hex: addressHex),
+            networkId: networkId
+        )
     }
 }
 

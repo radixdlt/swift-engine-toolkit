@@ -1,21 +1,24 @@
 import Foundation
 
-public struct PopFromAuthZone: Sendable, Codable, Hashable {
+public struct PopFromAuthZone: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .popFromAuthZone
+    public func embed() -> Instruction {
+        .popFromAuthZone(self)
+    }
     
     // ===============
     // Struct members
     // ===============
     
-    public let intoProof: Proof
+    public let proof: Proof
     
     // =============
     // Constructors
     // =============
     
-    public init(from intoProof: Proof) {
-        self.intoProof = intoProof
+    public init(proof: Proof) {
+        self.proof = proof
     }
 
 }
@@ -37,7 +40,7 @@ public extension PopFromAuthZone {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(intoProof, forKey: .intoProof)
+        try container.encode(proof, forKey: .intoProof)
     }
     
     init(from decoder: Decoder) throws {
@@ -48,8 +51,6 @@ public extension PopFromAuthZone {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let intoProof: Proof = try container.decode(Proof.self, forKey: .intoProof)
-        
-        self = Self(from: intoProof)
+        try self.init(proof: container.decode(Proof.self, forKey: .intoProof))
     }
 }

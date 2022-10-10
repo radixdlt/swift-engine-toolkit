@@ -1,8 +1,11 @@
 import Foundation
 
-public struct ReturnToWorktop: Sendable, Codable, Hashable {
+public struct ReturnToWorktop: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .returnToWorktop
+    public func embed() -> Instruction {
+        .returnToWorktop(self)
+    }
     
     // ===============
     // Struct members
@@ -12,7 +15,7 @@ public struct ReturnToWorktop: Sendable, Codable, Hashable {
     // =============
     // Constructors
     // =============
-    public init(from bucket: Bucket) {
+    public init(bucket: Bucket) {
         self.bucket = bucket
     }
 }
@@ -44,8 +47,6 @@ public extension ReturnToWorktop {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let bucket: Bucket = try container.decode(Bucket.self, forKey: .bucket)
-        
-        self = Self(from: bucket)
+        try self.init(bucket: container.decode(Bucket.self, forKey: .bucket))
     }
 }

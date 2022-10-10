@@ -1,8 +1,11 @@
 import Foundation
 
-public struct Component: Sendable, Codable, Hashable {
+public struct Component: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .component
+    public func embedValue() -> Value {
+        .component(self)
+    }
     
     // ===============
     // Struct members
