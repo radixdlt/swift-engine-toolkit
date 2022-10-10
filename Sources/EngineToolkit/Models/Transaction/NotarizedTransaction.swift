@@ -16,3 +16,4 @@ public struct NotarizedTransaction: Sendable, Codable, Hashable {
         case notarySignature = "notary_signature"
     }
 }
+

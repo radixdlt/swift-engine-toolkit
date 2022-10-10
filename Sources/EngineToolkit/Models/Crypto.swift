@@ -297,6 +297,16 @@ public enum SignatureWithPublicKey: Sendable, Codable, Hashable {
     case ecdsaSecp256k1(EcdsaSecp256k1SignatureString)
     case eddsaEd25519(EddsaEd25519PublicKeyString, EddsaEd25519SignatureString)
 }
+public extension SignatureWithPublicKey {
+    var signature: Signature {
+        switch self {
+        case let .eddsaEd25519(_, signature):
+            return .eddsaEd25519(signature)
+        case let .ecdsaSecp256k1(signature):
+            return .ecdsaSecp256k1(signature)
+        }
+    }
+}
 
 private extension SignatureWithPublicKey {
    

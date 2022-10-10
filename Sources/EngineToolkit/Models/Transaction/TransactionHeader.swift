@@ -14,7 +14,7 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
     public let endEpochExclusive: UInt64
     public let nonce: UInt64
     public let publicKey: PublicKey
-    public let notaryAsSignature: Bool
+    public let notaryAsSignatory: Bool
     public let costUnitLimit: UInt32
     public let tipPercentage: UInt32
     
@@ -25,7 +25,7 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
         case endEpochExclusive = "end_epoch_exclusive"
         case nonce = "nonce"
         case publicKey = "notary_public_key"
-        case notaryAsSignature = "notary_as_signatory"
+        case notaryAsSignatory = "notary_as_signatory"
         case costUnitLimit = "cost_unit_limit"
         case tipPercentage = "tip_percentage"
     }
