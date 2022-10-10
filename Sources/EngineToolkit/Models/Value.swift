@@ -73,150 +73,6 @@ public indirect enum Value_: Sendable, Codable, Hashable {
 }
 
 public extension Value {
-    // =============
-    // Constructors
-    // =============
-    
-    init(value: Unit) {
-        self = .unit(value)
-    }
-    init(value: Boolean) {
-        self = .boolean(value)
-    }
-    
-    init(value: I8) {
-        self = .i8(value)
-    }
-    init(value: I16) {
-        self = .i16(value)
-    }
-    init(value: I32) {
-        self = .i32(value)
-    }
-    init(value: I64) {
-        self = .i64(value)
-    }
-    init(value: I128) {
-        self = .i128(value)
-    }
-    
-    init(value: U8) {
-        self = .u8(value)
-    }
-    init(value: U16) {
-        self = .u16(value)
-    }
-    init(value: U32) {
-        self = .u32(value)
-    }
-    init(value: U64) {
-        self = .u64(value)
-    }
-    init(value: U128) {
-        self = .u128(value)
-    }
-    
-    init(value: String_) {
-        self = .string(value)
-    }
-    
-    init(value: Struct) {
-        self = .struct(value)
-    }
-    init(value: Enum) {
-        self = .enum(value)
-    }
-    
-    init(value: Option) {
-        self = .option(value)
-    }
-    init(value: Array_) {
-        self = .array(value)
-    }
-    init(value: Tuple) {
-        self = .tuple(value)
-    }
-    init(value: Result<Value, Value>) {
-        self = .result(value)
-    }
-    
-    init(value: List) {
-        self = .list(value)
-    }
-    init(value: Set_) {
-        self = .set(value)
-    }
-    init(value: Map) {
-        self = .map(value)
-    }
-    
-    init(value: Decimal_) {
-        self = .decimal(value)
-    }
-    init(value: PreciseDecimal) {
-        self = .preciseDecimal(value)
-    }
-    
-    init(value: Component) {
-        self = .component(value)
-    }
-    init(value: PackageAddress) {
-        self = .packageAddress(value)
-    }
-    init(value: ComponentAddress) {
-        self = .componentAddress(value)
-    }
-    init(value: ResourceAddress) {
-        self = .resourceAddress(value)
-    }
-    
-    init(value: Hash) {
-        self = .hash(value)
-    }
-    
-    init(value: Bucket) {
-        self = .bucket(value)
-    }
-    init(value: Proof) {
-        self = .proof(value)
-    }
-    init(value: Vault) {
-        self = .vault(value)
-    }
-    
-    init(value: NonFungibleId) {
-        self = .nonFungibleId(value)
-    }
-    init(value: NonFungibleAddress) {
-        self = .nonFungibleAddress(value)
-    }
-    
-    init(value: KeyValueStore) {
-        self = .keyValueStore(value)
-    }
-    
-    init(value: EcdsaSecp256k1PublicKey) {
-        self = .ecdsaSecp256k1PublicKey(value)
-    }
-    init(value: EcdsaSecp256k1Signature) {
-        self = .ecdsaSecp256k1Signature(value)
-    }
-    init(value: EddsaEd25519PublicKey) {
-        self = .eddsaEd25519PublicKey(value)
-    }
-    init(value: EddsaEd25519Signature) {
-        self = .eddsaEd25519Signature(value)
-    }
-    
-    init(value: Blob) {
-        self = .blob(value)
-    }
-    init(value: Expression) {
-        self = .expression(value)
-    }
-}
-
-public extension Value {
     
     // ===========
     // Value Kind
@@ -445,101 +301,127 @@ public extension Value {
         switch kind {
             
         case .unit:
-            self = try Self(value: Unit(from: decoder))
+            self = try .unit(.init(from: decoder))
+        
         case .bool:
-            self = try Self(value: Boolean(from: decoder))
+            self = try .boolean(.init(from: decoder))
 
         case .i8:
-            self = try Self(value: I8(from: decoder))
+            self = try .i8(.init(from: decoder))
+        
         case .i16:
-            self = try Self(value: I16(from: decoder))
+            self = try .i16(.init(from: decoder))
+        
         case .i32:
-            self = try Self(value: I32(from: decoder))
+            self = try .i32(.init(from: decoder))
+        
         case .i64:
-            self = try Self(value: I64(from: decoder))
+            self = try .i64(.init(from: decoder))
+        
         case .i128:
-            self = try Self(value: I128(from: decoder))
+            self = try .i128(.init(from: decoder))
 
         case .u8:
-            self = try Self(value: U8(from: decoder))
+            self = try .u8(.init(from: decoder))
+        
         case .u16:
-            self = try Self(value: U16(from: decoder))
+            self = try .u16(.init(from: decoder))
+        
         case .u32:
-            self = try Self(value: U32(from: decoder))
+            self = try .u32(.init(from: decoder))
+        
         case .u64:
-            self = try Self(value: U64(from: decoder))
+            self = try .u64(.init(from: decoder))
+        
         case .u128:
-            self = try Self(value: U128(from: decoder))
+            self = try .u128(.init(from: decoder))
 
         case .string:
-            self = try Self(value: String_(from: decoder))
+            self = try .string(.init(from: decoder))
 
         case .struct:
-            self = try Self(value: Struct(from: decoder))
+            self = try .struct(.init(from: decoder))
+        
         case .enum:
-            self = try Self(value: Enum(from: decoder))
+            self = try .enum(.init(from: decoder))
 
         case .option:
-            self = try Self(value: Option(from: decoder))
+            self = try .option(.init(from: decoder))
+        
         case .array:
-            self = try Self(value: Array_(from: decoder))
+            self = try .array(.init(from: decoder))
+        
         case .tuple:
-            self = try Self(value: Tuple(from: decoder))
+            self = try .tuple(.init(from: decoder))
+        
         case .result:
-            self = try Self(value: Result(from: decoder))
+            self = try .result(.init(from: decoder))
 
         case .list:
-            self = try Self(value: List(from: decoder))
+            self = try .list(.init(from: decoder))
+        
         case .set:
-            self = try Self(value: Set_(from: decoder))
+            self = try .set(.init(from: decoder))
+        
         case .map:
-            self = try Self(value: Map(from: decoder))
+            self = try .map(.init(from: decoder))
 
         case .decimal:
-            self = try Self(value: Decimal_(from: decoder))
+            self = try .decimal(.init(from: decoder))
+        
         case .preciseDecimal:
-            self = try Self(value: PreciseDecimal(from: decoder))
+            self = try .preciseDecimal(.init(from: decoder))
 
         case .component:
-            self = try Self(value: Component(from: decoder))
+            self = try .component(.init(from: decoder))
+        
         case .packageAddress:
-            self = try Self(value: PackageAddress(from: decoder))
+            self = try .packageAddress(.init(from: decoder))
+        
         case .componentAddress:
-            self = try Self(value: ComponentAddress(from: decoder))
+            self = try .componentAddress(.init(from: decoder))
+        
         case .resourceAddress:
-            self = try Self(value: ResourceAddress(from: decoder))
+            self = try .resourceAddress(.init(from: decoder))
 
         case .hash:
-            self = try Self(value: Hash(from: decoder))
+            self = try .hash(.init(from: decoder))
 
         case .bucket:
-            self = try Self(value: Bucket(from: decoder))
+            self = try .bucket(.init(from: decoder))
+        
         case .proof:
-            self = try Self(value: Proof(from: decoder))
+            self = try .proof(.init(from: decoder))
+        
         case .vault:
-            self = try Self(value: Vault(from: decoder))
+            self = try .vault(.init(from: decoder))
 
         case .nonFungibleId:
-            self = try Self(value: NonFungibleId(from: decoder))
+            self = try .nonFungibleId(.init(from: decoder))
+        
         case .nonFungibleAddress:
-            self = try Self(value: NonFungibleAddress(from: decoder))
+            self = try .nonFungibleAddress(.init(from: decoder))
 
         case .keyValueStore:
-            self = try Self(value: KeyValueStore(from: decoder))
+            self = try .keyValueStore(.init(from: decoder))
 
         case .ecdsaSecp256k1PublicKey:
-            self = try Self(value: EcdsaSecp256k1PublicKey(from: decoder))
+            self = try .ecdsaSecp256k1PublicKey(.init(from: decoder))
+        
         case .ecdsaSecp256k1Signature:
-            self = try Self(value: EcdsaSecp256k1Signature(from: decoder))
+            self = try .ecdsaSecp256k1Signature(.init(from: decoder))
+        
         case .eddsaEd25519PublicKey:
-            self = try Self(value: EddsaEd25519PublicKey(from: decoder))
+            self = try .eddsaEd25519PublicKey(.init(from: decoder))
+        
         case .eddsaEd25519Signature:
-            self = try Self(value: EddsaEd25519Signature(from: decoder))
+            self = try .eddsaEd25519Signature(.init(from: decoder))
 
         case .blob:
-            self = try Self(value: Blob(from: decoder))
+            self = try .blob(.init(from: decoder))
+        
         case .expression:
-            self = try Self(value: Expression(from: decoder))
+            self = try .expression(.init(from: decoder))
 
         }
     }
