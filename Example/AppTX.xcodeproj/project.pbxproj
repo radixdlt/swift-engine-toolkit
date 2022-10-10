@@ -7,21 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		48E3E3DF28F3F17C00930162 /* EngineToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = 48E3E3DE28F3F17C00930162 /* EngineToolkit */; };
 		E618162E28EC294800B4E578 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E618162928EC294700B4E578 /* Preview Assets.xcassets */; };
 		E618162F28EC294800B4E578 /* AppTXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618162A28EC294700B4E578 /* AppTXApp.swift */; };
 		E618163028EC294800B4E578 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E618162B28EC294700B4E578 /* Assets.xcassets */; };
 		E618163128EC294800B4E578 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618162C28EC294800B4E578 /* ContentView.swift */; };
-		E6EF2F4F28EDDAC30015AF17 /* EngineToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = E6EF2F4E28EDDAC30015AF17 /* EngineToolkit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		48E3E3DD28F3F16A00930162 /* swift-engine-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swift-engine-toolkit"; path = ..; sourceTree = "<group>"; };
 		E618161628EC28C600B4E578 /* AppTX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppTX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E618162928EC294700B4E578 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E618162A28EC294700B4E578 /* AppTXApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppTXApp.swift; sourceTree = "<group>"; };
 		E618162B28EC294700B4E578 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E618162C28EC294800B4E578 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E618162D28EC294800B4E578 /* AppTX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = AppTX.entitlements; sourceTree = "<group>"; };
-		E6EF2F4D28EDDABA0015AF17 /* EngineToolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = EngineToolkit; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,7 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6EF2F4F28EDDAC30015AF17 /* EngineToolkit in Frameworks */,
+				48E3E3DF28F3F17C00930162 /* EngineToolkit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,7 +69,7 @@
 		E618163228EC29CB00B4E578 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				E6EF2F4D28EDDABA0015AF17 /* EngineToolkit */,
+				48E3E3DD28F3F16A00930162 /* swift-engine-toolkit */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -95,11 +95,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				E6EF2F5128EDDAC60015AF17 /* PBXTargetDependency */,
+				48E3E3E128F3F18100930162 /* PBXTargetDependency */,
 			);
 			name = AppTX;
 			packageProductDependencies = (
-				E6EF2F4E28EDDAC30015AF17 /* EngineToolkit */,
+				48E3E3DE28F3F17C00930162 /* EngineToolkit */,
 			);
 			productName = AppTX;
 			productReference = E618161628EC28C600B4E578 /* AppTX.app */;
@@ -164,9 +164,9 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E6EF2F5128EDDAC60015AF17 /* PBXTargetDependency */ = {
+		48E3E3E128F3F18100930162 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = E6EF2F5028EDDAC60015AF17 /* EngineToolkit */;
+			productRef = 48E3E3E028F3F18100930162 /* EngineToolkit */;
 		};
 /* End PBXTargetDependency section */
 
@@ -377,11 +377,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E6EF2F4E28EDDAC30015AF17 /* EngineToolkit */ = {
+		48E3E3DE28F3F17C00930162 /* EngineToolkit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EngineToolkit;
 		};
-		E6EF2F5028EDDAC60015AF17 /* EngineToolkit */ = {
+		48E3E3E028F3F18100930162 /* EngineToolkit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EngineToolkit;
 		};
