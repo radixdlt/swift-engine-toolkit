@@ -1,13 +1,9 @@
 public struct DeriveNonFungibleAddressRequest: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let resourceAddress: String
     public let nonFungibleId: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(resourceAddress: String, nonFungibleId: [UInt8]) {
         self.resourceAddress = resourceAddress
@@ -20,17 +16,13 @@ public struct DeriveNonFungibleAddressRequest: Sendable, Codable, Hashable {
 }
 
 public extension DeriveNonFungibleAddressRequest {
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case resourceAddress = "resource_address"
         case nonFungibleId = "non_fungible_id"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(resourceAddress, forKey: .resourceAddress)
@@ -48,22 +40,16 @@ public extension DeriveNonFungibleAddressRequest {
 }
 
 public struct DeriveNonFungibleAddressResponse: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let nonFungibleAddress: String
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from nonFungibleAddress: String) {
         self.nonFungibleAddress = nonFungibleAddress
     }
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case nonFungibleAddress = "non_fungible_address"
     }

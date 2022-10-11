@@ -7,16 +7,11 @@ public struct AssertWorktopContainsByIds: InstructionProtocol {
         .assertWorktopContainsByIds(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let resourceAddress: ResourceAddress
     public let ids: Set<NonFungibleId>
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>) {
         self.resourceAddress = resourceAddress
@@ -26,18 +21,14 @@ public struct AssertWorktopContainsByIds: InstructionProtocol {
 
 public extension AssertWorktopContainsByIds {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case ids
         case resourceAddress = "resource_address"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

@@ -7,16 +7,11 @@ public struct Enum: ValueProtocol, Sendable, Codable, Hashable {
         .enum(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let variant: String
     public let fields: [Value]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(_ variant: String, fields: [Value]) {
         self.variant = variant
@@ -40,18 +35,14 @@ public struct Enum: ValueProtocol, Sendable, Codable, Hashable {
 
 public extension Enum {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case variant
         case type
         case fields
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

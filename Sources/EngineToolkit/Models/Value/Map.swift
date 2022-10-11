@@ -1,6 +1,5 @@
 import Foundation
 
-// TODO: Replace with `Swift.Dictionary`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
 public struct Map: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByDictionaryLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .map
@@ -8,17 +7,12 @@ public struct Map: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByDict
         .map(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let keyType: ValueKind
     public let valueType: ValueKind
     public let keyValuePairs: [KeyValuePair]
 
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(keyType: ValueKind, valueType: ValueKind) {
         self.keyType = keyType
@@ -141,16 +135,12 @@ public extension Map {
 
 public extension Map {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case keyValuePairsInterleaved = "elements", keyType = "key_type", valueType = "value_type", type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

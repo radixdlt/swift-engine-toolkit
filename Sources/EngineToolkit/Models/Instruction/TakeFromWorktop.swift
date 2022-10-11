@@ -7,16 +7,11 @@ public struct TakeFromWorktop: InstructionProtocol {
         .takeFromWorktop(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let resourceAddress: ResourceAddress
     public let bucket: Bucket
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(resourceAddress: ResourceAddress, bucket: Bucket) {
         self.resourceAddress = resourceAddress
@@ -27,18 +22,14 @@ public struct TakeFromWorktop: InstructionProtocol {
 
 public extension TakeFromWorktop {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case resourceAddress = "resource_address"
         case intoBucket = "into_bucket"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

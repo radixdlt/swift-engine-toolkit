@@ -7,17 +7,12 @@ public struct CreateProofFromAuthZoneByIds: InstructionProtocol {
         .createProofFromAuthZoneByIds(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let resourceAddress: ResourceAddress
     public let ids: Set<NonFungibleId>
     public let intoProof: Proof
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>, intoProof: Proof) {
         self.resourceAddress = resourceAddress
@@ -29,9 +24,7 @@ public struct CreateProofFromAuthZoneByIds: InstructionProtocol {
 
 public extension CreateProofFromAuthZoneByIds {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case ids
@@ -39,9 +32,7 @@ public extension CreateProofFromAuthZoneByIds {
         case intoProof = "into_proof"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

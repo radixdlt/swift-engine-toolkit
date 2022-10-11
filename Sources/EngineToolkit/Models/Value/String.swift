@@ -9,9 +9,7 @@ extension String: ValueProtocol, ProxyCodable {
     }
     
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case value, type
     }

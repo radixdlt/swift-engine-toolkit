@@ -7,15 +7,10 @@ public struct Blob: ValueProtocol, Sendable, Codable, Hashable {
         .blob(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let bytes: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(bytes: [UInt8]) {
         self.bytes = bytes
@@ -30,16 +25,12 @@ public struct Blob: ValueProtocol, Sendable, Codable, Hashable {
 
 public extension Blob {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case hash, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

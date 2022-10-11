@@ -9,18 +9,14 @@ import Foundation
 
 public extension TransactionManifest {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type
         case instructions
         case blobs
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         let hexBlobs = blobs.map { $0.toHexString() }

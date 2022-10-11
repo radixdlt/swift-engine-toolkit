@@ -1,15 +1,10 @@
 import Foundation
 
 public struct EcdsaSecp256k1SignatureString: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let bytes: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(bytes: [UInt8]) {
         self.bytes = bytes
@@ -22,16 +17,12 @@ public struct EcdsaSecp256k1SignatureString: Sendable, Codable, Hashable {
 
 public extension EcdsaSecp256k1SignatureString {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
         try container.encode(bytes.toHexString())
@@ -44,15 +35,10 @@ public extension EcdsaSecp256k1SignatureString {
 }
 
 public struct EcdsaSecp256k1PublicKeyString: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let bytes: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(bytes: [UInt8]) {
         self.bytes = bytes
@@ -66,16 +52,12 @@ public struct EcdsaSecp256k1PublicKeyString: Sendable, Codable, Hashable {
 
 public extension EcdsaSecp256k1PublicKeyString {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
         try container.encode(bytes.toHexString())
@@ -88,15 +70,10 @@ public extension EcdsaSecp256k1PublicKeyString {
 }
 
 public struct EddsaEd25519SignatureString: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let bytes: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(bytes: [UInt8]) {
         self.bytes = bytes
@@ -109,16 +86,12 @@ public struct EddsaEd25519SignatureString: Sendable, Codable, Hashable {
 
 public extension EddsaEd25519SignatureString {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
         try container.encode(bytes.toHexString())
@@ -131,15 +104,10 @@ public extension EddsaEd25519SignatureString {
 }
 
 public struct EddsaEd25519PublicKeyString: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let bytes: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(bytes: [UInt8]) {
         self.bytes = bytes
@@ -153,16 +121,12 @@ public struct EddsaEd25519PublicKeyString: Sendable, Codable, Hashable {
 
 public extension EddsaEd25519PublicKeyString {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
         try container.encode(bytes.toHexString())
@@ -184,17 +148,13 @@ public enum PublicKey: Sendable, Codable, Hashable {
 }
 
 public extension PublicKey {
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type
         case publicKey = "public_key"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
@@ -251,18 +211,14 @@ private extension Signature {
 
 public extension Signature {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type
         case signature
     }
     
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(discriminator, forKey: .type)
@@ -311,18 +267,14 @@ private extension SignatureWithPublicKey {
 
 public extension SignatureWithPublicKey {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type
         case publicKey = "public_key"
         case signature
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(discriminator, forKey: .type)

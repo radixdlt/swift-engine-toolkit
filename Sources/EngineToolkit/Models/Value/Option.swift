@@ -1,6 +1,5 @@
 import Foundation
 
-// TODO: Replace with `Swift.Optional`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
 extension Optional: ValueProtocol where Wrapped == Value {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .option
@@ -25,9 +24,7 @@ public extension Optional where Wrapped == Value {
 // MARK: Codable
 extension Optional: ProxyCodable where Wrapped == Value {
   
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case variant
         case type

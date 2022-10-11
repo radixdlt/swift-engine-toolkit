@@ -7,17 +7,12 @@ public struct TakeFromWorktopByIds: InstructionProtocol {
         .takeFromWorktopByIds(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let resourceAddress: ResourceAddress
     public let ids: Set<NonFungibleId>
     public let bucket: Bucket
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     // Same order as scrypto: IDS, Address, Bucket
     public init(
@@ -34,9 +29,7 @@ public struct TakeFromWorktopByIds: InstructionProtocol {
 
 public extension TakeFromWorktopByIds {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case ids
@@ -44,9 +37,7 @@ public extension TakeFromWorktopByIds {
         case intoBucket = "into_bucket"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

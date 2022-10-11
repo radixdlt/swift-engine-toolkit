@@ -1,6 +1,5 @@
 import Foundation
 
-// TODO: Replace with `Swift.Set`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
 public struct Set_: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .set
@@ -8,16 +7,11 @@ public struct Set_: ValueProtocol, Sendable, Codable, Hashable {
         .set(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let elementType: ValueKind
     public let elements: [Value]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     public init(
         elementType: ValueKind,
         elements: [Value]
@@ -62,16 +56,12 @@ public extension Set_ {
 
 public extension Set_ {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case elements, elementType = "element_type", type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

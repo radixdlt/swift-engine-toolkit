@@ -7,15 +7,10 @@ public struct ResourceAddress: ValueProtocol, Sendable, Codable, Hashable, Addre
         .resourceAddress(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let address: String
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(address: String) {
         // TODO: Perform some simple Bech32m validation.
@@ -24,16 +19,12 @@ public struct ResourceAddress: ValueProtocol, Sendable, Codable, Hashable, Addre
 }
 
 public extension ResourceAddress {
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case address, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

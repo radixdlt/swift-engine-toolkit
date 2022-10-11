@@ -1,22 +1,16 @@
 public typealias DeriveNonFungibleAddressFromPublicKeyRequest = PublicKey
 
 public struct DeriveNonFungibleAddressFromPublicKeyResponse: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let nonFungibleAddress: String
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from nonFungibleAddress: String) {
         self.nonFungibleAddress = nonFungibleAddress
     }
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case nonFungibleAddress = "non_fungible_address"
     }

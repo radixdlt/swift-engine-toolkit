@@ -1,12 +1,8 @@
 public struct ExtractAbiRequest: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let packageWasm: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from packageWasm: [UInt8]) {
         self.packageWasm = packageWasm
@@ -20,16 +16,12 @@ public struct ExtractAbiRequest: Sendable, Codable, Hashable {
 
 public extension ExtractAbiRequest {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case packageWasm = "package_wasm"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(packageWasm.toHexString(), forKey: .packageWasm)
@@ -44,15 +36,11 @@ public extension ExtractAbiRequest {
 }
 
 public struct ExtractAbiResponse: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let code: [UInt8]
     public let abi: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from code: [UInt8], abi: [UInt8]) {
         self.code = code
@@ -68,17 +56,13 @@ public struct ExtractAbiResponse: Sendable, Codable, Hashable {
 
 public extension ExtractAbiResponse {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case code
         case abi
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(code.toHexString(), forKey: .code)

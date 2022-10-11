@@ -7,15 +7,10 @@ public struct Bucket: ValueProtocol, Sendable, Codable, Hashable, IdentifierConv
         .bucket(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let identifier: Identifier
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(identifier: Identifier) {
         self.identifier = identifier
@@ -24,16 +19,12 @@ public struct Bucket: ValueProtocol, Sendable, Codable, Hashable, IdentifierConv
 
 public extension Bucket {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case identifier, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

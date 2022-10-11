@@ -7,15 +7,10 @@ public struct Struct: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByR
         .struct(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let fields: [Value]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(fields: [Value]) {
         self.fields = fields
@@ -31,16 +26,12 @@ public extension Struct {
 
 public extension Struct {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case fields, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

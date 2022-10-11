@@ -1,14 +1,10 @@
 public typealias SborEncodeRequest = Value
 
 public struct SborEncodeResponse: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let encodedValue: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(bytes: [UInt8]) {
         self.encodedValue = bytes
@@ -22,16 +18,12 @@ public struct SborEncodeResponse: Sendable, Codable, Hashable {
 
 public extension SborEncodeResponse {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case encodedValue = "encoded_value"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(encodedValue.toHexString(), forKey: .encodedValue)
