@@ -69,9 +69,9 @@ extension TransactionManifest {
     init(@InstructionsBuilder buildInstructions: () throws -> [Instruction]) rethrows{
         try self.init(instructions: buildInstructions())
     }
- 
+    
     init(@SpecificInstructionsBuilder buildInstructions: () throws -> [any InstructionProtocol]) rethrows {
         try self.init(instructions: buildInstructions())
     }
- 
+    
 }

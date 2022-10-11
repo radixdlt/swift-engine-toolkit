@@ -33,7 +33,7 @@ let package = Package(
                 "K1",
             ],
             resources: [
-                .copy("Resources"),
+                .process("TestVectors/"),
             ]
         )
     ]

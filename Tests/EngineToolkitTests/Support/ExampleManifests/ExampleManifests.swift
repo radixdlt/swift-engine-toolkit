@@ -65,7 +65,7 @@ typealias TestTransaction = (
 // the EdDSA Ed25519 curve. 
 func testTransaction(
     signerCount: UInt,
-    notaryAsSigner: Bool = true
+    notaryAsSignatory: Bool = true
 ) throws -> TestTransaction {
     // The engine toolkit to use to create this notarized transaction
     let sut = EngineToolkit()
@@ -84,7 +84,7 @@ func testTransaction(
         publicKey: .eddsaEd25519(
             EddsaEd25519PublicKeyString(bytes: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
         ),
-        notaryAsSignature: notaryAsSigner,
+        notaryAsSignatory: notaryAsSignatory,
         costUnitLimit: 100_000_000,
         tipPercentage: 0
     )
