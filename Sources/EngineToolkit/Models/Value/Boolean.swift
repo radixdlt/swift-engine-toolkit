@@ -1,58 +1,45 @@
 import Foundation
 
-public struct Boolean: ValueProtocol, ExpressibleByBooleanLiteral {
+extension Bool: ValueProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .bool
     public func embedValue() -> Value {
         .boolean(self)
     }
-    
-    // ===============
-    // Struct members
-    // ===============
-    public let value: Bool
-    
-    // =============
-    // Constructors
-    // =============
-    
-    public init(value: Bool) {
-        self.value = value
-    }
-    
-    public init(booleanLiteral value: Bool) {
-        self.init(value: value)
-    }
 }
 
-public extension Boolean {
+extension Bool: ProxyCodable {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(Self.kind, forKey: .type)
-        
-        try container.encode(value, forKey: .value)
+    public struct ProxyDecodable: DecodableProxy {
+        public typealias Decoded = Bool
+        public let decoded: Decoded
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
+            if kind != Decoded.kind {
+                throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Decoded.kind, butGot: kind)
+            }
+            
+            // Decoding `value`
+            self.decoded = try container.decode(Bool.self, forKey: .value)
+        }
     }
-    
-    init(from decoder: Decoder) throws {
-        // Checking for type discriminator
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let kind: ValueKind = try container.decode(ValueKind.self, forKey: .type)
-        if kind != Self.kind {
-            throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
+    public struct ProxyEncodable: EncodableProxy {
+        public typealias ToEncode = Bool
+        public let toEncode: ToEncode
+        public init(toEncode: ToEncode) {
+            self.toEncode = toEncode
         }
         
-        // Decoding `value`
-        try self.init(value: container.decode(Bool.self, forKey: .value))
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(ToEncode.kind, forKey: .type)
+            try container.encode(toEncode, forKey: .value)
+        }
     }
 }

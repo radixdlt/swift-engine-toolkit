@@ -7,17 +7,12 @@ public struct TakeFromWorktopByAmount: InstructionProtocol {
         .takeFromWorktopByAmount(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let amount: Decimal_
     public let resourceAddress: ResourceAddress
     public let bucket: Bucket
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     // Using same order as Scrypto uses, AMOUNT, ADDRESS, BUCKET
     public init(
@@ -33,9 +28,7 @@ public struct TakeFromWorktopByAmount: InstructionProtocol {
 
 public extension TakeFromWorktopByAmount {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case amount
@@ -43,9 +36,7 @@ public extension TakeFromWorktopByAmount {
         case intoBucket = "into_bucket"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

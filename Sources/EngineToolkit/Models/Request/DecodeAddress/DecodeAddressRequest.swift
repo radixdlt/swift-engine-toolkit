@@ -1,12 +1,8 @@
 public struct DecodeAddressRequest: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let address: String
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
    
     public init(address: String) {
         self.address = address

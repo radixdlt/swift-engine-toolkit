@@ -1,14 +1,10 @@
 public typealias CompileSignedTransactionIntentRequest = SignedTransactionIntent
 
 public struct CompileSignedTransactionIntentResponse: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let compiledSignedIntent: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from compiledIntent: [UInt8]) {
         self.compiledSignedIntent = compiledIntent
@@ -21,16 +17,12 @@ public struct CompileSignedTransactionIntentResponse: Sendable, Codable, Hashabl
 
 public extension CompileSignedTransactionIntentResponse {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case compiledSignedIntent = "compiled_signed_intent"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(compiledSignedIntent.toHexString(), forKey: .compiledSignedIntent)

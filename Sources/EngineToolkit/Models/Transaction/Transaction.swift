@@ -2,16 +2,11 @@ import Foundation
 
 
 public struct TransactionManifest: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let instructions: ManifestInstructions
     public let blobs: [[UInt8]]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(
         instructions: ManifestInstructions,

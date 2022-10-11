@@ -1,14 +1,10 @@
 public typealias CompileNotarizedTransactionIntentRequest = NotarizedTransaction
 
 public struct CompileNotarizedTransactionIntentResponse: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let compiledNotarizedIntent: [UInt8]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from compiledNotarizedIntent: [UInt8]) {
         self.compiledNotarizedIntent = compiledNotarizedIntent
@@ -21,16 +17,12 @@ public struct CompileNotarizedTransactionIntentResponse: Sendable, Codable, Hash
 
 public extension CompileNotarizedTransactionIntentResponse {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case compiledNotarizedIntent = "compiled_notarized_intent"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(compiledNotarizedIntent.toHexString(), forKey: .compiledNotarizedIntent)

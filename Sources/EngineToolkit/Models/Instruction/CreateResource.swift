@@ -7,15 +7,10 @@ public struct CreateResource: InstructionProtocol, ExpressibleByRadixEngineValue
         .createResource(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let values: [Value]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(values: [Value]) {
         self.values = values
@@ -24,17 +19,13 @@ public struct CreateResource: InstructionProtocol, ExpressibleByRadixEngineValue
 
 public extension CreateResource {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case args
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

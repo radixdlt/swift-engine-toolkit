@@ -1,21 +1,16 @@
 import Foundation
 
-public struct Bucket: ValueProtocol, IdentifierConvertible {
+public struct Bucket: ValueProtocol, Sendable, Codable, Hashable, IdentifierConvertible {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .bucket
     public func embedValue() -> Value {
         .bucket(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let identifier: Identifier
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(identifier: Identifier) {
         self.identifier = identifier
@@ -24,16 +19,12 @@ public struct Bucket: ValueProtocol, IdentifierConvertible {
 
 public extension Bucket {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case identifier, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

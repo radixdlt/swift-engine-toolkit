@@ -1,24 +1,18 @@
 import Foundation
 
-// TODO: Replace with `Swift.Dictionary`? As we did with `Result_` -> `Swift.Result` ( https://github.com/radixdlt/swift-engine-toolkit/pull/6/commits/decc7ebd325eb72fd8f376d1001f7ded7f2dd202 )
-public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
+public struct Map: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByDictionaryLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .map
     public func embedValue() -> Value_ {
         .map(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let keyType: ValueKind
     public let valueType: ValueKind
     public let keyValuePairs: [KeyValuePair]
 
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(keyType: ValueKind, valueType: ValueKind) {
         self.keyType = keyType
@@ -33,14 +27,14 @@ public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
         }
         let keys: [Value_] = try keyValuePairsInterleaved.enumerated().compactMap { offset, value in
             guard offset.isMultiple(of: 2) else { return nil }
-            guard value.kind() == keyType else {
+            guard value.kind == keyType else {
                 throw Error.unexpectedKeyTypeInKeyValuePairs
             }
             return value
         }
         let values: [Value_] = try keyValuePairsInterleaved.enumerated().compactMap { offset, value in
             guard !offset.isMultiple(of: 2) else { return nil }
-            guard value.kind() == valueType else {
+            guard value.kind == valueType else {
                 throw Error.unexpectedValueTypeInKeyValuePairs
             }
             return value
@@ -60,7 +54,7 @@ public struct Map: ValueProtocol, ExpressibleByDictionaryLiteral {
     public init(
         keyType: ValueKind,
         valueType: ValueKind,
-        @ValuesBuilder buildKeyValuePairsInterleaved: () throws -> [any ValueProtocol]
+        @ValuesBuilder buildKeyValuePairsInterleaved: () throws -> [ValueProtocol]
     ) throws {
         try self.init(
             keyType: keyType,
@@ -88,8 +82,8 @@ public extension Map {
     /// type like this:
     ///
     ///     [
-    ///         String_("key0"): U8(0),
-    ///         String_("key1"): U8(2)
+    ///         "key0": Uint8(0),
+    ///         "key1": Uint8(2)
     ///     ]
     ///
     /// instead of this:
@@ -98,13 +92,13 @@ public extension Map {
     ///         keyType: .string,
     ///         valueType: .u8
     ///     ) {
-    ///         String_("key0")
-    ///         U8(0)
-    ///         String_("key1")
-    ///         U8(2)
+    ///         "key0"
+    ///         Uint8(0)
+    ///         "key1"
+    ///         Uint8(2)
     ///     }
     ///
-    init(dictionaryLiteral elements: (any ValueProtocol, any ValueProtocol)...) {
+    init(dictionaryLiteral elements: (ValueProtocol, ValueProtocol)...) {
         precondition(!elements.isEmpty)
         self.keyType = elements.first!.0.kind
         self.valueType = elements.first!.1.kind
@@ -141,16 +135,12 @@ public extension Map {
 
 public extension Map {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case keyValuePairsInterleaved = "elements", keyType = "key_type", valueType = "value_type", type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

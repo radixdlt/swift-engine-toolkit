@@ -8,9 +8,7 @@
 import Foundation
 
 public struct DecodeAddressResponse: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let networkId: NetworkID
     public let networkName: String
     public let entityType: AddressKind
@@ -38,9 +36,7 @@ public struct DecodeAddressResponse: Sendable, Codable, Hashable {
 // MARK: Codable
 public extension DecodeAddressResponse {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case networkId = "network_id"
         case networkName = "network_name"
@@ -50,9 +46,7 @@ public extension DecodeAddressResponse {
         case address
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         

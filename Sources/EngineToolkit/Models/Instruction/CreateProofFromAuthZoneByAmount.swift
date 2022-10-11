@@ -7,17 +7,12 @@ public struct CreateProofFromAuthZoneByAmount: InstructionProtocol {
         .createProofFromAuthZoneByAmount(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let resourceAddress: ResourceAddress
     public let amount: Decimal_
     public let intoProof: Proof
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from resourceAddress: ResourceAddress, amount: Decimal_, intoProof: Proof) {
         self.resourceAddress = resourceAddress
@@ -29,9 +24,7 @@ public struct CreateProofFromAuthZoneByAmount: InstructionProtocol {
 
 public extension CreateProofFromAuthZoneByAmount {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case amount
@@ -39,9 +32,7 @@ public extension CreateProofFromAuthZoneByAmount {
         case intoProof = "into_proof"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

@@ -2,23 +2,30 @@
 
 final class SborEncodeDecodeRequestTests: TestCase {
     
+    override func setUp() {
+        debugPrint = true
+        super.setUp()
+    }
+    
     func test__encodeDecodeAddressRequest() throws {
-        try TestSuite.vectors.forEach { try doTest(vector: $0) }
+        try TestSuite.vectors.enumerated().forEach { try doTest(vector: $1, index: $0) }
     }
 }
 
 private extension SborEncodeDecodeRequestTests {
     func doTest(
         vector: SborDecodeEncodeTestVectors.Vector,
+        index: Int,
         networkID: NetworkID = .simulator,
         line: UInt = #line
     ) throws {
-   
+        guard index == 16 else { return }
+        print("✨ vector @ \(index)")
         let decodeRequest = try SborDecodeRequest(
             encodedHex: vector.encoded
         )
         let decoded = try sut.sborDecodeRequest(request: decodeRequest).get()
-        XCTAssertEqual(decoded, vector.decoded, line: line)
+        XCTAssertEqual(decoded, vector.decoded)//, line: line)
         
         let encodeRequest = vector.decoded
         let encoded = try sut.sborEncodeRequest(request: encodeRequest).get()
@@ -45,7 +52,6 @@ enum SborDecodeEncodeTestVectors {
             encoded: "0101",
             decoded: .boolean(true)
         ),
-        
         (
             encoded: "0701",
             decoded: .u8(1)
@@ -86,30 +92,27 @@ enum SborDecodeEncodeTestVectors {
             encoded: "060a000000000000000000000000000000",
             decoded: .i128("10")
         ),
-        
         (
             encoded: "0c0c00000048656c6c6f20576f726c6421",
             decoded: .string("Hello World!")
         ),
-        
         (
             encoded: "1002000000070c0c050000005261646978",
             decoded: .struct(Struct {
-                U8(12)
-                String_("Radix")
+                UInt8(12)
+                String("Radix")
             })
         ),
         (
             encoded: "11070000004661737443617202000000070c0c050000005261646978",
             decoded: .enum(Enum("FastCar") {
-                    U8(12)
-                    String_("Radix")
+                    UInt8(12)
+                    String("Radix")
                 })
         ),
-        
         (
             encoded: "12000764",
-            decoded: .option(.some(U8(100)))
+            decoded: .option(.some(UInt8(100)))
         ),
         (
             encoded: "1201",
@@ -129,8 +132,8 @@ enum SborDecodeEncodeTestVectors {
             encoded: "2007020000000c00",
             decoded: .array(try! Array_(
                 elementType: .u8) {
-                    U8(12)
-                    U8(0)
+                    UInt8(12)
+                    UInt8(0)
                 }
             )
         ),
@@ -138,8 +141,8 @@ enum SborDecodeEncodeTestVectors {
             encoded: "3107020000000c00",
             decoded: .set(try! Set_(
                 elementType: .u8) {
-                    U8(12)
-                    U8(0)
+                    UInt8(12)
+                    UInt8(0)
                 }
             )
         ),
@@ -148,16 +151,16 @@ enum SborDecodeEncodeTestVectors {
             decoded: .list(try! List(
                 elementType: .u8
             ) {
-                U8(12)
-                U8(0)
+                UInt8(12)
+                UInt8(0)
             }
             )
         ),
         (
             encoded: "2102000000070c0700",
             decoded: .tuple(Tuple {
-                U8(12)
-                U8(0)
+                UInt8(12)
+                UInt8(0)
             }
             )
         ),
@@ -168,8 +171,8 @@ enum SborDecodeEncodeTestVectors {
                     keyType: .u8,
                     valueType: .u8
                 ) {
-                    U8(12)
-                    U8(0)
+                    UInt8(12)
+                    UInt8(0)
                 }
             )
         ),

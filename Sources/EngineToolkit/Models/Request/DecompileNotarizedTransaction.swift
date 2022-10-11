@@ -1,13 +1,9 @@
 public struct DecompileNotarizedTransactionIntentRequest: Sendable, Codable, Hashable {
-    // ===============
-    // Struct members
-    // ===============
+    // MARK: Stored properties
     public let compiledNotarizedIntent: [UInt8]
     public let manifestInstructionsOutputFormat: ManifestInstructionsKind
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(compiledNotarizedIntent: [UInt8], manifestInstructionsOutputFormat: ManifestInstructionsKind) {
         self.compiledNotarizedIntent = compiledNotarizedIntent
@@ -24,17 +20,13 @@ public struct DecompileNotarizedTransactionIntentRequest: Sendable, Codable, Has
 }
 public extension DecompileNotarizedTransactionIntentRequest {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case compiledNotarizedIntent = "compiled_notarized_intent"
         case manifestInstructionsOutputFormat = "manifest_instructions_output_format"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(compiledNotarizedIntent.toHexString(), forKey: .compiledNotarizedIntent)

@@ -7,15 +7,10 @@ public struct PopFromAuthZone: InstructionProtocol {
         .popFromAuthZone(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let proof: Proof
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(proof: Proof) {
         self.proof = proof
@@ -25,17 +20,13 @@ public struct PopFromAuthZone: InstructionProtocol {
 
 public extension PopFromAuthZone {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case intoProof = "into_proof"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

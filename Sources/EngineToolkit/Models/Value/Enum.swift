@@ -1,22 +1,17 @@
 import Foundation
 
-public struct Enum: ValueProtocol {
+public struct Enum: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .enum
     public func embedValue() -> Value {
         .enum(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let variant: String
     public let fields: [Value]
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(_ variant: String, fields: [Value]) {
         self.variant = variant
@@ -25,7 +20,7 @@ public struct Enum: ValueProtocol {
     
     public init(
         _ variant: String,
-        @ValuesBuilder fields: () throws -> [any ValueProtocol]
+        @ValuesBuilder fields: () throws -> [ValueProtocol]
     ) rethrows {
         try self.init(variant, fields: fields().map { $0.embedValue() })
     }
@@ -40,18 +35,14 @@ public struct Enum: ValueProtocol {
 
 public extension Enum {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case variant
         case type
         case fields
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

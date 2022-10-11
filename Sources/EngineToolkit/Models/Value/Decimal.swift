@@ -1,22 +1,17 @@
 import Foundation
 
-public struct Decimal_: ValueProtocol, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
+public struct Decimal_: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .decimal
     public func embedValue() -> Value {
         .decimal(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     // TODO: Convert this to a better numerical type
     public let value: Foundation.Decimal
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(value: Foundation.Decimal) {
         self.value = value
@@ -44,16 +39,12 @@ public extension Decimal_ {
         "\(value)"
     }
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

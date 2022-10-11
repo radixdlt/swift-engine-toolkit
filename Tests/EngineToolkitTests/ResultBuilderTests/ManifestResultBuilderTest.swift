@@ -9,6 +9,12 @@ import Foundation
 @testable import EngineToolkit
 
 final class ManifestResultBuilderTest: TestCase {
+    
+    override func setUp() {
+        debugPrint = true
+        super.setUp()
+    }
+    
     func test__complex_resultBuilder() throws {
         let expected = try sut.convertManifest(request: makeRequest(outputFormat: .json, manifest: .complex)).get()
         
@@ -75,10 +81,10 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Create a new fungible resource
             CreateResource {
-                Enum("Fungible") { U8(0) }
+                Enum("Fungible") { UInt8(0) }
                 Map(keyType: .string, valueType: .string)
                 Map(keyType: .enum, valueType: .tuple)
-                Option {
+                Optional {
                     Enum("Fungible") { Decimal_(1.0) }
                 }
             }

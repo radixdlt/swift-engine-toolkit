@@ -1,22 +1,17 @@
 import Foundation
 
-public struct I128: ValueProtocol, ExpressibleByStringLiteral {
+public struct I128: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByStringLiteral {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .i128
     public func embedValue() -> Value {
         .i128(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     // TODO: Swift does not have any 128-bit types, so, we store this as a string. We need a better solution to this.
     public let value: String
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(value: String) {
         self.value = value
@@ -30,16 +25,12 @@ public struct I128: ValueProtocol, ExpressibleByStringLiteral {
 
 public extension I128 {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case value, type
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

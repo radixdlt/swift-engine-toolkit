@@ -16,9 +16,7 @@ public enum Identifier: Sendable, Codable, Hashable, ExpressibleByIntegerLiteral
 
 public extension Identifier {
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
         

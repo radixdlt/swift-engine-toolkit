@@ -7,15 +7,10 @@ public struct PushToAuthZone: InstructionProtocol {
         .pushToAuthZone(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let proof: Proof
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from proof: Proof) {
         self.proof = proof
@@ -24,17 +19,13 @@ public struct PushToAuthZone: InstructionProtocol {
 
 public extension PushToAuthZone {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case proof
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)

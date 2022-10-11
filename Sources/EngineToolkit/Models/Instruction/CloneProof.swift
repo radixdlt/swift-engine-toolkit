@@ -7,16 +7,11 @@ public struct CloneProof: InstructionProtocol {
         .cloneProof(self)
     }
     
-    // ===============
-    // Struct members
-    // ===============
-    
+    // MARK: Stored properties
     public let source: Proof
     public let target: Proof
     
-    // =============
-    // Constructors
-    // =============
+    // MARK: Init
     
     public init(from source: Proof, to target: Proof) {
         self.source = source
@@ -26,18 +21,14 @@ public struct CloneProof: InstructionProtocol {
 
 public extension CloneProof {
     
-    // =======================
-    // Coding Keys Definition
-    // =======================
+    // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case proof
         case intoProof = "into_proof"
     }
     
-    // ======================
-    // Encoding and Decoding
-    // ======================
+    // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
