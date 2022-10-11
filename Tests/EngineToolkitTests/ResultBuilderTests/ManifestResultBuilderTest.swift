@@ -10,51 +10,52 @@ import Foundation
 
 final class ManifestResultBuilderTest: TestCase {
     
-    override func setUp() {
-        debugPrint = true
-        super.setUp()
-    }
-    
     func test__complex_resultBuilder() throws {
         let expected = try sut.convertManifest(request: makeRequest(outputFormat: .json, manifest: .complex)).get()
         
         let built = try TransactionManifest {
             
             // Withdraw XRD from account
+            let resource: ResourceAddress = "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag"
             CallMethod(
                 componentAddress: "account_sim1q02r73u7nv47h80e30pc3q6ylsj7mgvparm3pnsm780qgsy064",
                 methodName: "withdraw_by_amount"
             ) {
                 Decimal_(5.0)
-                ResourceAddress("resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag")
+                resource
             }
-            
             // Buy GUM with XRD
+            let xrdBucket0: Bucket = "xrd"
             TakeFromWorktopByAmount(
                 amount: 2.0,
-                resourceAddress: "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag",
-                bucket: "xrd"
+                resourceAddress: resource,
+                bucket: xrdBucket0
             )
             CallMethod(
                 componentAddress: "component_sim1q2f9vmyrmeladvz0ejfttcztqv3genlsgpu9vue83mcs835hum",
                 methodName: "buy_gumball"
-            ) { Bucket("xrd") }
+            ) { xrdBucket0 }
             
             AssertWorktopContainsByAmount(
                 amount: 3.0,
-                resourceAddress: "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag"
+                resourceAddress: resource
             )
             AssertWorktopContains(resourceAddress: "resource_sim1qzhdk7tq68u8msj38r6v6yqa5myc64ejx3ud20zlh9gseqtux6")
             
             // Create a proof from bucket, clone it and drop both
+            let xrdBucket1: Bucket = "some_xrd"
             TakeFromWorktop(
-                resourceAddress: "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag",
-                bucket: "some_xrd"
+                resourceAddress: resource,
+                bucket: xrdBucket1
             )
-            CreateProofFromBucket(bucket: "some_xrd", proof: "proof1")
-            CloneProof(from: "proof1", to: "proof2")
-            DropProof("proof1")
-            DropProof("proof2")
+            // We can even make use of temporary variables, which are ignored by the @resultBuilder, like so:
+            let proof1: Proof = "proof1"
+            let proof2: Proof = "proof2"
+            
+            CreateProofFromBucket(bucket: xrdBucket1, proof: proof1)
+            CloneProof(from: proof1, to: proof2)
+            DropProof(proof1)
+            DropProof(proof2)
             
             // Create a proof from account and drop it
             CallMethod(
@@ -62,20 +63,20 @@ final class ManifestResultBuilderTest: TestCase {
                 methodName: "create_proof_by_amount"
             ) {
                 Decimal_(5.0)
-                ResourceAddress("resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag")
+                resource
             }
-            
-            PopFromAuthZone(proof: "proof3")
-            DropProof("proof3")
+            let proof3: Proof = "proof3"
+            PopFromAuthZone(proof: proof3)
+            DropProof(proof3)
             
             // Return a bucket to worktop
-            ReturnToWorktop(bucket: "some_xrd")
+            ReturnToWorktop(bucket: xrdBucket1)
             TakeFromWorktopByIds(
                 [
                     try NonFungibleId(hex: "0905000000"),
                     try NonFungibleId(hex: "0907000000")
                 ],
-                resourceAddress: "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag",
+                resourceAddress: resource,
                 bucket: "nfts"
             )
             
