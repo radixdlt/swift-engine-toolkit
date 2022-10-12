@@ -7,7 +7,6 @@ final class ExtractAbiTest: TestCase {
         let extractAbiRequest = ExtractAbiRequest(packageWasm: .init(packageWasm))
         let extractAbiResponse = try sut.extractAbiRequest(request: extractAbiRequest).get()
 
-        // TODO fix this test, used just first 32 bytes to avoid huge diff.
         XCTAssertEqual(
             extractAbiResponse.abi.toHexString(),
             packageAbi.toHexString()
