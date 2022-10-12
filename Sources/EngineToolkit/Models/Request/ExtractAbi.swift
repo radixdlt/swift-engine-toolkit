@@ -42,14 +42,16 @@ public struct ExtractAbiResponse: Sendable, Codable, Hashable {
     
     // MARK: Init
     
-    public init(from code: [UInt8], abi: [UInt8]) {
+    public init(code: [UInt8], abi: [UInt8]) {
         self.code = code
         self.abi = abi
     }
     
-    public init(from code: String, abi: String) throws {
-        self.code = try [UInt8](hex: code)
-        self.abi = try [UInt8](hex: abi)
+    public init(codeHex: String, abiHex: String) throws {
+        try self.init(
+            code: [UInt8](hex: codeHex),
+            abi: [UInt8](hex: abiHex)
+        )
     }
 
 }
@@ -73,6 +75,9 @@ public extension ExtractAbiResponse {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = try Self(from: container.decode(String.self, forKey: .code), abi: container.decode(String.self, forKey: .code))
+        try self.init(
+            codeHex: container.decode(String.self, forKey: .code),
+            abiHex: container.decode(String.self, forKey: .abi)
+        )
     }
 }
