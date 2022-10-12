@@ -73,6 +73,9 @@ public extension ExtractAbiResponse {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = try Self(from: container.decode(String.self, forKey: .code), abi: container.decode(String.self, forKey: .code))
+        self = try Self(
+            from: container.decode(String.self, forKey: .code),
+            abi: container.decode(String.self, forKey: .abi)
+        )
     }
 }
