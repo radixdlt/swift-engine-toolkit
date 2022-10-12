@@ -16,9 +16,10 @@ final class ManifestResultBuilderTest: TestCase {
         let built = try TransactionManifest {
             
             // Withdraw XRD from account
+            let account: ComponentAddress = "account_sim1q02r73u7nv47h80e30pc3q6ylsj7mgvparm3pnsm780qgsy064"
             let resource: ResourceAddress = "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag"
             CallMethod(
-                componentAddress: "account_sim1q02r73u7nv47h80e30pc3q6ylsj7mgvparm3pnsm780qgsy064",
+                componentAddress: account,
                 methodName: "withdraw_by_amount"
             ) {
                 Decimal_(5.0)
@@ -31,8 +32,9 @@ final class ManifestResultBuilderTest: TestCase {
                 resourceAddress: resource,
                 bucket: xrdBucket0
             )
+            let gumballComponent: ComponentAddress = "component_sim1q2f9vmyrmeladvz0ejfttcztqv3genlsgpu9vue83mcs835hum"
             CallMethod(
-                componentAddress: "component_sim1q2f9vmyrmeladvz0ejfttcztqv3genlsgpu9vue83mcs835hum",
+                componentAddress: gumballComponent,
                 methodName: "buy_gumball"
             ) { xrdBucket0 }
             
@@ -59,7 +61,7 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Create a proof from account and drop it
             CallMethod(
-                componentAddress: "account_sim1q02r73u7nv47h80e30pc3q6ylsj7mgvparm3pnsm780qgsy064",
+                componentAddress: account,
                 methodName: "create_proof_by_amount"
             ) {
                 Decimal_(5.0)
@@ -92,7 +94,7 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Cancel all buckets and move resources to account
             CallMethod(
-                componentAddress: "account_sim1q02r73u7nv47h80e30pc3q6ylsj7mgvparm3pnsm780qgsy064",
+                componentAddress: account,
                 methodName: "deposit_batch"
             ) {
                 Expression("ENTIRE_WORKTOP")
@@ -103,7 +105,7 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Complicated method that takes all of the number types
             CallMethod(
-                componentAddress: "component_sim1q2f9vmyrmeladvz0ejfttcztqv3genlsgpu9vue83mcs835hum",
+                componentAddress: gumballComponent,
                 methodName: "complicated_method"
             ) {
                 Decimal_(1)
