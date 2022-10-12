@@ -75,7 +75,7 @@ public extension ExtractAbiResponse {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self = try Self(
+        try self.init(
             codeHex: container.decode(String.self, forKey: .code),
             abiHex: container.decode(String.self, forKey: .abi)
         )
