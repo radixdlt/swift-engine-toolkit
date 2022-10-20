@@ -72,15 +72,23 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         try self.init(
-            version: try UInt8(container.decode(String.self, forKey: .version)) ?? { throw InternalDecodingFailure.parsingError }(),
-            networkId: NetworkID.init(try UInt8(container.decode(String.self, forKey: .networkId)) ?? { throw InternalDecodingFailure.parsingError }()),
-            startEpochInclusive: try UInt64(container.decode(String.self, forKey: .startEpochInclusive)) ?? { throw InternalDecodingFailure.parsingError }(),
-            endEpochExclusive: try UInt64(container.decode(String.self, forKey: .endEpochExclusive)) ?? { throw InternalDecodingFailure.parsingError }(),
-            nonce: try UInt64(container.decode(String.self, forKey: .nonce)) ?? { throw InternalDecodingFailure.parsingError }(),
+            version: decodeAndConvertToNumericType(container: container, key: .version),
+            // TODO: In the future, we should have consistent serialization of the NetworkId on the RET side.
+            networkId: NetworkID.init(decodeAndConvertToNumericType(container: container, key: .networkId)),
+            startEpochInclusive: decodeAndConvertToNumericType(container: container, key: .startEpochInclusive),
+            endEpochExclusive: decodeAndConvertToNumericType(container: container, key: .endEpochExclusive),
+            nonce: decodeAndConvertToNumericType(container: container, key: .nonce),
             publicKey: container.decode(PublicKey.self, forKey: .publicKey),
             notaryAsSignatory: container.decode(Bool.self, forKey: .notaryAsSignatory),
-            costUnitLimit: try UInt32(container.decode(String.self, forKey: .costUnitLimit)) ?? { throw InternalDecodingFailure.parsingError }(),
-            tipPercentage: try UInt32(container.decode(String.self, forKey: .tipPercentage)) ?? { throw InternalDecodingFailure.parsingError }()
+            costUnitLimit: decodeAndConvertToNumericType(container: container, key: .costUnitLimit),
+            tipPercentage: decodeAndConvertToNumericType(container: container, key: .tipPercentage)
         )
     }
+}
+
+private func decodeAndConvertToNumericType<Integer: FixedWidthInteger, Key: CodingKey>(
+    container: KeyedDecodingContainer<Key>,
+    key: Key
+) throws -> Integer {
+    return try Integer(container.decode(String.self, forKey: key)) ?? { throw InternalDecodingFailure.parsingError }()
 }
