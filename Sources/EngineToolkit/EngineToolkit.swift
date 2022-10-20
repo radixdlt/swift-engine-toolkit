@@ -187,7 +187,7 @@ public extension EngineToolkit {
 
     func deriveNonFungibleAddressRequest(
 		request: DeriveNonFungibleAddressRequest
-	) -> Result<DeriveNonFungibleAddressResponse, Error> {
+    ) -> Result<DeriveNonFungibleAddressResponse, Error> {
         callLibraryFunction(
             request: request,
             function: derive_non_fungible_address
@@ -204,7 +204,7 @@ internal extension EngineToolkit {
     /// communicating and getting responses back from the library.
     func callLibraryFunction<Request, Response>(
         request: Request,
-        function: (UnsafePointer<CChar>?) -> UnsafePointer<CChar>?
+        function: (UnsafeMutablePointer<UInt8>?) -> UnsafeMutablePointer<UInt8>?
     ) -> Result<Response, Error> where Request: Encodable, Response: Decodable {
         // Serialize the given request to a JSON string.
         serialize(request: request)
@@ -223,18 +223,18 @@ internal extension EngineToolkit {
                     .mapError(Error.callLibraryFunctionFailure)
                 
             }
-            .flatMap { (requestPointer: UnsafeMutablePointer<CChar>) in
+            .flatMap { (requestPointer: UnsafeMutablePointer<UInt8>) in
                 // Calling the underlying transaction library function and getting a pointer
                 // response. We cannot deallocated the `responsePointer`, it results in a crash.
                 guard let responsePointer = function(requestPointer) else {
                     // Deallocate memory on failure (no response).
-                    deallocateMemory(pointer: requestPointer)
+                    deallocateMemoryOfNullTerminatedString(pointer: requestPointer)
                     
                     return .failure(Error.callLibraryFunctionFailure(.noReturnedOutputFromLibraryFunction))
                 }
                 return .success((requestPointer, responsePointer))
             }
-            .flatMap { (requestPointer: UnsafeMutablePointer<CChar>, responsePointer: UnsafePointer<CChar>) in
+            .flatMap { (requestPointer: UnsafeMutablePointer<UInt8>, responsePointer: UnsafeMutablePointer<UInt8>) in
                 
                 let responseJSONString = jsonStringOfResponse(at: responsePointer)
                 
@@ -243,7 +243,8 @@ internal extension EngineToolkit {
 #endif
                 
                 // Deallocating the request and response memory
-                deallocateMemory(pointer: requestPointer)
+                deallocateMemoryOfNullTerminatedString(pointer: requestPointer)
+                deallocateMemoryOfNullTerminatedString(pointer: responsePointer)
                 
                 // Deserialize response
                 return deserialize(jsonString: responseJSONString)
@@ -306,15 +307,29 @@ private extension EngineToolkit {
         }
     }
     
-    /// Allocates as memory as the C-String representation of the provided String requires.
+    /// Allocates memory of the defined capacity through the library's memory allocator
+    ///
+    /// **Note:**
+    ///
+    /// Only one memory allocator should be used at a time, and in most cases, when using the Radix Engine Toolkit
+    /// this would be the allocator provided by the library. Using multiple allocators can lead to memory corruption
+    /// issues and potential memory leaks if memory is not handeled correctly.
+    func allocateMemory(capacity: UInt) -> Result<UnsafeMutablePointer<UInt8>, Error.CallLibraryFunctionFailure> {
+        if let allocatedMemory = toolkit_alloc(capacity) {
+            return .success(allocatedMemory)
+        } else {
+            return .failure(.noReturnedOutputFromLibraryFunction)
+        }
+    }
+    
+    /// Allocates memory for the C-String UTF-8 encoded representation of the passed string
     ///
     /// **Note: **
     ///
-    /// It is important to only use one memory allocator with the transaction library, you may opt to use the swift
-    /// memory allocator and pass pointers to memory allocated by swift, or alternativly you may choose to use the
-    /// memory allocator used in the transaction library. However, it is not recommended to use both at the same
-    /// time as it can lead to heap corruption and other undefined behavior.
-    func allocateMemoryForJSONStringOf(request requestJSONString: String) -> Result<UnsafeMutablePointer<CChar>, Error.CallLibraryFunctionFailure> {
+    /// Only one memory allocator should be used at a time, and in most cases, when using the Radix Engine Toolkit
+    /// this would be the allocator provided by the library. Using multiple allocators can lead to memory corruption
+    /// issues and potential memory leaks if memory is not handeled correctly.
+    func allocateMemoryForJSONStringOf(request requestJSONString: String) -> Result<UnsafeMutablePointer<UInt8>, Error.CallLibraryFunctionFailure> {
         // Get the byte count of the C-String representation of the utf-8 encoded
         // string.
 		guard let cString = cCharsFromJSONString(requestJSONString) else {
@@ -322,16 +337,22 @@ private extension EngineToolkit {
 		}
         
         let byteCount: Int = cString.count
-        let allocatedMemory = UnsafeMutablePointer<CChar>.allocate(capacity: byteCount)
-        return .success(allocatedMemory)
+        return allocateMemory(capacity: UInt(byteCount))
     }
     
-    /// Deallocates memory
+    /// Deallocates memory starting from the provided memory pointer and until (including) the first null terminator.
+    /// Thus, this function operates with the assumption that the memory location stores a null-terminated C-String.
     ///
     /// This function deallocates memory which was previously allocated by the transaction library memory allocator.
     /// There are no returns from this function since it is assumed that the memory deallocation will always succeed.
-    func deallocateMemory(pointer: UnsafeMutablePointer<CChar>) {
-        pointer.deallocate()
+    ///
+    /// **Note: **
+    ///
+    /// Only one memory allocator should be used at a time, and in most cases, when using the Radix Engine Toolkit
+    /// this would be the allocator provided by the library. Using multiple allocators can lead to memory corruption
+    /// issues and potential memory leaks if memory is not handeled correctly.
+    func deallocateMemoryOfNullTerminatedString(pointer: UnsafeMutablePointer<UInt8>) {
+        toolkit_free_c_string(pointer)
     }
     
     /// Writes the string to the memory location provided.
@@ -341,10 +362,10 @@ private extension EngineToolkit {
     @discardableResult
     func writeJSONString(
         of requestJSONString: String,
-        to pointer: UnsafeMutablePointer<CChar>
-    ) -> UnsafeMutablePointer<CChar> {
+        to pointer: UnsafeMutablePointer<UInt8>
+    ) -> UnsafeMutablePointer<UInt8> {
         // Converting the request JSON string to an array of UTF-8 bytes
-        let requestChars: [CChar] = Array(requestJSONString.utf8CString)
+        let requestChars: [UInt8] =  requestJSONString.utf8CString.map{ UInt8($0) }
         
         // Iterating over the array and writing all of the bytes to memory
         for (charIndex, cChar) in requestChars.enumerated() {
@@ -358,7 +379,7 @@ private extension EngineToolkit {
     ///
     /// This function reads a C-String, null terminated, string from the provided memory location and returns it.
     func jsonStringOfResponse(
-        at pointer: UnsafePointer<CChar>
+        at pointer: UnsafePointer<UInt8>
     ) -> String {
         String(cString: pointer)
     }

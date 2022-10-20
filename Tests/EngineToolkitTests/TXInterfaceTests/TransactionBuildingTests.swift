@@ -30,8 +30,8 @@ final class TransactionBuildingTests: TestCase {
             .notarize(notaryPrivateKey)
         
         let signedTransactionIntent = SignedTransactionIntent(
-            transactionIntent: notarized.signedIntent.transactionIntent,
-            signatures: notarized.signedIntent.signatures
+            intent: notarized.signedIntent.intent,
+            intentSignatures: notarized.signedIntent.intentSignatures
         )
         
         let compiledSignedTransactionIntent = try EngineToolkit().compileSignedTransactionIntentRequest(
@@ -65,7 +65,7 @@ public extension TransactionHeader {
                 EddsaEd25519PublicKeyString(bytes: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
             ),
             notaryAsSignatory: true,
-            costUnitLimit: 100_000_000,
+            costUnitLimit: 10_000_000,
             tipPercentage: 0
         )
     }

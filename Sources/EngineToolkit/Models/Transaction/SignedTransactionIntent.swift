@@ -8,11 +8,11 @@
 import Foundation
 
 public struct SignedTransactionIntent: Sendable, Codable, Hashable {
-    public let transactionIntent: TransactionIntent
-    public let signatures: [SignatureWithPublicKey]
+    public let intent: TransactionIntent
+    public let intentSignatures: [SignatureWithPublicKey]
     
     private enum CodingKeys: String, CodingKey {
-        case transactionIntent = "transaction_intent"
-        case signatures = "signatures"
+        case intent = "intent"
+        case intentSignatures = "intent_signatures"
     }
 }
