@@ -1,3 +1,0 @@
-[submodule "Sources/RadixEngineToolkit/build/radix-engine-toolkit"]
-	path = Sources/RadixEngineToolkit/build/radix-engine-toolkit
-	url = git@github.com:radixdlt/radix-engine-toolkit.git

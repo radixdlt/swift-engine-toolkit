@@ -42,7 +42,7 @@ public enum ErrorResponse: Swift.Error, Sendable, Equatable, Decodable {
     case unrecognizedAddressFormat(UnrecognizedAddressFormat)
     
     /// Not to be confused with `InternalDecodingFailure`
-    case decodeError(DecodeError)
+    case sborDecodeError(DecodeError)
     case deserializationError(DeserializationError)
     case invalidRequestString(InvalidRequestString)
     case unexpectedContents(UnexpectedContents)
@@ -70,8 +70,8 @@ public extension ErrorResponse {
             self = try .addressError(.init(from: decoder))
         case .unrecognizedAddressFormat:
             self = try .unrecognizedAddressFormat(.init(from: decoder))
-        case .decodeError:
-            self = try .decodeError(.init(from: decoder))
+        case .sborDecodeError:
+            self = try .sborDecodeError(.init(from: decoder))
         case .deserializationError:
             self = try .deserializationError(.init(from: decoder))
         case .invalidRequestString:
@@ -113,7 +113,7 @@ public extension ErrorResponse {
         switch self {
         case .addressError: return .addressError
         case .unrecognizedAddressFormat: return .unrecognizedAddressFormat
-        case .decodeError: return .decodeError
+        case .sborDecodeError: return .sborDecodeError
         case .deserializationError: return .deserializationError
         case .invalidRequestString: return .invalidRequestString
         case .unexpectedContents: return .unexpectedContents
@@ -137,7 +137,7 @@ public extension ErrorResponse {
 public enum ErrorKind: String, Swift.Error, Sendable, Equatable, Codable, CustomStringConvertible {
     case addressError = "AddressError"
     case unrecognizedAddressFormat = "UnrecognizedAddressFormat"
-    case decodeError = "DecodeError"
+    case sborDecodeError = "SborDecodeError"
     case deserializationError = "DeserializationError"
     case invalidRequestString = "InvalidRequestString"
     case unexpectedContents = "UnexpectedContents"
@@ -171,7 +171,7 @@ public struct UnrecognizedAddressFormat: EmptyErrorResponseProtocol {
 // MARK: DecodeError
 /// Not to be confused with `InternalDecodingFailure` nor `DeserializationError`
 public struct DecodeError: ErrorResponseWithStringValueProtocol {
-    public static let errorKind: ErrorKind = .decodeError
+    public static let errorKind: ErrorKind = .sborDecodeError
     public let value: String
 }
 
@@ -210,13 +210,13 @@ public struct UnexpectedContents: ErrorResponseProtocol {
     
     /// The kind that was parsed, e.g. a `Bucket`, which we expect to contain either a `u32` or a `String`,
     /// which is the `expectedKind` property
-    public let kind: ValueKind
+    public let kindBeingParsed: ValueKind
     
-    /// We expect to find any of these types, but found `foundKind`.
-    public let expectedKind: [ValueKind]
+    /// We expect to find any of these types, but found `foundChildKind`.
+    public let allowedChildrenKinds: [ValueKind]
     
-    /// The unexpected type we found, instead of any of the `expectedKind`, when parsing the `kind`.
-    public let foundKind: ValueKind
+    /// The unexpected type we found, instead of any of the `allowedChildrenKinds`, when parsing the `kindBeingParsed`.
+    public let foundChildKind: ValueKind
 }
 
 // MARK: InvalidType
@@ -312,6 +312,10 @@ private enum ErrorResponseCodingKeys: String, CodingKey {
     case actualType = "actual_type"
     
     case typeId = "type_id"
+    
+    case kindBeingParsed = "kind_being_parsed"
+    case allowedChildrenKinds = "allowed_children_kinds"
+    case foundChildKind = "found_child_kind"
 
     case kind
     case message
@@ -367,14 +371,17 @@ extension EmptyErrorResponseProtocol {
 // MARK: UnexpectedContents + Decodable
 public extension UnexpectedContents {
     init(from decoder: Decoder) throws {
-        // FIXME: how does this `kind` relate to `expectedKind`? Should one be removed?
-        let (container, kind) = try Self.containerAndValueKindAssertingErrorKind(from: decoder)
-        let foundKind = try container.decode(ValueKind.self, forKey: .found)
+        let container = try Self.containerAssertingErrorKind(from: decoder)
         
-        // FIXME: how does this `expectedKind` relate to `kind`? Should one be removed?
-        let expectedKind = try container.decode([ValueKind].self, forKey: .expected)
+        let kindBeingParsed = try container.decode(ValueKind.self, forKey: .kindBeingParsed)
+        let allowedChildrenKinds = try container.decode([ValueKind].self, forKey: .allowedChildrenKinds)
+        let foundChildKind = try container.decode(ValueKind.self, forKey: .foundChildKind)
         
-        self.init(kind: kind, expectedKind: expectedKind, foundKind: foundKind)
+        self.init(
+            kindBeingParsed: kindBeingParsed,
+            allowedChildrenKinds: allowedChildrenKinds,
+            foundChildKind: foundChildKind
+        )
     }
 }
 

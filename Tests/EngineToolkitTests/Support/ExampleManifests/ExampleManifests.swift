@@ -85,7 +85,7 @@ func testTransaction(
             EddsaEd25519PublicKeyString(bytes: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
         ),
         notaryAsSignatory: notaryAsSignatory,
-        costUnitLimit: 100_000_000,
+        costUnitLimit: 10_000_000,
         tipPercentage: 0
     )
     
@@ -98,8 +98,8 @@ func testTransaction(
     // Signing the doubleHashedCompiledTransactionIntent using the private key of all of the signers
     let signatures = try signerPrivateKeys.map({ [UInt8](try $0.signature(for: compiledTransactionIntent)) })
     let signedTransactionIntent = SignedTransactionIntent(
-        transactionIntent: transactionIntent,
-        signatures: zip(signatures, signerPrivateKeys).map({ SignatureWithPublicKey.eddsaEd25519(
+        intent: transactionIntent,
+        intentSignatures: zip(signatures, signerPrivateKeys).map({ SignatureWithPublicKey.eddsaEd25519(
             EddsaEd25519PublicKeyString(bytes: [UInt8]($1.publicKey.rawRepresentation)),
             EddsaEd25519SignatureString(bytes: $0)
         ) })

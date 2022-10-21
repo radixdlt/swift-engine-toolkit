@@ -46,7 +46,7 @@ public extension TransactionIntent {
     func sign(with privateKey: PrivateKey) throws -> SignedTransactionIntent {
         let compiledTransactionIntent = try EngineToolkit().compileTransactionIntentRequest(request: self).get().compiledIntent
         let signature = try privateKey.sign(data: compiledTransactionIntent)
-        return SignedTransactionIntent(transactionIntent: self, signatures: [signature])
+        return SignedTransactionIntent(intent: self, intentSignatures: [signature])
     }
 }
 
@@ -58,8 +58,8 @@ public extension SignedTransactionIntent {
     func sign(with privateKey: PrivateKey) throws -> Self {
         
         let signedTransactionIntent = SignedTransactionIntent(
-            transactionIntent: transactionIntent,
-            signatures: self.signatures
+            intent: intent,
+            intentSignatures: self.intentSignatures
         )
         
         
@@ -70,8 +70,8 @@ public extension SignedTransactionIntent {
         let signature = try privateKey.sign(data: compiledSignedTransactionIntent)
         
         return SignedTransactionIntent(
-            transactionIntent: transactionIntent,
-            signatures: signatures + [signature]
+            intent: intent,
+            intentSignatures: intentSignatures + [signature]
         )
     }
 }
@@ -83,8 +83,8 @@ public extension SignedTransactionIntent {
     func notarize(_ notaryPrivateKey: PrivateKey) throws -> NotarizedTransaction {
         
         let signedTransactionIntent = SignedTransactionIntent(
-            transactionIntent: transactionIntent,
-            signatures: self.signatures
+            intent: intent,
+            intentSignatures: self.intentSignatures
         )
         
         let compiledSignedTransactionIntent = try EngineToolkit().compileSignedTransactionIntentRequest(

@@ -28,14 +28,6 @@ final class TestOfErrors: TestCase {
         )
     }
     
-    func test_error_callLibraryFunctionFailure_cChar_encode_fail() throws {
-        let sut = EngineToolkit(cCharsFromJSONString: { _ in nil /* CChar from JSON failed => allocation fail */ })
-        XCTAssert(
-            sut.information(),
-            throwsSpecificError: .callLibraryFunctionFailure(.allocatedMemoryForResponseFailedCouldNotUTF8EncodeCString)
-        )
-    }
-    
     func test_error_callLibraryFunctionFailure_no_output_from_function() throws {
         let sut = EngineToolkit()
 
