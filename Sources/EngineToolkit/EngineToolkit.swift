@@ -11,7 +11,6 @@ public struct EngineToolkit {
 	private let jsonDecoder: JSONDecoder
     
     private let jsonStringFromJSONData: JSONStringFromJSONData
-    private let cCharsFromJSONString: CCharsFromJSONString
     private let jsonDataFromJSONString: JSONDataFromJSONString
 	
     public init() {
@@ -25,13 +24,11 @@ public struct EngineToolkit {
 		jsonEncoder: JSONEncoder = .init(),
 		jsonDecoder: JSONDecoder = .init(),
         jsonStringFromJSONData: @escaping JSONStringFromJSONData = { String(data: $0, encoding: .utf8) },
-        cCharsFromJSONString: @escaping CCharsFromJSONString = { $0.cString(using: .utf8) },
         jsonDataFromJSONString: @escaping JSONDataFromJSONString = { $0.data(using: .utf8) }
 	) {
 		self.jsonEncoder = jsonEncoder
 		self.jsonDecoder = jsonDecoder
         self.jsonStringFromJSONData = jsonStringFromJSONData
-        self.cCharsFromJSONString = cCharsFromJSONString
         self.jsonDataFromJSONString = jsonDataFromJSONString
         
 	}
@@ -332,9 +329,7 @@ private extension EngineToolkit {
     func allocateMemoryForJSONStringOf(request requestJSONString: String) -> Result<UnsafeMutablePointer<UInt8>, Error.CallLibraryFunctionFailure> {
         // Get the byte count of the C-String representation of the utf-8 encoded
         // string.
-		guard let cString = cCharsFromJSONString(requestJSONString) else {
-            return .failure(.allocatedMemoryForResponseFailedCouldNotUTF8EncodeCString)
-		}
+        let cString = Array(requestJSONString.utf8CString)
         
         let byteCount: Int = cString.count
         return allocateMemory(capacity: UInt(byteCount))

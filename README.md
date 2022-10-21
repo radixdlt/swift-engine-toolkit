@@ -18,6 +18,8 @@ iOS x86 is not supported since [it is obsolete][iphonearchs] and runs on iPhones
 
 # Build
 
+The following dependencies are required before you can build:
+
 ```sh
 rustup update
 rustup toolchain install nightly
@@ -26,11 +28,7 @@ cargo install cargo-lipo
 cargo install --force cbindgen
 ```
 
-Then run:
-
-```sh
-./build.sh
-```
+The build scripts for the `RadixEngineToolkit.XCFrmawork` dependency can be found in the Radix Engine Toolkit's repository, [here](https://github.com/radixdlt/radix-engine-toolkit). 
 
 Which should create a working `RadixEngineToolkit.xcframework` references from the `Package.swift`
 
