@@ -18,19 +18,9 @@ iOS x86 is not supported since [it is obsolete][iphonearchs] and runs on iPhones
 
 # Build
 
-The following dependencies are required before you can build:
+This Package distributes the RadixEngineToolkit.XCFrmawork as an SPM binaryTarget, which has been build by the build script here in Radix Engine Toolkit repo.
 
-```sh
-rustup update
-rustup toolchain install nightly
-rustup target add aarch64-apple-ios aarch64-apple-ios-sim aarch64-apple-darwin x86_64-apple-darwin
-cargo install cargo-lipo
-cargo install --force cbindgen
-```
-
-The build scripts for the `RadixEngineToolkit.XCFrmawork` dependency can be found in the Radix Engine Toolkit's repository, [here](https://github.com/radixdlt/radix-engine-toolkit). 
-
-Which should create a working `RadixEngineToolkit.xcframework` references from the `Package.swift`
+The process of of building the Radix Engine Toolkit is outlined in their repo, found [here](https://github.com/radixdlt/radix-engine-toolkit).
 
 # Declarative TransactionManifest syntax
 Leveraging [`@resultBuilder` feature of Swift][resbuilder] combined with [`ExpressibleByIntegerLiteral`][expintlit], [`ExpressibleByStringLiteral`][expstrlit] etc Swift `EngineToolkit` enables you to write TransactionManifests using this clean syntax:
