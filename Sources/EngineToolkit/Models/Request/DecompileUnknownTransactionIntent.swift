@@ -29,7 +29,7 @@ public extension DecompileUnknownTransactionIntentRequest {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(compiledUnknownIntent.toHexString(), forKey: .compiledUnknownIntent)
+        try container.encode(compiledUnknownIntent.hex(), forKey: .compiledUnknownIntent)
         try container.encode(manifestInstructionsOutputFormat, forKey: .manifestInstructionsOutputFormat)
     }
     

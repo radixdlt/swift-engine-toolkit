@@ -8,6 +8,7 @@
 import Foundation
 import CryptoKit
 import K1
+import SLIP10
 
 public extension Engine {
     enum PrivateKey {
@@ -19,7 +20,7 @@ public extension Engine {
 
 public extension Engine.PrivateKey {
     func publicKey() throws -> Engine.PublicKey {
-        try intoNonEngine()
+        try SLIP10.PrivateKey(engine: self)
             .publicKey()
             .intoEngine()
     }
@@ -27,44 +28,11 @@ public extension Engine.PrivateKey {
 
 
 public extension Engine.PrivateKey {
-    func intoNonEngine() -> PrivateKey {
-        switch self {
-        case let .secp256k1(key): return .secp256k1(key)
-        case let .curve25519(key): return .curve25519(key)
-        }
-    }
-}
-internal extension PrivateKey {
-    func intoEngine() throws -> Engine.PrivateKey {
-        switch self {
-        case let .secp256k1(key): return .secp256k1(key)
-        case let .curve25519(key): return .curve25519(key)
-        }
-    }
-}
-
-public extension Engine.PrivateKey {
     
     func sign(data: any DataProtocol) throws -> Engine.SignatureWithPublicKey {
-        try intoNonEngine()
+        try SLIP10.PrivateKey(engine: self)
             .sign(data: data)
             .intoEngine()
     }
 }
 
-internal extension SignatureWithPublicKey {
-    func intoEngine() throws -> Engine.SignatureWithPublicKey {
-        switch self {
-        case let .ecdsaSecp256k1(signature, publicKey):
-            return try .ecdsaSecp256k1(
-                signature: .init(bytes: [UInt8](signature.rawRepresentation)),
-                publicKey: .init(bytes: [UInt8](publicKey.rawRepresentation(format: .compressed)))
-            )
-        case let .eddsaEd25519(signature, publicKey):
-            return .eddsaEd25519(
-                signature: Engine.EddsaEd25519Signature(bytes: [UInt8](signature)),
-                publicKey: Engine.EddsaEd25519PublicKey(bytes: [UInt8](publicKey.rawRepresentation))
-            )
-        }
-    }
-}

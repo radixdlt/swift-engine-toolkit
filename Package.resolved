@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "bite",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:radixdlt/Bite.git",
+      "state" : {
+        "revision" : "b6801c0d4e269063ebc7b4930269d9d728b64e47",
+        "version" : "0.0.1"
+      }
+    },
+    {
       "identity" : "difference",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzysztofzablocki/Difference.git",
@@ -23,8 +32,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Sajjon/K1.git",
       "state" : {
-        "revision" : "9990be04f6c2f7d15cc9d4e136a54e59b4699ad2",
-        "version" : "0.0.1"
+        "revision" : "c327b56ba11df06a73a6761ecd14c6b21653f4a2",
+        "version" : "0.0.2"
+      }
+    },
+    {
+      "identity" : "slip10",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:radixdlt/SLIP10.git",
+      "state" : {
+        "revision" : "d93af9e9bf9106e2330b3f00af7683937d6f1c0e",
+        "version" : "0.0.9"
       }
     },
     {

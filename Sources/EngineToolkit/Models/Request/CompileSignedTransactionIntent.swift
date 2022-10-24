@@ -1,3 +1,4 @@
+import Foundation
 public typealias CompileSignedTransactionIntentRequest = SignedTransactionIntent
 
 public struct CompileSignedTransactionIntentResponse: Sendable, Codable, Hashable {
@@ -6,12 +7,12 @@ public struct CompileSignedTransactionIntentResponse: Sendable, Codable, Hashabl
     
     // MARK: Init
     
-    public init(from compiledIntent: [UInt8]) {
+    public init(bytes compiledIntent: [UInt8]) {
         self.compiledSignedIntent = compiledIntent
     }
     
-    public init(from compiledIntent: String) throws {
-        self.compiledSignedIntent = try [UInt8](hex: compiledIntent)
+    public init(hex compiledIntentHex: String) throws {
+        self.compiledSignedIntent = try [UInt8](hex: compiledIntentHex)
     }
 }
 
@@ -25,12 +26,12 @@ public extension CompileSignedTransactionIntentResponse {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(compiledSignedIntent.toHexString(), forKey: .compiledSignedIntent)
+        try container.encode(Data(compiledSignedIntent).hex(), forKey: .compiledSignedIntent)
     }
     
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try container.decode(String.self, forKey: .compiledSignedIntent))
+        try self.init(hex: try container.decode(String.self, forKey: .compiledSignedIntent))
     }
 }

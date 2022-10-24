@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SLIP10
+import CryptoKit
 
 public extension Engine {
     enum PublicKey: Sendable, Codable, Hashable {
@@ -19,13 +21,17 @@ public extension Engine {
 
 public extension Engine.PublicKey {
     func isValidSignature(
-        _ signatureWrapper: Engine.Signature,
+        _ engineSignature: Engine.Signature,
         for message: any DataProtocol
     ) throws -> Bool {
-        try intoNonEngine()
-            .isValidSignature(signatureWrapper.intoNonEngine(), for: message)
+        try SLIP10.PublicKey(engine: self)
+            .isValidSignature(
+                SLIP10.Signature(engine: engineSignature),
+                for: message
+            )
     }
 }
+
 
 public extension Engine.PublicKey {
     // MARK: CodingKeys

@@ -26,7 +26,7 @@ public extension SborEncodeResponse {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(encodedValue.toHexString(), forKey: .encodedValue)
+        try container.encode(encodedValue.hex(), forKey: .encodedValue)
     }
     
     init(from decoder: Decoder) throws {

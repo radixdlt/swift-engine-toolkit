@@ -35,7 +35,7 @@ public extension Blob {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(bytes.toHexString(), forKey: .hash)
+        try container.encode(bytes.hex(), forKey: .hash)
     }
     
     init(from decoder: Decoder) throws {

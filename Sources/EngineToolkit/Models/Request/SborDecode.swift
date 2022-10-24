@@ -25,7 +25,7 @@ public extension SborDecodeRequest {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(encodedValue.toHexString(), forKey: .encodedValue)
+        try container.encode(encodedValue.hex(), forKey: .encodedValue)
         try container.encode(networkId, forKey: .networkId)
     }
     

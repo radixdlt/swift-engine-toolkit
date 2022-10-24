@@ -34,7 +34,7 @@ public extension NonFungibleAddress {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(address.toHexString(), forKey: .address)
+        try container.encode(address.hex(), forKey: .address)
     }
     
     init(from decoder: Decoder) throws {

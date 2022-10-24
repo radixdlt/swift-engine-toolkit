@@ -34,7 +34,7 @@ public extension EcdsaSecp256k1Signature {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(bytes.toHexString(), forKey: .signature)
+        try container.encode(bytes.hex(), forKey: .signature)
     }
     
     init(from decoder: Decoder) throws {

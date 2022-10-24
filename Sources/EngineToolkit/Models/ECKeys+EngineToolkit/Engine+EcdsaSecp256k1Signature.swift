@@ -33,7 +33,7 @@ public extension Engine.EcdsaSecp256k1Signature {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container: SingleValueEncodingContainer = encoder.singleValueContainer()
-        try container.encode(bytes.toHexString())
+        try container.encode(bytes.hex())
     }
     
     init(from decoder: Decoder) throws {

@@ -8,6 +8,7 @@
 import Foundation
 import CryptoKit
 import K1
+import SLIP10
 
 public extension TransactionManifest {
     func header(_ header: TransactionHeader) -> TransactionIntent {

@@ -18,7 +18,7 @@ private extension DeriveNonFungibleAddressRequestTests {
         
         let request = try DeriveNonFungibleAddressRequest(resourceAddress: vector.resourceAddress, nonFungibleIdHex: vector.nonFungibleId)
         let derivedNonfungibleAddress = try sut.deriveNonFungibleAddressRequest(request: request).get()
-        XCTAssertEqual(derivedNonfungibleAddress.nonFungibleAddress, nonFungibleAddress.address.toHexString(), line: line)
+        XCTAssertEqual(derivedNonfungibleAddress.nonFungibleAddress, nonFungibleAddress.address.hex(), line: line)
         
     }
     typealias TestSuite = DeriveNonFungibleAddressTestVectors

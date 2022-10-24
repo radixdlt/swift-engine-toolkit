@@ -24,7 +24,7 @@ public extension ExtractAbiRequest {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(packageWasm.toHexString(), forKey: .packageWasm)
+        try container.encode(packageWasm.hex(), forKey: .packageWasm)
     }
     
     init(from decoder: Decoder) throws {
@@ -67,8 +67,8 @@ public extension ExtractAbiResponse {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(code.toHexString(), forKey: .code)
-        try container.encode(abi.toHexString(), forKey: .abi)
+        try container.encode(code.hex(), forKey: .code)
+        try container.encode(abi.hex(), forKey: .abi)
     }
     
     init(from decoder: Decoder) throws {

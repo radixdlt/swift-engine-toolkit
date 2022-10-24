@@ -26,7 +26,7 @@ public extension DecompileSignedTransactionIntentRequest {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(compiledSignedIntent.toHexString(), forKey: .compiledSignedIntent)
+        try container.encode(compiledSignedIntent.hex(), forKey: .compiledSignedIntent)
         try container.encode(manifestInstructionsOutputFormat, forKey: .manifestInstructionsOutputFormat)
     }
     
