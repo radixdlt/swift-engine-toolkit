@@ -1,4 +1,4 @@
-public typealias DeriveNonFungibleAddressFromPublicKeyRequest = PublicKey
+public typealias DeriveNonFungibleAddressFromPublicKeyRequest = Engine.PublicKey
 
 public struct DeriveNonFungibleAddressFromPublicKeyResponse: Sendable, Codable, Hashable {
     // MARK: Stored properties

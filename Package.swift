@@ -23,14 +23,16 @@ let package = Package(
         ),
         .target(
             name: "EngineToolkit",
-            dependencies: ["RadixEngineToolkit"]
+            dependencies: [
+                "RadixEngineToolkit",
+                "K1",
+            ]
         ),
         .testTarget(
             name: "EngineToolkitTests",
             dependencies: [
                 "Difference",
-                "EngineToolkit",
-                "K1",
+                "EngineToolkit"
             ],
             resources: [
                 .process("TestVectors/"),

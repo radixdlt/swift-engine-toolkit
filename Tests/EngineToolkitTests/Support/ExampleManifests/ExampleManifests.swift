@@ -82,7 +82,7 @@ func testTransaction(
         endEpochExclusive: 10,
         nonce: 0,
         publicKey: .eddsaEd25519(
-            EddsaEd25519PublicKeyString(bytes: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
+            Engine.EddsaEd25519PublicKey(bytes: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
         ),
         notaryAsSignatory: notaryAsSignatory,
         costUnitLimit: 10_000_000,
@@ -99,9 +99,9 @@ func testTransaction(
     let signatures = try signerPrivateKeys.map({ [UInt8](try $0.signature(for: compiledTransactionIntent)) })
     let signedTransactionIntent = SignedTransactionIntent(
         intent: transactionIntent,
-        intentSignatures: zip(signatures, signerPrivateKeys).map({ SignatureWithPublicKey.eddsaEd25519(
-            EddsaEd25519PublicKeyString(bytes: [UInt8]($1.publicKey.rawRepresentation)),
-            EddsaEd25519SignatureString(bytes: $0)
+        intentSignatures: zip(signatures, signerPrivateKeys).map({ Engine.SignatureWithPublicKey.eddsaEd25519(
+            signature: Engine.EddsaEd25519Signature(bytes: $0),
+            publicKey: Engine.EddsaEd25519PublicKey(bytes: [UInt8]($1.publicKey.rawRepresentation))
         ) })
     )
     
@@ -113,7 +113,7 @@ func testTransaction(
     let notarySignature = [UInt8](try notaryPrivateKey.signature(for: compiledSignedTransactionIntent))
     let notarizedTransaction = NotarizedTransaction(
         signedIntent: signedTransactionIntent,
-        notarySignature: .eddsaEd25519(EddsaEd25519SignatureString(bytes: notarySignature))
+        notarySignature: .eddsaEd25519(Engine.EddsaEd25519Signature(bytes: notarySignature))
     )
     let compiledNotarizedTransactionIntent = try sut.compileNotarizedTransactionIntentRequest(request: notarizedTransaction).get().compiledNotarizedIntent
     

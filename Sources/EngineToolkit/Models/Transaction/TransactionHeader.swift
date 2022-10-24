@@ -13,7 +13,7 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
     public let startEpochInclusive: UInt64
     public let endEpochExclusive: UInt64
     public let nonce: UInt64
-    public let publicKey: PublicKey
+    public let publicKey: Engine.PublicKey
     public let notaryAsSignatory: Bool
     public let costUnitLimit: UInt32
     public let tipPercentage: UInt32
@@ -37,7 +37,7 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
         startEpochInclusive: UInt64,
         endEpochExclusive: UInt64,
         nonce: UInt64,
-        publicKey: PublicKey,
+        publicKey: Engine.PublicKey,
         notaryAsSignatory: Bool,
         costUnitLimit: UInt32,
         tipPercentage: UInt32
@@ -78,7 +78,7 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
             startEpochInclusive: decodeAndConvertToNumericType(container: container, key: .startEpochInclusive),
             endEpochExclusive: decodeAndConvertToNumericType(container: container, key: .endEpochExclusive),
             nonce: decodeAndConvertToNumericType(container: container, key: .nonce),
-            publicKey: container.decode(PublicKey.self, forKey: .publicKey),
+            publicKey: container.decode(Engine.PublicKey.self, forKey: .publicKey),
             notaryAsSignatory: container.decode(Bool.self, forKey: .notaryAsSignatory),
             costUnitLimit: decodeAndConvertToNumericType(container: container, key: .costUnitLimit),
             tipPercentage: decodeAndConvertToNumericType(container: container, key: .tipPercentage)

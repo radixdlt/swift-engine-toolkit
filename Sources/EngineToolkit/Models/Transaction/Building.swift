@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import CryptoKit
+import K1
 
 public extension TransactionManifest {
     func header(_ header: TransactionHeader) -> TransactionIntent {
@@ -19,31 +21,20 @@ public extension TransactionIntent {
     }
 }
 
-import CryptoKit
-public enum PrivateKey {
-    case curve25519(Curve25519.Signing.PrivateKey)
-}
-extension PrivateKey {
-    
-    func sign(data: any DataProtocol) throws -> SignatureWithPublicKey {
-        switch self {
-        case let .curve25519(key):
-            let signature = try key.signature(for: data)
-            let publicKey = key.publicKey
-            return .eddsaEd25519(
-                EddsaEd25519PublicKeyString(bytes: [UInt8](publicKey.rawRepresentation)),
-                EddsaEd25519SignatureString(bytes: [UInt8](signature))
-            )
-        }
-    }
-}
-
 public extension TransactionIntent {
     func sign(with privateKey: Curve25519.Signing.PrivateKey) throws -> SignedTransactionIntent {
-        try sign(with: .curve25519(privateKey))
+        try sign(with: Engine.PrivateKey.curve25519(privateKey))
+    }
+    
+    func sign(with privateKey: K1.PrivateKey) throws -> SignedTransactionIntent {
+        try sign(with: Engine.PrivateKey.secp256k1(privateKey))
     }
     
     func sign(with privateKey: PrivateKey) throws -> SignedTransactionIntent {
+        try sign(with: privateKey.intoEngine())
+    }
+    
+    func sign(with privateKey: Engine.PrivateKey) throws -> SignedTransactionIntent {
         let compiledTransactionIntent = try EngineToolkit().compileTransactionIntentRequest(request: self).get().compiledIntent
         let signature = try privateKey.sign(data: compiledTransactionIntent)
         return SignedTransactionIntent(intent: self, intentSignatures: [signature])
@@ -53,15 +44,24 @@ public extension TransactionIntent {
 
 public extension SignedTransactionIntent {
     func sign(with privateKey: Curve25519.Signing.PrivateKey) throws -> Self {
-        try sign(with: .curve25519(privateKey))
+        try sign(with: Engine.PrivateKey.curve25519(privateKey))
     }
+    
+    func sign(with privateKey: K1.PrivateKey) throws -> Self {
+        try sign(with: Engine.PrivateKey.secp256k1(privateKey))
+    }
+    
+    
     func sign(with privateKey: PrivateKey) throws -> Self {
+        try sign(with: privateKey.intoEngine())
+    }
+        
+    func sign(with privateKey: Engine.PrivateKey) throws -> Self {
         
         let signedTransactionIntent = SignedTransactionIntent(
             intent: intent,
             intentSignatures: self.intentSignatures
         )
-        
         
         let compiledSignedTransactionIntent = try EngineToolkit().compileSignedTransactionIntentRequest(
             request: signedTransactionIntent
@@ -77,10 +77,20 @@ public extension SignedTransactionIntent {
 }
 
 public extension SignedTransactionIntent {
+    
     func notarize(_ notaryPrivateKey: Curve25519.Signing.PrivateKey) throws -> NotarizedTransaction {
-        try notarize(.curve25519(notaryPrivateKey))
+        try notarize(Engine.PrivateKey.curve25519(notaryPrivateKey))
     }
+    
+    func notarize(_ notaryPrivateKey: K1.PrivateKey) throws -> NotarizedTransaction {
+        try notarize(Engine.PrivateKey.secp256k1(notaryPrivateKey))
+    }
+    
     func notarize(_ notaryPrivateKey: PrivateKey) throws -> NotarizedTransaction {
+        try notarize(notaryPrivateKey.intoEngine())
+    }
+        
+    func notarize(_ notaryPrivateKey: Engine.PrivateKey) throws -> NotarizedTransaction {
         
         let signedTransactionIntent = SignedTransactionIntent(
             intent: intent,
