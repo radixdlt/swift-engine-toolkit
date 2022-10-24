@@ -14,8 +14,7 @@ public extension Engine {
         // ==============
         
         case ecdsaSecp256k1(
-            signature: EcdsaSecp256k1Signature,
-            publicKey: EcdsaSecp256k1PublicKey
+            signature: EcdsaSecp256k1Signature
         )
         
         case eddsaEd25519(
@@ -30,17 +29,17 @@ public extension Engine.SignatureWithPublicKey {
         switch self {
         case let .eddsaEd25519(signature, _):
             return .eddsaEd25519(signature)
-        case let .ecdsaSecp256k1(signature, _):
+        case let .ecdsaSecp256k1(signature):
             return .ecdsaSecp256k1(signature)
         }
     }
     
-    var publicKey: Engine.PublicKey {
+    var publicKey: Engine.PublicKey? {
         switch self {
         case let .eddsaEd25519(_, publicKey):
             return .eddsaEd25519(publicKey)
-        case let .ecdsaSecp256k1(_, publicKey):
-            return .ecdsaSecp256k1(publicKey)
+        case .ecdsaSecp256k1:
+            return nil
         }
     }
 }
@@ -71,9 +70,8 @@ public extension Engine.SignatureWithPublicKey {
         try container.encode(discriminator, forKey: .discriminator)
         
         switch self {
-        case .ecdsaSecp256k1(let signature, let publicKey):
+        case .ecdsaSecp256k1(let signature):
             try container.encode(signature, forKey: .signature)
-            try container.encode(publicKey, forKey: .publicKey)
         case .eddsaEd25519(let signature, let publicKey):
             try container.encode(signature, forKey: .signature)
             try container.encode(publicKey, forKey: .publicKey)
@@ -88,8 +86,7 @@ public extension Engine.SignatureWithPublicKey {
         switch discriminator {
         case .ecdsaSecp256k1:
             self = .ecdsaSecp256k1(
-                signature: try container.decode(Engine.EcdsaSecp256k1Signature.self, forKey: .signature),
-                publicKey: try container.decode(Engine.EcdsaSecp256k1PublicKey.self, forKey: .publicKey)
+                signature: try container.decode(Engine.EcdsaSecp256k1Signature.self, forKey: .signature)
             )
         case .eddsaEd25519:
             self = .eddsaEd25519(

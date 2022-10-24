@@ -73,10 +73,9 @@ internal extension SLIP10.Signature {
 public extension SignatureWithPublicKey {
     func intoEngine() throws -> Engine.SignatureWithPublicKey {
         switch self {
-        case let .ecdsaSecp256k1(signature, publicKey):
-            return try .ecdsaSecp256k1(
-                signature: .init(bytes: [UInt8](signature.rawRepresentation)),
-                publicKey: .init(bytes: [UInt8](publicKey.rawRepresentation(format: .compressed)))
+        case let .ecdsaSecp256k1(signature, _):
+            return .ecdsaSecp256k1(
+                signature: .init(bytes: [UInt8](signature.rawRepresentation))
             )
         case let .eddsaEd25519(signature, publicKey):
             return .eddsaEd25519(
