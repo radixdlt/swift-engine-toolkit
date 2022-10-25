@@ -8,12 +8,11 @@
 import Foundation
 import CryptoKit
 @testable import EngineToolkit
+import K1
 
 extension TransactionManifest {
     static let complex = Self(instructions: .string(complexManifestString))
 }
-
-
 
 private let complexManifestString = """
 # Withdraw XRD from account
@@ -62,17 +61,38 @@ typealias TestTransaction = (
 )
 
 // All cryptographic signatures required for this test transaction are done through
-// the EdDSA Ed25519 curve. 
-func testTransaction(
+// the EdDSA Ed25519 curve.
+func testTransactionEd25519(
     signerCount: UInt,
+    notaryAsSignatory: Bool = true
+) throws -> TestTransaction {
+    // Creating the private keys of the notary and the other signers
+    try _testTransaction(
+        notaryPrivateKey: .curve25519(.init()),
+        signerPrivateKeys: (0..<signerCount).map { _ in .curve25519(.init()) }
+    )
+}
+
+// All cryptographic signatures required for this test transaction are done through
+// the ECDAS `secp256k1` curve.
+func testTransactionSecp256k1(
+    signerCount: UInt,
+    notaryAsSignatory: Bool = true
+) throws -> TestTransaction {
+    // Creating the private keys of the notary and the other signers
+    try _testTransaction(
+        notaryPrivateKey: .secp256k1(try K1.PrivateKey.generateNew()),
+        signerPrivateKeys: (0..<signerCount).map { _ in .secp256k1(try K1.PrivateKey.generateNew()) }
+    )
+}
+
+private func _testTransaction(
+    notaryPrivateKey: Engine.PrivateKey,
+    signerPrivateKeys: [Engine.PrivateKey],
     notaryAsSignatory: Bool = true
 ) throws -> TestTransaction {
     // The engine toolkit to use to create this notarized transaction
     let sut = EngineToolkit()
-    
-    // Creating the private keys of the notary and the other signers
-    let notaryPrivateKey = Curve25519.Signing.PrivateKey.init()
-    let signerPrivateKeys = (0...signerCount).map({ _ in Curve25519.Signing.PrivateKey.init() })
     
     let transactionManifest = TransactionManifest(instructions: .string(complexManifestString))
     let transactionHeader = TransactionHeader(
@@ -81,9 +101,7 @@ func testTransaction(
         startEpochInclusive: 0,
         endEpochExclusive: 10,
         nonce: 0,
-        publicKey: .eddsaEd25519(
-            Engine.EddsaEd25519PublicKey(bytes: [UInt8](notaryPrivateKey.publicKey.rawRepresentation))
-        ),
+        publicKey: try notaryPrivateKey.publicKey(),
         notaryAsSignatory: notaryAsSignatory,
         costUnitLimit: 10_000_000,
         tipPercentage: 0
@@ -96,13 +114,13 @@ func testTransaction(
     let compiledTransactionIntent = try sut.compileTransactionIntentRequest(request: transactionIntent).get().compiledIntent
     
     // Signing the doubleHashedCompiledTransactionIntent using the private key of all of the signers
-    let signatures = try signerPrivateKeys.map({ [UInt8](try $0.signature(for: compiledTransactionIntent)) })
+    let intentSignatures = try signerPrivateKeys.map {
+        try $0.sign(data: compiledTransactionIntent)
+    }
+    
     let signedTransactionIntent = SignedTransactionIntent(
         intent: transactionIntent,
-        intentSignatures: zip(signatures, signerPrivateKeys).map({ Engine.SignatureWithPublicKey.eddsaEd25519(
-            signature: Engine.EddsaEd25519Signature(bytes: $0),
-            publicKey: Engine.EddsaEd25519PublicKey(bytes: [UInt8]($1.publicKey.rawRepresentation))
-        ) })
+        intentSignatures: intentSignatures
     )
     
     let compiledSignedTransactionIntent = try sut.compileSignedTransactionIntentRequest(
@@ -110,10 +128,10 @@ func testTransaction(
     ).get().compiledSignedIntent
     
     // Notarize the signed intent to create a notarized transaction
-    let notarySignature = [UInt8](try notaryPrivateKey.signature(for: compiledSignedTransactionIntent))
+    let notarySignature = try notaryPrivateKey.sign(data: compiledSignedTransactionIntent)
     let notarizedTransaction = NotarizedTransaction(
         signedIntent: signedTransactionIntent,
-        notarySignature: .eddsaEd25519(Engine.EddsaEd25519Signature(bytes: notarySignature))
+        notarySignature: notarySignature.signature
     )
     let compiledNotarizedTransactionIntent = try sut.compileNotarizedTransactionIntentRequest(request: notarizedTransaction).get().compiledNotarizedIntent
     
