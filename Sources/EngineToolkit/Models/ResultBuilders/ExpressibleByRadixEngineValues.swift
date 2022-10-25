@@ -55,5 +55,9 @@ public extension ExpressibleByRadixEngineValues {
     init(@SpecificValuesBuilder buildValues: () throws -> [Value]) rethrows {
         self.init(values: try buildValues())
     }
+      
+    init(@SpecificValuesBuilder buildValue: () throws -> Value) rethrows {
+        self.init(values: [try buildValue()])
+    }
 }
 

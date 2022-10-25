@@ -43,6 +43,18 @@ public struct CallMethod: InstructionProtocol {
             arguments: try buildValues()
         )
     }
+    
+    public init(
+        componentAddress: ComponentAddress,
+        methodName: String,
+        @SpecificValuesBuilder buildValue: () throws -> Value
+    ) rethrows {
+        self.init(
+            componentAddress: componentAddress,
+            methodName: methodName,
+            arguments: [try buildValue()]
+        )
+    }
  
 }
 
