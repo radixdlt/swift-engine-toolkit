@@ -22,7 +22,8 @@ public extension ExpressibleByRadixEngineValues {
 }
 
 @resultBuilder
-struct ValuesBuilder {
+public struct ValuesBuilder {}
+public extension ValuesBuilder {
     static func buildBlock(_ values: any ValueProtocol...) -> [any ValueProtocol] {
         values
     }
@@ -35,7 +36,8 @@ struct ValuesBuilder {
 }
 
 @resultBuilder
-struct SpecificValuesBuilder {
+public struct SpecificValuesBuilder {}
+public extension SpecificValuesBuilder {
     static func buildBlock(_ values: Value...) -> [Value] {
         values
     }
