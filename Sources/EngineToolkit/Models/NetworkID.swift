@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct NetworkID: Sendable, Codable, Hashable, CustomStringConvertible, ExpressibleByIntegerLiteral {
+public struct NetworkID: Sendable, Codable, Hashable, Identifiable, CustomStringConvertible, ExpressibleByIntegerLiteral {
 	public typealias ID = UInt8
 	public typealias IntegerLiteralType = ID
 	public var description: String { String(describing: id) }
