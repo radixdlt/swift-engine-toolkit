@@ -6,13 +6,23 @@
 //
 
 import Foundation
+import Tagged
+
+public enum VersionTag: Sendable {}
+public typealias Version = Tagged<VersionTag, UInt8>
+
+public enum EpochTag: Sendable {}
+public typealias Epoch = Tagged<EpochTag, UInt64>
+
+public enum NonceTag: Sendable {}
+public typealias Nonce = Tagged<NonceTag, UInt64>
 
 public struct TransactionHeader: Sendable, Codable, Hashable {
-    public let version: UInt8
+    public let version: Version
     public let networkId: NetworkID
-    public let startEpochInclusive: UInt64
-    public let endEpochExclusive: UInt64
-    public let nonce: UInt64
+    public let startEpochInclusive: Epoch
+    public let endEpochExclusive: Epoch
+    public let nonce: Nonce
     public let publicKey: Engine.PublicKey
     public let notaryAsSignatory: Bool
     public let costUnitLimit: UInt32
@@ -29,14 +39,13 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
         case costUnitLimit = "cost_unit_limit"
         case tipPercentage = "tip_percentage"
     }
-    
     // MARK: Init
     public init(
-        version: UInt8,
+        version: Version,
         networkId: NetworkID,
-        startEpochInclusive: UInt64,
-        endEpochExclusive: UInt64,
-        nonce: UInt64,
+        startEpochInclusive: Epoch,
+        endEpochExclusive: Epoch,
+        nonce: Nonce,
         publicKey: Engine.PublicKey,
         notaryAsSignatory: Bool,
         costUnitLimit: UInt32,
@@ -72,12 +81,12 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         try self.init(
-            version: decodeAndConvertToNumericType(container: container, key: .version),
+            version: .init(rawValue: decodeAndConvertToNumericType(container: container, key: .version)),
             // TODO: In the future, we should have consistent serialization of the NetworkId on the RET side.
             networkId: NetworkID.init(decodeAndConvertToNumericType(container: container, key: .networkId)),
-            startEpochInclusive: decodeAndConvertToNumericType(container: container, key: .startEpochInclusive),
-            endEpochExclusive: decodeAndConvertToNumericType(container: container, key: .endEpochExclusive),
-            nonce: decodeAndConvertToNumericType(container: container, key: .nonce),
+            startEpochInclusive: .init(rawValue: decodeAndConvertToNumericType(container: container, key: .startEpochInclusive)),
+            endEpochExclusive: .init(rawValue: decodeAndConvertToNumericType(container: container, key: .endEpochExclusive)),
+            nonce: .init(rawValue: decodeAndConvertToNumericType(container: container, key: .nonce)),
             publicKey: container.decode(Engine.PublicKey.self, forKey: .publicKey),
             notaryAsSignatory: container.decode(Bool.self, forKey: .notaryAsSignatory),
             costUnitLimit: decodeAndConvertToNumericType(container: container, key: .costUnitLimit),

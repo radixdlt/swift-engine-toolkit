@@ -53,6 +53,15 @@
         "revision" : "d9825fa541df64b1a7b182178d61b9a82730d01f",
         "version" : "2.1.0"
       }
+    },
+    {
+      "identity" : "swift-tagged",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-tagged.git",
+      "state" : {
+        "revision" : "f3f773a5e13f3c8f0ab1ce2ae6378058acefa87d",
+        "version" : "0.7.0"
+      }
     }
   ],
   "version" : 2

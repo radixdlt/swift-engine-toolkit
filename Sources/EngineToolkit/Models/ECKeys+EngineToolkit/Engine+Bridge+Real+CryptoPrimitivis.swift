@@ -20,7 +20,7 @@ public extension SLIP10.PrivateKey {
     }
 }
 
-internal extension SLIP10.PrivateKey {
+public extension SLIP10.PrivateKey {
     func intoEngine() throws -> Engine.PrivateKey {
         switch self {
         case let .secp256k1(key): return .secp256k1(key)
@@ -40,7 +40,7 @@ public extension SLIP10.PublicKey {
     }
 }
 
-internal extension SLIP10.PublicKey {
+public extension SLIP10.PublicKey {
     func intoEngine() throws -> Engine.PublicKey {
         switch self {
         case let .ecdsaSecp256k1(key):
@@ -51,13 +51,13 @@ internal extension SLIP10.PublicKey {
     }
 }
 
-internal extension K1.PublicKey {
+public extension K1.PublicKey {
     func intoEngine() throws -> Engine.EcdsaSecp256k1PublicKey {
         try .init(bytes: self.rawRepresentation(format: .compressed))
     }
 }
 
-internal extension SLIP10.Signature {
+public extension SLIP10.Signature {
     init(engine engineSignature: Engine.Signature) throws {
         switch engineSignature {
         case let .eddsaEd25519(signature):
