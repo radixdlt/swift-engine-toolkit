@@ -64,12 +64,15 @@ typealias TestTransaction = (
 // the EdDSA Ed25519 curve.
 func testTransactionEd25519(
     signerCount: UInt,
-    notaryAsSignatory: Bool = true
+    notaryAsSignatory: Bool = true,
+	file: StaticString = #file,
+	line: UInt = #line
 ) throws -> TestTransaction {
     // Creating the private keys of the notary and the other signers
     try _testTransaction(
         notaryPrivateKey: .curve25519(.init()),
-        signerPrivateKeys: (0..<signerCount).map { _ in .curve25519(.init()) }
+        signerPrivateKeys: (0..<signerCount).map { _ in .curve25519(.init()) },
+		file: file, line: line
     )
 }
 
@@ -77,19 +80,24 @@ func testTransactionEd25519(
 // the ECDAS `secp256k1` curve.
 func testTransactionSecp256k1(
     signerCount: UInt,
-    notaryAsSignatory: Bool = true
+    notaryAsSignatory: Bool = true,
+	file: StaticString = #file,
+	line: UInt = #line
 ) throws -> TestTransaction {
     // Creating the private keys of the notary and the other signers
     try _testTransaction(
         notaryPrivateKey: .secp256k1(try K1.PrivateKey.generateNew()),
-        signerPrivateKeys: (0..<signerCount).map { _ in .secp256k1(try K1.PrivateKey.generateNew()) }
+        signerPrivateKeys: (0..<signerCount).map { _ in .secp256k1(try K1.PrivateKey.generateNew()) },
+		file: file, line: line
     )
 }
 
 private func _testTransaction(
     notaryPrivateKey: Engine.PrivateKey,
     signerPrivateKeys: [Engine.PrivateKey],
-    notaryAsSignatory: Bool = true
+    notaryAsSignatory: Bool = true,
+	file: StaticString = #file,
+	line: UInt = #line
 ) throws -> TestTransaction {
     // The engine toolkit to use to create this notarized transaction
     let sut = EngineToolkit()

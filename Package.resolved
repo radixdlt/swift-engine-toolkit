@@ -32,8 +32,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Sajjon/K1.git",
       "state" : {
-        "revision" : "c327b56ba11df06a73a6761ecd14c6b21653f4a2",
-        "version" : "0.0.2"
+        "revision" : "020c98b002326efafd474e013b03492ede202dca"
       }
     },
     {
@@ -41,8 +40,7 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:radixdlt/SLIP10.git",
       "state" : {
-        "revision" : "d93af9e9bf9106e2330b3f00af7683937d6f1c0e",
-        "version" : "0.0.9"
+        "revision" : "37df4a16372dbdad97f9a97a621ecd7e64a21af4"
       }
     },
     {

@@ -2,6 +2,11 @@
 
 final class CompileNotarizedTransactionIntentTests: TestCase {
     
+    override func setUp() {
+        debugPrint = true
+        super.setUp()
+    }
+    
     func test__compile_notarized_transaction_intent_does_not_throw_ed25519() throws {
         let request = try testTransactionEd25519(signerCount: 0).notarizedTransaction
         XCTAssertNoThrow(try sut.compileNotarizedTransactionIntentRequest(request: request).get())
