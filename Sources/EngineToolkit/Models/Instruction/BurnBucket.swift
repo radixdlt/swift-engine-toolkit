@@ -11,7 +11,7 @@ public struct BurnBucket: InstructionProtocol {
     public let bucket: Bucket
     
     // MARK: Init
-    public init(from bucket: Bucket) {
+    public init(bucket: Bucket) {
         self.bucket = bucket
     }
 }
@@ -40,8 +40,7 @@ public extension BurnBucket {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let bucket: Bucket = try container.decode(Bucket.self, forKey: .bucket)
+        try self.init(bucket: container.decode(Bucket.self, forKey: .bucket))
         
-        self = Self(from: bucket)
     }
 }

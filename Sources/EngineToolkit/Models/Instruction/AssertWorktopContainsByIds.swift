@@ -13,7 +13,7 @@ public struct AssertWorktopContainsByIds: InstructionProtocol {
     
     // MARK: Init
     
-    public init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>) {
+    public init(resourceAddress: ResourceAddress, ids: Set<NonFungibleId>) {
         self.resourceAddress = resourceAddress
         self.ids = ids
     }
@@ -45,9 +45,9 @@ public extension AssertWorktopContainsByIds {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let ids: Set<NonFungibleId> = try container.decode(Set<NonFungibleId>.self, forKey: .ids)
-        
-        self = Self(from: resourceAddress, ids: ids)
+        try self.init(
+            resourceAddress: container.decode(ResourceAddress.self, forKey: .resourceAddress),
+            ids: container.decode(Set<NonFungibleId>.self, forKey: .ids)
+        )
     }
 }

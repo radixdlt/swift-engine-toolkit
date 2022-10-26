@@ -31,23 +31,11 @@ final class CreateAccountTXTest: TestCase {
         let privateKeyData = try Data(hex: "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef")
         let privateKey = try Engine.PrivateKey.curve25519(.init(rawRepresentation: privateKeyData))
         
-        // Deriving the `NonFungibleAddress` based on the public key of the account.
-        func deriveNonFungibleAddress(publicKey: Engine.PublicKey) throws -> NonFungibleAddress {
-            let base = try [UInt8](hex: "000000000000000000000000000000000000000000000000000002300721000000")
-            var publicKeyData = publicKey.compressedRepresentation
-            switch publicKey {
-            case .ecdsaSecp256k1: break
-            case .eddsaEd25519:
-                // need to extend length for Curve25519 keys
-                publicKeyData = [0x00] + publicKeyData
-            }
-            assert(publicKeyData.count == 33)
-            return NonFungibleAddress(
-                bytes: base + publicKeyData
+        let nonFungibleAddress = try sut.deriveNonFungibleAddressFromPublicKeyRequest(
+                request: privateKey.publicKey()
             )
-        }
-        
-        let nonFungibleAddress = try deriveNonFungibleAddress(publicKey: privateKey.publicKey())
+            .get()
+            .nonFungibleAddress
 
         let transactionManifest = TransactionManifest {
             CallMethod(

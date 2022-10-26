@@ -9,12 +9,12 @@ public struct CompileNotarizedTransactionIntentResponse: Sendable, Codable, Hash
     
     // MARK: Init
     
-    public init(from compiledNotarizedIntent: [UInt8]) {
+    public init(compiledNotarizedIntent: [UInt8]) {
         self.compiledNotarizedIntent = compiledNotarizedIntent
     }
     
-    public init(from compiledNotarizedIntent: String) throws {
-        self.compiledNotarizedIntent = try [UInt8](hex: compiledNotarizedIntent)
+    public init(compiledNotarizedIntentHex: String) throws {
+        self.compiledNotarizedIntent = try [UInt8](hex: compiledNotarizedIntentHex)
     }
 }
 
@@ -34,6 +34,6 @@ public extension CompileNotarizedTransactionIntentResponse {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try container.decode(String.self, forKey: .compiledNotarizedIntent))
+        try self.init(compiledNotarizedIntentHex: try container.decode(String.self, forKey: .compiledNotarizedIntent))
     }
 }

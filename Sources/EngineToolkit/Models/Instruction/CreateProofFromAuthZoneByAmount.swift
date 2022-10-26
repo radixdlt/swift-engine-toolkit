@@ -14,7 +14,11 @@ public struct CreateProofFromAuthZoneByAmount: InstructionProtocol {
     
     // MARK: Init
     
-    public init(from resourceAddress: ResourceAddress, amount: Decimal_, intoProof: Proof) {
+    public init(
+        resourceAddress: ResourceAddress,
+        amount: Decimal_,
+        intoProof: Proof
+    ) {
         self.resourceAddress = resourceAddress
         self.amount = amount
         self.intoProof = intoProof
@@ -49,11 +53,11 @@ public extension CreateProofFromAuthZoneByAmount {
         if kind != Self.kind {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
-        
-        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let amount: Decimal_ = try container.decode(Decimal_.self, forKey: .amount)
-        let intoProof: Proof = try container.decode(Proof.self, forKey: .intoProof)
-        
-        self = Self(from: resourceAddress, amount: amount, intoProof: intoProof)
+  
+        try self.init(
+            resourceAddress: container.decode(ResourceAddress.self, forKey: .resourceAddress),
+            amount: container.decode(Decimal_.self, forKey: .amount),
+            intoProof: container.decode(Proof.self, forKey: .intoProof)
+        )
     }
 }

@@ -32,9 +32,11 @@ public extension DeriveNonFungibleAddressRequest {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
        
-        try self.init(resourceAddress:  container.decode(String.self, forKey: .resourceAddress), nonFungibleIdHex: container.decode(String.self, forKey: .nonFungibleId))
+        try self.init(
+            resourceAddress:  container.decode(String.self, forKey: .resourceAddress),
+            nonFungibleIdHex: container.decode(String.self, forKey: .nonFungibleId)
+        )
         
     }
 }
@@ -45,7 +47,7 @@ public struct DeriveNonFungibleAddressResponse: Sendable, Codable, Hashable {
     
     // MARK: Init
     
-    public init(from nonFungibleAddress: String) {
+    public init(nonFungibleAddress: String) {
         self.nonFungibleAddress = nonFungibleAddress
     }
     
