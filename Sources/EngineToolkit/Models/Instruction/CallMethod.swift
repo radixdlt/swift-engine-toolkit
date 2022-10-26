@@ -74,7 +74,7 @@ public extension CallMethod {
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(componentAddress, forKey: .componentAddress)
-        try container.encode(methodName, forKey: .methodName)
+        try container.encode(methodName.proxyEncodable, forKey: .methodName)
         try container.encode(arguments, forKey: .arguments)
     }
     
