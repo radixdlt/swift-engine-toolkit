@@ -3,7 +3,7 @@
 final class SborEncodeDecodeRequestTests: TestCase {
     
     override func setUp() {
-        debugPrint = true
+        debugPrint = false
         super.setUp()
     }
     
