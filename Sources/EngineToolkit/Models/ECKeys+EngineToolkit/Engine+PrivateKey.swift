@@ -32,9 +32,18 @@ public extension Engine.PrivateKey {
 	/// Expects a non hashed `data`, will SHA256 double hash it for secp256k1,
 	/// but not for Curve25519, before signing.
     func sign(data: any DataProtocol) throws -> Engine.SignatureWithPublicKey {
-        try SLIP10.PrivateKey(engine: self)
-            .sign(data: data)
-            .intoEngine()
+        try signReturningHashOfMessage(data: data).signatureWithPublicKey
+    }
+    
+    /// Expects a non hashed `data`, will SHA256 double hash it for secp256k1,
+    /// but not for Curve25519, before signing.
+    func signReturningHashOfMessage(data: any DataProtocol) throws -> (signatureWithPublicKey: Engine.SignatureWithPublicKey, hashOfMessage: Data) {
+        let signatureAndMessage = try SLIP10.PrivateKey(engine: self).signReturningHashOfMessage(data: data)
+
+        return try (
+            signatureWithPublicKey: signatureAndMessage.signatureWithPublicKey.intoEngine(),
+            hashOfMessage: signatureAndMessage.hashOfMessage
+        )
     }
 }
 

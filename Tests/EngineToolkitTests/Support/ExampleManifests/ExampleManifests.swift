@@ -115,38 +115,44 @@ private func _testTransaction(
         tipPercentage: 0
     )
     
-    let transactionIntent = TransactionIntent(
-        header: transactionHeader,
-        manifest: transactionManifest
-    )
-    let compiledTransactionIntent = try sut.compileTransactionIntentRequest(request: transactionIntent).get().compiledIntent
+    let signedTXContext = try transactionManifest
+        .header(transactionHeader)
+        .sign(withMany: signerPrivateKeys)
+        .notarize(notaryPrivateKey)
     
-    // Signing the doubleHashedCompiledTransactionIntent using the private key of all of the signers
-    let intentSignatures = try signerPrivateKeys.map {
-        try $0.sign(data: compiledTransactionIntent)
-    }
-    
-    let signedTransactionIntent = SignedTransactionIntent(
-        intent: transactionIntent,
-        intentSignatures: intentSignatures
-    )
-    
-    let compiledSignedTransactionIntent = try sut.compileSignedTransactionIntentRequest(
-        request: signedTransactionIntent
-    ).get().compiledSignedIntent
-    
-    // Notarize the signed intent to create a notarized transaction
-    let notarySignature = try notaryPrivateKey.sign(data: compiledSignedTransactionIntent)
-    let notarizedTransaction = NotarizedTransaction(
-        signedIntent: signedTransactionIntent,
-        notarySignature: notarySignature.signature
-    )
-    let compiledNotarizedTransactionIntent = try sut.compileNotarizedTransactionIntentRequest(request: notarizedTransaction).get().compiledNotarizedIntent
+//    let transactionIntent = TransactionIntent(
+//        header: transactionHeader,
+//        manifest: transactionManifest
+//    )
+//    let compiledTransactionIntent = try sut.compileTransactionIntentRequest(request: transactionIntent).get().compiledIntent
+//
+//    // Signing the doubleHashedCompiledTransactionIntent using the private key of all of the signers
+//    let intentSignatures = try signerPrivateKeys.map {
+//        try $0.sign(data: compiledTransactionIntent)
+//    }
+//
+//    let signedTransactionIntent = SignedTransactionIntent(
+//        intent: transactionIntent,
+//        intentSignatures: intentSignatures
+//    )
+//
+//    let compiledSignedTransactionIntent = try sut.compileSignedTransactionIntentRequest(
+//        request: signedTransactionIntent
+//    ).get().compiledSignedIntent
+//
+//    // Notarize the signed intent to create a notarized transaction
+//    let notarySignature = try notaryPrivateKey.sign(data: compiledSignedTransactionIntent)
+//    let notarizedTransaction = NotarizedTransaction(
+//        signedIntent: signedTransactionIntent,
+//        notarySignature: notarySignature.signature
+//    )
+    let compiledNotarizedTransactionIntent = try sut.compileNotarizedTransactionIntentRequest(request: signedTXContext.notarizedTransaction).get().compiledNotarizedIntent
     
     return (
-        notarizedTransaction: notarizedTransaction,
-        compiledTransactionIntent: compiledTransactionIntent,
-        compiledSignedTransactionIntent: compiledSignedTransactionIntent,
+        notarizedTransaction: signedTXContext.notarizedTransaction,
+        compiledTransactionIntent: signedTXContext.compileTransactionIntentResponse.compiledIntent,
+        compiledSignedTransactionIntent: signedTXContext.compileSignedTransactionIntentResponse.compiledSignedIntent,
         compiledNotarizedTransactionIntent: compiledNotarizedTransactionIntent
     )
+
 }

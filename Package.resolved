@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzysztofzablocki/Difference.git",
       "state" : {
-        "revision" : "02fe1111edc8318c4f8a0da96336fcbcc201f38b",
-        "version" : "1.0.1"
+        "revision" : "f627d00718033c3d7888acd5f4e3524a843db1cf",
+        "version" : "1.0.2"
       }
     },
     {
@@ -32,7 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Sajjon/K1.git",
       "state" : {
-        "revision" : "020c98b002326efafd474e013b03492ede202dca"
+        "revision" : "29eaa6aeef23caf79fbfa161f5e9e7755b50bdbb",
+        "version" : "0.0.3"
       }
     },
     {
@@ -40,7 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:radixdlt/SLIP10.git",
       "state" : {
-        "revision" : "37df4a16372dbdad97f9a97a621ecd7e64a21af4"
+        "revision" : "7247c9742c51fca46f6cb71d468305d10fd83778",
+        "version" : "0.0.10"
       }
     },
     {

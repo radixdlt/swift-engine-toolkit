@@ -11,7 +11,7 @@ final class TransactionBuildingTests: TestCase {
         let privateKeyC = Engine.PrivateKey.curve25519(.init())
         let notaryPrivateKey = Engine.PrivateKey.curve25519(.init())
 
-        let notarized = try TransactionManifest.complex
+        let txContext = try TransactionManifest.complex
             .header(.example(notaryPrivateKey: notaryPrivateKey))
             .blobs([[0xde, 0xad], [0xbe, 0xef]])
             .sign(with: privateKeyA)
@@ -20,8 +20,8 @@ final class TransactionBuildingTests: TestCase {
             .notarize(notaryPrivateKey)
         
         let signedTransactionIntent = SignedTransactionIntent(
-            intent: notarized.signedIntent.intent,
-            intentSignatures: notarized.signedIntent.intentSignatures
+            intent: txContext.notarizedTransaction.signedIntent.intent,
+            intentSignatures: txContext.notarizedTransaction.signedIntent.intentSignatures
         )
         
         let compiledSignedTransactionIntent = try EngineToolkit().compileSignedTransactionIntentRequest(
@@ -31,7 +31,7 @@ final class TransactionBuildingTests: TestCase {
         let isValid = try notaryPrivateKey
             .publicKey()
             .isValidSignature(
-                notarized.notarySignature,
+                txContext.notarizedTransaction.notarySignature,
                 for: compiledSignedTransactionIntent
             )
         
