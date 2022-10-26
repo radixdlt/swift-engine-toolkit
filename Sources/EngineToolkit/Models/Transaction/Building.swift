@@ -170,3 +170,24 @@ public extension NotarizedNonNotarySignedButIntentSignedTransctionContext {
         )
     }
 }
+
+
+public extension TransactionIntent {
+    
+    func notarize(_ notaryPrivateKey: Curve25519.Signing.PrivateKey) throws -> NotarizedSignedTransctionContext {
+        try notarize(Engine.PrivateKey.curve25519(notaryPrivateKey))
+    }
+    
+    func notarize(_ notaryPrivateKey: K1.PrivateKey) throws -> NotarizedSignedTransctionContext {
+        try notarize(Engine.PrivateKey.secp256k1(notaryPrivateKey))
+    }
+    
+    func notarize(_ notaryPrivateKey: PrivateKey) throws -> NotarizedSignedTransctionContext {
+        try notarize(notaryPrivateKey.intoEngine())
+    }
+        
+    func notarize(_ notaryPrivateKey: Engine.PrivateKey) throws -> NotarizedSignedTransctionContext {
+        try sign(withMany: []) // a bit hacky, but hey, it works!
+            .notarize(notaryPrivateKey)
+    }
+}

@@ -100,7 +100,6 @@ final class CreateAccountTXTest: TestCase {
 
         let signTxContext = try transactionManifest
             .header(header)
-            .sign(withMany: [])
             .notarize(privateKey)
 
         XCTAssertNoThrow(try sut.compileSignedTransactionIntentRequest(request: signTxContext.signedTransactionIntent).get())
