@@ -1,3 +1,5 @@
+import Bite
+
 final class ExtractAbiTest: TestCase {
     
     func test__extractAbi() throws {
@@ -8,8 +10,8 @@ final class ExtractAbiTest: TestCase {
         let extractAbiResponse = try sut.extractAbiRequest(request: extractAbiRequest).get()
 
         XCTAssertEqual(
-            extractAbiResponse.abi.toHexString(),
-            packageAbi.toHexString()
+            extractAbiResponse.abi.hex,
+            packageAbi.hex
         )
     }
 }

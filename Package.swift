@@ -13,8 +13,13 @@ let package = Package(
             targets: ["EngineToolkit"]),
     ],
     dependencies: [
+        
         .package(url: "https://github.com/krzysztofzablocki/Difference.git", from: "1.0.1"),
-        .package(url: "https://github.com/Sajjon/K1.git", .upToNextMajor(from: "0.0.1")),
+        
+        .package(url: "git@github.com:radixdlt/SLIP10.git", from: "0.0.11"),
+        
+        // Haskell-like `newtype` feature.
+        .package(url: "https://github.com/pointfreeco/swift-tagged.git", from: "0.7.0"),
     ],
     targets: [
         .binaryTarget(
@@ -23,14 +28,17 @@ let package = Package(
         ),
         .target(
             name: "EngineToolkit",
-            dependencies: ["RadixEngineToolkit"]
+            dependencies: [
+                "RadixEngineToolkit",
+                "SLIP10",
+                .product(name: "Tagged", package: "swift-tagged"),
+            ]
         ),
         .testTarget(
             name: "EngineToolkitTests",
             dependencies: [
                 "Difference",
-                "EngineToolkit",
-                "K1",
+                "EngineToolkit"
             ],
             resources: [
                 .process("TestVectors/"),

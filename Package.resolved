@@ -10,12 +10,21 @@
       }
     },
     {
+      "identity" : "bite",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:radixdlt/Bite.git",
+      "state" : {
+        "revision" : "b6801c0d4e269063ebc7b4930269d9d728b64e47",
+        "version" : "0.0.1"
+      }
+    },
+    {
       "identity" : "difference",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzysztofzablocki/Difference.git",
       "state" : {
-        "revision" : "02fe1111edc8318c4f8a0da96336fcbcc201f38b",
-        "version" : "1.0.1"
+        "revision" : "f627d00718033c3d7888acd5f4e3524a843db1cf",
+        "version" : "1.0.2"
       }
     },
     {
@@ -23,8 +32,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Sajjon/K1.git",
       "state" : {
-        "revision" : "9990be04f6c2f7d15cc9d4e136a54e59b4699ad2",
-        "version" : "0.0.1"
+        "revision" : "29eaa6aeef23caf79fbfa161f5e9e7755b50bdbb",
+        "version" : "0.0.3"
+      }
+    },
+    {
+      "identity" : "slip10",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:radixdlt/SLIP10.git",
+      "state" : {
+        "revision" : "1774160dd2a8d3df5595aa654c87639a05779f5d",
+        "version" : "0.0.11"
       }
     },
     {
@@ -34,6 +52,15 @@
       "state" : {
         "revision" : "d9825fa541df64b1a7b182178d61b9a82730d01f",
         "version" : "2.1.0"
+      }
+    },
+    {
+      "identity" : "swift-tagged",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-tagged.git",
+      "state" : {
+        "revision" : "f3f773a5e13f3c8f0ab1ce2ae6378058acefa87d",
+        "version" : "0.7.0"
       }
     }
   ],

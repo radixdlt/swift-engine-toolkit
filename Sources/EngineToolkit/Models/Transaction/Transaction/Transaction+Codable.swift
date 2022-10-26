@@ -19,7 +19,7 @@ public extension TransactionManifest {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        let hexBlobs = blobs.map { $0.toHexString() }
+        let hexBlobs = blobs.map { $0.hex() }
         
         try container.encode(instructions, forKey: .instructions)
         try container.encode(hexBlobs, forKey: .blobs)

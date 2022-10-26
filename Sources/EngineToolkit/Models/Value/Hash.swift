@@ -35,7 +35,7 @@ public extension Hash {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(bytes.toHexString(), forKey: .value)
+        try container.encode(bytes.hex(), forKey: .value)
     }
     
     init(from decoder: Decoder) throws {

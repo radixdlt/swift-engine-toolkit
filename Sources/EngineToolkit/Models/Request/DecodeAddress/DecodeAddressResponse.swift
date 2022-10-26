@@ -53,7 +53,7 @@ public extension DecodeAddressResponse {
         try container.encode(networkId, forKey: .networkId)
         try container.encode(networkName, forKey: .networkName)
         try container.encode(entityType, forKey: .entityType)
-        try container.encode(data.toHexString(), forKey: .data)
+        try container.encode(data.hex(), forKey: .data)
         try container.encode(hrp, forKey: .hrp)
         try container.encode(address, forKey: .address)
     }

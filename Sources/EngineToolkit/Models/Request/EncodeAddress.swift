@@ -28,7 +28,7 @@ public extension EncodeAddressRequest {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(addressBytes.toHexString(), forKey: .addressBytes)
+        try container.encode(addressBytes.hex(), forKey: .addressBytes)
         try container.encode(networkId, forKey: .networkId)
     }
     

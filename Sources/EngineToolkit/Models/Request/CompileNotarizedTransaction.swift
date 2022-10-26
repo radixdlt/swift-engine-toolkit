@@ -1,3 +1,6 @@
+import Bite
+import Foundation
+
 public typealias CompileNotarizedTransactionIntentRequest = NotarizedTransaction
 
 public struct CompileNotarizedTransactionIntentResponse: Sendable, Codable, Hashable {
@@ -25,7 +28,7 @@ public extension CompileNotarizedTransactionIntentResponse {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(compiledNotarizedIntent.toHexString(), forKey: .compiledNotarizedIntent)
+        try container.encode(compiledNotarizedIntent.hex(), forKey: .compiledNotarizedIntent)
     }
     
     init(from decoder: Decoder) throws {

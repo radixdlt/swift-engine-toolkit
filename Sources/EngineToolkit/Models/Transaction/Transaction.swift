@@ -38,34 +38,36 @@ public struct TransactionManifest: Sendable, Codable, Hashable {
 }
 
 
-extension TransactionManifest {
-    
-    @resultBuilder
-    struct InstructionsBuilder {
-        static func buildBlock(_ instructions: Instruction...) -> [Instruction] {
-            instructions
-        }
-        static func buildBlock(_ instruction: Instruction) -> [Instruction] {
-            [instruction]
-        }
-        static func buildBlock(_ instruction: Instruction) -> Instruction {
-            instruction
-        }
+
+@resultBuilder
+public struct InstructionsBuilder {}
+public extension InstructionsBuilder {
+    static func buildBlock(_ instructions: Instruction...) -> [Instruction] {
+        instructions
     }
-    
-    @resultBuilder
-    struct SpecificInstructionsBuilder {
-        static func buildBlock(_ instructions: any InstructionProtocol...) -> [any InstructionProtocol] {
-            instructions
-        }
-        static func buildBlock(_ instruction: any InstructionProtocol) -> [any InstructionProtocol] {
-            [instruction]
-        }
-        static func buildBlock(_ instruction: any InstructionProtocol) -> any InstructionProtocol {
-            instruction
-        }
+    static func buildBlock(_ instruction: Instruction) -> [Instruction] {
+        [instruction]
     }
-    
+    static func buildBlock(_ instruction: Instruction) -> Instruction {
+        instruction
+    }
+}
+
+@resultBuilder
+public struct SpecificInstructionsBuilder {}
+public extension SpecificInstructionsBuilder {
+    static func buildBlock(_ instructions: any InstructionProtocol...) -> [any InstructionProtocol] {
+        instructions
+    }
+    static func buildBlock(_ instruction: any InstructionProtocol) -> [any InstructionProtocol] {
+        [instruction]
+    }
+    static func buildBlock(_ instruction: any InstructionProtocol) -> any InstructionProtocol {
+        instruction
+    }
+}
+
+public extension TransactionManifest {
     init(@InstructionsBuilder buildInstructions: () throws -> [Instruction]) rethrows{
         try self.init(instructions: buildInstructions())
     }
@@ -73,5 +75,5 @@ extension TransactionManifest {
     init(@SpecificInstructionsBuilder buildInstructions: () throws -> [any InstructionProtocol]) rethrows {
         try self.init(instructions: buildInstructions())
     }
-    
 }
+

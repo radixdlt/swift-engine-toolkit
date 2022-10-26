@@ -26,7 +26,7 @@ public extension DeriveNonFungibleAddressRequest {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(resourceAddress, forKey: .resourceAddress)
-        try container.encode(nonFungibleId.toHexString(), forKey: .nonFungibleId)
+        try container.encode(nonFungibleId.hex(), forKey: .nonFungibleId)
     }
     
     init(from decoder: Decoder) throws {

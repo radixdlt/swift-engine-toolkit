@@ -35,7 +35,7 @@ public extension EddsaEd25519PublicKey {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(bytes.toHexString(), forKey: .publicKey)
+        try container.encode(bytes.hex(), forKey: .publicKey)
     }
     
     init(from decoder: Decoder) throws {

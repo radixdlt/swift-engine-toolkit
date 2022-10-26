@@ -55,6 +55,20 @@ public struct CallFunction: InstructionProtocol {
         )
     }
     
+    public init(
+        packageAddress: PackageAddress,
+        blueprintName: String,
+        functionName: String,
+        @SpecificValuesBuilder buildValue: () throws -> Value
+    ) rethrows {
+        try self.init(
+            packageAddress: packageAddress,
+            blueprintName: blueprintName,
+            functionName: functionName,
+            arguments: [buildValue()]
+        )
+    }
+    
 
 }
 

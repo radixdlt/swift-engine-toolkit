@@ -25,7 +25,7 @@ public extension CompileTransactionIntentResponse {
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(compiledIntent.toHexString(), forKey: .compiledIntent)
+        try container.encode(compiledIntent.hex(), forKey: .compiledIntent)
     }
     
     init(from decoder: Decoder) throws {
