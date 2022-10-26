@@ -120,32 +120,6 @@ private func _testTransaction(
         .sign(withMany: signerPrivateKeys)
         .notarize(notaryPrivateKey)
     
-//    let transactionIntent = TransactionIntent(
-//        header: transactionHeader,
-//        manifest: transactionManifest
-//    )
-//    let compiledTransactionIntent = try sut.compileTransactionIntentRequest(request: transactionIntent).get().compiledIntent
-//
-//    // Signing the doubleHashedCompiledTransactionIntent using the private key of all of the signers
-//    let intentSignatures = try signerPrivateKeys.map {
-//        try $0.sign(data: compiledTransactionIntent)
-//    }
-//
-//    let signedTransactionIntent = SignedTransactionIntent(
-//        intent: transactionIntent,
-//        intentSignatures: intentSignatures
-//    )
-//
-//    let compiledSignedTransactionIntent = try sut.compileSignedTransactionIntentRequest(
-//        request: signedTransactionIntent
-//    ).get().compiledSignedIntent
-//
-//    // Notarize the signed intent to create a notarized transaction
-//    let notarySignature = try notaryPrivateKey.sign(data: compiledSignedTransactionIntent)
-//    let notarizedTransaction = NotarizedTransaction(
-//        signedIntent: signedTransactionIntent,
-//        notarySignature: notarySignature.signature
-//    )
     let compiledNotarizedTransactionIntent = try sut.compileNotarizedTransactionIntentRequest(request: signedTXContext.notarizedTransaction).get().compiledNotarizedIntent
     
     return (
