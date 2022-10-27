@@ -28,49 +28,15 @@ public extension ManifestInstructions {
 public typealias ManifestInstructionsKind = ManifestInstructions.Kind
 
 public extension ManifestInstructions {
-	func toString(
-		separator: String = "\n",
-        argumentSeparator: String = "\n\t"
-	) -> String {
-		switch self {
-		case let .string(manifestString):
-            
-            // Remove newline so that we can control number of newlines ourselves.
-			let instructionStringsWithoutNewline = manifestString
-                .split(separator: ";")
-                .map { $0.trimmingCharacters(in: .newlines) }
-                .map { $0 + ";" } // Re-add ";"
-                .map {
-                    // Make it possible to change separator between arguments inside the instruction
-                    $0.split(separator: " ").joined(separator: argumentSeparator)
-                }
-            
-			return instructionStringsWithoutNewline.joined(separator: separator)
-            
-		case .json(_): // use `_` because we convert to String anyway.
-            // We dont wanna print JSON, so we go through conversion to STRING first
-            let stringifiedManifest = try! EngineToolkit()
-                .convertManifest(
-                    request: .init(
-                        transactionVersion: .default,
-                        // Create a manifest with `self`
-                        manifest: TransactionManifest(
-                            instructions: self
-                        ),
-                        // Wanna convert from Self (`.json`) -> ManifestInstrictions.string
-                        outputFormat: .string
-                    )
-                )
-                .get()
-            
-            let stringifiedSelf: Self = stringifiedManifest.instructions
-            
-            // Recursively call `toString` on `stringifiedSelf`, with original arguments intact.
-            return stringifiedSelf.toString(separator: separator)
-		}
-	}
 	
+    @available(iOS, deprecated: 999, message: "Prefer using `String(describing: transactionManifest)` if you have that, which will result in much better printing.")
+    @available(macOS, deprecated: 999, message: "Prefer using `String(describing: transactionManifest)` if you have that, which will result in much better printing.")
 	var description: String {
-		toString()
+        switch self {
+        case let .string(string):
+            return string
+        case let .json(instructions):
+            return String(describing: instructions)
+        }
 	}
 }
