@@ -119,7 +119,7 @@ public extension TransactionManifest {
 		switch formatting {
 		case .excludeBlobs: return ""
 		case .includeBlobsByByteCountOnly:
-			body = blobs.enumerated().map { index, blob in
+			body = blobs.lazy.enumerated().map { index, blob in
 				"\(label)[\(index)]: #\(blob.count) bytes"
 			}.joined(separator: separator)
 		case .includeBlobs:
