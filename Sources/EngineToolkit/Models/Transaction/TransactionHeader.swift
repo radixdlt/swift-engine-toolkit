@@ -6,16 +6,6 @@
 //
 
 import Foundation
-import Tagged
-
-public enum VersionTag: Sendable {}
-public typealias Version = Tagged<VersionTag, UInt8>
-
-public enum EpochTag: Sendable {}
-public typealias Epoch = Tagged<EpochTag, UInt64>
-
-public enum NonceTag: Sendable {}
-public typealias Nonce = Tagged<NonceTag, UInt64>
 
 public struct TransactionHeader: Sendable, Codable, Hashable {
     public let version: Version

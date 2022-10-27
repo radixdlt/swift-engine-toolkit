@@ -156,7 +156,9 @@ public extension NotarizedNonNotarySignedButIntentSignedTransctionContext {
         let compiledSignedTransactionIntent = compileSignedTransactionIntentResponse.compiledSignedIntent
         
         // Notarize the signed intent to create a notarized transaction
-        let (notarySignature, notarizedTransactionHash) = try notaryPrivateKey.signReturningHashOfMessage(data: compiledSignedTransactionIntent)
+        let (notarySignature, notarizedTransactionHash) = try notaryPrivateKey.signReturningHashOfMessage(
+            data: compiledSignedTransactionIntent
+        )
         
         let notarizedTransaction = NotarizedTransaction(
             signedIntent: signedTransactionIntent,

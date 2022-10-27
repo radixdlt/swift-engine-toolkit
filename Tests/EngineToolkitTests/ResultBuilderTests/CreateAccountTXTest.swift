@@ -71,12 +71,13 @@ final class CreateAccountTXTest: TestCase {
                 xrdBucket
             }
         }
+        
         let startEpoch: Epoch = 8000
         let endEpochExclusive = startEpoch + 2
-        
+        let networkID: NetworkID = .adapanet
         let header = TransactionHeader(
             version: 1,
-            networkId: 0x0a,
+            networkId: networkID,
             startEpochInclusive: startEpoch,
             endEpochExclusive: endEpochExclusive,
             nonce: 12345,
@@ -84,6 +85,17 @@ final class CreateAccountTXTest: TestCase {
             notaryAsSignatory: true,
             costUnitLimit: 10_000_000,
             tipPercentage: 0
+        )
+        
+        XCTAssertNoThrow(
+            try sut.convertManifest(
+                request: .init(
+                    transactionVersion: header.version,
+                    manifest: transactionManifest,
+                    outputFormat: .string,
+                    networkId: networkID
+                )
+            ).get()
         )
 
         let signTxContext = try transactionManifest

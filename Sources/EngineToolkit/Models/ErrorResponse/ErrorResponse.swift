@@ -295,10 +295,18 @@ public struct ExtractAbiError: ErrorResponseWithStringValueProtocol {
 }
 
 // MARK: NetworkMismatchError
-public struct NetworkMismatchError: ErrorResponseProtocol {
+public struct NetworkMismatchError: MismatchErrorResponseProtocol {
+    public typealias MismatchingValue = NetworkID
     public static let errorKind: ErrorKind = .networkMismatchError
-    public let expected: NetworkID
-    public let found: NetworkID
+    public let value: PropertyMismatch<NetworkID>
+}
+
+public struct PropertyMismatch<MismatchingValue: Sendable & Decodable & Equatable>: Sendable, Decodable, Equatable {
+    public let expected: MismatchingValue
+    public let found: MismatchingValue
+}
+protocol MismatchErrorResponseProtocol: ErrorResponseWithValueProtocol where Value == PropertyMismatch<MismatchingValue> {
+    associatedtype MismatchingValue: Sendable, Decodable, Equatable
 }
 
 private enum ErrorResponseCodingKeys: String, CodingKey {
@@ -414,15 +422,5 @@ public extension ParseError {
         let (container, kind) = try Self.containerAndValueKindAssertingErrorKind(from: decoder)
         let message = try container.decode(String.self, forKey: .message)
         self.init(kind: kind, message: message)
-    }
-}
-
-// MARK: NetworkMismatchError + Decodable
-public extension NetworkMismatchError {
-    init(from decoder: Decoder) throws {
-        let container = try Self.containerAssertingErrorKind(from: decoder)
-        let expectedNetworkID = try container.decode(NetworkID.self, forKey: .expected)
-        let foundNetworkID = try container.decode(NetworkID.self, forKey: .found)
-        self.init(expected: expectedNetworkID, found: foundNetworkID)
     }
 }
