@@ -1,5 +1,6 @@
 import Foundation
-
+import CryptoKit
+import SLIP10
 
 public struct TransactionManifest: Sendable, Codable, Hashable, CustomStringConvertible {
     // MARK: Stored properties
@@ -42,7 +43,9 @@ public extension TransactionManifest {
 	enum BlobOutputFormat {
 		case excludeBlobs
 		case includeBlobsByByteCountOnly
-		case includeBlobsCompletely
+		case includeBlobs
+        /// Blob + SHA256.twice hash of blob
+        case includeBlobsWithHash
 		public static let `default`: Self = .includeBlobsByByteCountOnly
 	}
 	
@@ -59,10 +62,16 @@ public extension TransactionManifest {
 			body = blobs.enumerated().map { index, blob in
 				"\(label)[\(index)]: #\(blob.count) bytes"
 			}.joined(separator: separator)
-		case .includeBlobsCompletely:
+		case .includeBlobs:
 			body = blobs.enumerated().map { index, blob in
 				"\(label)[\(index)]:\n\(blob.hex)\n"
 			}.joined(separator: separator)
+        case .includeBlobsWithHash:
+            body = blobs.enumerated().map { index, blob in
+                let hash = Data(SHA256.twice(data: blob))
+                let hashHex = hash.hex
+                return "\(label)[\(index)] hash = \(hashHex):\n\(blob.hex)\n"
+            }.joined(separator: separator)
 		}
 		guard !body.isEmpty else {
 			return ""
@@ -76,12 +85,14 @@ public extension TransactionManifest {
 		blobSeparator: String = "\n",
 		blobPreamble: String = "BLOBS\n",
 		blobLabel: String = "BLOB\n",
-		instructionsSeparator: String = "\n\n"
+        instructionsSeparator: String = "\n\n",
+        instructionsArgumentSeparator: String = "\n\t"
 	) -> String {
 		
 		
 		let instructionsString = instructions.toString(
-			separator: instructionsSeparator
+            separator: instructionsSeparator,
+            argumentSeparator: instructionsArgumentSeparator
 		)
 		
 		let blobString = toStringBlobs(
