@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ManifestInstructions: Sendable, Codable, Hashable {
+public enum ManifestInstructions: Sendable, Codable, Hashable, CustomStringConvertible {
     // ==============
     // Enum Variants
     // ==============
@@ -26,3 +26,17 @@ public extension ManifestInstructions {
 }
 
 public typealias ManifestInstructionsKind = ManifestInstructions.Kind
+
+public extension ManifestInstructions {
+	
+    @available(iOS, deprecated: 999, message: "Prefer using `String(describing: transactionManifest)` if you have that, which will result in much better printing.")
+    @available(macOS, deprecated: 999, message: "Prefer using `String(describing: transactionManifest)` if you have that, which will result in much better printing.")
+	var description: String {
+        switch self {
+        case let .string(string):
+            return string
+        case let .json(instructions):
+            return String(describing: instructions)
+        }
+	}
+}
