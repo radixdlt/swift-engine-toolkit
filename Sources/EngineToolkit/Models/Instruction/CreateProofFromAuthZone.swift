@@ -13,7 +13,7 @@ public struct CreateProofFromAuthZone: InstructionProtocol {
     
     // MARK: Init
     
-    public init(from resourceAddress: ResourceAddress, intoBucket: Bucket) {
+    public init(resourceAddress: ResourceAddress, intoBucket: Bucket) {
         self.resourceAddress = resourceAddress
         self.intoBucket = intoBucket
     }
@@ -46,9 +46,9 @@ public extension CreateProofFromAuthZone {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let intoBucket: Bucket = try container.decode(Bucket.self, forKey: .intoBucket)
-        
-        self = Self(from: resourceAddress, intoBucket: intoBucket)
+        try self.init(
+            resourceAddress: container.decode(ResourceAddress.self, forKey: .resourceAddress),
+            intoBucket: container.decode(Bucket.self, forKey: .intoBucket)
+        )
     }
 }

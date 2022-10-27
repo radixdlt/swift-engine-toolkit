@@ -13,7 +13,7 @@ public struct PublishPackage: InstructionProtocol {
     
     // MARK: Init
     
-    public init(from code: Blob, abi: Blob) {
+    public init(code: Blob, abi: Blob) {
         self.code = code
         self.abi = abi
     }
@@ -46,9 +46,9 @@ public extension PublishPackage {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let code: Blob = try container.decode(Blob.self, forKey: .code)
-        let abi: Blob = try container.decode(Blob.self, forKey: .abi)
-        
-        self = Self(from: code, abi: abi)
+        try self.init(
+            code: container.decode(Blob.self, forKey: .code),
+            abi: container.decode(Blob.self, forKey: .abi)
+        )
     }
 }

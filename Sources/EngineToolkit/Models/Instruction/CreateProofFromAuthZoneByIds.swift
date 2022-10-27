@@ -14,7 +14,11 @@ public struct CreateProofFromAuthZoneByIds: InstructionProtocol {
     
     // MARK: Init
     
-    public init(from resourceAddress: ResourceAddress, ids: Set<NonFungibleId>, intoProof: Proof) {
+    public init(
+        resourceAddress: ResourceAddress,
+        ids: Set<NonFungibleId>,
+        intoProof: Proof
+    ) {
         self.resourceAddress = resourceAddress
         self.ids = ids
         self.intoProof = intoProof
@@ -50,10 +54,10 @@ public extension CreateProofFromAuthZoneByIds {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let ids: Set<NonFungibleId> = try container.decode(Set<NonFungibleId>.self, forKey: .ids)
-        let intoProof: Proof = try container.decode(Proof.self, forKey: .intoProof)
-        
-        self = Self(from: resourceAddress, ids: ids, intoProof: intoProof)
+        try self.init(
+            resourceAddress: container.decode(ResourceAddress.self, forKey: .resourceAddress),
+            ids: container.decode(Set<NonFungibleId>.self, forKey: .ids),
+            intoProof: container.decode(Proof.self, forKey: .intoProof)
+        )
     }
 }

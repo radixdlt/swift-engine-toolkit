@@ -13,7 +13,10 @@ public struct MintFungible: InstructionProtocol {
     
     // MARK: Init
     
-    public init(from resourceAddress: ResourceAddress, amount: Decimal_) {
+    public init(
+        resourceAddress: ResourceAddress,
+        amount: Decimal_
+    ) {
         self.resourceAddress = resourceAddress
         self.amount = amount
     }
@@ -45,9 +48,9 @@ public extension MintFungible {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let resourceAddress: ResourceAddress = try container.decode(ResourceAddress.self, forKey: .resourceAddress)
-        let amount: Decimal_ = try container.decode(Decimal_.self, forKey: .amount)
-        
-        self = Self(from: resourceAddress, amount: amount)
+        try self.init(
+            resourceAddress: container.decode(ResourceAddress.self, forKey: .resourceAddress),
+            amount: container.decode(Decimal_.self, forKey: .amount)
+        )
     }
 }

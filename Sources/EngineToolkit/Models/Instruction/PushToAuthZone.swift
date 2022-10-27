@@ -12,7 +12,7 @@ public struct PushToAuthZone: InstructionProtocol {
     
     // MARK: Init
     
-    public init(from proof: Proof) {
+    public init(proof: Proof) {
         self.proof = proof
     }
 }
@@ -41,8 +41,6 @@ public extension PushToAuthZone {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let proof: Proof = try container.decode(Proof.self, forKey: .proof)
-        
-        self = Self(from: proof)
+        try self.init(proof: container.decode(Proof.self, forKey: .proof))
     }
 }

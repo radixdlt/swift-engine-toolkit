@@ -6,12 +6,12 @@ public struct CompileTransactionIntentResponse: Sendable, Codable, Hashable {
     
     // MARK: Init
     
-    public init(from compiledIntent: [UInt8]) {
+    public init(compiledIntent: [UInt8]) {
         self.compiledIntent = compiledIntent
     }
     
-    public init(from compiledIntent: String) throws {
-        self.compiledIntent = try [UInt8](hex: compiledIntent)
+    public init(compiledIntentHex: String) throws {
+        self.compiledIntent = try [UInt8](hex: compiledIntentHex)
     }
 }
 
@@ -31,6 +31,6 @@ public extension CompileTransactionIntentResponse {
     init(from decoder: Decoder) throws {
         // Checking for type discriminator
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self(from: try container.decode(String.self, forKey: .compiledIntent))
+        try self.init(compiledIntentHex: container.decode(String.self, forKey: .compiledIntent))
     }
 }

@@ -6,7 +6,7 @@ public struct DeriveNonFungibleAddressFromPublicKeyResponse: Sendable, Codable, 
     
     // MARK: Init
     
-    public init(from nonFungibleAddress: String) {
+    public init(nonFungibleAddress: String) {
         self.nonFungibleAddress = nonFungibleAddress
     }
     

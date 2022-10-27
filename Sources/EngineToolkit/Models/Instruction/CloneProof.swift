@@ -45,9 +45,9 @@ public extension CloneProof {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        let source = try container.decode(Proof.self, forKey: .proof)
-        let target = try container.decode(Proof.self, forKey: .intoProof)
-        
-        self.init(from: source, to: target)
+        try self.init(
+            from: container.decode(Proof.self, forKey: .proof),
+            to: container.decode(Proof.self, forKey: .intoProof)
+        )
     }
 }

@@ -89,8 +89,8 @@ public extension CallFunction {
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(packageAddress, forKey: .packageAddress)
-        try container.encode(blueprintName, forKey: .blueprintName)
-        try container.encode(functionName, forKey: .functionName)
+        try container.encode(blueprintName.proxyEncodable, forKey: .blueprintName)
+        try container.encode(functionName.proxyEncodable, forKey: .functionName)
         try container.encode(arguments, forKey: .arguments)
     }
     

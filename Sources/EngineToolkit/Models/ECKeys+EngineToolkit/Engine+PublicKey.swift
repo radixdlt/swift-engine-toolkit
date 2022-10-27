@@ -76,3 +76,17 @@ public extension Engine.PublicKey {
     }
     
 }
+public extension Engine.PublicKey {
+    
+    /// For ECDSA secp256k1 public keys this will use the compressed representation
+    /// For EdDSA Curve25519 there is no difference between compressed and uncompressed.
+    var compressedRepresentation: Data {
+        try! SLIP10.PublicKey(engine: self).compressedRepresentation
+    }
+    
+    /// For ECDSA secp256k1 public keys this will use the uncompressed representation
+    /// For EdDSA Curve25519 there is no difference between compressed and uncompressed.
+    var uncompressedRepresentation: Data {
+        try! SLIP10.PublicKey(engine: self).uncompressedRepresentation
+    }
+}
