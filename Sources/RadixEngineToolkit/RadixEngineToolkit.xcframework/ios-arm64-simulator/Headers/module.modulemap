@@ -1,4 +1,0 @@
-module RadixEngineToolkit {
-    umbrella header "radix_engine_toolkit.h"
-    export *
-}

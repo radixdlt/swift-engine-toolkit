@@ -10,11 +10,10 @@ For now you need to build the [Radix Engine Toolkit][ret] yourself, using `build
 # Supported Platforms
 The underlying binary is built for these platforms:
 * iOS (ARM64, used since [iPhone 5S][iphonearchs])
-* iOS Simulator (ARM64)
+* iOS Simulator for both Apple Silicon (ARM64) and Intel (x86).
 * macOS, both Apple Silicon (ARM64) and Intel (x86).
 
-iOS x86 is not supported since [it is obsolete][iphonearchs] and runs on iPhones which are not capable of running iOS 15, which is required by Babylon Wallet app.
-> arm64 is the current 64-bit ARM CPU architecture, as used since the iPhone 5S and later (6, 6S, SE and 7)
+> Note: While x86 iOS versions are considered [obsolete][iphonearchs] they are still supported by the RadixEngineToolkit XCFramework to allow developers on Intel-based Macs to be able to use this library with their iPhone simulators.
 
 # Build
 
