@@ -123,7 +123,7 @@ public extension TransactionManifest {
 				"\(label)[\(index)]: #\(blob.count) bytes"
 			}.joined(separator: separator)
 		case .includeBlobs:
-			body = blobs.enumerated().map { index, blob in
+			body = blobs.lazy.enumerated().map { index, blob in
 				"\(label)[\(index)]:\n\(blob.hex)\n"
 			}.joined(separator: separator)
         case .includeBlobsWithHash:
