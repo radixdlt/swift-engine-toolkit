@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct TransactionManifest: Sendable, Codable, Hashable {
+public struct TransactionManifest: Sendable, Codable, Hashable, CustomStringConvertible {
     // MARK: Stored properties
     public let instructions: ManifestInstructions
     public let blobs: [[UInt8]]
@@ -37,6 +37,69 @@ public struct TransactionManifest: Sendable, Codable, Hashable {
     }
 }
 
+public extension TransactionManifest {
+	
+	enum BlobOutputFormat {
+		case excludeBlobs
+		case includeBlobsByByteCountOnly
+		case includeBlobsCompletely
+		public static let `default`: Self = .includeBlobsByByteCountOnly
+	}
+	
+	func toStringBlobs(
+		preamble: String = "BLOBS\n",
+		label: String = "BLOB\n",
+		formatting: BlobOutputFormat,
+		separator: String = "\n"
+	) -> String {
+		let body: String
+		switch formatting {
+		case .excludeBlobs: return ""
+		case .includeBlobsByByteCountOnly:
+			body = blobs.enumerated().map { index, blob in
+				"\(label)[\(index)]: #\(blob.count) bytes"
+			}.joined(separator: separator)
+		case .includeBlobsCompletely:
+			body = blobs.enumerated().map { index, blob in
+				"\(label)[\(index)]:\n\(blob.hex)\n"
+			}.joined(separator: separator)
+		}
+		guard !body.isEmpty else {
+			return ""
+		}
+		return [preamble, body].joined()
+	}
+	
+	func toString(
+		preamble: String = "~~~ MANIFEST ~~~\n",
+		blobOutputFormat: BlobOutputFormat = .default,
+		blobSeparator: String = "\n",
+		blobPreamble: String = "BLOBS\n",
+		blobLabel: String = "BLOB\n",
+		instructionsSeparator: String = "\n\n"
+	) -> String {
+		
+		
+		let instructionsString = instructions.toString(
+			separator: instructionsSeparator
+		)
+		
+		let blobString = toStringBlobs(
+			preamble: blobPreamble,
+			label: blobLabel,
+			formatting: blobOutputFormat,
+			separator: blobSeparator
+		)
+		
+		let manifestString = [preamble, instructionsString, blobString].joined()
+		
+		return manifestString
+	}
+	
+	var description: String {
+		toString()
+	}
+}
 
 
 @resultBuilder
