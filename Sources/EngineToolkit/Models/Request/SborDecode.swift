@@ -5,12 +5,12 @@ public struct SborDecodeRequest: Sendable, Codable, Hashable {
     
     // MARK: Init
     
-	public init(encodedBytes: [UInt8], networkId: NetworkID = .mainnet) {
+	public init(encodedBytes: [UInt8], networkId: NetworkID) {
         self.encodedValue = encodedBytes
         self.networkId = networkId
     }
     
-	public init(encodedHex: String, networkId: NetworkID = .mainnet) throws {
+	public init(encodedHex: String, networkId: NetworkID) throws {
 		self.init(encodedBytes: try [UInt8](hex: encodedHex), networkId: networkId)
     }
 }

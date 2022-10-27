@@ -36,7 +36,7 @@ public extension ManifestInstructions {
         case let .string(string):
             return string
         case let .json(instructions):
-            return String(describing: instructions)
+            return instructions.lazy.map({ String(describing: $0) }).joined(separator: "\n")
         }
 	}
 }

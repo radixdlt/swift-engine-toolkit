@@ -22,7 +22,8 @@ private extension SborEncodeDecodeRequestTests {
         guard index == 16 else { return }
         print("✨ vector @ \(index)")
         let decodeRequest = try SborDecodeRequest(
-            encodedHex: vector.encoded
+            encodedHex: vector.encoded,
+            networkId: .mainnet
         )
         let decoded = try sut.sborDecodeRequest(request: decodeRequest).get()
         XCTAssertEqual(decoded, vector.decoded)//, line: line)

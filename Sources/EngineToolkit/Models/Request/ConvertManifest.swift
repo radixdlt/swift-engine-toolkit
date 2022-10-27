@@ -8,7 +8,7 @@ public struct ConvertManifestRequest: Sendable, Codable, Hashable {
 		transactionVersion: Version,
 		manifest: TransactionManifest,
 		outputFormat: ManifestInstructionsKind,
-		networkId: NetworkID = .mainnet
+		networkId: NetworkID
 	) {
 		self.transactionVersion = transactionVersion
 		self.manifestInstructionsOutputFormat = outputFormat

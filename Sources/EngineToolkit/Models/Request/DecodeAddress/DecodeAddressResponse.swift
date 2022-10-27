@@ -22,7 +22,7 @@ public struct DecodeAddressResponse: Sendable, Codable, Hashable {
         data: [UInt8],
         hrp: String,
         address: Address,
-        networkId: NetworkID = .mainnet
+        networkId: NetworkID
     ) {
         self.networkId = networkId
         self.networkName = networkName
