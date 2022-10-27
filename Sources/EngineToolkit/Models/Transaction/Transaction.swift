@@ -60,6 +60,11 @@ public extension TransactionManifest {
         switch instructions {
         case let .string(manifestString):
             
+            var manifestString = manifestString.trimWhitespacesIncludingNullTerminators()
+            if manifestString.hasSuffix(";") {
+                manifestString.removeLast()
+            }
+            
             // Remove newline so that we can control number of newlines ourselves.
             let instructionsStringsWithoutNewline = manifestString
                 .split(separator: ";")
@@ -67,15 +72,11 @@ public extension TransactionManifest {
                 .map { $0 + ";" } // Re-add ";"
                 .map {
                     // Make it possible to change separator between arguments inside the instruction
-                    $0.split(separator: " ").joined(separator: argumentSeparator)
+                    $0.split(separator: " ").filter{ !$0.isEmpty }.joined(separator: argumentSeparator)
                 }
             
-            var instructionStringWithoutNewline = instructionsStringsWithoutNewline.joined(separator: separator)
-            
-            if instructionStringWithoutNewline.hasSuffix(";;") {
-                instructionStringWithoutNewline.removeLast()
-            }
-            return instructionStringWithoutNewline
+            return instructionsStringsWithoutNewline
+                .joined(separator: separator)
             
         case let .json(instructionsOnJSONFormat):
             // We dont wanna print JSON, so we go through conversion to STRING first
