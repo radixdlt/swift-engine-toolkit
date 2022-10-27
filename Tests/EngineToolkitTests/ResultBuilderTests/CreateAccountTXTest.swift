@@ -87,16 +87,27 @@ final class CreateAccountTXTest: TestCase {
             tipPercentage: 0
         )
         
-        XCTAssertNoThrow(
-            try sut.convertManifest(
+           let jsonManifest = try sut.convertManifest(
                 request: .init(
                     transactionVersion: header.version,
                     manifest: transactionManifest,
-                    outputFormat: .string,
+                    outputFormat: .json,
                     networkId: networkID
                 )
             ).get()
+        
+        
+        
+        let manifestString = jsonManifest.toString(
+            preamble: "",
+            instructionsSeparator: "",
+            instructionsArgumentSeparator: " ",
+            networkID: networkID
         )
+        let expected = """
+        CALL_METHOD ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42") "lock_fee" Decimal("10");CALL_METHOD ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42") "free_xrd";TAKE_FROM_WORKTOP ResourceAddress("resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9") Bucket("bucket1");CALL_FUNCTION PackageAddress("package_tdx_a_1qyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqps373guw") "Account" "new_with_resource" Enum("Protected", Enum("ProofRule", Enum("Require", Enum("StaticNonFungible", "000000000000000000000000000000000000000000000000000003300720000000ff57575dc7af8bfc4d0837cc1ce2017b686a88145dc5579a958e3462fe9a908e")))) Bucket("bucket1");
+        """
+        XCTAssertEqual(manifestString, expected)
 
         let signTxContext = try transactionManifest
             .header(header)

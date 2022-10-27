@@ -49,7 +49,7 @@ public extension TransactionManifest {
 		public static let `default`: Self = .includeBlobsByByteCountOnly
 	}
     
-    static func toStringInstructions(
+    internal static func toStringInstructions(
         _ instructions: ManifestInstructions,
         // If instructions are on JSON format we stringify them, which requires blobs (convertManifest)
         in manifest: TransactionManifest,
@@ -61,7 +61,7 @@ public extension TransactionManifest {
         case let .string(manifestString):
             
             // Remove newline so that we can control number of newlines ourselves.
-            let instructionStringsWithoutNewline = manifestString
+            let instructionsStringsWithoutNewline = manifestString
                 .split(separator: ";")
                 .map { $0.trimmingCharacters(in: .newlines) }
                 .map { $0 + ";" } // Re-add ";"
@@ -70,7 +70,12 @@ public extension TransactionManifest {
                     $0.split(separator: " ").joined(separator: argumentSeparator)
                 }
             
-            return instructionStringsWithoutNewline.joined(separator: separator)
+            var instructionStringWithoutNewline = instructionsStringsWithoutNewline.joined(separator: separator)
+            
+            if instructionStringWithoutNewline.hasSuffix(";;") {
+                instructionStringWithoutNewline.removeLast()
+            }
+            return instructionStringWithoutNewline
             
         case let .json(instructionsOnJSONFormat):
             // We dont wanna print JSON, so we go through conversion to STRING first
@@ -119,7 +124,7 @@ public extension TransactionManifest {
         }
     }
     
-    func toStringInstructions(
+    internal func toStringInstructions(
         separator: String = "\n",
         argumentSeparator: String = "\n\t",
         networkID: NetworkID
@@ -134,7 +139,7 @@ public extension TransactionManifest {
         )
     }
 	
-	func toStringBlobs(
+	internal func toStringBlobs(
 		preamble: String = "BLOBS\n",
 		label: String = "BLOB\n",
 		formatting: BlobOutputFormat,
