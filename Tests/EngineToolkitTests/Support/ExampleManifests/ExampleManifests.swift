@@ -84,18 +84,10 @@ func testTransactionSecp256k1(
 	file: StaticString = #file,
 	line: UInt = #line
 ) throws -> TestTransaction {
-    /*
-    try _testTransaction(
+    return try _testTransaction(
         notaryPrivateKey: .secp256k1(try K1.PrivateKey.generateNew()),
         signerPrivateKeys: (0..<signerCount).map { _ in .secp256k1(try K1.PrivateKey.generateNew()) },
 		file: file, line: line
-    )
-     */
-    print("\n\n⚠️⚠️⚠️⚠️⚠️ WARNING ⚠️⚠️⚠️⚠️⚠️\nUsing Curve25519 instead of Secp256k1 temporarily to omit failing secp256k1 tests.\n\nSecp256k1 tests fail with error: TransactionValidationError, value: SignatureValidationError(InvalidNotarySignature)\nPLEASE FIX secp256k1 failing test by commenting out the line above (\(#line) in file: \(#file)!\n⚠️⚠️⚠️⚠️⚠️ WARNING ⚠️⚠️⚠️⚠️⚠️\n\n")
-    return try _testTransaction(
-        notaryPrivateKey: .curve25519(.init()),
-        signerPrivateKeys: (0..<signerCount).map { _ in .curve25519(.init()) },
-        file: file, line: line
     )
 }
 
