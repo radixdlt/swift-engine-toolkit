@@ -17,6 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3.1.0
 
+      - uses: webfactory/ssh-agent@v0.6.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.BITE_UNIT_TESTS_SSH_KEY }}
+            ${{ secrets.SLIP_10_UNIT_TESTS_SSH_KEY }}
+
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "14.0.1"
