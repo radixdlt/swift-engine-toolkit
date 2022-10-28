@@ -1,0 +1,26 @@
+name: "CI"
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+
+  unit_tests:
+    name: "Unit tests"
+    runs-on: macos-12
+
+    steps:
+      - uses: actions/checkout@v3.1.0
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "14.0.1"
+
+      - name: "Run unit tests"
+        run: |
+          swift test -Xswiftc -O
