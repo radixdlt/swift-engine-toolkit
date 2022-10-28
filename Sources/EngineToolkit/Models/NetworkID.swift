@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct NetworkID: Sendable, Codable, Hashable, Identifiable, CustomStringConvertible, ExpressibleByIntegerLiteral {
+public struct NetworkID: Sendable, Codable, Hashable, Identifiable, CaseIterable, CustomStringConvertible, ExpressibleByIntegerLiteral {
 	public typealias ID = UInt8
 	public typealias IntegerLiteralType = ID
 	public var description: String { String(describing: id) }
@@ -47,4 +47,24 @@ public extension NetworkID {
 	/// Decimal value: 11
 	static let nebunet: Self = 0x0B
 	
+}
+
+public extension NetworkID {
+    // Update this to betanet for betanet and mainnet post mainnet.
+    static let primary: Self = .adapanet
+}
+
+public extension NetworkID {
+   
+    typealias AllCases = [Self]
+   
+    static var allCases: [NetworkID] {
+        [.mainnet, .simulator, .adapanet, .nebunet]
+    }
+    
+    static func all(but excluded: NetworkID) -> AllCases {
+        var allBut = Self.allCases
+        allBut.removeAll(where: { $0 == excluded })
+        return allBut
+    }
 }

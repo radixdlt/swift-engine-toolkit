@@ -63,3 +63,18 @@ public extension Engine.Signature {
         }
     }
 }
+
+public extension Engine.Signature {
+    var bytes: [UInt8] {
+        switch self {
+        case let .ecdsaSecp256k1(signature):
+            return signature.bytes
+        case let .eddsaEd25519(signature):
+            return signature.bytes
+        }
+    }
+
+    var hex: String {
+        bytes.hex
+    }
+}

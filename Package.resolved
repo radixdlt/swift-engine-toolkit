@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:radixdlt/SLIP10.git",
       "state" : {
-        "revision" : "a61be0bec3b2f2fd9f92e3effc26a13736b5cc08",
-        "version" : "0.0.12"
+        "revision" : "8ae35c9d8c1920dfe8197eebe1b5d1a10efb5e28",
+        "version" : "0.0.15"
       }
     },
     {

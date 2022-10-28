@@ -49,67 +49,98 @@ public extension TransactionManifest {
 		public static let `default`: Self = .includeBlobsByByteCountOnly
 	}
     
-    static func toStringInstructions(
+    internal static func toStringInstructions(
         _ instructions: ManifestInstructions,
         // If instructions are on JSON format we stringify them, which requires blobs (convertManifest)
         in manifest: TransactionManifest,
+        networkID: NetworkID,
         separator: String = "\n",
         argumentSeparator: String = "\n\t"
     ) -> String {
         switch instructions {
         case let .string(manifestString):
             
+            var manifestString = manifestString.trimWhitespacesIncludingNullTerminators()
+            if manifestString.hasSuffix(";") {
+                manifestString.removeLast()
+            }
+            
             // Remove newline so that we can control number of newlines ourselves.
-            let instructionStringsWithoutNewline = manifestString
+            let instructionsStringsWithoutNewline = manifestString
                 .split(separator: ";")
                 .map { $0.trimmingCharacters(in: .newlines) }
                 .map { $0 + ";" } // Re-add ";"
                 .map {
                     // Make it possible to change separator between arguments inside the instruction
-                    $0.split(separator: " ").joined(separator: argumentSeparator)
+                    $0.split(separator: " ").filter{ !$0.isEmpty }.joined(separator: argumentSeparator)
                 }
             
-            return instructionStringsWithoutNewline.joined(separator: separator)
+            return instructionsStringsWithoutNewline
+                .joined(separator: separator)
             
-        case .json(_): // use `_` because we convert to String anyway.
+        case let .json(instructionsOnJSONFormat):
             // We dont wanna print JSON, so we go through conversion to STRING first
-            let stringifiedManifest = try! EngineToolkit()
-                .convertManifest(
-                    request: .init(
-                        transactionVersion: .default,
-                        manifest: manifest, // need blobs
-                        // Wanna convert from Self (`.json`) -> ManifestInstrictions.string
-                        outputFormat: .string
+            func stringifyManifest(networkForRequest: NetworkID) throws -> TransactionManifest {
+                try EngineToolkit()
+                    .convertManifest(
+                        request: .init(
+                            transactionVersion: .default,
+                            manifest: manifest, // need blobs
+                            // Wanna convert from Self (`.json`) -> ManifestInstrictions.string
+                            outputFormat: .string,
+                            networkId: networkForRequest
+                        )
                     )
-                )
-                .get()
+                    .get()
+            }
             
-            let stringifiedInstructions = stringifiedManifest.instructions
+            let stringifiedManifest: TransactionManifest? = {
+                do {
+                    return try stringifyManifest(networkForRequest: networkID)
+                } catch {
+                    // maybe NetworkMismatchError...
+                    for networkForRequest in NetworkID.all(but: networkID) {
+                        do {
+                            return try stringifyManifest(networkForRequest: networkForRequest)
+                        } catch {
+                            continue
+                        }
+                    }
+                    return nil
+                }
+            }()
+            guard let stringifiedManifest else {
+                // We fail to stringify JSON instructions..
+                return String(describing: instructionsOnJSONFormat)
+            }
             
             // Recursively call `toString` on `stringifiedSelf`, with original arguments intact.
             return Self.toStringInstructions(
-                stringifiedInstructions, // Use newly stringified instructions!
-                in: manifest, // Don't care
+                stringifiedManifest.instructions, // Use newly stringified instructions!
+                in: manifest, // Don't care,
+                networkID: networkID,
                 separator: separator, // passthrough
                 argumentSeparator: argumentSeparator // passthrough
             )
         }
     }
     
-    func toStringInstructions(
+    internal func toStringInstructions(
         separator: String = "\n",
-        argumentSeparator: String = "\n\t"
+        argumentSeparator: String = "\n\t",
+        networkID: NetworkID
     ) -> String {
         Self.toStringInstructions(
             instructions,
             // If instructions are on JSON format we stringify them, which requires blobs (convertManifest)
             in: self,
+            networkID: networkID,
             separator: separator,
             argumentSeparator: argumentSeparator
         )
     }
 	
-	func toStringBlobs(
+	internal func toStringBlobs(
 		preamble: String = "BLOBS\n",
 		label: String = "BLOB\n",
 		formatting: BlobOutputFormat,
@@ -146,12 +177,14 @@ public extension TransactionManifest {
 		blobPreamble: String = "BLOBS\n",
 		blobLabel: String = "BLOB\n",
         instructionsSeparator: String = "\n\n",
-        instructionsArgumentSeparator: String = "\n\t"
+        instructionsArgumentSeparator: String = "\n\t",
+        networkID: NetworkID
 	) -> String {
         
         let instructionsString = toStringInstructions(
             separator: instructionsSeparator,
-            argumentSeparator: instructionsArgumentSeparator
+            argumentSeparator: instructionsArgumentSeparator,
+            networkID: networkID
         )
         
 		let blobString = toStringBlobs(
@@ -167,7 +200,8 @@ public extension TransactionManifest {
 	}
 	
 	var description: String {
-		toString()
+        // Best we can do is default to the primary network given the roadmap.
+        toString(networkID: .primary)
 	}
 }
 
