@@ -16,7 +16,7 @@ let package = Package(
         
         .package(url: "https://github.com/krzysztofzablocki/Difference.git", from: "1.0.1"),
         
-        .package(url: "git@github.com:radixdlt/SLIP10.git", from: "0.0.15"),
+        .package(url: "git@github.com:radixdlt/SLIP10.git", from: "0.0.16"),
         
         // Haskell-like `newtype` feature.
         .package(url: "https://github.com/pointfreeco/swift-tagged.git", from: "0.7.0"),

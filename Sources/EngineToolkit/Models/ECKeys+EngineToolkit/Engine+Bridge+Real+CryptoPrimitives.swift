@@ -8,6 +8,7 @@
 import Foundation
 import SLIP10
 import K1
+import CryptoKit
 
 public extension SLIP10.PrivateKey {
     init(engine enginePrivateKey: Engine.PrivateKey) {

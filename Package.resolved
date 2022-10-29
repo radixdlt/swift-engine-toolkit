@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Sajjon/K1.git",
       "state" : {
-        "revision" : "29eaa6aeef23caf79fbfa161f5e9e7755b50bdbb",
-        "version" : "0.0.3"
+        "revision" : "a6796d66597f0295fe3fe37e00bfda370b439c78",
+        "version" : "0.0.4"
       }
     },
     {
@@ -41,17 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:radixdlt/SLIP10.git",
       "state" : {
-        "revision" : "8ae35c9d8c1920dfe8197eebe1b5d1a10efb5e28",
-        "version" : "0.0.15"
-      }
-    },
-    {
-      "identity" : "swift-crypto",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-crypto.git",
-      "state" : {
-        "revision" : "d9825fa541df64b1a7b182178d61b9a82730d01f",
-        "version" : "2.1.0"
+        "revision" : "e73e568a77f3817167d373471490dd4d4e07e27b",
+        "version" : "0.0.16"
       }
     },
     {
