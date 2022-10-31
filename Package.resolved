@@ -37,12 +37,30 @@
       }
     },
     {
+      "identity" : "mnemonic",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:radixdlt/Mnemonic.git",
+      "state" : {
+        "revision" : "6df4401b181d4d10f2acd1e0d95aa82c7f73d9b1",
+        "version" : "0.0.4"
+      }
+    },
+    {
       "identity" : "slip10",
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:radixdlt/SLIP10.git",
       "state" : {
         "revision" : "c5eb8e5f72953e883208c54c54da4a104415fd61",
         "version" : "0.0.17"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "9f39744e025c7d377987f30b03770805dcb0bcd1",
+        "version" : "1.1.4"
       }
     },
     {
