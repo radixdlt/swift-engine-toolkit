@@ -22,8 +22,8 @@ let package = Package(
 		// This is very unfortunate and we hope it gets fixed in the future.
 		.package(url: "https://github.com/Sajjon/K1.git", from: "0.0.4"),
 		.package(url: "git@github.com:radixdlt/Bite.git", from: "0.0.1"),
-		.package(url: "git@github.com:radixdlt/Mnemonic.git", from: "0.0.4"),
-		.package(url: "git@github.com:radixdlt/SLIP10.git", from: "0.0.17"),
+		.package(url: "git@github.com:radixdlt/Mnemonic.git", from: "0.0.5"),
+		.package(url: "git@github.com:radixdlt/SLIP10.git", from: "0.0.18"),
         
         // Haskell-like `newtype` feature.
         .package(url: "https://github.com/pointfreeco/swift-tagged.git", from: "0.7.0"),

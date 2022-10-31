@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:radixdlt/Mnemonic.git",
       "state" : {
-        "revision" : "6df4401b181d4d10f2acd1e0d95aa82c7f73d9b1",
-        "version" : "0.0.4"
+        "revision" : "c16383ddf78bc7ff71435f78fa0c4bdecc186a96",
+        "version" : "0.0.5"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:radixdlt/SLIP10.git",
       "state" : {
-        "revision" : "c5eb8e5f72953e883208c54c54da4a104415fd61",
-        "version" : "0.0.17"
+        "revision" : "a0259393b897d1aa22526a86b4079140344100db",
+        "version" : "0.0.18"
       }
     },
     {
