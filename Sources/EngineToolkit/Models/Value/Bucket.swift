@@ -8,11 +8,11 @@ public struct Bucket: ValueProtocol, Sendable, Codable, Hashable, IdentifierConv
     }
     
     // MARK: Stored properties
-    public let identifier: Identifier
+    public let identifier: TransientIdentifier
     
     // MARK: Init
     
-    public init(identifier: Identifier) {
+    public init(identifier: TransientIdentifier) {
         self.identifier = identifier
     }
 }
@@ -41,6 +41,6 @@ public extension Bucket {
         }
         
         // Decoding `identifier`
-        try self.init(identifier: container.decode(Identifier.self, forKey: .identifier))
+        try self.init(identifier: container.decode(TransientIdentifier.self, forKey: .identifier))
     }
 }

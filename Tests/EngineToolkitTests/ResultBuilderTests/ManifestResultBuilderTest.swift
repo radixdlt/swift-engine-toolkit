@@ -13,13 +13,13 @@ final class ManifestResultBuilderTest: TestCase {
     func test__complex_resultBuilder() throws {
         let expected = try sut.convertManifest(request: makeRequest(outputFormat: .json, manifest: .complex)).get()
         
-        let built = try TransactionManifest {
+        let built: TransactionManifest = try TransactionManifest {
             
             // Withdraw XRD from account
             let account: ComponentAddress = "account_sim1q02r73u7nv47h80e30pc3q6ylsj7mgvparm3pnsm780qgsy064"
             let resource: ResourceAddress = "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag"
             CallMethod(
-                componentAddress: account,
+                receiver: account,
                 methodName: "withdraw_by_amount"
             ) {
                 Decimal_(5.0)
@@ -34,7 +34,7 @@ final class ManifestResultBuilderTest: TestCase {
             )
             let gumballComponent: ComponentAddress = "component_sim1q2f9vmyrmeladvz0ejfttcztqv3genlsgpu9vue83mcs835hum"
             CallMethod(
-                componentAddress: gumballComponent,
+                receiver: gumballComponent,
                 methodName: "buy_gumball"
             ) { xrdBucket0 }
             
@@ -61,7 +61,7 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Create a proof from account and drop it
             CallMethod(
-                componentAddress: account,
+                receiver: account,
                 methodName: "create_proof_by_amount"
             ) {
                 Decimal_(5.0)
@@ -83,18 +83,16 @@ final class ManifestResultBuilderTest: TestCase {
             )
             
             // Create a new fungible resource
-            CreateResource {
-                Enum("Fungible") { UInt8(0) }
-                Map(keyType: .string, valueType: .string)
-                Map(keyType: .enum, valueType: .tuple)
-                Optional {
-                    Enum("Fungible") { Decimal_(1.0) }
-                }
-            }
+            CreateResource (
+                resourceType: Enum("Fungible") { UInt8(0) },
+                metadata: Map(keyType: .string, valueType: .string),
+                accessRules: Map(keyType: .enum, valueType: .tuple),
+                mintParams: Value.option(Value.enum(Enum("Fungible") { Decimal_(1.0) }))
+            )
             
             // Cancel all buckets and move resources to account
             CallMethod(
-                componentAddress: account,
+                receiver: account,
                 methodName: "deposit_batch"
             ) {
                 Expression("ENTIRE_WORKTOP")
@@ -105,7 +103,7 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Complicated method that takes all of the number types
             CallMethod(
-                componentAddress: gumballComponent,
+                receiver: gumballComponent,
                 methodName: "complicated_method"
             ) {
                 Decimal_(1)

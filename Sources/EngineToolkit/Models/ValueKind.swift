@@ -37,6 +37,7 @@ public enum ValueKind: String, Codable, Sendable, Hashable {
     case packageAddress = "PackageAddress"
     case componentAddress = "ComponentAddress"
     case resourceAddress = "ResourceAddress"
+    case systemAddress = "SystemAddress"
 
     case hash = "Hash"
 

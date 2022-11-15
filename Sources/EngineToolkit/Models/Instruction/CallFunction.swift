@@ -105,7 +105,10 @@ public extension CallFunction {
         let packageAddress = try container.decode(PackageAddress.self, forKey: .packageAddress)
         let blueprintName = try container.decode(String.ProxyDecodable.self, forKey: .blueprintName).decoded
         let functionName = try container.decode(String.ProxyDecodable.self, forKey: .functionName).decoded
-        let arguments = try container.decode([Value].self, forKey: .arguments)
+        var arguments: [Value] = []
+        do {
+            arguments = try container.decode([Value].self, forKey: .arguments)
+        } catch {}
         
         self.init(
             packageAddress: packageAddress,

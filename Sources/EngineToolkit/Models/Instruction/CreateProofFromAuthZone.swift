@@ -9,13 +9,13 @@ public struct CreateProofFromAuthZone: InstructionProtocol {
     
     // MARK: Stored properties
     public let resourceAddress: ResourceAddress
-    public let intoBucket: Bucket
+    public let intoProof: Proof
     
     // MARK: Init
     
-    public init(resourceAddress: ResourceAddress, intoBucket: Bucket) {
+    public init(resourceAddress: ResourceAddress, intoProof: Proof) {
         self.resourceAddress = resourceAddress
-        self.intoBucket = intoBucket
+        self.intoProof = intoProof
     }
 
 }
@@ -26,7 +26,7 @@ public extension CreateProofFromAuthZone {
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
         case resourceAddress = "resource_address"
-        case intoBucket = "into_bucket"
+        case intoProof = "into_proof"
     }
     
     // MARK: Codable
@@ -35,7 +35,7 @@ public extension CreateProofFromAuthZone {
         try container.encode(Self.kind, forKey: .type)
         
         try container.encode(resourceAddress, forKey: .resourceAddress)
-        try container.encode(intoBucket, forKey: .intoBucket)
+        try container.encode(intoProof, forKey: .intoProof)
     }
     
     init(from decoder: Decoder) throws {
@@ -48,7 +48,7 @@ public extension CreateProofFromAuthZone {
         
         try self.init(
             resourceAddress: container.decode(ResourceAddress.self, forKey: .resourceAddress),
-            intoBucket: container.decode(Bucket.self, forKey: .intoBucket)
+            intoProof: container.decode(Proof.self, forKey: .intoProof)
         )
     }
 }

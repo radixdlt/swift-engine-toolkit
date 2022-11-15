@@ -46,6 +46,7 @@ public enum ErrorResponse: Swift.Error, Sendable, Equatable, Decodable {
     case deserializationError(DeserializationError)
     case invalidRequestString(InvalidRequestString)
     case unexpectedContents(UnexpectedContents)
+    case unexpectedReNodeContents(UnexpectedReNodeContents)
     case invalidType(InvalidType)
     case unknownTypeId(UnknownTypeId)
     case parseError(ParseError)
@@ -57,7 +58,6 @@ public enum ErrorResponse: Swift.Error, Sendable, Equatable, Decodable {
     case requestResponseConversionError(RequestResponseConversionError)
     case unrecognizedCompiledIntentFormat(UnrecognizedCompiledIntentFormat)
     case transactionValidationError(TransactionValidationError)
-    case extractAbiError(ExtractAbiError)
     case networkMismatchError(NetworkMismatchError)
 }
 
@@ -100,10 +100,10 @@ public extension ErrorResponse {
             self = try .unrecognizedCompiledIntentFormat(.init(from: decoder))
         case .transactionValidationError:
             self = try .transactionValidationError(.init(from: decoder))
-        case .extractAbiError:
-            self = try .extractAbiError(.init(from: decoder))
         case .networkMismatchError:
             self = try .networkMismatchError(.init(from: decoder))
+        case .unexpectedReNodeContents:
+            self = try .unexpectedReNodeContents(.init(from: decoder))
         }
     }
 }
@@ -117,6 +117,7 @@ public extension ErrorResponse {
         case .deserializationError: return .deserializationError
         case .invalidRequestString: return .invalidRequestString
         case .unexpectedContents: return .unexpectedContents
+        case .unexpectedReNodeContents: return .unexpectedReNodeContents
         case .invalidType: return .invalidType
         case .unknownTypeId: return .unknownTypeId
         case .parseError: return .parseError
@@ -128,7 +129,6 @@ public extension ErrorResponse {
         case .requestResponseConversionError: return .requestResponseConversionError
         case .unrecognizedCompiledIntentFormat: return .unrecognizedCompiledIntentFormat
         case .transactionValidationError: return .transactionValidationError
-        case .extractAbiError: return .extractAbiError
         case .networkMismatchError: return .networkMismatchError
         }
     }
@@ -141,6 +141,7 @@ public enum ErrorKind: String, Swift.Error, Sendable, Equatable, Codable, Custom
     case deserializationError = "DeserializationError"
     case invalidRequestString = "InvalidRequestString"
     case unexpectedContents = "UnexpectedContents"
+    case unexpectedReNodeContents = "UnexpectedReNodeContents"
     case invalidType = "InvalidType"
     case unknownTypeId = "UnknownTypeId"
     case parseError = "ParseError"
@@ -152,7 +153,6 @@ public enum ErrorKind: String, Swift.Error, Sendable, Equatable, Codable, Custom
     case requestResponseConversionError = "RequestResponseConversionError"
     case unrecognizedCompiledIntentFormat = "UnrecognizedCompiledIntentFormat"
     case transactionValidationError = "TransactionValidationError"
-    case extractAbiError = "ExtractAbiError"
     case networkMismatchError = "NetworkMismatchError"
 }
 
@@ -219,11 +219,25 @@ public struct UnexpectedContents: ErrorResponseProtocol {
     public let foundChildKind: ValueKind
 }
 
+public struct UnexpectedReNodeContents: ErrorResponseProtocol {
+    public static let errorKind: ErrorKind = .unexpectedContents
+    
+    /// The kind that was parsed, e.g. a `Bucket`, which we expect to contain either a `u32` or a `String`,
+    /// which is the `expectedKind` property
+    public let kindBeingParsed: RENodeKind
+    
+    /// We expect to find any of these types, but found `foundChildKind`.
+    public let allowedChildrenKinds: [ValueKind]
+    
+    /// The unexpected type we found, instead of any of the `allowedChildrenKinds`, when parsing the `kindBeingParsed`.
+    public let foundChildKind: ValueKind
+}
+
 // MARK: InvalidType
 public struct InvalidType: ErrorResponseProtocol {
     public static let errorKind: ErrorKind = .invalidType
     // FIXME: rename `expectedKind` ? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
-    public let expectedType: ValueKind
+    public let expectedTypes: [ValueKind]
     // FIXME: rename `actual` ? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
     public let actualType: ValueKind
 }
@@ -285,12 +299,6 @@ public struct UnrecognizedCompiledIntentFormat: EmptyErrorResponseProtocol {
 // MARK: TransactionValidationError
 public struct TransactionValidationError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .transactionValidationError
-    public let value: String
-}
-
-// MARK: ExtractAbiError
-public struct ExtractAbiError: ErrorResponseWithStringValueProtocol {
-    public static let errorKind: ErrorKind = .extractAbiError
     public let value: String
 }
 
@@ -393,6 +401,23 @@ public extension UnexpectedContents {
     }
 }
 
+// MARK: UnexpectedReNodeContents + Decodable
+public extension UnexpectedReNodeContents {
+    init(from decoder: Decoder) throws {
+        let container = try Self.containerAssertingErrorKind(from: decoder)
+        
+        let kindBeingParsed = try container.decode(RENodeKind.self, forKey: .kindBeingParsed)
+        let allowedChildrenKinds = try container.decode([ValueKind].self, forKey: .allowedChildrenKinds)
+        let foundChildKind = try container.decode(ValueKind.self, forKey: .foundChildKind)
+        
+        self.init(
+            kindBeingParsed: kindBeingParsed,
+            allowedChildrenKinds: allowedChildrenKinds,
+            foundChildKind: foundChildKind
+        )
+    }
+}
+
 // MARK: InvalidType + Decodable
 public extension InvalidType {
     init(from decoder: Decoder) throws {
@@ -401,9 +426,9 @@ public extension InvalidType {
         // FIXME: rename to `actual`? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
         let actualType = try container.decode(ValueKind.self, forKey: .actualType)
         // FIXME: rename to `expected`? see: https://rdxworks.slack.com/archives/C040KJQN5CL/p1665044252605759
-        let expectedType = try container.decode(ValueKind.self, forKey: .expected)
+        let expectedType = try container.decode([ValueKind].self, forKey: .expected)
         
-        self.init(expectedType: expectedType, actualType: actualType)
+        self.init(expectedTypes: expectedType, actualType: actualType)
     }
 }
 

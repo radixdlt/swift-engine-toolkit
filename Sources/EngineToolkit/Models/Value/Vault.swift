@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Vault: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByStringLiteral {
+public struct Vault: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .vault
     public func embedValue() -> Value {
@@ -8,16 +8,16 @@ public struct Vault: ValueProtocol, Sendable, Codable, Hashable, ExpressibleBySt
     }
     
     // MARK: Stored properties
-    public let identifier: String
+    public let identifier: RENodeIdentifier
     
     // MARK: Init
     
-    public init(identifier: String) {
+    public init(identifier: RENodeIdentifier) {
         self.identifier = identifier
     }
     
-    public init(stringLiteral value: String) {
-        self.init(identifier: value)
+    public init(hex: String) throws {
+        self.identifier = try .init(hex: hex)
     }
 }
 
@@ -44,6 +44,6 @@ public extension Vault {
         }
         
         // Decoding `identifier`
-        try self.init(identifier: container.decode(String.self, forKey: .identifier))
+        try self.init(identifier: container.decode(RENodeIdentifier.self, forKey: .identifier))
     }
 }
