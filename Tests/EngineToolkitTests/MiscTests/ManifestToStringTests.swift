@@ -11,6 +11,10 @@ final class ManifestToStringTests: TestCase {
     func test_transactionManifest_toString_on_multiple_packages() throws {
         let packages = [
             (
+                code: try resource(named: "hello", extension: "code"),
+                abi: try resource(named: "hello", extension: "abi")
+            ),
+            (
                 code: try resource(named: "hello_world", extension: "code"),
                 abi: try resource(named: "hello_world", extension: "abi")
             ),
