@@ -105,7 +105,7 @@ final class TestOfErrors: TestCase {
     func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_missing_separator() throws {
         let badRequest = DecodeAddressRequest(address: "missing separator")
         let result = sut.decodeAddressRequest(request: badRequest)
-        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "DecodingError(MissingSeparator)"))
+        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "Bech32mDecodingError(MissingSeparator)"))
         XCTAssert(
             result,
             throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))
@@ -115,7 +115,7 @@ final class TestOfErrors: TestCase {
     func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_invalid_char_space() throws {
         let badRequest = DecodeAddressRequest(address: "bad1 invalid char spaces")
         let result = sut.decodeAddressRequest(request: badRequest)
-        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "DecodingError(InvalidChar(' '))"))
+        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "Bech32mDecodingError(InvalidChar(' '))"))
         XCTAssert(
             result,
             throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))
@@ -125,7 +125,7 @@ final class TestOfErrors: TestCase {
     func test_assert_that_decodeAddress_badRequest_missing_separator_throws_addressError_nested_DecodingError_invalid_checksum() throws {
         let badRequest = DecodeAddressRequest(address: "invalid1checksum")
         let result = sut.decodeAddressRequest(request: badRequest)
-        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "DecodingError(InvalidChecksum)"))
+        let expectedErrorResponse: ErrorResponse = .addressError(AddressError(value: "Bech32mDecodingError(InvalidChecksum)"))
         XCTAssert(
             result,
             throwsSpecificError: .deserializeResponseFailure(.errorResponse(expectedErrorResponse))

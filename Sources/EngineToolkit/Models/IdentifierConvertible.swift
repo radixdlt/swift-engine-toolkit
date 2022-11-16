@@ -8,12 +8,12 @@
 import Foundation
 
 public protocol IdentifierConvertible: ExpressibleByStringLiteral, ExpressibleByIntegerLiteral {
-    var identifier: Identifier { get }
-    init(identifier: Identifier)
+    var identifier: TransientIdentifier { get }
+    init(identifier: TransientIdentifier)
 }
 public extension IdentifierConvertible {
     
-    init(_ identifier: Identifier) {
+    init(_ identifier: TransientIdentifier) {
         self.init(identifier: identifier)
     }
     

@@ -12,16 +12,16 @@ import SLIP10
 // MARK: - AlphanetAddresses
 private enum AlphanetAddresses {}
 private extension AlphanetAddresses {
-    static let faucet: ComponentAddress = "system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42"
-    static let createAccountComponent: PackageAddress = "package_tdx_a_1qyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqps373guw"
-    static let xrd: ResourceAddress = "resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9"
+    static let faucet: ComponentAddress = "component_sim1qftacppvmr9ezmekxqpq58en0nk954x0a7jv2zz0hc7q8utaxr"
+    static let createAccountComponent: PackageAddress = "package_sim1qyqzcexvnyg60z7lnlwauh66nhzg3m8tch2j8wc0e70qkydk8r"
+    static let xrd: ResourceAddress = "resource_sim1qzxcrac59cy2v9lpcpmf82qel3cjj25v3k5m09rxurgqehgxzu"
 }
 
 
 final class CreateAccountTXTest: TestCase {
     
     override func setUp() {
-        debugPrint = false
+        debugPrint = true
         super.setUp()
         continueAfterFailure = false
     }
@@ -40,14 +40,14 @@ final class CreateAccountTXTest: TestCase {
 
         let transactionManifest = TransactionManifest {
             CallMethod(
-                componentAddress: AlphanetAddresses.faucet,
+                receiver: AlphanetAddresses.faucet,
                 methodName: "lock_fee"
             ) {
                 Decimal_(10.0)
             }
 
             CallMethod(
-                componentAddress: AlphanetAddresses.faucet,
+                receiver: AlphanetAddresses.faucet,
                 methodName: "free_xrd"
             )
 
@@ -75,7 +75,7 @@ final class CreateAccountTXTest: TestCase {
         
         let startEpoch: Epoch = 8000
         let endEpochExclusive = startEpoch + 2
-        let networkID: NetworkID = .adapanet
+        let networkID: NetworkID = .simulator
         let header = TransactionHeader(
             version: 1,
             networkId: networkID,
@@ -106,7 +106,7 @@ final class CreateAccountTXTest: TestCase {
             networkID: networkID
         )
         let expected = """
-        CALL_METHOD ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42") "lock_fee" Decimal("10");CALL_METHOD ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42") "free_xrd";TAKE_FROM_WORKTOP ResourceAddress("resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9") Bucket("bucket1");CALL_FUNCTION PackageAddress("package_tdx_a_1qyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqps373guw") "Account" "new_with_resource" Enum("Protected", Enum("ProofRule", Enum("Require", Enum("StaticNonFungible", NonFungibleAddress("000000000000000000000000000000000000000000000000000003300720000000ff57575dc7af8bfc4d0837cc1ce2017b686a88145dc5579a958e3462fe9a908e"))))) Bucket("bucket1");
+        CALL_METHOD ComponentAddress("component_sim1qftacppvmr9ezmekxqpq58en0nk954x0a7jv2zz0hc7q8utaxr") "lock_fee" Decimal("10");CALL_METHOD ComponentAddress("component_sim1qftacppvmr9ezmekxqpq58en0nk954x0a7jv2zz0hc7q8utaxr") "free_xrd";TAKE_FROM_WORKTOP ResourceAddress("resource_sim1qzxcrac59cy2v9lpcpmf82qel3cjj25v3k5m09rxurgqehgxzu") Bucket("bucket1");CALL_FUNCTION PackageAddress("package_sim1qyqzcexvnyg60z7lnlwauh66nhzg3m8tch2j8wc0e70qkydk8r") "Account" "new_with_resource" Enum("Protected", Enum("ProofRule", Enum("Require", Enum("StaticNonFungible", NonFungibleAddress("000f8e920aa79f53349d0a99746e17b59241bd51e19abb50ad6b6a30071a00000071cf1c6fc032e971de8fd8349a2b05dcb6d57ff15bef8bfbe98e"))))) Bucket("bucket1");
         """
         XCTAssertEqual(expected, manifestString)
         
@@ -119,27 +119,27 @@ final class CreateAccountTXTest: TestCase {
         
         let expected2 = """
         CALL_METHOD
-            ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42")
+            ComponentAddress("component_sim1qftacppvmr9ezmekxqpq58en0nk954x0a7jv2zz0hc7q8utaxr")
             "lock_fee"
             Decimal("10");
 
         CALL_METHOD
-            ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42")
+            ComponentAddress("component_sim1qftacppvmr9ezmekxqpq58en0nk954x0a7jv2zz0hc7q8utaxr")
             "free_xrd";
 
         TAKE_FROM_WORKTOP
-            ResourceAddress("resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9")
+            ResourceAddress("resource_sim1qzxcrac59cy2v9lpcpmf82qel3cjj25v3k5m09rxurgqehgxzu")
             Bucket("bucket1");
 
         CALL_FUNCTION
-            PackageAddress("package_tdx_a_1qyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqps373guw")
+            PackageAddress("package_sim1qyqzcexvnyg60z7lnlwauh66nhzg3m8tch2j8wc0e70qkydk8r")
             "Account"
             "new_with_resource"
             Enum("Protected",
             Enum("ProofRule",
             Enum("Require",
             Enum("StaticNonFungible",
-            NonFungibleAddress("000000000000000000000000000000000000000000000000000003300720000000ff57575dc7af8bfc4d0837cc1ce2017b686a88145dc5579a958e3462fe9a908e")))))
+            NonFungibleAddress("000f8e920aa79f53349d0a99746e17b59241bd51e19abb50ad6b6a30071a00000071cf1c6fc032e971de8fd8349a2b05dcb6d57ff15bef8bfbe98e")))))
             Bucket("bucket1");
         """
         XCTAssertEqual(expected2.replacingOccurrences(of: "    ", with: "_").replacingOccurrences(of: "\t", with: "_"), manifestString2.replacingOccurrences(of: "    ", with: "_").replacingOccurrences(of: "\t", with: "_"))

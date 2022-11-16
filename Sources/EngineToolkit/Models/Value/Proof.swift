@@ -8,11 +8,11 @@ public struct Proof: ValueProtocol, Sendable, Codable, Hashable, IdentifierConve
     }
     
     // MARK: Stored properties
-    public let identifier: Identifier
+    public let identifier: TransientIdentifier
     
     // MARK: Init
     
-    public init(identifier: Identifier) {
+    public init(identifier: TransientIdentifier) {
         self.identifier = identifier
     }
 }
@@ -42,6 +42,6 @@ public extension Proof {
         }
         
         // Decoding `identifier`
-        try self.init(identifier: container.decode(Identifier.self, forKey: .identifier))
+        try self.init(identifier: container.decode(TransientIdentifier.self, forKey: .identifier))
     }
 }

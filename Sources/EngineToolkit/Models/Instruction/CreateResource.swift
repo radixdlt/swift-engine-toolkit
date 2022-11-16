@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CreateResource: InstructionProtocol, ExpressibleByRadixEngineValues {
+public struct CreateResource: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .createResource
     public func embed() -> Instruction {
@@ -8,12 +8,18 @@ public struct CreateResource: InstructionProtocol, ExpressibleByRadixEngineValue
     }
     
     // MARK: Stored properties
-    public let values: [Value]
+    public let resourceType: Enum
+    public let metadata: Map
+    public let accessRules: Map
+    public let mintParams: Optional<Enum>
     
     // MARK: Init
     
-    public init(values: [Value]) {
-        self.values = values
+    public init(resourceType: Enum, metadata: Map, accessRules: Map, mintParams: Optional<Enum>) {
+        self.resourceType = resourceType
+        self.metadata = metadata
+        self.accessRules = accessRules
+        self.mintParams = mintParams
     }
 }
 
@@ -22,7 +28,10 @@ public extension CreateResource {
     // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
-        case args
+        case resourceType = "resource_type"
+        case metadata
+        case accessRules = "access_rules"
+        case mintParams = "mint_params"
     }
     
     // MARK: Codable
@@ -30,7 +39,10 @@ public extension CreateResource {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(values, forKey: .args)
+        try container.encode(resourceType, forKey: .resourceType)
+        try container.encode(metadata, forKey: .metadata)
+        try container.encode(accessRules, forKey: .accessRules)
+        try container.encode(Value.option(mintParams.map { Value.enum($0) }), forKey: .mintParams)
     }
     
     init(from decoder: Decoder) throws {
@@ -40,7 +52,31 @@ public extension CreateResource {
         if kind != Self.kind {
             throw InternalDecodingFailure.instructionTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
+
+        let resourceType = try container.decode(Enum.self, forKey: .resourceType)
+        let metadata = try container.decode(Map.self, forKey: .metadata)
+        let accessRules = try container.decode(Map.self, forKey: .accessRules)
+        let mintParamsValue = try container.decode(Value.self, forKey: .mintParams)
         
-        try self.init(values: container.decode([Value].self, forKey: .args))
+        // Mint params has been decoded as a `Value`. We need to attempt to transform the `Value` to a
+        // `Optional<Enum>`.
+        switch mintParamsValue {
+        case .option(let option):
+            let mintParams = try option.map { switch $0 {
+            case .enum(let enumeration):
+                return enumeration
+            default:
+                throw DecodeError(value: "Invalid mint params")
+            }}
+            
+            self.init(
+                resourceType: resourceType,
+                metadata: metadata,
+                accessRules: accessRules,
+                mintParams: mintParams
+            )
+        default:
+            throw DecodeError(value: "Invalid mint params")
+        }        
     }
 }

@@ -164,15 +164,6 @@ public extension EngineToolkit {
         )
     }
 
-    func extractAbiRequest(
-		request: ExtractAbiRequest
-	) -> Result<ExtractAbiResponse, Error> {
-        callLibraryFunction(
-            request: request,
-            function: extract_abi
-        )
-    }
-
     func deriveNonFungibleAddressFromPublicKeyRequest(
 		request: DeriveNonFungibleAddressFromPublicKeyRequest
 	) -> Result<DeriveNonFungibleAddressFromPublicKeyResponse, Error> {
@@ -188,6 +179,15 @@ public extension EngineToolkit {
         callLibraryFunction(
             request: request,
             function: derive_non_fungible_address
+        )
+    }
+    
+    func deriveVirtualAccountAddressRequest(
+        request: DeriveVirtualAccountAddressRequest
+    ) -> Result<DeriveVirtualAccountAddressResponse, Error> {
+        callLibraryFunction(
+            request: request,
+            function: derive_virtual_account_address
         )
     }
 }

@@ -16,8 +16,8 @@ public struct EcdsaSecp256k1PublicKey: ValueProtocol, Sendable, Codable, Hashabl
         self.bytes = bytes
     }
     
-    public init(publicKeyHex: String) throws {
-        try self.init(bytes: [UInt8](hex: publicKeyHex))
+    public init(hex: String) throws {
+        try self.init(bytes: [UInt8](hex: hex))
     }
 
 }
@@ -46,6 +46,6 @@ public extension EcdsaSecp256k1PublicKey {
         }
         
         // Decoding `publicKey`
-        try self.init(publicKeyHex: container.decode(String.self, forKey: .publicKey))
+        try self.init(hex: container.decode(String.self, forKey: .publicKey))
     }
 }

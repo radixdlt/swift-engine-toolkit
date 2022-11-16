@@ -16,8 +16,8 @@ public struct EcdsaSecp256k1Signature: ValueProtocol, Sendable, Codable, Hashabl
         self.bytes = bytes
     }
     
-    public init(signatureHex: String) throws {
-        try self.init(bytes: [UInt8](hex: signatureHex))
+    public init(hex: String) throws {
+        try self.init(bytes: [UInt8](hex: hex))
     }
 
 }
@@ -46,6 +46,6 @@ public extension EcdsaSecp256k1Signature {
         }
         
         // Decoding `signature`
-        try self.init(signatureHex: container.decode(String.self, forKey: .signature))
+        try self.init(hex: container.decode(String.self, forKey: .signature))
     }
 }

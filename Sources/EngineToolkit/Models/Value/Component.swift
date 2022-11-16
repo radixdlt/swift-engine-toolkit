@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Component: ValueProtocol, Sendable, Codable, Hashable {
+public struct Component: ValueProtocol, Sendable, Codable, Hashable, CallMethodReceiverCompatible {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .component
     public func embedValue() -> Value {
@@ -8,13 +8,16 @@ public struct Component: ValueProtocol, Sendable, Codable, Hashable {
     }
     
     // MARK: Stored properties
-    public let address: String
+    public let identifier: RENodeIdentifier
     
     // MARK: Init
     
-    public init(address: String) {
-        // TODO: Perform some simple Bech32m validation.
-        self.address = address
+    public init(identifier: RENodeIdentifier) {
+        self.identifier = identifier
+    }
+    
+    public init(hex: String) throws {
+        try self.init(identifier: .init(hex: hex))
     }
 }
 
@@ -22,7 +25,7 @@ public extension Component {
     
     // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
-        case address, type
+        case identifier, type
     }
     
     // MARK: Codable
@@ -30,7 +33,7 @@ public extension Component {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(String(address), forKey: .address)
+        try container.encode(identifier, forKey: .identifier)
     }
     
     init(from decoder: Decoder) throws {
@@ -43,7 +46,13 @@ public extension Component {
         
         // Decoding `address`
         try self.init(
-            address: container.decode(String.self, forKey: .address)
+            identifier: container.decode(RENodeIdentifier.self, forKey: .identifier)
         )
+    }
+}
+
+public extension Component {
+    func toCallMethodReceiver() -> CallMethodReceiver {
+        return .component(self)
     }
 }

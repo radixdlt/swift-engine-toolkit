@@ -51,6 +51,7 @@ public indirect enum Value_: Sendable, Codable, Hashable {
     case packageAddress(PackageAddress)
     case componentAddress(ComponentAddress)
     case resourceAddress(ResourceAddress)
+    case systemAddress(SystemAddress)
     
     case hash(Hash)
     
@@ -163,6 +164,9 @@ public extension Value {
             
         case .resourceAddress:
             return .resourceAddress
+        
+        case .systemAddress:
+            return .systemAddress
             
         case .hash:
             return .hash
@@ -310,6 +314,9 @@ public extension Value {
         case .resourceAddress(let value):
             try value.encode(to: encoder)
             
+        case .systemAddress(let value):
+            try value.encode(to: encoder)
+            
         case .hash(let value):
             try value.encode(to: encoder)
             
@@ -452,6 +459,9 @@ public extension Value {
             
         case .resourceAddress:
             self = try .resourceAddress(.init(from: decoder))
+            
+        case .systemAddress:
+            self = try .systemAddress(.init(from: decoder))
             
         case .hash:
             self = try .hash(.init(from: decoder))

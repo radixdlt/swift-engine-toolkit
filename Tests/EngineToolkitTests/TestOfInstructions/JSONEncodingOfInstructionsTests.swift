@@ -20,7 +20,7 @@ final class JSONEncodingOfInstructionsTests: TestCase {
     
     func test_encode_call_method() throws {
         let callMethod = CallMethod(
-            componentAddress: "system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42",
+            receiver: ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42"),
             methodName: "lock_fee"
         ) {
             Decimal_(10.0)

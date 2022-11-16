@@ -11,6 +11,9 @@ public indirect enum Instruction: Sendable, Codable, Hashable {
     case callFunction(CallFunction)
     case callMethod(CallMethod)
     
+    case callNativeFunction(CallNativeFunction)
+    case callNativeMethod(CallNativeMethod)
+    
     case takeFromWorktop(TakeFromWorktop)
     case takeFromWorktopByAmount(TakeFromWorktopByAmount)
     case takeFromWorktopByIds(TakeFromWorktopByIds)
@@ -52,6 +55,12 @@ public extension Instruction {
 
         case .callMethod:
             return .callMethod
+            
+        case .callNativeFunction:
+            return .callNativeFunction
+        
+        case .callNativeMethod:
+            return .callNativeMethod
             
         case .takeFromWorktop:
             return .takeFromWorktop
@@ -136,6 +145,12 @@ public extension Instruction {
         case .callMethod(let instruction):
             try instruction.encode(to: encoder)
             
+        case .callNativeFunction(let instruction):
+            try instruction.encode(to: encoder)
+            
+        case .callNativeMethod(let instruction):
+            try instruction.encode(to: encoder)
+            
         case .takeFromWorktop(let instruction):
             try instruction.encode(to: encoder)
             
@@ -207,25 +222,31 @@ public extension Instruction {
         let kind: InstructionKind = try container.decode(InstructionKind.self, forKey: .type)
         
         switch kind {
-        
+            
         case .callFunction:
             self = try .callFunction(.init(from: decoder))
-        
+            
         case .callMethod:
             self = try .callMethod(.init(from: decoder))
-
+            
+        case .callNativeFunction:
+            self = try .callNativeFunction(.init(from: decoder))
+            
+        case .callNativeMethod:
+            self = try .callNativeMethod(.init(from: decoder))
+            
         case .takeFromWorktop:
             self = try .takeFromWorktop(.init(from: decoder))
-        
+            
         case .takeFromWorktopByAmount:
             self = try .takeFromWorktopByAmount(.init(from: decoder))
             
         case .takeFromWorktopByIds:
             self = try .takeFromWorktopByIds(.init(from: decoder))
-
+            
         case .returnToWorktop:
             self = try .returnToWorktop(.init(from: decoder))
-
+            
         case .assertWorktopContains:
             self = try .assertWorktopContains(.init(from: decoder))
             
@@ -234,16 +255,16 @@ public extension Instruction {
             
         case .assertWorktopContainsByIds:
             self = try .assertWorktopContainsByIds(.init(from: decoder))
-
+            
         case .popFromAuthZone:
             self = try .popFromAuthZone(.init(from: decoder))
             
         case .pushToAuthZone:
             self = try .pushToAuthZone(.init(from: decoder))
-
+            
         case .clearAuthZone:
             self = try .clearAuthZone(.init(from: decoder))
-
+            
         case .createProofFromAuthZone:
             self = try .createProofFromAuthZone(.init(from: decoder))
             
@@ -255,7 +276,7 @@ public extension Instruction {
             
         case .createProofFromBucket:
             self = try .createProofFromBucket(.init(from: decoder))
-
+            
         case .cloneProof:
             self = try .cloneProof(.init(from: decoder))
             
@@ -264,10 +285,10 @@ public extension Instruction {
             
         case .dropAllProofs:
             self = try .dropAllProofs(.init(from: decoder))
-
+            
         case .publishPackage:
             self =  try .publishPackage(.init(from: decoder))
-
+            
         case .createResource:
             self = try .createResource(.init(from: decoder))
             

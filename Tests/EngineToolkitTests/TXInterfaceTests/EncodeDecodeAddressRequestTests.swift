@@ -1,5 +1,11 @@
 final class EncodeDecodeAddressRequestTests: TestCase {
     
+    override func setUp() {
+        debugPrint = true
+        super.setUp()
+        continueAfterFailure = false
+    }
+    
     func test__encodeDecodeAddressRequest() throws {
         try TestSuite.vectors.forEach { try doTest(vector: $0) }
     }
@@ -36,7 +42,6 @@ enum AddressDecodeEncodeTestVectors {
         "package_sim1qyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpsuluv44",
         "package_sim1qy7rfwzgm99jp4lwngv8utfnzxd7zv2fq9p279rzzmws555ujt",
         "package_sim1q8jy0frw4en9cdc63cyj2n7pdefj95lftvrdamjhhyqqlgshez",
-        "system_sim1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs9fh54n",
         "account_sim1qv0z2nsg5aqayjeszxa9uc6p82nalts0cm2sdna69g7sm3626z",
         "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqshxgp7h",
         "resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpqd60rqz",
@@ -50,7 +55,6 @@ enum AddressDecodeEncodeTestVectors {
         "010000000000000000000000000000000000000000000000000003",
         "013c34b848d94b20d7ee9a187e2d33119be131490142af146216dd",
         "01e447a46eae665c371a8e09254fc16e5322d3e95b06deee57b900",
-        "040000000000000000000000000000000000000000000000000001",
         "031e254e08a741d24b3011ba5e63413aa7dfae0fc6d506cfba2a3d",
         "000000000000000000000000000000000000000000000000000001",
         "000000000000000000000000000000000000000000000000000002",
