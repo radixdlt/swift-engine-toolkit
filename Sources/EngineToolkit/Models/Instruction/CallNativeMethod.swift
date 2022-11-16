@@ -88,10 +88,7 @@ public extension CallNativeMethod {
         
         let receiver = try container.decode(RENode.self, forKey: .receiver)
         let methodName = try container.decode(String.ProxyDecodable.self, forKey: .methodName).decoded
-        var arguments: [Value] = []
-        do {
-            arguments = try container.decode([Value].self, forKey: .arguments)
-        } catch {}
+        let arguments = try container.decodeIfPresent([Value].self, forKey: .arguments) ?? []
         
         self.init(
             receiver: receiver,
