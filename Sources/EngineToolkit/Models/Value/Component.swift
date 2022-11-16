@@ -17,7 +17,7 @@ public struct Component: ValueProtocol, Sendable, Codable, Hashable, CallMethodR
     }
     
     public init(hex: String) throws {
-        self.identifier = try .init(hex: hex)
+        try self.init(identifier: .init(hex: hex))
     }
 }
 

@@ -16,7 +16,7 @@ public struct KeyValueStore: ValueProtocol, Sendable, Codable, Hashable {
     }
     
     public init(hex: String) throws {
-        self.identifier = try .init(hex: hex)
+        try self.init(identifier: .init(hex: hex))
     }
 }
 
