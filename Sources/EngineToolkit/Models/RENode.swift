@@ -1,20 +1,3 @@
-public enum RENodeKind: String, Codable, Sendable, Hashable {
-    case bucket = "Bucket"
-    case proof = "Proof"
-
-    case authZoneStack = "AuthZoneStack"
-    case worktop = "Worktop"
-
-    case global = "Global"
-    case keyValueStore = "KeyValueStore"
-    case nonFungibleStore = "NonFungibleStore"
-    case component = "Component"
-    case epochManager = "EpochManager"
-    case vault = "Vault"
-    case resourceManager = "ResourceManager"
-    case package = "Package"
-}
-
 public enum RENode: Codable, Equatable, Hashable, Sendable {
     case bucket(TransientIdentifier)
     case proof(TransientIdentifier)
@@ -33,7 +16,26 @@ public enum RENode: Codable, Equatable, Hashable, Sendable {
 }
 
 public extension RENode {
-    var kind: RENodeKind {
+    enum Kind: String, Codable, Sendable, Hashable {
+        case bucket = "Bucket"
+        case proof = "Proof"
+
+        case authZoneStack = "AuthZoneStack"
+        case worktop = "Worktop"
+
+        case global = "Global"
+        case keyValueStore = "KeyValueStore"
+        case nonFungibleStore = "NonFungibleStore"
+        case component = "Component"
+        case epochManager = "EpochManager"
+        case vault = "Vault"
+        case resourceManager = "ResourceManager"
+        case package = "Package"
+    }
+}
+
+public extension RENode {
+    var kind: Kind {
         switch self {
         case .bucket:
             return .bucket
@@ -108,7 +110,7 @@ public extension RENode {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let type = try container.decode(RENodeKind.self, forKey: .type)
+        let type = try container.decode(RENode.Kind.self, forKey: .type)
         
         switch type {
         case .bucket:

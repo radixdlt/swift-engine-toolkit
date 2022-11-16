@@ -224,7 +224,7 @@ public struct UnexpectedReNodeContents: ErrorResponseProtocol {
     
     /// The kind that was parsed, e.g. a `Bucket`, which we expect to contain either a `u32` or a `String`,
     /// which is the `expectedKind` property
-    public let kindBeingParsed: RENodeKind
+    public let kindBeingParsed: RENode.Kind
     
     /// We expect to find any of these types, but found `foundChildKind`.
     public let allowedChildrenKinds: [ValueKind]
@@ -406,7 +406,7 @@ public extension UnexpectedReNodeContents {
     init(from decoder: Decoder) throws {
         let container = try Self.containerAssertingErrorKind(from: decoder)
         
-        let kindBeingParsed = try container.decode(RENodeKind.self, forKey: .kindBeingParsed)
+        let kindBeingParsed = try container.decode(RENode.Kind.self, forKey: .kindBeingParsed)
         let allowedChildrenKinds = try container.decode([ValueKind].self, forKey: .allowedChildrenKinds)
         let foundChildKind = try container.decode(ValueKind.self, forKey: .foundChildKind)
         
