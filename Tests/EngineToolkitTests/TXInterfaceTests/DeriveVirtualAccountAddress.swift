@@ -39,8 +39,6 @@ private extension DeriveVirtualAccountAddressRequestTests {
     typealias TestSuite = DeriveVirtualAccountAddressTestVectors
 }
 
-// NOTE: We will need to update these test vectors if SBOR gets updated.
-// TODO: For now, all tests use Ecdsa Secp251k1 public keys and NonFungibleAddresses. We need to also add EdDSA Ed25519
 enum DeriveVirtualAccountAddressTestVectors {
     typealias Vector = (publicKey: String, virtualAccountComponentAddress: String)
     static let vectors: [Vector] = [
