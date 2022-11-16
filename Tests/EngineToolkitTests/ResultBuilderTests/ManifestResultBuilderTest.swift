@@ -87,7 +87,7 @@ final class ManifestResultBuilderTest: TestCase {
                 resourceType: Enum("Fungible") { UInt8(0) },
                 metadata: Map(keyType: .string, valueType: .string),
                 accessRules: Map(keyType: .enum, valueType: .tuple),
-                mintParams: Value.option(Value.enum(Enum("Fungible") { Decimal_(1.0) }))
+                mintParams: Enum("Fungible") { Decimal_(1.0) }
             )
             
             // Cancel all buckets and move resources to account

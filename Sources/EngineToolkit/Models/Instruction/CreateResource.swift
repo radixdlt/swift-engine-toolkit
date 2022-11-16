@@ -11,11 +11,11 @@ public struct CreateResource: InstructionProtocol {
     public let resourceType: Enum
     public let metadata: Map
     public let accessRules: Map
-    public let mintParams: Value // TODO: Option<Enum> seems to produce incorrect behavior. Perhaps needs to be decoded through proxy? 
+    public let mintParams: Optional<Enum>
     
     // MARK: Init
     
-    public init(resourceType: Enum, metadata: Map, accessRules: Map, mintParams: Value) {
+    public init(resourceType: Enum, metadata: Map, accessRules: Map, mintParams: Optional<Enum>) {
         self.resourceType = resourceType
         self.metadata = metadata
         self.accessRules = accessRules
@@ -42,7 +42,7 @@ public extension CreateResource {
         try container.encode(resourceType, forKey: .resourceType)
         try container.encode(metadata, forKey: .metadata)
         try container.encode(accessRules, forKey: .accessRules)
-        try container.encode(mintParams, forKey: .mintParams)
+        try container.encode(Value.option(mintParams.map { Value.enum($0) }), forKey: .mintParams)
     }
     
     init(from decoder: Decoder) throws {
@@ -56,13 +56,27 @@ public extension CreateResource {
         let resourceType = try container.decode(Enum.self, forKey: .resourceType)
         let metadata = try container.decode(Map.self, forKey: .metadata)
         let accessRules = try container.decode(Map.self, forKey: .accessRules)
-        let mintParams = try container.decode(Value.self, forKey: .mintParams)
+        let mintParamsValue = try container.decode(Value.self, forKey: .mintParams)
         
-        self.init(
-            resourceType: resourceType,
-            metadata: metadata,
-            accessRules: accessRules,
-            mintParams: mintParams
-        )
+        // Mint params has been decoded as a `Value`. We need to attempt to transform the `Value` to a
+        // `Optional<Enum>`.
+        switch mintParamsValue {
+        case .option(let option):
+            let mintParams = try option.map { switch $0 {
+            case .enum(let enumeration):
+                return enumeration
+            default:
+                throw DecodeError(value: "Invalid mint params")
+            }}
+            
+            self.init(
+                resourceType: resourceType,
+                metadata: metadata,
+                accessRules: accessRules,
+                mintParams: mintParams
+            )
+        default:
+            throw DecodeError(value: "Invalid mint params")
+        }        
     }
 }
