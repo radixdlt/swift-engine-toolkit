@@ -31,8 +31,6 @@ final class CreateAccountTXTest: TestCase {
         let privateKeyData = try Data(hex: "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef")
         let privateKey = try Engine.PrivateKey.curve25519(.init(rawRepresentation: privateKeyData))
         
-        print(try privateKey.publicKey())
-        
         let nonFungibleAddressHex = try sut.deriveNonFungibleAddressFromPublicKeyRequest(
                 request: privateKey.publicKey()
             )
