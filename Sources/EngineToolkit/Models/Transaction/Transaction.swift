@@ -235,9 +235,6 @@ public extension TransactionManifest {
                         "create_proof_by_ids",
                     ].contains(callMethodInstruction.methodName)
                     
-                    print(isAccountComponent)
-                    print(isMethodThatRequiresAuth)
-                    
                     if isAccountComponent && isMethodThatRequiresAuth {
                         switch callMethodInstruction.receiver {
                         case .componentAddress(let componentAddress):
