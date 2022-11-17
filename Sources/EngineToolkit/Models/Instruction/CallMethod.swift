@@ -146,4 +146,19 @@ public extension CallMethodReceiver {
     func toCallMethodReceiver() -> CallMethodReceiver {
         return self
     }
+    
+    func isAccountComponent() -> Bool {
+        switch self {
+        case .component:
+            // TODO: We should not assume that any `Component` receiver is not an account.
+            // We should instead call the Gateway API and try to get the account component address
+            return false
+        case .componentAddress(let componentAddress):
+            if componentAddress.address.contains("account") {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
 }
