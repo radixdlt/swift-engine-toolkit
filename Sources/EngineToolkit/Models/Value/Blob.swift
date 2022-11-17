@@ -20,6 +20,10 @@ public struct Blob: ValueProtocol, Sendable, Codable, Hashable {
         // TODO: Validation of length of Hash
         try self.init(bytes: [UInt8](hex: hex))
     }
+    
+    public init(data: Data) {
+        self.init(bytes: [UInt8](data))
+    }
 
 }
 
