@@ -203,6 +203,59 @@ public extension TransactionManifest {
         // Best we can do is default to the primary network given the roadmap.
         toString(networkID: .primary)
 	}
+    
+    func accountsRequiredToSign(
+        networkId: NetworkID
+    ) throws -> Set<ComponentAddress> {
+        let convertedManifest = try EngineToolkit().convertManifest(request: ConvertManifestRequest(
+            transactionVersion: 0x01,
+            manifest: self,
+            outputFormat: .json,
+            networkId: networkId
+        )).get();
+        
+        switch convertedManifest.instructions {
+        case .json(let instructions):
+            var accountsRequiredToSign: Set<ComponentAddress> = []
+            for instruction in instructions {
+                switch instruction {
+                case .callMethod(let callMethodInstruction):
+                    let isAccountComponent = callMethodInstruction.receiver.isAccountComponent()
+                    let isMethodThatRequiresAuth = [
+                        "lock_fee",
+                        "lock_contingent_fee",
+                        "withdraw",
+                        "withdraw_by_amount",
+                        "withdraw_by_ids",
+                        "lock_fee_and_withdraw",
+                        "lock_fee_and_withdraw_by_amount",
+                        "lock_fee_and_withdraw_by_ids",
+                        "create_proof",
+                        "create_proof_by_amount",
+                        "create_proof_by_ids",
+                    ].contains(callMethodInstruction.methodName)
+                    
+                    if isAccountComponent && isMethodThatRequiresAuth {
+                        switch callMethodInstruction.receiver {
+                        case .componentAddress(let componentAddress):
+                            accountsRequiredToSign.insert(componentAddress)
+                        case .component:
+                            // TODO: The RENodeId should be translated to an account component
+                            // address and added to the set
+                            break
+                        }
+                    }
+                
+                default:
+                    break
+                }
+            }
+            
+            return accountsRequiredToSign;
+        case .string:
+            throw DecodeError(value: "Impossible case") // TODO: need a better error
+        }
+    }
 }
 
 
