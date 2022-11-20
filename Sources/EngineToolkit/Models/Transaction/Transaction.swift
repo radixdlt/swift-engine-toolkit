@@ -205,10 +205,11 @@ public extension TransactionManifest {
 	}
     
     func accountsRequiredToSign(
-        networkId: NetworkID
+        networkId: NetworkID,
+        version: Version = .default
     ) throws -> Set<ComponentAddress> {
         let convertedManifest = try EngineToolkit().convertManifest(request: ConvertManifestRequest(
-            transactionVersion: 0x01,
+            transactionVersion: version,
             manifest: self,
             outputFormat: .json,
             networkId: networkId
