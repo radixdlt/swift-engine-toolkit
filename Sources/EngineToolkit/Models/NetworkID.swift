@@ -32,26 +32,27 @@ public extension NetworkID {
 
 public extension NetworkID {
 	
-	/// https://github.com/radixdlt/radixdlt-scrypto/blob/f4c41985ad9d1570fff7293fa90b77a896b3be2b/scrypto/src/core/network.rs#L43
+    /// Mainnet
+	/// https://github.com/radixdlt/babylon-node/blob/main/common/src/main/java/com/radixdlt/networks/Network.java#L77
+    /// Decimal value: 01
 	static let mainnet: Self = 0x01
 	
-	/// https://github.com/radixdlt/radixdlt-scrypto/blob/f4c41985ad9d1570fff7293fa90b77a896b3be2b/scrypto/src/core/network.rs#L19
+    /// Local Simulator
+	/// https://github.com/radixdlt/babylon-node/blob/main/common/src/main/java/com/radixdlt/networks/Network.java#L104
 	/// Decimal value: 242
 	static let simulator: Self = 0xF2
-	
-	/// https://github.com/radixdlt/radixdlt-scrypto/blob/f4c41985ad9d1570fff7293fa90b77a896b3be2b/scrypto/src/core/network.rs#L27
-	/// Decimal value: 10
-	static let adapanet: Self = 0x0A
-	
-	/// https://github.com/radixdlt/radixdlt-scrypto/blob/f4c41985ad9d1570fff7293fa90b77a896b3be2b/scrypto/src/core/network.rs#L35
-	/// Decimal value: 11
-	static let nebunet: Self = 0x0B
+    
+    /// Hammunet
+    /// https://github.com/radixdlt/babylon-node/blob/main/common/src/main/java/com/radixdlt/networks/Network.java#L95
+    /// Decimal value: 34
+    static let hammunet: Self = 0x22
+
 	
 }
 
 public extension NetworkID {
     // Update this to betanet for betanet and mainnet post mainnet.
-    static let primary: Self = .adapanet
+    static let primary: Self = .hammunet
 }
 
 public extension NetworkID {
@@ -59,7 +60,7 @@ public extension NetworkID {
     typealias AllCases = [Self]
    
     static var allCases: [NetworkID] {
-        [.mainnet, .simulator, .adapanet, .nebunet]
+        [.mainnet, .simulator, .hammunet]
     }
     
     static func all(but excluded: NetworkID) -> AllCases {
