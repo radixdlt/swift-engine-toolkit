@@ -201,7 +201,7 @@ public extension TransactionManifest {
 	
 	var description: String {
         // Best we can do is default to the primary network given the roadmap.
-        toString(networkID: .primary)
+        toString(networkID: .hammunet)
 	}
     
     func accountsRequiredToSign(
