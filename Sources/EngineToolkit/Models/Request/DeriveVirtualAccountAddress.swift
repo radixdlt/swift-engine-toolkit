@@ -17,19 +17,15 @@ public struct DeriveVirtualAccountAddressRequest: Sendable, Codable, Hashable {
 }
 
 public struct DeriveVirtualAccountAddressResponse: Sendable, Codable, Hashable {
-    public let virtualAccountAddress: String
+    public let virtualAccountAddress: ComponentAddress
     
     public init(
-        virtualAccountAddress: String
+        virtualAccountAddress: ComponentAddress
     ) {
         self.virtualAccountAddress = virtualAccountAddress
     }
     
     private enum CodingKeys: String, CodingKey {
         case virtualAccountAddress = "virtual_account_address"
-    }
-    
-    func componentAddress() -> ComponentAddress {
-        return ComponentAddress(address: self.virtualAccountAddress)
     }
 }

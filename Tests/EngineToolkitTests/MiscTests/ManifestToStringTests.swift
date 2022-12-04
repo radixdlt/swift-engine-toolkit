@@ -39,9 +39,11 @@ final class ManifestToStringTests: TestCase {
                     methodName: "lock_fee"
                 ) { try Decimal_(string: "100") }
                 
-                PublishPackage(
+                PublishPackageWithOwner(
                     code: Blob(data: sha256(data: package.code)),
-                    abi: Blob(data: sha256(data: package.abi))
+                    abi: Blob(data: sha256(data: package.abi)),
+                    ownerBadge: try! NonFungibleAddress(hex: "00b91737ee8a4de59d49dad40de5560e5754466ac84cf5432ea95d5c20071a63535ec6738f7afe1984c128398182a5046cb006f4b6e89af817"
+                    )
                 )
             }.instructions
             

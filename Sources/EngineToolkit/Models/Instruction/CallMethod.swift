@@ -136,7 +136,7 @@ public extension CallMethodReceiver {
             do {
                 self = try .component(.init(from: decoder))
             } catch {
-                throw DecodeError(value: "CallMethodReceiver must either be a `Component` or a `ComponentAddress`.")
+                throw SborDecodeError(value: "CallMethodReceiver must either be a `Component` or a `ComponentAddress`.")
             }
         }
     }

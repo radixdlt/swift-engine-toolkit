@@ -20,18 +20,15 @@ private extension DeriveVirtualAccountAddressRequestTests {
         line: UInt = #line
     ) throws {
    
-        let expectedVirtualAccountComponentAddress = ComponentAddress(address: vector.virtualAccountComponentAddress)
-        let publicKey = try Engine.PublicKey.ecdsaSecp256k1(Engine.EcdsaSecp256k1PublicKey(hex: vector.publicKey))
-        
         let derivedVirtualAccountAddress = try sut.deriveVirtualAccountAddressRequest(
             request: DeriveVirtualAccountAddressRequest(
-                publicKey: publicKey,
+                publicKey: vector.publicKey,
                 networkId: NetworkID(0xF2)
             )
-        ).get()
+        ).get().virtualAccountAddress
         XCTAssertEqual(
-            derivedVirtualAccountAddress.componentAddress(),
-            expectedVirtualAccountComponentAddress,
+            derivedVirtualAccountAddress,
+            vector.virtualAccountComponentAddress,
             line: line
         )
         
@@ -40,11 +37,11 @@ private extension DeriveVirtualAccountAddressRequestTests {
 }
 
 enum DeriveVirtualAccountAddressTestVectors {
-    typealias Vector = (publicKey: String, virtualAccountComponentAddress: String)
+    typealias Vector = (publicKey: Engine.PublicKey, virtualAccountComponentAddress: ComponentAddress)
     static let vectors: [Vector] = [
         (
-            publicKey: "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
-            virtualAccountComponentAddress: "account_sim1q5hdx2tctnhjnetz7u6g3j9zhwwmc4cqkdsa2jumq42qhrv6m0"
+            publicKey: try! Engine.PublicKey.eddsaEd25519(Engine.EddsaEd25519PublicKey(hex: "1262bc6d5408a3c4e025aa0c15e64f69197cdb38911be5ad344a949779df3da6")),
+            virtualAccountComponentAddress: ComponentAddress(address: "account_sim1quazc2z3kaescm47d9qvrmn65pl75j5r5wfr7pcg4njsfezk47")
         ),
     ]
 }

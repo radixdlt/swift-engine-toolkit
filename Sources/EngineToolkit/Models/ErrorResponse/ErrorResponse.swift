@@ -42,7 +42,8 @@ public enum ErrorResponse: Swift.Error, Sendable, Equatable, Decodable {
     case unrecognizedAddressFormat(UnrecognizedAddressFormat)
     
     /// Not to be confused with `InternalDecodingFailure`
-    case sborDecodeError(DecodeError)
+    case sborDecodeError(SborDecodeError)
+    case sborEncodeError(SborEncodeError)
     case deserializationError(DeserializationError)
     case invalidRequestString(InvalidRequestString)
     case unexpectedContents(UnexpectedContents)
@@ -50,7 +51,6 @@ public enum ErrorResponse: Swift.Error, Sendable, Equatable, Decodable {
     case invalidType(InvalidType)
     case unknownTypeId(UnknownTypeId)
     case parseError(ParseError)
-    case noManifestRepresentation(NoManifestRepresentation)
     case transactionCompileError(TransactionCompileError)
     case transactionDecompileError(TransactionDecompileError)
     case unsupportedTransactionVersion(UnsupportedTransactionVersion)
@@ -72,6 +72,8 @@ public extension ErrorResponse {
             self = try .unrecognizedAddressFormat(.init(from: decoder))
         case .sborDecodeError:
             self = try .sborDecodeError(.init(from: decoder))
+        case .sborEncodeError:
+            self = try .sborDecodeError(.init(from: decoder))
         case .deserializationError:
             self = try .deserializationError(.init(from: decoder))
         case .invalidRequestString:
@@ -84,8 +86,6 @@ public extension ErrorResponse {
             self = try .unknownTypeId(.init(from: decoder))
         case .parseError:
             self = try .parseError(.init(from: decoder))
-        case .noManifestRepresentation:
-            self = try .noManifestRepresentation(.init(from: decoder))
         case .transactionCompileError:
             self = try .transactionCompileError(.init(from: decoder))
         case .transactionDecompileError:
@@ -114,6 +114,7 @@ public extension ErrorResponse {
         case .addressError: return .addressError
         case .unrecognizedAddressFormat: return .unrecognizedAddressFormat
         case .sborDecodeError: return .sborDecodeError
+        case .sborEncodeError: return .sborEncodeError
         case .deserializationError: return .deserializationError
         case .invalidRequestString: return .invalidRequestString
         case .unexpectedContents: return .unexpectedContents
@@ -121,7 +122,6 @@ public extension ErrorResponse {
         case .invalidType: return .invalidType
         case .unknownTypeId: return .unknownTypeId
         case .parseError: return .parseError
-        case .noManifestRepresentation: return .noManifestRepresentation
         case .transactionCompileError: return .transactionCompileError
         case .transactionDecompileError: return .transactionDecompileError
         case .unsupportedTransactionVersion: return .unsupportedTransactionVersion
@@ -138,6 +138,7 @@ public enum ErrorKind: String, Swift.Error, Sendable, Equatable, Codable, Custom
     case addressError = "AddressError"
     case unrecognizedAddressFormat = "UnrecognizedAddressFormat"
     case sborDecodeError = "SborDecodeError"
+    case sborEncodeError = "SborEncodeError"
     case deserializationError = "DeserializationError"
     case invalidRequestString = "InvalidRequestString"
     case unexpectedContents = "UnexpectedContents"
@@ -145,7 +146,6 @@ public enum ErrorKind: String, Swift.Error, Sendable, Equatable, Codable, Custom
     case invalidType = "InvalidType"
     case unknownTypeId = "UnknownTypeId"
     case parseError = "ParseError"
-    case noManifestRepresentation = "NoManifestRepresentation"
     case transactionCompileError = "TransactionCompileError"
     case transactionDecompileError = "TransactionDecompileError"
     case unsupportedTransactionVersion = "UnsupportedTransactionVersion"
@@ -170,8 +170,14 @@ public struct UnrecognizedAddressFormat: EmptyErrorResponseProtocol {
 
 // MARK: DecodeError
 /// Not to be confused with `InternalDecodingFailure` nor `DeserializationError`
-public struct DecodeError: ErrorResponseWithStringValueProtocol {
+public struct SborDecodeError: ErrorResponseWithStringValueProtocol {
     public static let errorKind: ErrorKind = .sborDecodeError
+    public let value: String
+}
+
+// MARK: EncodeError
+public struct SborEncodeError: ErrorResponseWithStringValueProtocol {
+    public static let errorKind: ErrorKind = .sborEncodeError
     public let value: String
 }
 
@@ -253,12 +259,6 @@ public struct ParseError: ErrorResponseProtocol {
     public static let errorKind: ErrorKind = .parseError
     public let kind: ValueKind
     public let message: String
-}
-
-// MARK: NoManifestRepresentation
-public struct NoManifestRepresentation: ErrorResponseWithKindProtocol {
-    public static let errorKind: ErrorKind = .noManifestRepresentation
-    public let kind: ValueKind
 }
 
 // MARK: TransactionCompileError

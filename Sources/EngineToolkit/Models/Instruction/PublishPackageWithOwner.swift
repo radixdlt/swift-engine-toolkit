@@ -1,8 +1,8 @@
 import Foundation
 
-public struct PublishPackage: InstructionProtocol {
+public struct PublishPackageWithOwner: InstructionProtocol {
     // Type name, used as a discriminator
-    public static let kind: InstructionKind = .publishPackage
+    public static let kind: InstructionKind = .publishPackageWithOwner
     public func embed() -> Instruction {
         .publishPackage(self)
     }
@@ -10,21 +10,24 @@ public struct PublishPackage: InstructionProtocol {
     // MARK: Stored properties
     public let code: Blob
     public let abi: Blob
+    public let ownerBadge: NonFungibleAddress
     
     // MARK: Init
     
-    public init(code: Blob, abi: Blob) {
+    public init(code: Blob, abi: Blob, ownerBadge: NonFungibleAddress) {
         self.code = code
         self.abi = abi
+        self.ownerBadge = ownerBadge
     }
 
 }
 
-public extension PublishPackage {
+public extension PublishPackageWithOwner {
     
     // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
         case type = "instruction"
+        case ownerBadge = "owner_badge"
         case code
         case abi
     }
@@ -36,6 +39,7 @@ public extension PublishPackage {
         
         try container.encode(code, forKey: .code)
         try container.encode(abi, forKey: .abi)
+        try container.encode(ownerBadge, forKey: .ownerBadge)
     }
     
     init(from decoder: Decoder) throws {
@@ -48,7 +52,8 @@ public extension PublishPackage {
         
         try self.init(
             code: container.decode(Blob.self, forKey: .code),
-            abi: container.decode(Blob.self, forKey: .abi)
+            abi: container.decode(Blob.self, forKey: .abi),
+            ownerBadge: container.decode(NonFungibleAddress.self, forKey: .ownerBadge)
         )
     }
 }

@@ -3,7 +3,7 @@
 final class CompileNotarizedTransactionIntentTests: TestCase {
     
     override func setUp() {
-        debugPrint = false
+        debugPrint = true
         super.setUp()
     }
     

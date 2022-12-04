@@ -31,7 +31,7 @@ public enum InstructionKind: String, Codable, Sendable, Hashable {
     case dropProof = "DROP_PROOF"
     case dropAllProofs = "DROP_ALL_PROOFS"
     
-    case publishPackage = "PUBLISH_PACKAGE"
+    case publishPackageWithOwner = "PUBLISH_PACKAGE_WITH_OWNER"
     
     case createResource = "CREATE_RESOURCE"
     case burnBucket = "BURN_BUCKET"

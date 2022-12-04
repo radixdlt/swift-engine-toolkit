@@ -18,17 +18,10 @@ public enum ValueKind: String, Codable, Sendable, Hashable {
 
     case string = "String"
 
-    case `struct` = "Struct"
     case `enum` = "Enum"
 
-    case option = "Option"
     case array = "Array"
     case tuple = "Tuple"
-    case result = "Result"
-
-    case list = "List"
-    case set = "Set"
-    case map = "Map"
 
     case decimal = "Decimal"
     case preciseDecimal = "PreciseDecimal"
