@@ -85,7 +85,8 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
     }
 }
 
-private func decodeAndConvertToNumericType<Integer: FixedWidthInteger, Key: CodingKey>(
+// TODO: Move to a better place
+public func decodeAndConvertToNumericType<Integer: FixedWidthInteger, Key: CodingKey>(
     container: KeyedDecodingContainer<Key>,
     key: Key
 ) throws -> Integer {

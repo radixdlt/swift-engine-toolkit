@@ -22,15 +22,8 @@ private extension DeriveNonFungibleAddressRequestTests {
     typealias TestSuite = DeriveNonFungibleAddressTestVectors
 }
 
-// Note: The swift side is not meant to test the full functionality of the toolkit. It is meant
-// to check that the communication happens with no issues between it and the toolkit.
+// TODO: Test cases have been removed since this request type will be removed and deprecated soon.
 enum DeriveNonFungibleAddressTestVectors {
     typealias Vector = (resourceAddress: ResourceAddress, nonFungibleId: NonFungibleId, nonFungibleAddress: NonFungibleAddress)
-    static let vectors: [Vector] = [
-        (
-            resourceAddress: .init(address: "resource_sim1qplejpntdzfnxytqq7q56al3rzyhw4tr8p08k9tnd4hqfjsyfu"),
-            nonFungibleId: try! .init(hex: "5cb7065c0913000000"),
-            nonFungibleAddress: try! .init(hex: "007f99066b689333116007814d77f11889775563385e7b15736d6e5c0913000000")
-        ),
-    ]
+    static let vectors: [Vector] = []
 }

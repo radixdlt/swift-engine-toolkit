@@ -75,7 +75,7 @@ final class ManifestResultBuilderTest: TestCase {
             ReturnToWorktop(bucket: xrdBucket1)
             TakeFromWorktopByIds(
                 [
-                    try .init(hex: "5c200721031b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f")
+                    try .bytes(.init(hex: "031b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f"))
                 ],
                 resourceAddress: resource,
                 bucket: "nfts"
