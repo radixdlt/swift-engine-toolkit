@@ -34,6 +34,8 @@ public indirect enum Value_: Sendable, Codable, Hashable {
     
     case `enum`(Enum)
     
+    case option(Optional<Value>)
+    case result(Result<Value, Value>)
     case array(Array_)
     case tuple(Tuple)
     
@@ -115,6 +117,10 @@ public extension Value {
             
         case .enum:
             return .enum
+        case .option:
+            return .option
+        case .result:
+            return .result
             
         case .array:
             return .array
@@ -245,6 +251,11 @@ public extension Value {
         
         case .enum(let value):
             try value.encode(to: encoder)
+        case .option(let value):
+            // `Optional` is already `Codable` so we have to go through its proxy type for JSON coding.
+            try value.proxyEncodable.encode(to: encoder)
+        case .result(let value):
+            try value.encode(to: encoder)
             
         case .array(let value):
             try value.encode(to: encoder)
@@ -372,6 +383,11 @@ public extension Value {
             
         case .enum:
             self = try .enum(.init(from: decoder))
+        case .option:
+            // `Optional` is already `Codable` so we have to go through its proxy type for JSON coding.
+            self = try .option(Optional<Value>.ProxyDecodable(from: decoder).decoded)
+        case .result:
+            self = try .result(.init(from: decoder))
             
         case .array:
             self = try .array(.init(from: decoder))

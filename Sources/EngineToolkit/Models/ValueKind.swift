@@ -20,6 +20,8 @@ public enum ValueKind: String, Codable, Sendable, Hashable {
 
     case `enum` = "Enum"
 
+    case option = "Option"
+    case result = "Result"
     case array = "Array"
     case tuple = "Tuple"
 
