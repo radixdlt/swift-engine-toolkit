@@ -1,6 +1,5 @@
 import Foundation
 
-// TODO: We really need something higher level and more structured here.
 public struct CreateResource: InstructionProtocol {
     // Type name, used as a discriminator
     public static let kind: InstructionKind = .createResource
@@ -12,11 +11,11 @@ public struct CreateResource: InstructionProtocol {
     public let resourceType: Enum
     public let metadata: Array_
     public let accessRules: Array_
-    public let mintParams: Enum
+    public let mintParams: Optional<Enum>
     
     // MARK: Init
     
-    public init(resourceType: Enum, metadata: Array_, accessRules: Array_, mintParams: Enum) {
+    public init(resourceType: Enum, metadata: Array_, accessRules: Array_, mintParams: Optional<Enum>) {
         self.resourceType = resourceType
         self.metadata = metadata
         self.accessRules = accessRules
@@ -43,7 +42,7 @@ public extension CreateResource {
         try container.encode(resourceType, forKey: .resourceType)
         try container.encode(metadata, forKey: .metadata)
         try container.encode(accessRules, forKey: .accessRules)
-        try container.encode(mintParams, forKey: .mintParams)
+        try container.encode(Value.option(mintParams.map { Value.enum($0) }), forKey: .mintParams)
     }
     
     init(from decoder: Decoder) throws {
@@ -57,13 +56,29 @@ public extension CreateResource {
         let resourceType = try container.decode(Enum.self, forKey: .resourceType)
         let metadata = try container.decode(Array_.self, forKey: .metadata)
         let accessRules = try container.decode(Array_.self, forKey: .accessRules)
-        let mintParams = try container.decode(Enum.self, forKey: .mintParams)
+        let mintParamsValue = try container.decode(Value.self, forKey: .mintParams)
         
-        self.init(
-            resourceType: resourceType,
-            metadata: metadata,
-            accessRules: accessRules,
-            mintParams: mintParams
-        )
+        // Mint params has been decoded as a `Value`. We need to attempt to transform the `Value` to a
+        // `Optional<Enum>`.
+        switch mintParamsValue {
+        case .option(let option):
+            let mintParams = try option.map { switch $0 {
+            case .enum(let enumeration):
+                return enumeration
+            default:
+                // TODO: Bad error. Need a beter one
+                throw SborDecodeError(value: "Invalid mint params")
+            }}
+            
+            self.init(
+                resourceType: resourceType,
+                metadata: metadata,
+                accessRules: accessRules,
+                mintParams: mintParams
+            )
+        default:
+            // TODO: Bad error. Need a beter one
+            throw SborDecodeError(value: "Invalid mint params")
+        }
     }
 }

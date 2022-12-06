@@ -24,7 +24,7 @@ public extension HammunetAddresses {
 final class CreateAccountTXTest: TestCase {
     
     override func setUp() {
-        debugPrint = true
+        debugPrint = false
         super.setUp()
         continueAfterFailure = false
     }

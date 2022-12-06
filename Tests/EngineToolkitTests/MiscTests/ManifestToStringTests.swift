@@ -4,7 +4,7 @@ import CryptoKit
 final class ManifestToStringTests: TestCase {
     
     override func setUp() {
-        debugPrint = true
+        debugPrint = false
         super.setUp()
     }
     

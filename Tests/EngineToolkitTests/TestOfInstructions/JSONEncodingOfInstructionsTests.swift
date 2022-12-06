@@ -13,7 +13,7 @@ import SLIP10
 final class JSONEncodingOfInstructionsTests: TestCase {
     
     override func setUp() {
-        debugPrint = true
+        debugPrint = false
         super.setUp()
         continueAfterFailure = false
     }
