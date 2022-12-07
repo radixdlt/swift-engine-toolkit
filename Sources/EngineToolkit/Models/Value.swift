@@ -32,17 +32,12 @@ public indirect enum Value_: Sendable, Codable, Hashable {
     
     case string(String)
     
-    case `struct`(Struct)
     case `enum`(Enum)
     
     case option(Optional<Value>)
+    case result(Result<Value, Value>)
     case array(Array_)
     case tuple(Tuple)
-    case result(Result<Value, Value>)
-    
-    case list(List)
-    case set(Set_)
-    case map(Map)
     
     case decimal(Decimal_)
     case preciseDecimal(PreciseDecimal)
@@ -120,32 +115,18 @@ public extension Value {
         case .string:
             return .string
             
-        case .struct:
-            return .struct
-            
         case .enum:
             return .enum
-            
         case .option:
             return .option
+        case .result:
+            return .result
             
         case .array:
             return .array
             
         case .tuple:
             return .tuple
-            
-        case .result:
-            return .result
-            
-        case .list:
-            return .list
-            
-        case .set:
-            return .set
-            
-        case .map:
-            return .map
             
         case .decimal:
             return .decimal
@@ -267,35 +248,21 @@ public extension Value {
         case .string(let value):
             // `String` is already `Codable` so we have to go through its proxy type for JSON coding.
             try value.proxyEncodable.encode(to: encoder)
-            
-        case .struct(let value):
-            try value.encode(to: encoder)
         
         case .enum(let value):
             try value.encode(to: encoder)
-            
         case .option(let value):
             // `Optional` is already `Codable` so we have to go through its proxy type for JSON coding.
             try value.proxyEncodable.encode(to: encoder)
-        
+        case .result(let value):
+            try value.encode(to: encoder)
+            
         case .array(let value):
             try value.encode(to: encoder)
         
         case .tuple(let value):
             try value.encode(to: encoder)
         
-        case .result(let value):
-            try value.encode(to: encoder)
-            
-        case .list(let value):
-            try value.encode(to: encoder)
-        
-        case .set(let value):
-            try value.encode(to: encoder)
-        
-        case .map(let value):
-            try value.encode(to: encoder)
-            
         case .decimal(let value):
             try value.encode(to: encoder)
         
@@ -414,33 +381,19 @@ public extension Value {
             // `String` is already `Codable` so we have to go through its proxy type for JSON coding.
             self = try .string(String.ProxyDecodable(from: decoder).decoded)
             
-        case .struct:
-            self = try .struct(.init(from: decoder))
-            
         case .enum:
             self = try .enum(.init(from: decoder))
-            
         case .option:
             // `Optional` is already `Codable` so we have to go through its proxy type for JSON coding.
             self = try .option(Optional<Value>.ProxyDecodable(from: decoder).decoded)
+        case .result:
+            self = try .result(.init(from: decoder))
             
         case .array:
             self = try .array(.init(from: decoder))
             
         case .tuple:
             self = try .tuple(.init(from: decoder))
-            
-        case .result:
-            self = try .result(.init(from: decoder))
-            
-        case .list:
-            self = try .list(.init(from: decoder))
-            
-        case .set:
-            self = try .set(.init(from: decoder))
-            
-        case .map:
-            self = try .map(.init(from: decoder))
             
         case .decimal:
             self = try .decimal(.init(from: decoder))

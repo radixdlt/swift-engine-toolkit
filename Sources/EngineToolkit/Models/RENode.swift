@@ -13,6 +13,7 @@ public enum RENode: Codable, Equatable, Hashable, Sendable {
     case vault(RENodeIdentifier)
     case resourceManager(RENodeIdentifier)
     case package(RENodeIdentifier)
+    case clock(RENodeIdentifier)
 }
 
 public extension RENode {
@@ -31,6 +32,7 @@ public extension RENode {
         case vault = "Vault"
         case resourceManager = "ResourceManager"
         case package = "Package"
+        case clock = "Clock"
     }
 }
 
@@ -63,6 +65,8 @@ public extension RENode {
             return .resourceManager
         case .package:
             return .package
+        case .clock:
+            return .clock
         }
     }
 }
@@ -105,6 +109,8 @@ public extension RENode {
             try container.encode(identifier, forKey: .identifier)
         case .package(let identifier):
             try container.encode(identifier, forKey: .identifier)
+        case .clock(let identifier):
+            try container.encode(identifier, forKey: .identifier)
         }
     }
     
@@ -121,7 +127,7 @@ public extension RENode {
         case .authZoneStack:
             let identifierString = try container.decode(String.self, forKey: .identifier)
             guard let identifierValue = UInt32(identifierString) else {
-                throw DecodeError(value: "Auth zone stack must be a valid 32-bit unsigned integer")
+                throw SborDecodeError(value: "Auth zone stack must be a valid 32-bit unsigned integer")
             }
             self = .authZoneStack(identifierValue)
         case .worktop:
@@ -143,6 +149,8 @@ public extension RENode {
             self = try .resourceManager(container.decode(RENodeIdentifier.self, forKey: .identifier))
         case .package:
             self = try .package(container.decode(RENodeIdentifier.self, forKey: .identifier))
+        case .clock:
+            self = try .clock(container.decode(RENodeIdentifier.self, forKey: .identifier))
         }
     }
 }

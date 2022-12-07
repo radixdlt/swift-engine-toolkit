@@ -8,16 +8,14 @@ public struct NonFungibleAddress: ValueProtocol, Sendable, Codable, Hashable {
     }
     
     // MARK: Stored properties
-    public let address: [UInt8]
+    public let resourceAddress: ResourceAddress
+    public let nonFungibleId: NonFungibleId
     
     // MARK: Init
     
-    public init(bytes: [UInt8]) {
-        self.address = bytes
-    }
-    
-    public init(hex: String) throws {
-        try self.init(bytes:  [UInt8](hex: hex))
+    public init(resourceAddress: ResourceAddress, nonFungibleId: NonFungibleId) {
+        self.resourceAddress = resourceAddress
+        self.nonFungibleId = nonFungibleId
     }
 
 }
@@ -26,15 +24,17 @@ public extension NonFungibleAddress {
     
     // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
-        case address, type
+        case type
+        case resourceAddress = "resource_address"
+        case nonFungibleId = "non_fungible_id"
     }
     
     // MARK: Codable
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
-        
-        try container.encode(address.hex(), forKey: .address)
+        try container.encode(resourceAddress, forKey: .resourceAddress)
+        try container.encode(nonFungibleId, forKey: .nonFungibleId)
     }
     
     init(from decoder: Decoder) throws {
@@ -45,7 +45,9 @@ public extension NonFungibleAddress {
             throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        // Decoding `address`
-        try self.init(hex: container.decode(String.self, forKey: .address))
+        self.init(
+            resourceAddress: try container.decode(ResourceAddress.self, forKey: .resourceAddress),
+            nonFungibleId: try container.decode(NonFungibleId.self, forKey: .nonFungibleId)
+        )
     }
 }

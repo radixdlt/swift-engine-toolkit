@@ -4,7 +4,7 @@ import CryptoKit
 final class ManifestToStringTests: TestCase {
     
     override func setUp() {
-        debugPrint = true
+        debugPrint = false
         super.setUp()
     }
     
@@ -39,9 +39,13 @@ final class ManifestToStringTests: TestCase {
                     methodName: "lock_fee"
                 ) { try Decimal_(string: "100") }
                 
-                PublishPackage(
+                PublishPackageWithOwner(
                     code: Blob(data: sha256(data: package.code)),
-                    abi: Blob(data: sha256(data: package.abi))
+                    abi: Blob(data: sha256(data: package.abi)),
+                    ownerBadge: NonFungibleAddress(
+                        resourceAddress: .init(address: "resource_sim1qzf8hl3azz2q0e5s33nh2mt8wmvqjfxdrv06ysus4alqh0994h"),
+                        nonFungibleId: .u32(12)
+                    )
                 )
             }.instructions
             

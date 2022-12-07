@@ -9,13 +9,13 @@ public struct CreateResource: InstructionProtocol {
     
     // MARK: Stored properties
     public let resourceType: Enum
-    public let metadata: Map
-    public let accessRules: Map
+    public let metadata: Array_
+    public let accessRules: Array_
     public let mintParams: Optional<Enum>
     
     // MARK: Init
     
-    public init(resourceType: Enum, metadata: Map, accessRules: Map, mintParams: Optional<Enum>) {
+    public init(resourceType: Enum, metadata: Array_, accessRules: Array_, mintParams: Optional<Enum>) {
         self.resourceType = resourceType
         self.metadata = metadata
         self.accessRules = accessRules
@@ -54,8 +54,8 @@ public extension CreateResource {
         }
 
         let resourceType = try container.decode(Enum.self, forKey: .resourceType)
-        let metadata = try container.decode(Map.self, forKey: .metadata)
-        let accessRules = try container.decode(Map.self, forKey: .accessRules)
+        let metadata = try container.decode(Array_.self, forKey: .metadata)
+        let accessRules = try container.decode(Array_.self, forKey: .accessRules)
         let mintParamsValue = try container.decode(Value.self, forKey: .mintParams)
         
         // Mint params has been decoded as a `Value`. We need to attempt to transform the `Value` to a
@@ -66,7 +66,8 @@ public extension CreateResource {
             case .enum(let enumeration):
                 return enumeration
             default:
-                throw DecodeError(value: "Invalid mint params")
+                // TODO: Bad error. Need a beter one
+                throw SborDecodeError(value: "Invalid mint params")
             }}
             
             self.init(
@@ -76,7 +77,8 @@ public extension CreateResource {
                 mintParams: mintParams
             )
         default:
-            throw DecodeError(value: "Invalid mint params")
-        }        
+            // TODO: Bad error. Need a beter one
+            throw SborDecodeError(value: "Invalid mint params")
+        }
     }
 }

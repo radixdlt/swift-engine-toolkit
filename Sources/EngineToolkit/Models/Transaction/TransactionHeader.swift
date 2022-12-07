@@ -16,7 +16,7 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
     public let publicKey: Engine.PublicKey
     public let notaryAsSignatory: Bool
     public let costUnitLimit: UInt32
-    public let tipPercentage: UInt32
+    public let tipPercentage: UInt8
     
     private enum CodingKeys: String, CodingKey {
         case version = "version"
@@ -39,7 +39,7 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
         publicKey: Engine.PublicKey,
         notaryAsSignatory: Bool,
         costUnitLimit: UInt32,
-        tipPercentage: UInt32
+        tipPercentage: UInt8
     ) {
         self.version = version
         self.networkId = networkId
@@ -85,7 +85,8 @@ public struct TransactionHeader: Sendable, Codable, Hashable {
     }
 }
 
-private func decodeAndConvertToNumericType<Integer: FixedWidthInteger, Key: CodingKey>(
+// TODO: Move to a better place
+public func decodeAndConvertToNumericType<Integer: FixedWidthInteger, Key: CodingKey>(
     container: KeyedDecodingContainer<Key>,
     key: Key
 ) throws -> Integer {

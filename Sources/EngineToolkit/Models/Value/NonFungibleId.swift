@@ -1,27 +1,29 @@
 import Foundation
 
-public struct NonFungibleId: ValueProtocol, Sendable, Codable, Hashable {
+public enum NonFungibleId {
+    case u32(UInt32)
+    case u64(UInt64)
+    case uuid(String)
+    case string(String)
+    case bytes([UInt8])
+}
+
+public extension NonFungibleId {
+    // MARK: Kind
+    enum Kind: String, Codable {
+        case u32 = "U32"
+        case u64 = "U64"
+        case uuid = "UUID"
+        case string = "String"
+        case bytes = "Bytes"
+    }
+}
+
+extension NonFungibleId: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .nonFungibleId
     public func embedValue() -> Value {
         .nonFungibleId(self)
-    }
-    
-    
-    // MARK: Stored properties
-    public let bytes: [UInt8]
-    
-    // MARK: Init
-    
-    public init(bytes: [UInt8]) {
-        self.bytes = bytes
-    }
-}
-
-public extension NonFungibleId {
-    
-    init(hex: String) throws {
-        try self.init(bytes: [UInt8](hex: hex))
     }
 }
 
@@ -29,7 +31,7 @@ public extension NonFungibleId {
     
     // MARK: CodingKeys
     private enum CodingKeys: String, CodingKey {
-        case value, type
+        case value, type, variant
     }
     
     // MARK: Codable
@@ -37,7 +39,23 @@ public extension NonFungibleId {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(Self.kind, forKey: .type)
         
-        try container.encode(bytes.hex(), forKey: .value)
+        switch self {
+        case .u32(let identifier):
+            try container.encode(Kind.u32, forKey: .variant)
+            try container.encode(String(identifier), forKey: .value)
+        case .u64(let identifier):
+            try container.encode(Kind.u64, forKey: .variant)
+            try container.encode(String(identifier), forKey: .value)
+        case .uuid(let identifier):
+            try container.encode(Kind.uuid, forKey: .variant)
+            try container.encode(String(identifier), forKey: .value)
+        case .string(let identifier):
+            try container.encode(Kind.string, forKey: .variant)
+            try container.encode(identifier, forKey: .value)
+        case .bytes(let identifier):
+            try container.encode(Kind.bytes, forKey: .variant)
+            try container.encode(identifier.hex(), forKey: .value)
+        }
     }
     
     init(from decoder: Decoder) throws {
@@ -48,7 +66,18 @@ public extension NonFungibleId {
             throw InternalDecodingFailure.valueTypeDiscriminatorMismatch(expected: Self.kind, butGot: kind)
         }
         
-        // Decoding `value`
-        try self.init(hex: container.decode(String.self, forKey: .value))
+        let variant = try container.decode(Kind.self, forKey: .variant)
+        switch variant {
+        case .u32:
+            self = .u32(try decodeAndConvertToNumericType(container: container, key: .value))
+        case .u64:
+            self = .u64(try decodeAndConvertToNumericType(container: container, key: .value))
+        case .uuid:
+            self = .uuid(try container.decode(String.self, forKey: .value))
+        case .string:
+            self = .string(try container.decode(String.self, forKey: .value))
+        case .bytes:
+            self = try .bytes(.init(hex: container.decode(String.self, forKey: .value)))
+        }
     }
 }

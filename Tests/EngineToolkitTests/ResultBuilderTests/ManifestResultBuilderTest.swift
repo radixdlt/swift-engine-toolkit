@@ -75,8 +75,7 @@ final class ManifestResultBuilderTest: TestCase {
             ReturnToWorktop(bucket: xrdBucket1)
             TakeFromWorktopByIds(
                 [
-                    try NonFungibleId(hex: "0905000000"),
-                    try NonFungibleId(hex: "0907000000")
+                    try .bytes(.init(hex: "031b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f"))
                 ],
                 resourceAddress: resource,
                 bucket: "nfts"
@@ -85,9 +84,9 @@ final class ManifestResultBuilderTest: TestCase {
             // Create a new fungible resource
             CreateResource (
                 resourceType: Enum("Fungible") { UInt8(0) },
-                metadata: Map(keyType: .string, valueType: .string),
-                accessRules: Map(keyType: .enum, valueType: .tuple),
-                mintParams: Enum("Fungible") { Decimal_(1.0) }
+                metadata: try Array_(elementType: .tuple, elements: []),
+                accessRules: try Array_(elementType: .tuple, elements: []),
+                mintParams: .some(Enum("Fungible") { Decimal_(1.0) })
             )
             
             // Cancel all buckets and move resources to account

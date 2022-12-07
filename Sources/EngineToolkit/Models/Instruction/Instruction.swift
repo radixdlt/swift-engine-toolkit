@@ -38,7 +38,7 @@ public indirect enum Instruction: Sendable, Codable, Hashable {
     case dropProof(DropProof)
     case dropAllProofs(DropAllProofs)
     
-    case publishPackage(PublishPackage)
+    case publishPackage(PublishPackageWithOwner)
     
     case createResource(CreateResource)
     case burnBucket(BurnBucket)
@@ -114,7 +114,7 @@ public extension Instruction {
             return .dropAllProofs
             
         case .publishPackage:
-            return .publishPackage
+            return .publishPackageWithOwner
         
         case .createResource:
             return .createResource
@@ -286,7 +286,7 @@ public extension Instruction {
         case .dropAllProofs:
             self = try .dropAllProofs(.init(from: decoder))
             
-        case .publishPackage:
+        case .publishPackageWithOwner:
             self =  try .publishPackage(.init(from: decoder))
             
         case .createResource:

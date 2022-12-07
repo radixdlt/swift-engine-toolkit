@@ -254,7 +254,7 @@ public extension TransactionManifest {
             
             return accountsRequiredToSign;
         case .string:
-            throw DecodeError(value: "Impossible case") // TODO: need a better error
+            throw SborDecodeError(value: "Impossible case") // TODO: need a better error
         }
     }
 }
