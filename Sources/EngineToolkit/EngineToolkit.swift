@@ -1,6 +1,10 @@
 import Foundation
 import RadixEngineToolkit
 
+typealias UnderlyingPointerType = CChar;
+typealias MutableToolkitPointer = UnsafeMutablePointer<UnderlyingPointerType>;
+typealias ImmutableToolkitPointer = UnsafePointer<UnderlyingPointerType>;
+
 /// A type provides a high level functions and method for the
 /// interaction with the transaction library and abstracting away
 /// the low level memory allocation, serialization, and other low level concepts.
@@ -201,7 +205,7 @@ internal extension EngineToolkit {
     /// communicating and getting responses back from the library.
     func callLibraryFunction<Request, Response>(
         request: Request,
-        function: (UnsafeMutablePointer<UInt8>?) -> UnsafeMutablePointer<UInt8>?
+        function: (MutableToolkitPointer?) -> MutableToolkitPointer?
     ) -> Result<Response, Error> where Request: Encodable, Response: Decodable {
         // Serialize the given request to a JSON string.
         serialize(request: request)
@@ -220,7 +224,7 @@ internal extension EngineToolkit {
                     .mapError(Error.callLibraryFunctionFailure)
                 
             }
-            .flatMap { (requestPointer: UnsafeMutablePointer<UInt8>) in
+            .flatMap { (requestPointer: MutableToolkitPointer) in
                 // Calling the underlying transaction library function and getting a pointer
                 // response. We cannot deallocated the `responsePointer`, it results in a crash.
                 guard let responsePointer = function(requestPointer) else {
@@ -231,7 +235,7 @@ internal extension EngineToolkit {
                 }
                 return .success((requestPointer, responsePointer))
             }
-            .flatMap { (requestPointer: UnsafeMutablePointer<UInt8>, responsePointer: UnsafeMutablePointer<UInt8>) in
+            .flatMap { (requestPointer: MutableToolkitPointer, responsePointer: MutableToolkitPointer) in
                 
                 let responseJSONString = jsonStringOfResponse(at: responsePointer)
                 
@@ -311,7 +315,7 @@ private extension EngineToolkit {
     /// Only one memory allocator should be used at a time, and in most cases, when using the Radix Engine Toolkit
     /// this would be the allocator provided by the library. Using multiple allocators can lead to memory corruption
     /// issues and potential memory leaks if memory is not handeled correctly.
-    func allocateMemory(capacity: UInt) -> Result<UnsafeMutablePointer<UInt8>, Error.CallLibraryFunctionFailure> {
+    func allocateMemory(capacity: UInt) -> Result<MutableToolkitPointer, Error.CallLibraryFunctionFailure> {
         if let allocatedMemory = toolkit_alloc(capacity) {
             return .success(allocatedMemory)
         } else {
@@ -326,7 +330,7 @@ private extension EngineToolkit {
     /// Only one memory allocator should be used at a time, and in most cases, when using the Radix Engine Toolkit
     /// this would be the allocator provided by the library. Using multiple allocators can lead to memory corruption
     /// issues and potential memory leaks if memory is not handeled correctly.
-    func allocateMemoryForJSONStringOf(request requestJSONString: String) -> Result<UnsafeMutablePointer<UInt8>, Error.CallLibraryFunctionFailure> {
+    func allocateMemoryForJSONStringOf(request requestJSONString: String) -> Result<MutableToolkitPointer, Error.CallLibraryFunctionFailure> {
         // Get the byte count of the C-String representation of the utf-8 encoded
         // string.
         let cString = Array(requestJSONString.utf8CString)
@@ -346,7 +350,7 @@ private extension EngineToolkit {
     /// Only one memory allocator should be used at a time, and in most cases, when using the Radix Engine Toolkit
     /// this would be the allocator provided by the library. Using multiple allocators can lead to memory corruption
     /// issues and potential memory leaks if memory is not handeled correctly.
-    func deallocateMemoryOfNullTerminatedString(pointer: UnsafeMutablePointer<UInt8>) {
+    func deallocateMemoryOfNullTerminatedString(pointer: MutableToolkitPointer) {
         toolkit_free_c_string(pointer)
     }
     
@@ -357,10 +361,10 @@ private extension EngineToolkit {
     @discardableResult
     func writeJSONString(
         of requestJSONString: String,
-        to pointer: UnsafeMutablePointer<UInt8>
-    ) -> UnsafeMutablePointer<UInt8> {
+        to pointer: MutableToolkitPointer
+    ) -> MutableToolkitPointer {
         // Converting the request JSON string to an array of UTF-8 bytes
-        let requestChars: [UInt8] =  requestJSONString.utf8CString.map{ UInt8($0) }
+        let requestChars =  requestJSONString.utf8CString
         
         // Iterating over the array and writing all of the bytes to memory
         for (charIndex, cChar) in requestChars.enumerated() {
@@ -374,7 +378,7 @@ private extension EngineToolkit {
     ///
     /// This function reads a C-String, null terminated, string from the provided memory location and returns it.
     func jsonStringOfResponse(
-        at pointer: UnsafePointer<UInt8>
+        at pointer: ImmutableToolkitPointer
     ) -> String {
         String(cString: pointer)
     }

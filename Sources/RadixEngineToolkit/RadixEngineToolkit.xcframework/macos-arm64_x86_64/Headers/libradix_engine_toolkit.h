@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef uint8_t *Pointer;
+typedef char *Pointer;
 
 Pointer information(Pointer string_pointer);
 
