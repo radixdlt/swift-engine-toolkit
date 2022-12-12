@@ -13,6 +13,11 @@ public struct Enum: ValueProtocol, Sendable, Codable, Hashable {
     
     // MARK: Init
     
+    public init(_ variant: String) {
+        self.variant = variant
+        self.fields = []
+    }
+    
     public init(_ variant: String, fields: [Value]) {
         self.variant = variant
         self.fields = fields
@@ -61,7 +66,7 @@ public extension Enum {
    
         try self.init(
             container.decode(String.self, forKey: .variant),
-            fields: container.decode([Value].self, forKey: .fields)
+            fields: container.decodeIfPresent([Value].self, forKey: .fields) ?? []
         )
     }
 }
