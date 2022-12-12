@@ -83,10 +83,10 @@ final class ManifestResultBuilderTest: TestCase {
             
             // Create a new fungible resource
             CreateResource (
-                resourceType: Enum("Fungible") { UInt8(0) },
+                resourceType: .enum(Enum("Fungible") { UInt8(0) }),
                 metadata: try Array_(elementType: .tuple, elements: []),
                 accessRules: try Array_(elementType: .tuple, elements: []),
-                mintParams: .some(Enum("Fungible") { Decimal_(1.0) })
+                mintParams: .option(.some(Enum("Fungible") { Decimal_(1.0) }))
             )
             
             // Cancel all buckets and move resources to account

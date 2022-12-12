@@ -3,7 +3,7 @@
 final class ConvertManifestTests: TestCase {
 	
     override func setUp() {
-        debugPrint = false
+        debugPrint = true
         super.setUp()
     }
     
@@ -280,6 +280,139 @@ final class ConvertManifestTests: TestCase {
         
         let transactionManifest = TransactionManifest(instructions: .string(manifestString))
         let convertedManifest = try sut.convertManifest(request: makeRequest(outputFormat: .json, manifest: transactionManifest)).get()
+        
+        XCTAssertEqual(expectedManifest, convertedManifest)
+    }
+    
+    func test__convertManifest_for_nft_creation_manifest_succeeds() throws {
+        let manifestString = """
+        CALL_METHOD
+          ComponentAddress("component_tdx_20_1qftacppvmr9ezmekxqpq58en0nk954x0a7jv2zz0hc7qlnye7x")
+          "lock_fee"
+          Decimal("10");
+
+        CREATE_RESOURCE
+          Enum("NonFungible", Enum("UUID"))
+          Array<Tuple>(
+            Tuple("name", "NFT with ID of type UUID (u128)"),
+            Tuple("symbol", "NFTUUID")
+          )
+          Array<Tuple>(
+            Tuple(Enum("Withdraw"), Tuple(Enum("AllowAll"), Enum("LOCKED"))),
+            Tuple(Enum("Mint"), Tuple(Enum("AllowAll"), Enum("LOCKED"))),
+            Tuple(Enum("Burn"), Tuple(Enum("AllowAll"), Enum("LOCKED")))
+          )
+          Some(Enum("NonFungible", Array<Tuple>(
+            Tuple(NonFungibleId(1u128), Tuple(Array<U8>(92u8, 0u8, 0u8), Array<U8>(92u8, 0u8, 0u8))),
+            Tuple(NonFungibleId(2u128), Tuple(Array<U8>(92u8, 0u8, 0u8), Array<U8>(92u8, 0u8, 0u8))),
+            Tuple(NonFungibleId(3u128), Tuple(Array<U8>(92u8, 0u8, 0u8), Array<U8>(92u8, 0u8, 0u8))),
+          )));
+
+        CALL_METHOD
+          ComponentAddress("account_tdx_20_1qd7xwn5lq340zsqt6cmdg9j3ans96kcpe8h79t3prl7q5p5k92")
+          "deposit_batch"
+          Expression("ENTIRE_WORKTOP");
+        """
+        
+        let expectedManifest = try TransactionManifest {
+            try CallMethod(
+                receiver: ComponentAddress(address: "component_tdx_20_1qftacppvmr9ezmekxqpq58en0nk954x0a7jv2zz0hc7qlnye7x"),
+                methodName: "lock_fee"
+            ) {
+                try Decimal_(string: "10")
+            }
+            
+            CreateResource(
+              resourceType: .enum(.init("NonFungible", fields: [.enum(.init("UUID"))])),
+              metadata: try Array_(
+                elementType: .tuple,
+                elements: [
+                  .tuple(.init(values: [.string("name"), .string("NFT with ID of type UUID (u128)")])),
+                  .tuple(.init(values: [.string("symbol"), .string("NFTUUID")])),
+                ]),
+              accessRules: try Array_(
+                elementType: .tuple,
+                elements: [
+                  .tuple(
+                    .init(values: [
+                      .enum(.init("Withdraw")),
+                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("LOCKED"))])),
+                    ])),
+                  .tuple(
+                    .init(values: [
+                      .enum(.init("Mint")),
+                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("LOCKED"))])),
+                    ])),
+                  .tuple(
+                    .init(values: [
+                      .enum(.init("Burn")),
+                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("LOCKED"))])),
+                    ])),
+                ]),
+              mintParams: .option(
+                .some(
+                  .enum(
+                    .init(
+                      "NonFungible",
+                      fields: [
+                        .array(try .init(elementType: .tuple, elements: [
+                            .tuple(
+                              .init(values: [
+                                .nonFungibleId(.uuid("1")),
+                                .tuple(
+                                  .init(values: [
+                                    .array(
+                                      try .init(elementType: .u8, elements: [.u8(0x5c), .u8(0x00), .u8(0x00)])),
+                                    .array(
+                                      try .init(elementType: .u8, elements: [.u8(0x5c), .u8(0x00), .u8(0x00)])),
+                                  ])),
+                              ])),
+                            .tuple(
+                              .init(values: [
+                                .nonFungibleId(.uuid("2")),
+                                .tuple(
+                                  .init(values: [
+                                    .array(
+                                      try .init(elementType: .u8, elements: [.u8(0x5c), .u8(0x00), .u8(0x00)])),
+                                    .array(
+                                      try .init(elementType: .u8, elements: [.u8(0x5c), .u8(0x00), .u8(0x00)])),
+                                  ])),
+                              ])),
+                            .tuple(
+                              .init(values: [
+                                .nonFungibleId(.uuid("3")),
+                                .tuple(
+                                  .init(values: [
+                                    .array(
+                                      try .init(elementType: .u8, elements: [.u8(0x5c), .u8(0x00), .u8(0x00)])),
+                                    .array(
+                                      try .init(elementType: .u8, elements: [.u8(0x5c), .u8(0x00), .u8(0x00)])),
+                                  ])),
+                              ])),
+                        ]))
+                      ]))
+                )
+              )
+            )
+
+            
+            CallMethod(
+                receiver: ComponentAddress(address: "account_tdx_20_1qd7xwn5lq340zsqt6cmdg9j3ans96kcpe8h79t3prl7q5p5k92"),
+                methodName: "deposit_batch"
+            ) {
+                Expression(value: "ENTIRE_WORKTOP")
+            }
+        }
+        
+        let transactionManifest = TransactionManifest(instructions: .string(manifestString))
+        let convertedManifest = try sut.convertManifest(
+            request: .init(
+                transactionVersion: 0x01,
+                manifest: transactionManifest,
+                outputFormat: .json,
+                networkId: .gilganet
+            )
+        ).get()
         
         XCTAssertEqual(expectedManifest, convertedManifest)
     }
