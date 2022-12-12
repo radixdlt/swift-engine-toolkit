@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ComponentAddress: ValueProtocol, Sendable, Codable, Hashable, AddressProtocol {
+public struct ComponentAddress: ValueProtocol, Sendable, Codable, Hashable, Equatable, AddressProtocol {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .componentAddress
     public func embedValue() -> Value {
