@@ -47,7 +47,7 @@ public extension TransactionHeader {
         
         try Self(
             version: 0x01,
-            networkId: 0xF2,
+            networkId: NetworkID.nebunet,
             startEpochInclusive: 0,
             endEpochExclusive: 10,
             nonce: 0,

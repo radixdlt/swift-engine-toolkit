@@ -104,7 +104,7 @@ private func _testTransaction(
     let transactionManifest = TransactionManifest(instructions: .string(complexManifestString))
     let transactionHeader = TransactionHeader(
         version: 0x01,
-        networkId: 0xF2,
+        networkId: NetworkID.nebunet,
         startEpochInclusive: 0,
         endEpochExclusive: 10,
         nonce: 0,

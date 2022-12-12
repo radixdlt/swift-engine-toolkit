@@ -78,6 +78,13 @@ final class TestOfErrors: TestCase {
             )
         )
     }
+
+	func test_json_parse_networkMismatchError() throws {
+		// TODO: fix json format
+		let json = "{\"error\":\"NetworkMismatchError\",\"value\":{\"expected\":11,\"found\":36}}".data(using: .utf8)!
+		let addressError = try JSONDecoder().decode(NetworkMismatchError.self, from: json)
+		XCTAssertEqual(addressError, NetworkMismatchError(value: .init(expected: 11, found: 36)))
+	}
     
     func test_json_parse_address_error() throws {
         let json = """
