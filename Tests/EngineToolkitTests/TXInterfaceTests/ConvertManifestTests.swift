@@ -298,9 +298,9 @@ final class ConvertManifestTests: TestCase {
             Tuple("symbol", "NFTUUID")
           )
           Array<Tuple>(
-            Tuple(Enum("Withdraw"), Tuple(Enum("AllowAll"), Enum("LOCKED"))),
-            Tuple(Enum("Mint"), Tuple(Enum("AllowAll"), Enum("LOCKED"))),
-            Tuple(Enum("Burn"), Tuple(Enum("AllowAll"), Enum("LOCKED")))
+            Tuple(Enum("Withdraw"), Tuple(Enum("AllowAll"), Enum("DenyAll"))),
+            Tuple(Enum("Mint"), Tuple(Enum("AllowAll"), Enum("DenyAll"))),
+            Tuple(Enum("Burn"), Tuple(Enum("AllowAll"), Enum("DenyAll")))
           )
           Some(Enum("NonFungible", Array<Tuple>(
             Tuple(NonFungibleId(1u128), Tuple(Array<U8>(92u8, 0u8, 0u8), Array<U8>(92u8, 0u8, 0u8))),
@@ -336,17 +336,17 @@ final class ConvertManifestTests: TestCase {
                   .tuple(
                     .init(values: [
                       .enum(.init("Withdraw")),
-                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("LOCKED"))])),
+                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("DenyAll"))])),
                     ])),
                   .tuple(
                     .init(values: [
                       .enum(.init("Mint")),
-                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("LOCKED"))])),
+                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("DenyAll"))])),
                     ])),
                   .tuple(
                     .init(values: [
                       .enum(.init("Burn")),
-                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("LOCKED"))])),
+                      .tuple(.init(values: [.enum(.init("AllowAll")), .enum(.init("DenyAll"))])),
                     ])),
                 ]),
               mintParams: .option(
