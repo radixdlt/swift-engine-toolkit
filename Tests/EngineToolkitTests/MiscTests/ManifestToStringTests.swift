@@ -69,7 +69,7 @@ final class ManifestToStringTests: TestCase {
     }
 }
 
-func resource(
+public func resource(
     named fileName: String,
     extension fileExtension: String
 ) throws -> Data {
@@ -77,6 +77,6 @@ func resource(
     return try Data(contentsOf: fileURL!)
 }
 
-func sha256(data : Data) -> Data {
+public func sha256(data : Data) -> Data {
     return SHA256.hash(data: data).data
 }
