@@ -52,4 +52,5 @@ public enum ValueKind: String, Codable, Sendable, Hashable {
 
     case blob = "Blob"
     case expression = "Expression"
+    case bytes = "Bytes"
 }

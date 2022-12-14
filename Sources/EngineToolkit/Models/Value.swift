@@ -66,6 +66,7 @@ public indirect enum Value_: Sendable, Codable, Hashable {
     
     case blob(Blob)
     case expression(Expression)
+    case bytes(Bytes)
 }
 
 public extension Value {
@@ -185,6 +186,8 @@ public extension Value {
             
         case .expression:
             return .expression
+        case .bytes:
+            return .bytes
         }
     }
 }
@@ -322,6 +325,8 @@ public extension Value {
         
         case .expression(let value):
             try value.encode(to: encoder)
+        case .bytes(let value):
+            try value.encode(to: encoder)
         }
     }
     
@@ -455,6 +460,8 @@ public extension Value {
         case .expression:
             self = try .expression(.init(from: decoder))
             
+        case .bytes:
+            self = try .bytes(.init(from: decoder))
         }
     }
 }
