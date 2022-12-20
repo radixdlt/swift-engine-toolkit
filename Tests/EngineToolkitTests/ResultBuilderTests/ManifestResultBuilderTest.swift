@@ -22,13 +22,13 @@ final class ManifestResultBuilderTest: TestCase {
                 receiver: account,
                 methodName: "withdraw_by_amount"
             ) {
-                Decimal_(5.0)
+                Decimal_(value: "5")
                 resource
             }
             // Buy GUM with XRD
             let xrdBucket0: Bucket = "xrd"
             TakeFromWorktopByAmount(
-                amount: 2.0,
+                amount: Decimal_(value: "2"),
                 resourceAddress: resource,
                 bucket: xrdBucket0
             )
@@ -39,7 +39,7 @@ final class ManifestResultBuilderTest: TestCase {
             ) { xrdBucket0 }
             
             AssertWorktopContainsByAmount(
-                amount: 3.0,
+                amount: Decimal_(value: "3"),
                 resourceAddress: resource
             )
             AssertWorktopContains(resourceAddress: "resource_sim1qzhdk7tq68u8msj38r6v6yqa5myc64ejx3ud20zlh9gseqtux6")
@@ -64,7 +64,7 @@ final class ManifestResultBuilderTest: TestCase {
                 receiver: account,
                 methodName: "create_proof_by_amount"
             ) {
-                Decimal_(5.0)
+                Decimal_(value: "5")
                 resource
             }
             let proof3: Proof = "proof3"
@@ -86,7 +86,7 @@ final class ManifestResultBuilderTest: TestCase {
                 resourceType: .enum(Enum("Fungible") { UInt8(0) }),
                 metadata: try Array_(elementType: .tuple, elements: []),
                 accessRules: try Array_(elementType: .tuple, elements: []),
-                mintParams: .option(.some(Enum("Fungible") { Decimal_(1.0) }))
+                mintParams: .option(.some(Enum("Fungible") { Decimal_(value: "1") }))
             )
             
             // Cancel all buckets and move resources to account
@@ -105,7 +105,7 @@ final class ManifestResultBuilderTest: TestCase {
                 receiver: gumballComponent,
                 methodName: "complicated_method"
             ) {
-                Decimal_(1)
+                Decimal_(value: "1")
                 PreciseDecimal(2)
             }
         }

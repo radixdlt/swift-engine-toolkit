@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Decimal_: ValueProtocol, Sendable, Codable, Hashable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral {
+public struct Decimal_: ValueProtocol, Sendable, Codable, Hashable {
     // Type name, used as a discriminator
     public static let kind: ValueKind = .decimal
     public func embedValue() -> Value {
@@ -9,34 +9,19 @@ public struct Decimal_: ValueProtocol, Sendable, Codable, Hashable, ExpressibleB
     
     // MARK: Stored properties
     // TODO: Convert this to a better numerical type
-    public let value: Foundation.Decimal
+    public let value: String
     
     // MARK: Init
     
-    public init(value: Foundation.Decimal) {
+    public init(value: String) {
         self.value = value
-    }
-    
-    public init(string: String) throws {
-        try self.init(value: Decimal(string, format: .number, lenient: false))
-    }
-    
-    public typealias FloatLiteralType = Double
-    public init(floatLiteral: FloatLiteralType) {
-        self.init(value: Foundation.Decimal(floatLiteral: floatLiteral))
-    }
-    
-    public init(integerLiteral: Decimal.IntegerLiteralType) {
-        self.init(value: Foundation.Decimal(integerLiteral: integerLiteral))
     }
 }
 
 public extension Decimal_ {
     
     private var string: String {
-        // FIXME: investigate which `Locale` is being used here.. might need to use `NumberFormatter`, i.e.
-        // does `"\(value)"` use "," or "." for decimals, and what does Scrypto expect?
-        "\(value)"
+        return value
     }
     
     // MARK: CodingKeys
@@ -62,6 +47,6 @@ public extension Decimal_ {
         
         // Decoding `value`
         let string = try container.decode(String.self, forKey: .value)
-        try self.init(string: string)
+        self.init(value: string)
     }
 }
