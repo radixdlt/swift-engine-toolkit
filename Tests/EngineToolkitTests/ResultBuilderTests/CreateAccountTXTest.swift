@@ -48,7 +48,7 @@ final class CreateAccountTXTest: TestCase {
                 receiver: HammunetAddresses.faucet,
                 methodName: "lock_fee"
             ) {
-                Decimal_(10.0)
+                Decimal_(value: "10.0")
             }
             
             CallMethod(

@@ -23,7 +23,7 @@ final class JSONEncodingOfInstructionsTests: TestCase {
             receiver: ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42"),
             methodName: "lock_fee"
         ) {
-            Decimal_(10.0)
+            Decimal_(value: "10.0")
         }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .withoutEscapingSlashes]
@@ -34,7 +34,7 @@ final class JSONEncodingOfInstructionsTests: TestCase {
           "arguments" : [
             {
               "type" : "Decimal",
-              "value" : "10"
+              "value" : "10.0"
             }
           ],
           "component_address" : {

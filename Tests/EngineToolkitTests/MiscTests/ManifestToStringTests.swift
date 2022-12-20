@@ -33,11 +33,11 @@ final class ManifestToStringTests: TestCase {
         ]
         
         for package in packages {
-            let manifestInstructions = try TransactionManifest {
-                try CallMethod(
+            let manifestInstructions = TransactionManifest {
+                CallMethod(
                     receiver: ComponentAddress("account_sim1qdfapg25xjpned3q5k8vcku6vdp55rs493lqtjeky9wqse9w34"),
                     methodName: "lock_fee"
-                ) { try Decimal_(string: "100") }
+                ) { Decimal_(value: "100") }
                 
                 PublishPackageWithOwner(
                     code: Blob(data: sha256(data: package.code)),
