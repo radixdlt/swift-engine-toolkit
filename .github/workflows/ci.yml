@@ -13,6 +13,11 @@ jobs:
   unit_tests:
     name: "Unit tests"
     runs-on: macos-12
+    strategy:
+      matrix:
+        platform:
+          - macOS
+          - iOS
 
     steps:
       - uses: actions/checkout@v3.1.0
@@ -24,10 +29,9 @@ jobs:
             ${{ secrets.SLIP_10_UNIT_TESTS_SSH_KEY }}
             ${{ secrets.MNEMONIC_UNIT_TESTS_SSH_KEY }}
 
-      - uses: maxim-lobanov/setup-xcode@v1
+      - name: Run unit tests
+        uses: mxcl/xcodebuild@v1
         with:
-          xcode-version: "14.2"
-
-      - name: "Run unit tests"
-        run: |
-          swift test -Xswiftc -O
+          xcode: ^14.2
+          action: test
+          platform: ${{ matrix.platform }}
