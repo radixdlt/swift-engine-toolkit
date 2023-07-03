@@ -1,75 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "bigint",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/attaswift/BigInt.git",
-      "state" : {
-        "revision" : "0ed110f7555c34ff468e72e1686e59721f2b0da6",
-        "version" : "5.3.0"
-      }
-    },
-    {
-      "identity" : "bite",
-      "kind" : "remoteSourceControl",
-      "location" : "git@github.com:radixdlt/Bite.git",
-      "state" : {
-        "revision" : "b6801c0d4e269063ebc7b4930269d9d728b64e47",
-        "version" : "0.0.1"
-      }
-    },
-    {
       "identity" : "difference",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzysztofzablocki/Difference.git",
       "state" : {
         "revision" : "f627d00718033c3d7888acd5f4e3524a843db1cf",
         "version" : "1.0.2"
-      }
-    },
-    {
-      "identity" : "k1",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Sajjon/K1.git",
-      "state" : {
-        "revision" : "a6796d66597f0295fe3fe37e00bfda370b439c78",
-        "version" : "0.0.4"
-      }
-    },
-    {
-      "identity" : "mnemonic",
-      "kind" : "remoteSourceControl",
-      "location" : "git@github.com:radixdlt/Mnemonic.git",
-      "state" : {
-        "revision" : "c16383ddf78bc7ff71435f78fa0c4bdecc186a96",
-        "version" : "0.0.5"
-      }
-    },
-    {
-      "identity" : "slip10",
-      "kind" : "remoteSourceControl",
-      "location" : "git@github.com:radixdlt/SLIP10.git",
-      "state" : {
-        "revision" : "e8320eff864f1b447108bc002a282146bc1d53af",
-        "version" : "0.0.19"
-      }
-    },
-    {
-      "identity" : "swift-argument-parser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-argument-parser",
-      "state" : {
-        "revision" : "9f39744e025c7d377987f30b03770805dcb0bcd1",
-        "version" : "1.1.4"
-      }
-    },
-    {
-      "identity" : "swift-tagged",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-tagged.git",
-      "state" : {
-        "revision" : "f3f773a5e13f3c8f0ab1ce2ae6378058acefa87d",
-        "version" : "0.7.0"
       }
     }
   ],
