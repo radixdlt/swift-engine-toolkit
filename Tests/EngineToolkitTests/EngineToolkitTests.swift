@@ -1,5 +1,3 @@
 import XCTest
 
-class EngineToolkitTests: XCTestCase {
-
-}
+class EngineToolkitTests: XCTestCase {}

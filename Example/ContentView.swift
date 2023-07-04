@@ -5,8 +5,8 @@
 //  Created by Alexander Cyon on 2022-10-04.
 //
 
-import SwiftUI
 import EngineToolkit
+import SwiftUI
 
 struct ContentView: View {
     @State var information = ""
@@ -32,10 +32,9 @@ private extension ContentView {
         encoder.outputFormatting = [.prettyPrinted]
         let information = try EngineToolkit().information().get()
         let encoded_data: Data = try encoder.encode(information)
-        let encoded_string: String = String(data: encoded_data, encoding: .utf8)!
+        let encoded_string = String(data: encoded_data, encoding: .utf8)!
         return encoded_string
     }
-
 }
 
 struct ContentView_Previews: PreviewProvider {

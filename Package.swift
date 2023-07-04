@@ -10,7 +10,8 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "EngineToolkit",
-            targets: ["EngineToolkit"]),
+            targets: ["EngineToolkit"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/krzysztofzablocki/Difference.git", from: "1.0.1"),
@@ -18,7 +19,7 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "RadixEngineToolkit",
-            path: "Sources/RadixEngineToolkit/RadixEngineToolkit.xcframework"
+            path: "Sources/RadixEngineToolkit/RadixEngineToolkitUniFFI.xcframework"
         ),
         .target(
             name: "EngineToolkit",
@@ -30,9 +31,9 @@ let package = Package(
             name: "EngineToolkitTests",
             dependencies: [
                 "Difference",
-                "EngineToolkit"
+                "EngineToolkit",
             ],
             resources: []
-        )
+        ),
     ]
 )
