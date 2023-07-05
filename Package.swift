@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import Foundation
 
 let package = Package(
     name: "EngineToolkitUniFFI",
@@ -10,7 +11,6 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "EngineToolkitUniFFI",
-            type: .dynamic,
             targets: ["EngineToolkitUniFFI"]
         ),
     ],
@@ -28,8 +28,10 @@ let package = Package(
                 "RadixEngineToolkitUniFFI",
             ],
             linkerSettings: [
-                .unsafeFlags(
-                ["-Xlinker", "-rpath", "-Xlinker", "@executable_path/Frameworks"])
+                .unsafeFlags([
+                        "-rpath",
+                        URL(fileURLWithPath: #file).deletingLastPathComponent().path
+                ])
             ]
         ),
         .testTarget(
