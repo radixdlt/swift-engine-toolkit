@@ -19,13 +19,13 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(
-            name: "RadixEngineToolkit",
-            path: "Sources/RadixEngineToolkit/RadixEngineToolkitUniFFI.xcframework"
+            name: "RadixEngineToolkitUniFFI",
+            path: "Sources/RadixEngineToolkitUniFFI/RadixEngineToolkitUniFFI.xcframework"
         ),
         .target(
             name: "EngineToolkitUniFFI",
             dependencies: [
-                "RadixEngineToolkit",
+                "RadixEngineToolkitUniFFI",
             ]
         ),
         .testTarget(
