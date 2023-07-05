@@ -26,13 +26,13 @@ let package = Package(
             name: "EngineToolkitUniFFI",
             dependencies: [
                 "RadixEngineToolkitUniFFI",
-            ],
-            linkerSettings: [
-                .unsafeFlags([
-                        "-rpath",
-                        URL(fileURLWithPath: #file).deletingLastPathComponent().path
-                ])
             ]
+//            linkerSettings: [
+//                .unsafeFlags([
+//                        "-rpath",
+//                        URL(fileURLWithPath: #file).deletingLastPathComponent().path
+//                ])
+//            ]
         ),
         .testTarget(
             name: "EngineToolkitTests",
