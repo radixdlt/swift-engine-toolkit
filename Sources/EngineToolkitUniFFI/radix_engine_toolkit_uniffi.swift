@@ -546,7 +546,7 @@ public class Address: AddressProtocol {
     }
 
     public func addressString() -> String {
-            ""
+        ""
 //        return try! FfiConverterString.lift(
 //            try!
 //                rustCall {
@@ -1217,7 +1217,7 @@ public class Instructions: InstructionsProtocol {
     }
 
     public func instructionsList() -> [Instruction] {
-            []
+        []
 //        return try! FfiConverterSequenceTypeInstruction.lift(
 //            try!
 //                rustCall {
