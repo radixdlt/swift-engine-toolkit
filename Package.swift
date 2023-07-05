@@ -11,7 +11,7 @@ let package = Package(
         .library(
             name: "EngineToolkitUniFFI",
             type: .dynamic,
-            targets: ["EngineToolkit"]
+            targets: ["EngineToolkitUniFFI"]
         ),
     ],
     dependencies: [
@@ -23,7 +23,7 @@ let package = Package(
             path: "Sources/RadixEngineToolkit/RadixEngineToolkitUniFFI.xcframework"
         ),
         .target(
-            name: "EngineToolkit",
+            name: "EngineToolkitUniFFI",
             dependencies: [
                 "RadixEngineToolkit",
             ]
@@ -32,7 +32,7 @@ let package = Package(
             name: "EngineToolkitTests",
             dependencies: [
                 "Difference",
-                "EngineToolkit",
+                "EngineToolkitUniFFI",
             ],
             resources: []
         ),
