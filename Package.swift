@@ -4,12 +4,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "EngineToolkit",
+    name: "EngineToolkitUniFFI",
     platforms: [.macOS(.v12), .iOS(.v15)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "EngineToolkit",
+            name: "EngineToolkitUniFFI",
             type: .dynamic,
             targets: ["EngineToolkit"]
         ),
