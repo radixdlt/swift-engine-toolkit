@@ -2283,6 +2283,7 @@ public protocol TransactionManifestProtocol {
     func accountsDepositedInto() -> [Address]
     func accountsRequiringAuth() -> [Address]
     func accountsWithdrawnFrom() -> [Address]
+    func analyzeExecution(transactionReceipt: [UInt8]) throws -> ExecutionAnalysis
     func blobs() -> [[UInt8]]
     func extractAddresses() -> [EntityType: [Address]]
     func identitiesRequiringAuth() -> [Address]
@@ -2337,6 +2338,15 @@ public class TransactionManifest: TransactionManifestProtocol {
                 rustCall {
                     uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_accounts_withdrawn_from(self.pointer, $0)
                 }
+        )
+    }
+
+    public func analyzeExecution(transactionReceipt: [UInt8]) throws -> ExecutionAnalysis {
+        return try FfiConverterTypeExecutionAnalysis.lift(
+            rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+                uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_analyze_execution(self.pointer,
+                                                                                                   FfiConverterSequenceUInt8.lower(transactionReceipt), $0)
+            }
         )
     }
 
@@ -6496,6 +6506,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_withdrawn_from() != 1186 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_analyze_execution() != 28095 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_blobs() != 55127 {
