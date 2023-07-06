@@ -458,7 +458,7 @@ private struct FfiConverterString: FfiConverter {
 }
 
 public protocol AddressProtocol {
-    func addressString() -> String
+    func address() -> String
     func asStr() -> String
     func bytes() -> [UInt8]
     func entityType() -> EntityType
@@ -545,14 +545,13 @@ public class Address: AddressProtocol {
         })
     }
 
-    public func addressString() -> String {
-        ""
-//        return try! FfiConverterString.lift(
-//            try!
-//                rustCall {
-//                    uniffi_radix_engine_toolkit_uniffi_fn_method_address_address_string(self.pointer, $0)
-//                }
-//        )
+    public func address() -> String {
+        return try! FfiConverterString.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_address_address(self.pointer, $0)
+                }
+        )
     }
 
     public func asStr() -> String {
@@ -1171,7 +1170,7 @@ public func FfiConverterTypeHash_lower(_ value: Hash) -> UnsafeMutableRawPointer
 
 public protocol InstructionsProtocol {
     func asStr() throws -> String
-    func instructionsList() -> [Instruction]
+    func instructions() -> [Instruction]
     func networkId() -> UInt8
 }
 
@@ -1198,11 +1197,10 @@ public class Instructions: InstructionsProtocol {
         })
     }
 
-    public static func fromString(string: String, blobs: [[UInt8]], networkId: UInt8) throws -> Instructions {
+    public static func fromString(string: String, networkId: UInt8) throws -> Instructions {
         return try Instructions(unsafeFromRawPointer: rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
             uniffi_radix_engine_toolkit_uniffi_fn_constructor_instructions_from_string(
                 FfiConverterString.lower(string),
-                FfiConverterSequenceSequenceUInt8.lower(blobs),
                 FfiConverterUInt8.lower(networkId), $0
             )
         })
@@ -1216,14 +1214,13 @@ public class Instructions: InstructionsProtocol {
         )
     }
 
-    public func instructionsList() -> [Instruction] {
-        []
-//        return try! FfiConverterSequenceTypeInstruction.lift(
-//            try!
-//                rustCall {
-//                    uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_instructions_list(self.pointer, $0)
-//                }
-//        )
+    public func instructions() -> [Instruction] {
+        return try! FfiConverterSequenceTypeInstruction.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_instructions(self.pointer, $0)
+                }
+        )
     }
 
     public func networkId() -> UInt8 {
@@ -1280,6 +1277,7 @@ public protocol IntentProtocol {
     func header() -> TransactionHeader
     func intentHash() throws -> Hash
     func manifest() -> TransactionManifest
+    func message() -> Message
     func staticallyValidate(validationConfig: ValidationConfig) throws
 }
 
@@ -1293,11 +1291,12 @@ public class Intent: IntentProtocol {
         self.pointer = pointer
     }
 
-    public convenience init(header: TransactionHeader, manifest: TransactionManifest) {
+    public convenience init(header: TransactionHeader, manifest: TransactionManifest, message: Message) {
         self.init(unsafeFromRawPointer: try! rustCall {
             uniffi_radix_engine_toolkit_uniffi_fn_constructor_intent_new(
                 FfiConverterTypeTransactionHeader.lower(header),
-                FfiConverterTypeTransactionManifest.lower(manifest), $0
+                FfiConverterTypeTransactionManifest.lower(manifest),
+                FfiConverterTypeMessage.lower(message), $0
             )
         })
     }
@@ -1356,6 +1355,15 @@ public class Intent: IntentProtocol {
         )
     }
 
+    public func message() -> Message {
+        return try! FfiConverterTypeMessage.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_intent_message(self.pointer, $0)
+                }
+        )
+    }
+
     public func staticallyValidate(validationConfig: ValidationConfig) throws {
         try
             rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -1401,6 +1409,119 @@ public func FfiConverterTypeIntent_lift(_ pointer: UnsafeMutableRawPointer) thro
 
 public func FfiConverterTypeIntent_lower(_ value: Intent) -> UnsafeMutableRawPointer {
     return FfiConverterTypeIntent.lower(value)
+}
+
+public protocol MessageValidationConfigProtocol {
+    func maxDecryptors() -> UInt64
+    func maxEncryptedMessageLength() -> UInt64
+    func maxMimeTypeLength() -> UInt64
+    func maxPlaintextMessageLength() -> UInt64
+}
+
+public class MessageValidationConfig: MessageValidationConfigProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    public convenience init(maxPlaintextMessageLength: UInt64, maxEncryptedMessageLength: UInt64, maxMimeTypeLength: UInt64, maxDecryptors: UInt64) {
+        self.init(unsafeFromRawPointer: try! rustCall {
+            uniffi_radix_engine_toolkit_uniffi_fn_constructor_messagevalidationconfig_new(
+                FfiConverterUInt64.lower(maxPlaintextMessageLength),
+                FfiConverterUInt64.lower(maxEncryptedMessageLength),
+                FfiConverterUInt64.lower(maxMimeTypeLength),
+                FfiConverterUInt64.lower(maxDecryptors), $0
+            )
+        })
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_messagevalidationconfig(pointer, $0) }
+    }
+
+    public static func `default`() -> MessageValidationConfig {
+        return MessageValidationConfig(unsafeFromRawPointer: try! rustCall {
+            uniffi_radix_engine_toolkit_uniffi_fn_constructor_messagevalidationconfig_default($0)
+        })
+    }
+
+    public func maxDecryptors() -> UInt64 {
+        return try! FfiConverterUInt64.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_messagevalidationconfig_max_decryptors(self.pointer, $0)
+                }
+        )
+    }
+
+    public func maxEncryptedMessageLength() -> UInt64 {
+        return try! FfiConverterUInt64.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_messagevalidationconfig_max_encrypted_message_length(self.pointer, $0)
+                }
+        )
+    }
+
+    public func maxMimeTypeLength() -> UInt64 {
+        return try! FfiConverterUInt64.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_messagevalidationconfig_max_mime_type_length(self.pointer, $0)
+                }
+        )
+    }
+
+    public func maxPlaintextMessageLength() -> UInt64 {
+        return try! FfiConverterUInt64.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_messagevalidationconfig_max_plaintext_message_length(self.pointer, $0)
+                }
+        )
+    }
+}
+
+public struct FfiConverterTypeMessageValidationConfig: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = MessageValidationConfig
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MessageValidationConfig {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if ptr == nil {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: MessageValidationConfig, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> MessageValidationConfig {
+        return MessageValidationConfig(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: MessageValidationConfig) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+public func FfiConverterTypeMessageValidationConfig_lift(_ pointer: UnsafeMutableRawPointer) throws -> MessageValidationConfig {
+    return try FfiConverterTypeMessageValidationConfig.lift(pointer)
+}
+
+public func FfiConverterTypeMessageValidationConfig_lower(_ value: MessageValidationConfig) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeMessageValidationConfig.lower(value)
 }
 
 public protocol NonFungibleGlobalIdProtocol {
@@ -2429,6 +2550,7 @@ public protocol ValidationConfigProtocol {
     func maxEpochRange() -> UInt64
     func maxNotarizedPayloadSize() -> UInt64
     func maxTipPercentage() -> UInt16
+    func messageValidation() -> MessageValidationConfig
     func minCostUnitLimit() -> UInt32
     func minTipPercentage() -> UInt16
     func networkId() -> UInt8
@@ -2444,7 +2566,7 @@ public class ValidationConfig: ValidationConfigProtocol {
         self.pointer = pointer
     }
 
-    public convenience init(networkId: UInt8, maxNotarizedPayloadSize: UInt64, minCostUnitLimit: UInt32, maxCostUnitLimit: UInt32, minTipPercentage: UInt16, maxTipPercentage: UInt16, maxEpochRange: UInt64) {
+    public convenience init(networkId: UInt8, maxNotarizedPayloadSize: UInt64, minCostUnitLimit: UInt32, maxCostUnitLimit: UInt32, minTipPercentage: UInt16, maxTipPercentage: UInt16, maxEpochRange: UInt64, messageValidation: MessageValidationConfig) {
         self.init(unsafeFromRawPointer: try! rustCall {
             uniffi_radix_engine_toolkit_uniffi_fn_constructor_validationconfig_new(
                 FfiConverterUInt8.lower(networkId),
@@ -2453,7 +2575,8 @@ public class ValidationConfig: ValidationConfigProtocol {
                 FfiConverterUInt32.lower(maxCostUnitLimit),
                 FfiConverterUInt16.lower(minTipPercentage),
                 FfiConverterUInt16.lower(maxTipPercentage),
-                FfiConverterUInt64.lower(maxEpochRange), $0
+                FfiConverterUInt64.lower(maxEpochRange),
+                FfiConverterTypeMessageValidationConfig.lower(messageValidation), $0
             )
         })
     }
@@ -2502,6 +2625,15 @@ public class ValidationConfig: ValidationConfigProtocol {
             try!
                 rustCall {
                     uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_max_tip_percentage(self.pointer, $0)
+                }
+        )
+    }
+
+    public func messageValidation() -> MessageValidationConfig {
+        return try! FfiConverterTypeMessageValidationConfig.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_message_validation(self.pointer, $0)
                 }
         )
     }
@@ -2661,7 +2793,7 @@ public func FfiConverterTypeComponentAddresses_lower(_ value: ComponentAddresses
     return FfiConverterTypeComponentAddresses.lower(value)
 }
 
-public struct EcdsaSecp256k1PublicKey {
+public struct Ed25519PublicKey {
     public var value: [UInt8]
 
     // Default memberwise initializers are never public by default, so we
@@ -2671,8 +2803,8 @@ public struct EcdsaSecp256k1PublicKey {
     }
 }
 
-extension EcdsaSecp256k1PublicKey: Equatable, Hashable {
-    public static func == (lhs: EcdsaSecp256k1PublicKey, rhs: EcdsaSecp256k1PublicKey) -> Bool {
+extension Ed25519PublicKey: Equatable, Hashable {
+    public static func == (lhs: Ed25519PublicKey, rhs: Ed25519PublicKey) -> Bool {
         if lhs.value != rhs.value {
             return false
         }
@@ -2684,67 +2816,75 @@ extension EcdsaSecp256k1PublicKey: Equatable, Hashable {
     }
 }
 
-public struct FfiConverterTypeEcdsaSecp256k1PublicKey: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EcdsaSecp256k1PublicKey {
-        return try EcdsaSecp256k1PublicKey(
+public struct FfiConverterTypeEd25519PublicKey: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Ed25519PublicKey {
+        return try Ed25519PublicKey(
             value: FfiConverterSequenceUInt8.read(from: &buf)
         )
     }
 
-    public static func write(_ value: EcdsaSecp256k1PublicKey, into buf: inout [UInt8]) {
+    public static func write(_ value: Ed25519PublicKey, into buf: inout [UInt8]) {
         FfiConverterSequenceUInt8.write(value.value, into: &buf)
     }
 }
 
-public func FfiConverterTypeEcdsaSecp256k1PublicKey_lift(_ buf: RustBuffer) throws -> EcdsaSecp256k1PublicKey {
-    return try FfiConverterTypeEcdsaSecp256k1PublicKey.lift(buf)
+public func FfiConverterTypeEd25519PublicKey_lift(_ buf: RustBuffer) throws -> Ed25519PublicKey {
+    return try FfiConverterTypeEd25519PublicKey.lift(buf)
 }
 
-public func FfiConverterTypeEcdsaSecp256k1PublicKey_lower(_ value: EcdsaSecp256k1PublicKey) -> RustBuffer {
-    return FfiConverterTypeEcdsaSecp256k1PublicKey.lower(value)
+public func FfiConverterTypeEd25519PublicKey_lower(_ value: Ed25519PublicKey) -> RustBuffer {
+    return FfiConverterTypeEd25519PublicKey.lower(value)
 }
 
-public struct EddsaEd25519PublicKey {
-    public var value: [UInt8]
+public struct EncryptedMessage {
+    public var encrypted: [UInt8]
+    public var decryptorsByCurve: [CurveType: DecryptorsByCurve]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(value: [UInt8]) {
-        self.value = value
+    public init(encrypted: [UInt8], decryptorsByCurve: [CurveType: DecryptorsByCurve]) {
+        self.encrypted = encrypted
+        self.decryptorsByCurve = decryptorsByCurve
     }
 }
 
-extension EddsaEd25519PublicKey: Equatable, Hashable {
-    public static func == (lhs: EddsaEd25519PublicKey, rhs: EddsaEd25519PublicKey) -> Bool {
-        if lhs.value != rhs.value {
+extension EncryptedMessage: Equatable, Hashable {
+    public static func == (lhs: EncryptedMessage, rhs: EncryptedMessage) -> Bool {
+        if lhs.encrypted != rhs.encrypted {
+            return false
+        }
+        if lhs.decryptorsByCurve != rhs.decryptorsByCurve {
             return false
         }
         return true
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(value)
+        hasher.combine(encrypted)
+        hasher.combine(decryptorsByCurve)
     }
 }
 
-public struct FfiConverterTypeEddsaEd25519PublicKey: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EddsaEd25519PublicKey {
-        return try EddsaEd25519PublicKey(
-            value: FfiConverterSequenceUInt8.read(from: &buf)
+public struct FfiConverterTypeEncryptedMessage: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EncryptedMessage {
+        return try EncryptedMessage(
+            encrypted: FfiConverterSequenceUInt8.read(from: &buf),
+            decryptorsByCurve: FfiConverterDictionaryTypeCurveTypeTypeDecryptorsByCurve.read(from: &buf)
         )
     }
 
-    public static func write(_ value: EddsaEd25519PublicKey, into buf: inout [UInt8]) {
-        FfiConverterSequenceUInt8.write(value.value, into: &buf)
+    public static func write(_ value: EncryptedMessage, into buf: inout [UInt8]) {
+        FfiConverterSequenceUInt8.write(value.encrypted, into: &buf)
+        FfiConverterDictionaryTypeCurveTypeTypeDecryptorsByCurve.write(value.decryptorsByCurve, into: &buf)
     }
 }
 
-public func FfiConverterTypeEddsaEd25519PublicKey_lift(_ buf: RustBuffer) throws -> EddsaEd25519PublicKey {
-    return try FfiConverterTypeEddsaEd25519PublicKey.lift(buf)
+public func FfiConverterTypeEncryptedMessage_lift(_ buf: RustBuffer) throws -> EncryptedMessage {
+    return try FfiConverterTypeEncryptedMessage.lift(buf)
 }
 
-public func FfiConverterTypeEddsaEd25519PublicKey_lower(_ value: EddsaEd25519PublicKey) -> RustBuffer {
-    return FfiConverterTypeEddsaEd25519PublicKey.lower(value)
+public func FfiConverterTypeEncryptedMessage_lower(_ value: EncryptedMessage) -> RustBuffer {
+    return FfiConverterTypeEncryptedMessage.lower(value)
 }
 
 public struct ExecutionAnalysis {
@@ -2889,6 +3029,49 @@ public func FfiConverterTypeKnownAddresses_lift(_ buf: RustBuffer) throws -> Kno
 
 public func FfiConverterTypeKnownAddresses_lower(_ value: KnownAddresses) -> RustBuffer {
     return FfiConverterTypeKnownAddresses.lower(value)
+}
+
+public struct ManifestAddressReservation {
+    public var value: UInt32
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(value: UInt32) {
+        self.value = value
+    }
+}
+
+extension ManifestAddressReservation: Equatable, Hashable {
+    public static func == (lhs: ManifestAddressReservation, rhs: ManifestAddressReservation) -> Bool {
+        if lhs.value != rhs.value {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(value)
+    }
+}
+
+public struct FfiConverterTypeManifestAddressReservation: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ManifestAddressReservation {
+        return try ManifestAddressReservation(
+            value: FfiConverterUInt32.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: ManifestAddressReservation, into buf: inout [UInt8]) {
+        FfiConverterUInt32.write(value.value, into: &buf)
+    }
+}
+
+public func FfiConverterTypeManifestAddressReservation_lift(_ buf: RustBuffer) throws -> ManifestAddressReservation {
+    return try FfiConverterTypeManifestAddressReservation.lift(buf)
+}
+
+public func FfiConverterTypeManifestAddressReservation_lower(_ value: ManifestAddressReservation) -> RustBuffer {
+    return FfiConverterTypeManifestAddressReservation.lower(value)
 }
 
 public struct ManifestBlobRef {
@@ -3048,6 +3231,7 @@ public struct PackageAddresses {
     public var identityPackage: Address
     public var consensusManagerPackage: Address
     public var accessControllerPackage: Address
+    public var poolPackage: Address
     public var transactionProcessorPackage: Address
     public var metadataModulePackage: Address
     public var royaltyModulePackage: Address
@@ -3057,13 +3241,14 @@ public struct PackageAddresses {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(packagePackage: Address, resourcePackage: Address, accountPackage: Address, identityPackage: Address, consensusManagerPackage: Address, accessControllerPackage: Address, transactionProcessorPackage: Address, metadataModulePackage: Address, royaltyModulePackage: Address, accessRulesModulePackage: Address, genesisHelperPackage: Address, faucetPackage: Address) {
+    public init(packagePackage: Address, resourcePackage: Address, accountPackage: Address, identityPackage: Address, consensusManagerPackage: Address, accessControllerPackage: Address, poolPackage: Address, transactionProcessorPackage: Address, metadataModulePackage: Address, royaltyModulePackage: Address, accessRulesModulePackage: Address, genesisHelperPackage: Address, faucetPackage: Address) {
         self.packagePackage = packagePackage
         self.resourcePackage = resourcePackage
         self.accountPackage = accountPackage
         self.identityPackage = identityPackage
         self.consensusManagerPackage = consensusManagerPackage
         self.accessControllerPackage = accessControllerPackage
+        self.poolPackage = poolPackage
         self.transactionProcessorPackage = transactionProcessorPackage
         self.metadataModulePackage = metadataModulePackage
         self.royaltyModulePackage = royaltyModulePackage
@@ -3082,6 +3267,7 @@ public struct FfiConverterTypePackageAddresses: FfiConverterRustBuffer {
             identityPackage: FfiConverterTypeAddress.read(from: &buf),
             consensusManagerPackage: FfiConverterTypeAddress.read(from: &buf),
             accessControllerPackage: FfiConverterTypeAddress.read(from: &buf),
+            poolPackage: FfiConverterTypeAddress.read(from: &buf),
             transactionProcessorPackage: FfiConverterTypeAddress.read(from: &buf),
             metadataModulePackage: FfiConverterTypeAddress.read(from: &buf),
             royaltyModulePackage: FfiConverterTypeAddress.read(from: &buf),
@@ -3098,6 +3284,7 @@ public struct FfiConverterTypePackageAddresses: FfiConverterRustBuffer {
         FfiConverterTypeAddress.write(value.identityPackage, into: &buf)
         FfiConverterTypeAddress.write(value.consensusManagerPackage, into: &buf)
         FfiConverterTypeAddress.write(value.accessControllerPackage, into: &buf)
+        FfiConverterTypeAddress.write(value.poolPackage, into: &buf)
         FfiConverterTypeAddress.write(value.transactionProcessorPackage, into: &buf)
         FfiConverterTypeAddress.write(value.metadataModulePackage, into: &buf)
         FfiConverterTypeAddress.write(value.royaltyModulePackage, into: &buf)
@@ -3115,10 +3302,61 @@ public func FfiConverterTypePackageAddresses_lower(_ value: PackageAddresses) ->
     return FfiConverterTypePackageAddresses.lower(value)
 }
 
+public struct PlainTextMessage {
+    public var mimeType: String
+    public var message: MessageContent
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(mimeType: String, message: MessageContent) {
+        self.mimeType = mimeType
+        self.message = message
+    }
+}
+
+extension PlainTextMessage: Equatable, Hashable {
+    public static func == (lhs: PlainTextMessage, rhs: PlainTextMessage) -> Bool {
+        if lhs.mimeType != rhs.mimeType {
+            return false
+        }
+        if lhs.message != rhs.message {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(mimeType)
+        hasher.combine(message)
+    }
+}
+
+public struct FfiConverterTypePlainTextMessage: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PlainTextMessage {
+        return try PlainTextMessage(
+            mimeType: FfiConverterString.read(from: &buf),
+            message: FfiConverterTypeMessageContent.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: PlainTextMessage, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.mimeType, into: &buf)
+        FfiConverterTypeMessageContent.write(value.message, into: &buf)
+    }
+}
+
+public func FfiConverterTypePlainTextMessage_lift(_ buf: RustBuffer) throws -> PlainTextMessage {
+    return try FfiConverterTypePlainTextMessage.lift(buf)
+}
+
+public func FfiConverterTypePlainTextMessage_lower(_ value: PlainTextMessage) -> RustBuffer {
+    return FfiConverterTypePlainTextMessage.lower(value)
+}
+
 public struct ResourceAddresses {
     public var xrd: Address
-    public var ecdsaSecp256k1SignatureVirtualBadge: Address
-    public var eddsaEd25519SignatureVirtualBadge: Address
+    public var secp256k1SignatureVirtualBadge: Address
+    public var ed25519SignatureVirtualBadge: Address
     public var packageOfDirectCallerVirtualBadge: Address
     public var globalCallerVirtualBadge: Address
     public var systemTransactionBadge: Address
@@ -3129,10 +3367,10 @@ public struct ResourceAddresses {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(xrd: Address, ecdsaSecp256k1SignatureVirtualBadge: Address, eddsaEd25519SignatureVirtualBadge: Address, packageOfDirectCallerVirtualBadge: Address, globalCallerVirtualBadge: Address, systemTransactionBadge: Address, packageOwnerBadge: Address, validatorOwnerBadge: Address, accountOwnerBadge: Address, identityOwnerBadge: Address) {
+    public init(xrd: Address, secp256k1SignatureVirtualBadge: Address, ed25519SignatureVirtualBadge: Address, packageOfDirectCallerVirtualBadge: Address, globalCallerVirtualBadge: Address, systemTransactionBadge: Address, packageOwnerBadge: Address, validatorOwnerBadge: Address, accountOwnerBadge: Address, identityOwnerBadge: Address) {
         self.xrd = xrd
-        self.ecdsaSecp256k1SignatureVirtualBadge = ecdsaSecp256k1SignatureVirtualBadge
-        self.eddsaEd25519SignatureVirtualBadge = eddsaEd25519SignatureVirtualBadge
+        self.secp256k1SignatureVirtualBadge = secp256k1SignatureVirtualBadge
+        self.ed25519SignatureVirtualBadge = ed25519SignatureVirtualBadge
         self.packageOfDirectCallerVirtualBadge = packageOfDirectCallerVirtualBadge
         self.globalCallerVirtualBadge = globalCallerVirtualBadge
         self.systemTransactionBadge = systemTransactionBadge
@@ -3147,8 +3385,8 @@ public struct FfiConverterTypeResourceAddresses: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ResourceAddresses {
         return try ResourceAddresses(
             xrd: FfiConverterTypeAddress.read(from: &buf),
-            ecdsaSecp256k1SignatureVirtualBadge: FfiConverterTypeAddress.read(from: &buf),
-            eddsaEd25519SignatureVirtualBadge: FfiConverterTypeAddress.read(from: &buf),
+            secp256k1SignatureVirtualBadge: FfiConverterTypeAddress.read(from: &buf),
+            ed25519SignatureVirtualBadge: FfiConverterTypeAddress.read(from: &buf),
             packageOfDirectCallerVirtualBadge: FfiConverterTypeAddress.read(from: &buf),
             globalCallerVirtualBadge: FfiConverterTypeAddress.read(from: &buf),
             systemTransactionBadge: FfiConverterTypeAddress.read(from: &buf),
@@ -3161,8 +3399,8 @@ public struct FfiConverterTypeResourceAddresses: FfiConverterRustBuffer {
 
     public static func write(_ value: ResourceAddresses, into buf: inout [UInt8]) {
         FfiConverterTypeAddress.write(value.xrd, into: &buf)
-        FfiConverterTypeAddress.write(value.ecdsaSecp256k1SignatureVirtualBadge, into: &buf)
-        FfiConverterTypeAddress.write(value.eddsaEd25519SignatureVirtualBadge, into: &buf)
+        FfiConverterTypeAddress.write(value.secp256k1SignatureVirtualBadge, into: &buf)
+        FfiConverterTypeAddress.write(value.ed25519SignatureVirtualBadge, into: &buf)
         FfiConverterTypeAddress.write(value.packageOfDirectCallerVirtualBadge, into: &buf)
         FfiConverterTypeAddress.write(value.globalCallerVirtualBadge, into: &buf)
         FfiConverterTypeAddress.write(value.systemTransactionBadge, into: &buf)
@@ -3179,6 +3417,49 @@ public func FfiConverterTypeResourceAddresses_lift(_ buf: RustBuffer) throws -> 
 
 public func FfiConverterTypeResourceAddresses_lower(_ value: ResourceAddresses) -> RustBuffer {
     return FfiConverterTypeResourceAddresses.lower(value)
+}
+
+public struct Secp256k1PublicKey {
+    public var value: [UInt8]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(value: [UInt8]) {
+        self.value = value
+    }
+}
+
+extension Secp256k1PublicKey: Equatable, Hashable {
+    public static func == (lhs: Secp256k1PublicKey, rhs: Secp256k1PublicKey) -> Bool {
+        if lhs.value != rhs.value {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(value)
+    }
+}
+
+public struct FfiConverterTypeSecp256k1PublicKey: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Secp256k1PublicKey {
+        return try Secp256k1PublicKey(
+            value: FfiConverterSequenceUInt8.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: Secp256k1PublicKey, into buf: inout [UInt8]) {
+        FfiConverterSequenceUInt8.write(value.value, into: &buf)
+    }
+}
+
+public func FfiConverterTypeSecp256k1PublicKey_lift(_ buf: RustBuffer) throws -> Secp256k1PublicKey {
+    return try FfiConverterTypeSecp256k1PublicKey.lift(buf)
+}
+
+public func FfiConverterTypeSecp256k1PublicKey_lower(_ value: Secp256k1PublicKey) -> RustBuffer {
+    return FfiConverterTypeSecp256k1PublicKey.lower(value)
 }
 
 public struct TransactionHeader {
@@ -3274,6 +3555,100 @@ public func FfiConverterTypeTransactionHeader_lower(_ value: TransactionHeader) 
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum CurveType {
+    case ed25519
+    case secp256k1
+}
+
+public struct FfiConverterTypeCurveType: FfiConverterRustBuffer {
+    typealias SwiftType = CurveType
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CurveType {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return .ed25519
+
+        case 2: return .secp256k1
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: CurveType, into buf: inout [UInt8]) {
+        switch value {
+        case .ed25519:
+            writeInt(&buf, Int32(1))
+
+        case .secp256k1:
+            writeInt(&buf, Int32(2))
+        }
+    }
+}
+
+public func FfiConverterTypeCurveType_lift(_ buf: RustBuffer) throws -> CurveType {
+    return try FfiConverterTypeCurveType.lift(buf)
+}
+
+public func FfiConverterTypeCurveType_lower(_ value: CurveType) -> RustBuffer {
+    return FfiConverterTypeCurveType.lower(value)
+}
+
+extension CurveType: Equatable, Hashable {}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum DecryptorsByCurve {
+    case ed25519(dhEphemeralPublicKey: Ed25519PublicKey, decryptors: [[UInt8]: [UInt8]])
+    case secp256k1(dhEphemeralPublicKey: Secp256k1PublicKey, decryptors: [[UInt8]: [UInt8]])
+}
+
+public struct FfiConverterTypeDecryptorsByCurve: FfiConverterRustBuffer {
+    typealias SwiftType = DecryptorsByCurve
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> DecryptorsByCurve {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return try .ed25519(
+                dhEphemeralPublicKey: FfiConverterTypeEd25519PublicKey.read(from: &buf),
+                decryptors: FfiConverterDictionarySequenceUInt8SequenceUInt8.read(from: &buf)
+            )
+
+        case 2: return try .secp256k1(
+                dhEphemeralPublicKey: FfiConverterTypeSecp256k1PublicKey.read(from: &buf),
+                decryptors: FfiConverterDictionarySequenceUInt8SequenceUInt8.read(from: &buf)
+            )
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: DecryptorsByCurve, into buf: inout [UInt8]) {
+        switch value {
+        case let .ed25519(dhEphemeralPublicKey, decryptors):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeEd25519PublicKey.write(dhEphemeralPublicKey, into: &buf)
+            FfiConverterDictionarySequenceUInt8SequenceUInt8.write(decryptors, into: &buf)
+
+        case let .secp256k1(dhEphemeralPublicKey, decryptors):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeSecp256k1PublicKey.write(dhEphemeralPublicKey, into: &buf)
+            FfiConverterDictionarySequenceUInt8SequenceUInt8.write(decryptors, into: &buf)
+        }
+    }
+}
+
+public func FfiConverterTypeDecryptorsByCurve_lift(_ buf: RustBuffer) throws -> DecryptorsByCurve {
+    return try FfiConverterTypeDecryptorsByCurve.lift(buf)
+}
+
+public func FfiConverterTypeDecryptorsByCurve_lower(_ value: DecryptorsByCurve) -> RustBuffer {
+    return FfiConverterTypeDecryptorsByCurve.lower(value)
+}
+
+extension DecryptorsByCurve: Equatable, Hashable {}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum DependencyInformation {
     case version(value: String)
     case tag(value: String)
@@ -3354,6 +3729,10 @@ public enum EntityType {
     case globalVirtualEd25519Account
     case globalVirtualSecp256k1Identity
     case globalVirtualEd25519Identity
+    case globalOneResourcePool
+    case globalTwoResourcePool
+    case globalMultiResourcePool
+    case globalTransactionTracker
     case internalFungibleVault
     case internalNonFungibleVault
     case internalAccount
@@ -3393,15 +3772,23 @@ public struct FfiConverterTypeEntityType: FfiConverterRustBuffer {
 
         case 13: return .globalVirtualEd25519Identity
 
-        case 14: return .internalFungibleVault
+        case 14: return .globalOneResourcePool
 
-        case 15: return .internalNonFungibleVault
+        case 15: return .globalTwoResourcePool
 
-        case 16: return .internalAccount
+        case 16: return .globalMultiResourcePool
 
-        case 17: return .internalGenericComponent
+        case 17: return .globalTransactionTracker
 
-        case 18: return .internalKeyValueStore
+        case 18: return .internalFungibleVault
+
+        case 19: return .internalNonFungibleVault
+
+        case 20: return .internalAccount
+
+        case 21: return .internalGenericComponent
+
+        case 22: return .internalKeyValueStore
 
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -3448,20 +3835,32 @@ public struct FfiConverterTypeEntityType: FfiConverterRustBuffer {
         case .globalVirtualEd25519Identity:
             writeInt(&buf, Int32(13))
 
-        case .internalFungibleVault:
+        case .globalOneResourcePool:
             writeInt(&buf, Int32(14))
 
-        case .internalNonFungibleVault:
+        case .globalTwoResourcePool:
             writeInt(&buf, Int32(15))
 
-        case .internalAccount:
+        case .globalMultiResourcePool:
             writeInt(&buf, Int32(16))
 
-        case .internalGenericComponent:
+        case .globalTransactionTracker:
             writeInt(&buf, Int32(17))
 
-        case .internalKeyValueStore:
+        case .internalFungibleVault:
             writeInt(&buf, Int32(18))
+
+        case .internalNonFungibleVault:
+            writeInt(&buf, Int32(19))
+
+        case .internalAccount:
+            writeInt(&buf, Int32(20))
+
+        case .internalGenericComponent:
+            writeInt(&buf, Int32(21))
+
+        case .internalKeyValueStore:
+            writeInt(&buf, Int32(22))
         }
     }
 }
@@ -3500,13 +3899,14 @@ public enum Instruction {
     case burnResource(bucketId: ManifestBucket)
     case cloneProof(proofId: ManifestProof)
     case dropProof(proofId: ManifestProof)
-    case callFunction(packageAddress: Address, blueprintName: String, functionName: String, args: ManifestValue)
-    case callMethod(address: Address, methodName: String, args: ManifestValue)
-    case callRoyaltyMethod(address: Address, methodName: String, args: ManifestValue)
-    case callMetadataMethod(address: Address, methodName: String, args: ManifestValue)
-    case callAccessRulesMethod(address: Address, methodName: String, args: ManifestValue)
+    case callFunction(packageAddress: ManifestAddress, blueprintName: String, functionName: String, args: ManifestValue)
+    case callMethod(address: ManifestAddress, methodName: String, args: ManifestValue)
+    case callRoyaltyMethod(address: ManifestAddress, methodName: String, args: ManifestValue)
+    case callMetadataMethod(address: ManifestAddress, methodName: String, args: ManifestValue)
+    case callAccessRulesMethod(address: ManifestAddress, methodName: String, args: ManifestValue)
+    case callDirectVaultMethod(address: Address, methodName: String, args: ManifestValue)
     case dropAllProofs
-    case recallResource(vaultId: Address, amount: Decimal)
+    case allocateGlobalAddress(packageAddress: Address, blueprintName: String)
 }
 
 public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
@@ -3602,41 +4002,47 @@ public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
             )
 
         case 22: return try .callFunction(
-                packageAddress: FfiConverterTypeAddress.read(from: &buf),
+                packageAddress: FfiConverterTypeManifestAddress.read(from: &buf),
                 blueprintName: FfiConverterString.read(from: &buf),
                 functionName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
         case 23: return try .callMethod(
-                address: FfiConverterTypeAddress.read(from: &buf),
+                address: FfiConverterTypeManifestAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
         case 24: return try .callRoyaltyMethod(
-                address: FfiConverterTypeAddress.read(from: &buf),
+                address: FfiConverterTypeManifestAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
         case 25: return try .callMetadataMethod(
-                address: FfiConverterTypeAddress.read(from: &buf),
+                address: FfiConverterTypeManifestAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
         case 26: return try .callAccessRulesMethod(
+                address: FfiConverterTypeManifestAddress.read(from: &buf),
+                methodName: FfiConverterString.read(from: &buf),
+                args: FfiConverterTypeManifestValue.read(from: &buf)
+            )
+
+        case 27: return try .callDirectVaultMethod(
                 address: FfiConverterTypeAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
-        case 27: return .dropAllProofs
+        case 28: return .dropAllProofs
 
-        case 28: return try .recallResource(
-                vaultId: FfiConverterTypeAddress.read(from: &buf),
-                amount: FfiConverterTypeDecimal.read(from: &buf)
+        case 29: return try .allocateGlobalAddress(
+                packageAddress: FfiConverterTypeAddress.read(from: &buf),
+                blueprintName: FfiConverterString.read(from: &buf)
             )
 
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -3736,42 +4142,48 @@ public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
 
         case let .callFunction(packageAddress, blueprintName, functionName, args):
             writeInt(&buf, Int32(22))
-            FfiConverterTypeAddress.write(packageAddress, into: &buf)
+            FfiConverterTypeManifestAddress.write(packageAddress, into: &buf)
             FfiConverterString.write(blueprintName, into: &buf)
             FfiConverterString.write(functionName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callMethod(address, methodName, args):
             writeInt(&buf, Int32(23))
-            FfiConverterTypeAddress.write(address, into: &buf)
+            FfiConverterTypeManifestAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callRoyaltyMethod(address, methodName, args):
             writeInt(&buf, Int32(24))
-            FfiConverterTypeAddress.write(address, into: &buf)
+            FfiConverterTypeManifestAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callMetadataMethod(address, methodName, args):
             writeInt(&buf, Int32(25))
-            FfiConverterTypeAddress.write(address, into: &buf)
+            FfiConverterTypeManifestAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callAccessRulesMethod(address, methodName, args):
             writeInt(&buf, Int32(26))
+            FfiConverterTypeManifestAddress.write(address, into: &buf)
+            FfiConverterString.write(methodName, into: &buf)
+            FfiConverterTypeManifestValue.write(args, into: &buf)
+
+        case let .callDirectVaultMethod(address, methodName, args):
+            writeInt(&buf, Int32(27))
             FfiConverterTypeAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case .dropAllProofs:
-            writeInt(&buf, Int32(27))
-
-        case let .recallResource(vaultId, amount):
             writeInt(&buf, Int32(28))
-            FfiConverterTypeAddress.write(vaultId, into: &buf)
-            FfiConverterTypeDecimal.write(amount, into: &buf)
+
+        case let .allocateGlobalAddress(packageAddress, blueprintName):
+            writeInt(&buf, Int32(29))
+            FfiConverterTypeAddress.write(packageAddress, into: &buf)
+            FfiConverterString.write(blueprintName, into: &buf)
         }
     }
 }
@@ -3782,6 +4194,52 @@ public func FfiConverterTypeInstruction_lift(_ buf: RustBuffer) throws -> Instru
 
 public func FfiConverterTypeInstruction_lower(_ value: Instruction) -> RustBuffer {
     return FfiConverterTypeInstruction.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ManifestAddress {
+    case named(value: UInt32)
+    case `static`(value: Address)
+}
+
+public struct FfiConverterTypeManifestAddress: FfiConverterRustBuffer {
+    typealias SwiftType = ManifestAddress
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ManifestAddress {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return try .named(
+                value: FfiConverterUInt32.read(from: &buf)
+            )
+
+        case 2: return try .static(
+                value: FfiConverterTypeAddress.read(from: &buf)
+            )
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ManifestAddress, into buf: inout [UInt8]) {
+        switch value {
+        case let .named(value):
+            writeInt(&buf, Int32(1))
+            FfiConverterUInt32.write(value, into: &buf)
+
+        case let .static(value):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeAddress.write(value, into: &buf)
+        }
+    }
+}
+
+public func FfiConverterTypeManifestAddress_lift(_ buf: RustBuffer) throws -> ManifestAddress {
+    return try FfiConverterTypeManifestAddress.lift(buf)
+}
+
+public func FfiConverterTypeManifestAddress_lower(_ value: ManifestAddress) -> RustBuffer {
+    return FfiConverterTypeManifestAddress.lower(value)
 }
 
 // Note that we don't yet support `indirect` for enums.
@@ -3845,7 +4303,7 @@ public enum ManifestValue {
     case arrayValue(elementValueKind: ManifestValueKind, elements: [ManifestValue])
     case tupleValue(fields: [ManifestValue])
     case mapValue(keyValueKind: ManifestValueKind, valueValueKind: ManifestValueKind, entries: [MapEntry])
-    case addressValue(value: Address)
+    case addressValue(value: ManifestAddress)
     case bucketValue(value: ManifestBucket)
     case proofValue(value: ManifestProof)
     case expressionValue(value: ManifestExpression)
@@ -3853,6 +4311,7 @@ public enum ManifestValue {
     case decimalValue(value: Decimal)
     case preciseDecimalValue(value: PreciseDecimal)
     case nonFungibleLocalIdValue(value: NonFungibleLocalId)
+    case addressReservationValue(value: ManifestAddressReservation)
 }
 
 public struct FfiConverterTypeManifestValue: FfiConverterRustBuffer {
@@ -3930,7 +4389,7 @@ public struct FfiConverterTypeManifestValue: FfiConverterRustBuffer {
             )
 
         case 17: return try .addressValue(
-                value: FfiConverterTypeAddress.read(from: &buf)
+                value: FfiConverterTypeManifestAddress.read(from: &buf)
             )
 
         case 18: return try .bucketValue(
@@ -3959,6 +4418,10 @@ public struct FfiConverterTypeManifestValue: FfiConverterRustBuffer {
 
         case 24: return try .nonFungibleLocalIdValue(
                 value: FfiConverterTypeNonFungibleLocalId.read(from: &buf)
+            )
+
+        case 25: return try .addressReservationValue(
+                value: FfiConverterTypeManifestAddressReservation.read(from: &buf)
             )
 
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -4037,7 +4500,7 @@ public struct FfiConverterTypeManifestValue: FfiConverterRustBuffer {
 
         case let .addressValue(value):
             writeInt(&buf, Int32(17))
-            FfiConverterTypeAddress.write(value, into: &buf)
+            FfiConverterTypeManifestAddress.write(value, into: &buf)
 
         case let .bucketValue(value):
             writeInt(&buf, Int32(18))
@@ -4066,6 +4529,10 @@ public struct FfiConverterTypeManifestValue: FfiConverterRustBuffer {
         case let .nonFungibleLocalIdValue(value):
             writeInt(&buf, Int32(24))
             FfiConverterTypeNonFungibleLocalId.write(value, into: &buf)
+
+        case let .addressReservationValue(value):
+            writeInt(&buf, Int32(25))
+            FfiConverterTypeManifestAddressReservation.write(value, into: &buf)
         }
     }
 }
@@ -4105,6 +4572,7 @@ public enum ManifestValueKind {
     case decimalValue
     case preciseDecimalValue
     case nonFungibleLocalIdValue
+    case addressReservationValue
 }
 
 public struct FfiConverterTypeManifestValueKind: FfiConverterRustBuffer {
@@ -4160,6 +4628,8 @@ public struct FfiConverterTypeManifestValueKind: FfiConverterRustBuffer {
         case 23: return .preciseDecimalValue
 
         case 24: return .nonFungibleLocalIdValue
+
+        case 25: return .addressReservationValue
 
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -4238,6 +4708,9 @@ public struct FfiConverterTypeManifestValueKind: FfiConverterRustBuffer {
 
         case .nonFungibleLocalIdValue:
             writeInt(&buf, Int32(24))
+
+        case .addressReservationValue:
+            writeInt(&buf, Int32(25))
         }
     }
 }
@@ -4251,6 +4724,108 @@ public func FfiConverterTypeManifestValueKind_lower(_ value: ManifestValueKind) 
 }
 
 extension ManifestValueKind: Equatable, Hashable {}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum Message {
+    case none
+    case plainText(value: PlainTextMessage)
+    case encrypted(value: EncryptedMessage)
+}
+
+public struct FfiConverterTypeMessage: FfiConverterRustBuffer {
+    typealias SwiftType = Message
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Message {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return .none
+
+        case 2: return try .plainText(
+                value: FfiConverterTypePlainTextMessage.read(from: &buf)
+            )
+
+        case 3: return try .encrypted(
+                value: FfiConverterTypeEncryptedMessage.read(from: &buf)
+            )
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: Message, into buf: inout [UInt8]) {
+        switch value {
+        case .none:
+            writeInt(&buf, Int32(1))
+
+        case let .plainText(value):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypePlainTextMessage.write(value, into: &buf)
+
+        case let .encrypted(value):
+            writeInt(&buf, Int32(3))
+            FfiConverterTypeEncryptedMessage.write(value, into: &buf)
+        }
+    }
+}
+
+public func FfiConverterTypeMessage_lift(_ buf: RustBuffer) throws -> Message {
+    return try FfiConverterTypeMessage.lift(buf)
+}
+
+public func FfiConverterTypeMessage_lower(_ value: Message) -> RustBuffer {
+    return FfiConverterTypeMessage.lower(value)
+}
+
+extension Message: Equatable, Hashable {}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum MessageContent {
+    case str(value: String)
+    case bytes(value: [UInt8])
+}
+
+public struct FfiConverterTypeMessageContent: FfiConverterRustBuffer {
+    typealias SwiftType = MessageContent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MessageContent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return try .str(
+                value: FfiConverterString.read(from: &buf)
+            )
+
+        case 2: return try .bytes(
+                value: FfiConverterSequenceUInt8.read(from: &buf)
+            )
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: MessageContent, into buf: inout [UInt8]) {
+        switch value {
+        case let .str(value):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(value, into: &buf)
+
+        case let .bytes(value):
+            writeInt(&buf, Int32(2))
+            FfiConverterSequenceUInt8.write(value, into: &buf)
+        }
+    }
+}
+
+public func FfiConverterTypeMessageContent_lift(_ buf: RustBuffer) throws -> MessageContent {
+    return try FfiConverterTypeMessageContent.lift(buf)
+}
+
+public func FfiConverterTypeMessageContent_lower(_ value: MessageContent) -> RustBuffer {
+    return FfiConverterTypeMessageContent.lower(value)
+}
+
+extension MessageContent: Equatable, Hashable {}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
@@ -4574,7 +5149,7 @@ public enum NonFungibleLocalId {
     case integer(value: UInt64)
     case str(value: String)
     case bytes(value: [UInt8])
-    case uuid(value: String)
+    case ruid(value: [UInt8])
 }
 
 public struct FfiConverterTypeNonFungibleLocalId: FfiConverterRustBuffer {
@@ -4595,8 +5170,8 @@ public struct FfiConverterTypeNonFungibleLocalId: FfiConverterRustBuffer {
                 value: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
-        case 4: return try .uuid(
-                value: FfiConverterString.read(from: &buf)
+        case 4: return try .ruid(
+                value: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -4617,9 +5192,9 @@ public struct FfiConverterTypeNonFungibleLocalId: FfiConverterRustBuffer {
             writeInt(&buf, Int32(3))
             FfiConverterSequenceUInt8.write(value, into: &buf)
 
-        case let .uuid(value):
+        case let .ruid(value):
             writeInt(&buf, Int32(4))
-            FfiConverterString.write(value, into: &buf)
+            FfiConverterSequenceUInt8.write(value, into: &buf)
         }
     }
 }
@@ -4715,8 +5290,8 @@ extension OlympiaNetwork: Equatable, Hashable {}
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum PublicKey {
-    case ecdsaSecp256k1(value: [UInt8])
-    case eddsaEd25519(value: [UInt8])
+    case secp256k1(value: [UInt8])
+    case ed25519(value: [UInt8])
 }
 
 public struct FfiConverterTypePublicKey: FfiConverterRustBuffer {
@@ -4725,11 +5300,11 @@ public struct FfiConverterTypePublicKey: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PublicKey {
         let variant: Int32 = try readInt(&buf)
         switch variant {
-        case 1: return try .ecdsaSecp256k1(
+        case 1: return try .secp256k1(
                 value: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
-        case 2: return try .eddsaEd25519(
+        case 2: return try .ed25519(
                 value: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
@@ -4739,11 +5314,11 @@ public struct FfiConverterTypePublicKey: FfiConverterRustBuffer {
 
     public static func write(_ value: PublicKey, into buf: inout [UInt8]) {
         switch value {
-        case let .ecdsaSecp256k1(value):
+        case let .secp256k1(value):
             writeInt(&buf, Int32(1))
             FfiConverterSequenceUInt8.write(value, into: &buf)
 
-        case let .eddsaEd25519(value):
+        case let .ed25519(value):
             writeInt(&buf, Int32(2))
             FfiConverterSequenceUInt8.write(value, into: &buf)
         }
@@ -4763,8 +5338,8 @@ extension PublicKey: Equatable, Hashable {}
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum PublicKeyHash {
-    case ecdsaSecp256k1(value: [UInt8])
-    case eddsaEd25519(value: [UInt8])
+    case secp256k1(value: [UInt8])
+    case ed25519(value: [UInt8])
 }
 
 public struct FfiConverterTypePublicKeyHash: FfiConverterRustBuffer {
@@ -4773,11 +5348,11 @@ public struct FfiConverterTypePublicKeyHash: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PublicKeyHash {
         let variant: Int32 = try readInt(&buf)
         switch variant {
-        case 1: return try .ecdsaSecp256k1(
+        case 1: return try .secp256k1(
                 value: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
-        case 2: return try .eddsaEd25519(
+        case 2: return try .ed25519(
                 value: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
@@ -4787,11 +5362,11 @@ public struct FfiConverterTypePublicKeyHash: FfiConverterRustBuffer {
 
     public static func write(_ value: PublicKeyHash, into buf: inout [UInt8]) {
         switch value {
-        case let .ecdsaSecp256k1(value):
+        case let .secp256k1(value):
             writeInt(&buf, Int32(1))
             FfiConverterSequenceUInt8.write(value, into: &buf)
 
-        case let .eddsaEd25519(value):
+        case let .ed25519(value):
             writeInt(&buf, Int32(2))
             FfiConverterSequenceUInt8.write(value, into: &buf)
         }
@@ -5125,8 +5700,8 @@ extension RoundingMode: Equatable, Hashable {}
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum Signature {
-    case ecdsaSecp256k1(value: [UInt8])
-    case eddsaEd25519(value: [UInt8])
+    case secp256k1(value: [UInt8])
+    case ed25519(value: [UInt8])
 }
 
 public struct FfiConverterTypeSignature: FfiConverterRustBuffer {
@@ -5135,11 +5710,11 @@ public struct FfiConverterTypeSignature: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Signature {
         let variant: Int32 = try readInt(&buf)
         switch variant {
-        case 1: return try .ecdsaSecp256k1(
+        case 1: return try .secp256k1(
                 value: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
-        case 2: return try .eddsaEd25519(
+        case 2: return try .ed25519(
                 value: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
@@ -5149,11 +5724,11 @@ public struct FfiConverterTypeSignature: FfiConverterRustBuffer {
 
     public static func write(_ value: Signature, into buf: inout [UInt8]) {
         switch value {
-        case let .ecdsaSecp256k1(value):
+        case let .secp256k1(value):
             writeInt(&buf, Int32(1))
             FfiConverterSequenceUInt8.write(value, into: &buf)
 
-        case let .eddsaEd25519(value):
+        case let .ed25519(value):
             writeInt(&buf, Int32(2))
             FfiConverterSequenceUInt8.write(value, into: &buf)
         }
@@ -5173,8 +5748,8 @@ extension Signature: Equatable, Hashable {}
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum SignatureWithPublicKey {
-    case ecdsaSecp256k1(signature: [UInt8])
-    case eddsaEd25519(signature: [UInt8], publicKey: [UInt8])
+    case secp256k1(signature: [UInt8])
+    case ed25519(signature: [UInt8], publicKey: [UInt8])
 }
 
 public struct FfiConverterTypeSignatureWithPublicKey: FfiConverterRustBuffer {
@@ -5183,11 +5758,11 @@ public struct FfiConverterTypeSignatureWithPublicKey: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SignatureWithPublicKey {
         let variant: Int32 = try readInt(&buf)
         switch variant {
-        case 1: return try .ecdsaSecp256k1(
+        case 1: return try .secp256k1(
                 signature: FfiConverterSequenceUInt8.read(from: &buf)
             )
 
-        case 2: return try .eddsaEd25519(
+        case 2: return try .ed25519(
                 signature: FfiConverterSequenceUInt8.read(from: &buf),
                 publicKey: FfiConverterSequenceUInt8.read(from: &buf)
             )
@@ -5198,11 +5773,11 @@ public struct FfiConverterTypeSignatureWithPublicKey: FfiConverterRustBuffer {
 
     public static func write(_ value: SignatureWithPublicKey, into buf: inout [UInt8]) {
         switch value {
-        case let .ecdsaSecp256k1(signature):
+        case let .secp256k1(signature):
             writeInt(&buf, Int32(1))
             FfiConverterSequenceUInt8.write(signature, into: &buf)
 
-        case let .eddsaEd25519(signature, publicKey):
+        case let .ed25519(signature, publicKey):
             writeInt(&buf, Int32(2))
             FfiConverterSequenceUInt8.write(signature, into: &buf)
             FfiConverterSequenceUInt8.write(publicKey, into: &buf)
@@ -6010,6 +6585,29 @@ private struct FfiConverterDictionaryStringDictionaryTypeNonFungibleLocalIdSeque
     }
 }
 
+private struct FfiConverterDictionaryTypeCurveTypeTypeDecryptorsByCurve: FfiConverterRustBuffer {
+    public static func write(_ value: [CurveType: DecryptorsByCurve], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterTypeCurveType.write(key, into: &buf)
+            FfiConverterTypeDecryptorsByCurve.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CurveType: DecryptorsByCurve] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [CurveType: DecryptorsByCurve]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            let key = try FfiConverterTypeCurveType.read(from: &buf)
+            let value = try FfiConverterTypeDecryptorsByCurve.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 private struct FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress: FfiConverterRustBuffer {
     public static func write(_ value: [EntityType: [Address]], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -6049,6 +6647,29 @@ private struct FfiConverterDictionaryTypeNonFungibleLocalIdSequenceUInt8: FfiCon
         dict.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             let key = try FfiConverterTypeNonFungibleLocalId.read(from: &buf)
+            let value = try FfiConverterSequenceUInt8.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+private struct FfiConverterDictionarySequenceUInt8SequenceUInt8: FfiConverterRustBuffer {
+    public static func write(_ value: [[UInt8]: [UInt8]], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterSequenceUInt8.write(key, into: &buf)
+            FfiConverterSequenceUInt8.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [[UInt8]: [UInt8]] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [[UInt8]: [UInt8]]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            let key = try FfiConverterSequenceUInt8.read(from: &buf)
             let value = try FfiConverterSequenceUInt8.read(from: &buf)
             dict[key] = value
         }
@@ -6176,46 +6797,46 @@ private var initializationResult: InitializationResult {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_build_information() != 17662 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_build_information() != 34855 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_olympia_account_address_from_public_key() != 19647 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_olympia_account_address_from_public_key() != 36729 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_public_key_from_olympia_account_address() != 45205 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_public_key_from_olympia_account_address() != 28184 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_resource_address_from_olympia_resource_address() != 11639 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_resource_address_from_olympia_resource_address() != 62971 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_account_address_from_olympia_account_address() != 24509 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_account_address_from_olympia_account_address() != 51609 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_account_address_from_public_key() != 36758 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_account_address_from_public_key() != 56397 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_identity_address_from_public_key() != 11003 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_identity_address_from_public_key() != 56871 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_signature_non_fungible_global_id_from_public_key() != 61146 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_signature_non_fungible_global_id_from_public_key() != 54572 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_hash() != 16303 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_hash() != 50091 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_utils_known_addresses() != 31925 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_utils_known_addresses() != 31450 {
         return InitializationResult.apiChecksumMismatch
     }
-//    if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_address_string() != 5709 {
-//        return InitializationResult.apiChecksumMismatch
-//    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_address() != 45601 {
+        return InitializationResult.apiChecksumMismatch
+    }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_as_str() != 38197 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_bytes() != 16699 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_entity_type() != 40172 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_entity_type() != 10174 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_is_global() != 25808 {
@@ -6260,34 +6881,34 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_network_id() != 20026 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_abs() != 47552 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_abs() != 6839 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_add() != 29792 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_add() != 21481 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_as_str() != 18253 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_cbrt() != 31267 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_cbrt() != 55534 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_ceiling() != 53104 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_ceiling() != 64912 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_div() != 7427 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_div() != 63453 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_equal() != 45597 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_equal() != 28673 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_floor() != 17697 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_floor() != 48851 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_greater_than() != 16609 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_greater_than() != 59331 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_greater_than_or_equal() != 3170 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_greater_than_or_equal() != 33760 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_is_negative() != 27762 {
@@ -6299,31 +6920,31 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_is_zero() != 27694 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_less_than() != 30546 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_less_than() != 44786 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_less_than_or_equal() != 2387 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_less_than_or_equal() != 21306 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_mul() != 52430 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_mul() != 56183 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_not_equal() != 61801 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_not_equal() != 14434 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_nth_root() != 6178 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_nth_root() != 50432 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_powi() != 11213 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_powi() != 58727 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_round() != 26660 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_round() != 4853 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sqrt() != 43295 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sqrt() != 33416 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sub() != 15109 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sub() != 53296 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_hash_as_str() != 46597 {
@@ -6332,100 +6953,115 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_hash_bytes() != 57303 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_as_str() != 2403 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_as_str() != 38933 {
         return InitializationResult.apiChecksumMismatch
     }
-//    if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_instructions_list() != 45845 {
-//        return InitializationResult.apiChecksumMismatch
-//    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_instructions() != 31236 {
+        return InitializationResult.apiChecksumMismatch
+    }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_network_id() != 55489 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_compile() != 31325 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_compile() != 5095 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_hash() != 63059 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_hash() != 47055 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_header() != 49719 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_header() != 49139 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_intent_hash() != 18535 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_intent_hash() != 20855 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_manifest() != 60823 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_manifest() != 23380 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_statically_validate() != 18502 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_message() != 14818 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_statically_validate() != 42734 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_messagevalidationconfig_max_decryptors() != 45350 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_messagevalidationconfig_max_encrypted_message_length() != 10753 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_messagevalidationconfig_max_mime_type_length() != 15824 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_messagevalidationconfig_max_plaintext_message_length() != 53437 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_nonfungibleglobalid_as_str() != 12617 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_nonfungibleglobalid_local_id() != 42729 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_nonfungibleglobalid_local_id() != 52075 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_nonfungibleglobalid_resource_address() != 26038 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_nonfungibleglobalid_resource_address() != 19291 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_compile() != 65183 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_compile() != 59876 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_hash() != 41987 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_hash() != 51810 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_intent_hash() != 13547 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_intent_hash() != 34575 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_notarized_transaction_hash() != 11805 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_notarized_transaction_hash() != 8209 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_notary_signature() != 46873 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_notary_signature() != 32973 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_signed_intent() != 11409 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_signed_intent() != 12652 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_signed_intent_hash() != 1807 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_signed_intent_hash() != 44318 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_statically_validate() != 11188 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction_statically_validate() != 22100 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_olympiaaddress_as_str() != 211 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_olympiaaddress_public_key() != 33649 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_olympiaaddress_public_key() != 50205 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_abs() != 2924 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_abs() != 53813 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_add() != 36087 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_add() != 47439 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_as_str() != 50135 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_cbrt() != 60153 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_cbrt() != 54222 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_ceiling() != 35397 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_ceiling() != 63528 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_div() != 55154 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_div() != 37810 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_equal() != 35658 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_equal() != 39938 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_floor() != 37447 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_floor() != 56147 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_greater_than() != 21292 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_greater_than() != 63218 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_greater_than_or_equal() != 34931 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_greater_than_or_equal() != 43518 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_is_negative() != 11588 {
@@ -6437,52 +7073,52 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_is_zero() != 41566 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_less_than() != 50862 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_less_than() != 25820 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_less_than_or_equal() != 33893 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_less_than_or_equal() != 4840 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_mul() != 61496 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_mul() != 13626 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_not_equal() != 17368 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_not_equal() != 1176 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_nth_root() != 60037 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_nth_root() != 52024 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_powi() != 1798 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_powi() != 39475 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_round() != 38869 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_round() != 24995 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sqrt() != 18565 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sqrt() != 25928 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub() != 15847 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub() != 8488 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_compile() != 26394 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_compile() != 43849 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_hash() != 13452 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_hash() != 6775 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_intent() != 19540 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_intent() != 64980 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_intent_hash() != 51680 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_intent_hash() != 34459 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_intent_signatures() != 46037 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_intent_signatures() != 4676 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_signed_intent_hash() != 18381 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_signed_intent_hash() != 47667 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_statically_validate() != 27682 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_statically_validate() != 25087 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_as_str() != 9829 {
@@ -6491,28 +7127,28 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_bytes() != 40875 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_deposited_into() != 33560 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_deposited_into() != 49913 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_requiring_auth() != 31236 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_requiring_auth() != 15222 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_withdrawn_from() != 1186 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_withdrawn_from() != 32852 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_blobs() != 55127 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses() != 5474 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses() != 63624 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_identities_requiring_auth() != 1239 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_identities_requiring_auth() != 15997 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_instructions() != 3783 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_instructions() != 22892 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate() != 42656 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate() != 47252 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_max_cost_unit_limit() != 3389 {
@@ -6527,6 +7163,9 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_max_tip_percentage() != 28981 {
         return InitializationResult.apiChecksumMismatch
     }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_message_validation() != 38811 {
+        return InitializationResult.apiChecksumMismatch
+    }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_min_cost_unit_limit() != 51406 {
         return InitializationResult.apiChecksumMismatch
     }
@@ -6536,106 +7175,112 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_network_id() != 63098 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_from_raw() != 43797 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_from_raw() != 58623 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_new() != 37549 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_new() != 62229 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_resource_address_from_olympia_resource_address() != 64771 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_resource_address_from_olympia_resource_address() != 41367 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_virtual_account_address_from_olympia_address() != 31070 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_virtual_account_address_from_olympia_address() != 19136 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_virtual_account_address_from_public_key() != 738 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_virtual_account_address_from_public_key() != 64592 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_virtual_identity_address_from_public_key() != 32432 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_virtual_identity_address_from_public_key() != 53717 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_max() != 38313 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_max() != 41905 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_min() != 18079 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_min() != 56351 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_new() != 15617 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_new() != 60934 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_one() != 42470 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_one() != 12069 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_zero() != 39451 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_zero() != 38266 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_from_hex_string() != 64410 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_from_hex_string() != 22117 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_from_unhashed_bytes() != 17030 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_from_unhashed_bytes() != 59794 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_new() != 17594 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_new() != 4507 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_instructions_from_instructions() != 51039 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_instructions_from_instructions() != 7576 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_instructions_from_string() != 48056 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_instructions_from_string() != 5425 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_intent_decompile() != 565 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_intent_decompile() != 52170 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_intent_new() != 61618 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_intent_new() != 40431 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_from_parts() != 36478 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_messagevalidationconfig_default() != 8477 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_new() != 58056 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_messagevalidationconfig_new() != 51880 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_virtual_signature_badge() != 22546 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_from_parts() != 46559 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_notarizedtransaction_decompile() != 58667 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_new() != 57831 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_notarizedtransaction_new() != 56154 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_virtual_signature_badge() != 26840 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_olympiaaddress_new() != 12724 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_notarizedtransaction_decompile() != 5281 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_max() != 49495 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_notarizedtransaction_new() != 55473 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_min() != 4453 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_olympiaaddress_new() != 9582 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_new() != 34846 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_max() != 2098 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_one() != 9121 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_min() != 60044 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_zero() != 5648 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_new() != 22025 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedintent_decompile() != 12765 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_one() != 17470 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedintent_new() != 36392 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_zero() != 19136 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new() != 62865 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedintent_decompile() != 32759 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_validationconfig_default() != 1435 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedintent_new() != 4465 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_validationconfig_new() != 63156 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new() != 62516 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_validationconfig_default() != 63649 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_validationconfig_new() != 4682 {
         return InitializationResult.apiChecksumMismatch
     }
 
