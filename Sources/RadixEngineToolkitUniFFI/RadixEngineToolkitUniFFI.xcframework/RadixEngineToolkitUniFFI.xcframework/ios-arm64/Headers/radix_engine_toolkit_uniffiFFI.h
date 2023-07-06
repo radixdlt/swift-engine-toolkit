@@ -78,6 +78,7 @@ typedef void (*UniFfiFutureCallbackUnsafeMutableRawPointer)(const void * _Nonnul
 typedef void (*UniFfiFutureCallbackUnsafeMutableRawPointer)(const void * _Nonnull, void*_Nonnull, RustCallStatus);
 typedef void (*UniFfiFutureCallbackUnsafeMutableRawPointer)(const void * _Nonnull, void*_Nonnull, RustCallStatus);
 typedef void (*UniFfiFutureCallbackUnsafeMutableRawPointer)(const void * _Nonnull, void*_Nonnull, RustCallStatus);
+typedef void (*UniFfiFutureCallbackUnsafeMutableRawPointer)(const void * _Nonnull, void*_Nonnull, RustCallStatus);
 typedef void (*UniFfiFutureCallbackRustBuffer)(const void * _Nonnull, RustBuffer, RustCallStatus);
 
 // Scaffolding functions
@@ -95,7 +96,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_address_virtual_
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_address_virtual_identity_address_from_public_key(RustBuffer public_key, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_address_address(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_address_address_string(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_address_as_str(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -185,7 +186,7 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_nth_root(void*_N
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_powi(void*_Nonnull ptr, int64_t exp, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_round(void*_Nonnull ptr, uint32_t decimal_places, RustBuffer rounding_mode, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_round(void*_Nonnull ptr, int32_t decimal_places, RustBuffer rounding_mode, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_sqrt(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -211,7 +212,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_instructions_fro
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_as_str(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_instructions(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_instructions_list(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 uint8_t uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_network_id(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -348,7 +349,7 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_nth_root(
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_powi(void*_Nonnull ptr, int64_t exp, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_round(void*_Nonnull ptr, uint32_t decimal_places, RustBuffer rounding_mode, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_round(void*_Nonnull ptr, int32_t decimal_places, RustBuffer rounding_mode, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sqrt(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -379,6 +380,8 @@ void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionhash(void*_Nonnull pt
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_as_str(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+uint8_t uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_network_id(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionmanifest(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -441,7 +444,15 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_signatur
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_hash(RustBuffer data, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_utils_known_addresses(uint8_t network_id, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_known_addresses(uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_manifest_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_metadata_value(RustBuffer bytes, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_scrypto_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
 );
 RustBuffer ffi_radix_engine_toolkit_uniffi_rustbuffer_alloc(int32_t size, RustCallStatus *_Nonnull out_status
 );
@@ -478,10 +489,22 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_signatu
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_hash(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_utils_known_addresses(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_known_addresses(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_address_address(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_manifest_sbor_decode_to_string_representation(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_metadata_value(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_string_representation(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_decode_to_string_representation(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_address_address_string(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_address_as_str(void
@@ -610,7 +633,7 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_hash_bytes(void
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_as_str(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_instructions(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_instructions_list(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_network_id(void
@@ -779,6 +802,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_as_s
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_bytes(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_network_id(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_deposited_into(void
