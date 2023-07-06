@@ -546,13 +546,12 @@ public class Address: AddressProtocol {
     }
 
     public func addressString() -> String {
-        ""
-//        return try! FfiConverterString.lift(
-//            try!
-//                rustCall {
-//                    uniffi_radix_engine_toolkit_uniffi_fn_method_address_address_string(self.pointer, $0)
-//                }
-//        )
+        return try! FfiConverterString.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_address_address_string(self.pointer, $0)
+                }
+        )
     }
 
     public func asStr() -> String {
@@ -1217,13 +1216,12 @@ public class Instructions: InstructionsProtocol {
     }
 
     public func instructionsList() -> [Instruction] {
-        []
-//        return try! FfiConverterSequenceTypeInstruction.lift(
-//            try!
-//                rustCall {
-//                    uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_instructions_list(self.pointer, $0)
-//                }
-//        )
+        return try! FfiConverterSequenceTypeInstruction.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_instructions_list(self.pointer, $0)
+                }
+        )
     }
 
     public func networkId() -> UInt8 {
@@ -6206,9 +6204,9 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_func_utils_known_addresses() != 31925 {
         return InitializationResult.apiChecksumMismatch
     }
-//    if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_address_string() != 5709 {
-//        return InitializationResult.apiChecksumMismatch
-//    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_address_string() != 5709 {
+        return InitializationResult.apiChecksumMismatch
+    }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_address_as_str() != 38197 {
         return InitializationResult.apiChecksumMismatch
     }
@@ -6335,9 +6333,9 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_as_str() != 2403 {
         return InitializationResult.apiChecksumMismatch
     }
-//    if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_instructions_list() != 45845 {
-//        return InitializationResult.apiChecksumMismatch
-//    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_instructions_list() != 45845 {
+        return InitializationResult.apiChecksumMismatch
+    }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_instructions_network_id() != 55489 {
         return InitializationResult.apiChecksumMismatch
     }
