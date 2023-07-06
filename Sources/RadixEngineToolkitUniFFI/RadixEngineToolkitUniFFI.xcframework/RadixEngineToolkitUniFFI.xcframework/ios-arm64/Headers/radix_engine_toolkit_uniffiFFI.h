@@ -186,7 +186,7 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_nth_root(void*_N
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_powi(void*_Nonnull ptr, int64_t exp, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_round(void*_Nonnull ptr, uint32_t decimal_places, RustBuffer rounding_mode, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_round(void*_Nonnull ptr, int32_t decimal_places, RustBuffer rounding_mode, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_sqrt(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -349,7 +349,7 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_nth_root(
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_powi(void*_Nonnull ptr, int64_t exp, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_round(void*_Nonnull ptr, uint32_t decimal_places, RustBuffer rounding_mode, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_round(void*_Nonnull ptr, int32_t decimal_places, RustBuffer rounding_mode, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sqrt(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );

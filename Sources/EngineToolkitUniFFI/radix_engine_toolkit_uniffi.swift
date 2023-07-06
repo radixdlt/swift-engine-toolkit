@@ -766,7 +766,7 @@ public protocol DecimalProtocol {
     func notEqual(other: Decimal) -> Bool
     func nthRoot(n: UInt32) -> Decimal?
     func powi(exp: Int64) -> Decimal
-    func round(decimalPlaces: UInt32, roundingMode: RoundingMode) -> Decimal
+    func round(decimalPlaces: Int32, roundingMode: RoundingMode) -> Decimal
     func sqrt() -> Decimal?
     func sub(other: Decimal) -> Decimal
 }
@@ -999,12 +999,12 @@ public class Decimal: DecimalProtocol {
         )
     }
 
-    public func round(decimalPlaces: UInt32, roundingMode: RoundingMode) -> Decimal {
+    public func round(decimalPlaces: Int32, roundingMode: RoundingMode) -> Decimal {
         return try! FfiConverterTypeDecimal.lift(
             try!
                 rustCall {
                     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_round(self.pointer,
-                                                                               FfiConverterUInt32.lower(decimalPlaces),
+                                                                               FfiConverterInt32.lower(decimalPlaces),
                                                                                FfiConverterTypeRoundingMode.lower(roundingMode), $0)
                 }
         )
@@ -1886,7 +1886,7 @@ public protocol PreciseDecimalProtocol {
     func notEqual(other: PreciseDecimal) -> Bool
     func nthRoot(n: UInt32) -> PreciseDecimal?
     func powi(exp: Int64) -> PreciseDecimal
-    func round(decimalPlaces: UInt32, roundingMode: RoundingMode) -> PreciseDecimal
+    func round(decimalPlaces: Int32, roundingMode: RoundingMode) -> PreciseDecimal
     func sqrt() -> PreciseDecimal?
     func sub(other: PreciseDecimal) -> PreciseDecimal
 }
@@ -2119,12 +2119,12 @@ public class PreciseDecimal: PreciseDecimalProtocol {
         )
     }
 
-    public func round(decimalPlaces: UInt32, roundingMode: RoundingMode) -> PreciseDecimal {
+    public func round(decimalPlaces: Int32, roundingMode: RoundingMode) -> PreciseDecimal {
         return try! FfiConverterTypePreciseDecimal.lift(
             try!
                 rustCall {
                     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_round(self.pointer,
-                                                                                      FfiConverterUInt32.lower(decimalPlaces),
+                                                                                      FfiConverterInt32.lower(decimalPlaces),
                                                                                       FfiConverterTypeRoundingMode.lower(roundingMode), $0)
                 }
         )
@@ -3944,16 +3944,15 @@ public enum Instruction {
     case takeNonFungiblesFromWorktop(resourceAddress: Address, ids: [NonFungibleLocalId])
     case returnToWorktop(bucketId: ManifestBucket)
     case assertWorktopContains(resourceAddress: Address, amount: Decimal)
+    case assertWorktopContainsAny(resourceAddress: Address)
     case assertWorktopContainsNonFungibles(resourceAddress: Address, ids: [NonFungibleLocalId])
     case popFromAuthZone
     case pushToAuthZone(proofId: ManifestProof)
     case clearAuthZone
-    case createProofFromAuthZone(resourceAddress: Address)
     case createProofFromAuthZoneOfAmount(resourceAddress: Address, amount: Decimal)
     case createProofFromAuthZoneOfNonFungibles(resourceAddress: Address, ids: [NonFungibleLocalId])
     case createProofFromAuthZoneOfAll(resourceAddress: Address)
     case clearSignatureProofs
-    case createProofFromBucket(bucketId: ManifestBucket)
     case createProofFromBucketOfAmount(bucketId: ManifestBucket, amount: Decimal)
     case createProofFromBucketOfNonFungibles(bucketId: ManifestBucket, ids: [NonFungibleLocalId])
     case createProofFromBucketOfAll(bucketId: ManifestBucket)
@@ -3999,22 +3998,22 @@ public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
                 amount: FfiConverterTypeDecimal.read(from: &buf)
             )
 
-        case 6: return try .assertWorktopContainsNonFungibles(
+        case 6: return try .assertWorktopContainsAny(
+                resourceAddress: FfiConverterTypeAddress.read(from: &buf)
+            )
+
+        case 7: return try .assertWorktopContainsNonFungibles(
                 resourceAddress: FfiConverterTypeAddress.read(from: &buf),
                 ids: FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
             )
 
-        case 7: return .popFromAuthZone
+        case 8: return .popFromAuthZone
 
-        case 8: return try .pushToAuthZone(
+        case 9: return try .pushToAuthZone(
                 proofId: FfiConverterTypeManifestProof.read(from: &buf)
             )
 
-        case 9: return .clearAuthZone
-
-        case 10: return try .createProofFromAuthZone(
-                resourceAddress: FfiConverterTypeAddress.read(from: &buf)
-            )
+        case 10: return .clearAuthZone
 
         case 11: return try .createProofFromAuthZoneOfAmount(
                 resourceAddress: FfiConverterTypeAddress.read(from: &buf),
@@ -4032,76 +4031,72 @@ public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
 
         case 14: return .clearSignatureProofs
 
-        case 15: return try .createProofFromBucket(
-                bucketId: FfiConverterTypeManifestBucket.read(from: &buf)
-            )
-
-        case 16: return try .createProofFromBucketOfAmount(
+        case 15: return try .createProofFromBucketOfAmount(
                 bucketId: FfiConverterTypeManifestBucket.read(from: &buf),
                 amount: FfiConverterTypeDecimal.read(from: &buf)
             )
 
-        case 17: return try .createProofFromBucketOfNonFungibles(
+        case 16: return try .createProofFromBucketOfNonFungibles(
                 bucketId: FfiConverterTypeManifestBucket.read(from: &buf),
                 ids: FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
             )
 
-        case 18: return try .createProofFromBucketOfAll(
+        case 17: return try .createProofFromBucketOfAll(
                 bucketId: FfiConverterTypeManifestBucket.read(from: &buf)
             )
 
-        case 19: return try .burnResource(
+        case 18: return try .burnResource(
                 bucketId: FfiConverterTypeManifestBucket.read(from: &buf)
             )
 
-        case 20: return try .cloneProof(
+        case 19: return try .cloneProof(
                 proofId: FfiConverterTypeManifestProof.read(from: &buf)
             )
 
-        case 21: return try .dropProof(
+        case 20: return try .dropProof(
                 proofId: FfiConverterTypeManifestProof.read(from: &buf)
             )
 
-        case 22: return try .callFunction(
+        case 21: return try .callFunction(
                 packageAddress: FfiConverterTypeManifestAddress.read(from: &buf),
                 blueprintName: FfiConverterString.read(from: &buf),
                 functionName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
-        case 23: return try .callMethod(
+        case 22: return try .callMethod(
                 address: FfiConverterTypeManifestAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
-        case 24: return try .callRoyaltyMethod(
+        case 23: return try .callRoyaltyMethod(
                 address: FfiConverterTypeManifestAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
-        case 25: return try .callMetadataMethod(
+        case 24: return try .callMetadataMethod(
                 address: FfiConverterTypeManifestAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
-        case 26: return try .callAccessRulesMethod(
+        case 25: return try .callAccessRulesMethod(
                 address: FfiConverterTypeManifestAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
-        case 27: return try .callDirectVaultMethod(
+        case 26: return try .callDirectVaultMethod(
                 address: FfiConverterTypeAddress.read(from: &buf),
                 methodName: FfiConverterString.read(from: &buf),
                 args: FfiConverterTypeManifestValue.read(from: &buf)
             )
 
-        case 28: return .dropAllProofs
+        case 27: return .dropAllProofs
 
-        case 29: return try .allocateGlobalAddress(
+        case 28: return try .allocateGlobalAddress(
                 packageAddress: FfiConverterTypeAddress.read(from: &buf),
                 blueprintName: FfiConverterString.read(from: &buf)
             )
@@ -4135,24 +4130,24 @@ public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
             FfiConverterTypeAddress.write(resourceAddress, into: &buf)
             FfiConverterTypeDecimal.write(amount, into: &buf)
 
-        case let .assertWorktopContainsNonFungibles(resourceAddress, ids):
+        case let .assertWorktopContainsAny(resourceAddress):
             writeInt(&buf, Int32(6))
+            FfiConverterTypeAddress.write(resourceAddress, into: &buf)
+
+        case let .assertWorktopContainsNonFungibles(resourceAddress, ids):
+            writeInt(&buf, Int32(7))
             FfiConverterTypeAddress.write(resourceAddress, into: &buf)
             FfiConverterSequenceTypeNonFungibleLocalId.write(ids, into: &buf)
 
         case .popFromAuthZone:
-            writeInt(&buf, Int32(7))
+            writeInt(&buf, Int32(8))
 
         case let .pushToAuthZone(proofId):
-            writeInt(&buf, Int32(8))
+            writeInt(&buf, Int32(9))
             FfiConverterTypeManifestProof.write(proofId, into: &buf)
 
         case .clearAuthZone:
-            writeInt(&buf, Int32(9))
-
-        case let .createProofFromAuthZone(resourceAddress):
             writeInt(&buf, Int32(10))
-            FfiConverterTypeAddress.write(resourceAddress, into: &buf)
 
         case let .createProofFromAuthZoneOfAmount(resourceAddress, amount):
             writeInt(&buf, Int32(11))
@@ -4171,78 +4166,74 @@ public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
         case .clearSignatureProofs:
             writeInt(&buf, Int32(14))
 
-        case let .createProofFromBucket(bucketId):
-            writeInt(&buf, Int32(15))
-            FfiConverterTypeManifestBucket.write(bucketId, into: &buf)
-
         case let .createProofFromBucketOfAmount(bucketId, amount):
-            writeInt(&buf, Int32(16))
+            writeInt(&buf, Int32(15))
             FfiConverterTypeManifestBucket.write(bucketId, into: &buf)
             FfiConverterTypeDecimal.write(amount, into: &buf)
 
         case let .createProofFromBucketOfNonFungibles(bucketId, ids):
-            writeInt(&buf, Int32(17))
+            writeInt(&buf, Int32(16))
             FfiConverterTypeManifestBucket.write(bucketId, into: &buf)
             FfiConverterSequenceTypeNonFungibleLocalId.write(ids, into: &buf)
 
         case let .createProofFromBucketOfAll(bucketId):
-            writeInt(&buf, Int32(18))
+            writeInt(&buf, Int32(17))
             FfiConverterTypeManifestBucket.write(bucketId, into: &buf)
 
         case let .burnResource(bucketId):
-            writeInt(&buf, Int32(19))
+            writeInt(&buf, Int32(18))
             FfiConverterTypeManifestBucket.write(bucketId, into: &buf)
 
         case let .cloneProof(proofId):
-            writeInt(&buf, Int32(20))
+            writeInt(&buf, Int32(19))
             FfiConverterTypeManifestProof.write(proofId, into: &buf)
 
         case let .dropProof(proofId):
-            writeInt(&buf, Int32(21))
+            writeInt(&buf, Int32(20))
             FfiConverterTypeManifestProof.write(proofId, into: &buf)
 
         case let .callFunction(packageAddress, blueprintName, functionName, args):
-            writeInt(&buf, Int32(22))
+            writeInt(&buf, Int32(21))
             FfiConverterTypeManifestAddress.write(packageAddress, into: &buf)
             FfiConverterString.write(blueprintName, into: &buf)
             FfiConverterString.write(functionName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callMethod(address, methodName, args):
-            writeInt(&buf, Int32(23))
+            writeInt(&buf, Int32(22))
             FfiConverterTypeManifestAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callRoyaltyMethod(address, methodName, args):
-            writeInt(&buf, Int32(24))
+            writeInt(&buf, Int32(23))
             FfiConverterTypeManifestAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callMetadataMethod(address, methodName, args):
-            writeInt(&buf, Int32(25))
+            writeInt(&buf, Int32(24))
             FfiConverterTypeManifestAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callAccessRulesMethod(address, methodName, args):
-            writeInt(&buf, Int32(26))
+            writeInt(&buf, Int32(25))
             FfiConverterTypeManifestAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case let .callDirectVaultMethod(address, methodName, args):
-            writeInt(&buf, Int32(27))
+            writeInt(&buf, Int32(26))
             FfiConverterTypeAddress.write(address, into: &buf)
             FfiConverterString.write(methodName, into: &buf)
             FfiConverterTypeManifestValue.write(args, into: &buf)
 
         case .dropAllProofs:
-            writeInt(&buf, Int32(28))
+            writeInt(&buf, Int32(27))
 
         case let .allocateGlobalAddress(packageAddress, blueprintName):
-            writeInt(&buf, Int32(29))
+            writeInt(&buf, Int32(28))
             FfiConverterTypeAddress.write(packageAddress, into: &buf)
             FfiConverterString.write(blueprintName, into: &buf)
         }
@@ -5804,12 +5795,13 @@ public func FfiConverterTypeResources_lower(_ value: Resources) -> RustBuffer {
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum RoundingMode {
-    case towardsPositiveInfinity
-    case towardsNegativeInfinity
-    case towardsZero
+    case toPositiveInfinity
+    case toNegativeInfinity
+    case toZero
     case awayFromZero
-    case towardsNearestAndHalfTowardsZero
-    case towardsNearestAndHalfAwayFromZero
+    case toNearestMidpointTowardZero
+    case toNearestMidpointAwayFromZero
+    case toNearestMidpointToEven
 }
 
 public struct FfiConverterTypeRoundingMode: FfiConverterRustBuffer {
@@ -5818,17 +5810,19 @@ public struct FfiConverterTypeRoundingMode: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RoundingMode {
         let variant: Int32 = try readInt(&buf)
         switch variant {
-        case 1: return .towardsPositiveInfinity
+        case 1: return .toPositiveInfinity
 
-        case 2: return .towardsNegativeInfinity
+        case 2: return .toNegativeInfinity
 
-        case 3: return .towardsZero
+        case 3: return .toZero
 
         case 4: return .awayFromZero
 
-        case 5: return .towardsNearestAndHalfTowardsZero
+        case 5: return .toNearestMidpointTowardZero
 
-        case 6: return .towardsNearestAndHalfAwayFromZero
+        case 6: return .toNearestMidpointAwayFromZero
+
+        case 7: return .toNearestMidpointToEven
 
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -5836,23 +5830,26 @@ public struct FfiConverterTypeRoundingMode: FfiConverterRustBuffer {
 
     public static func write(_ value: RoundingMode, into buf: inout [UInt8]) {
         switch value {
-        case .towardsPositiveInfinity:
+        case .toPositiveInfinity:
             writeInt(&buf, Int32(1))
 
-        case .towardsNegativeInfinity:
+        case .toNegativeInfinity:
             writeInt(&buf, Int32(2))
 
-        case .towardsZero:
+        case .toZero:
             writeInt(&buf, Int32(3))
 
         case .awayFromZero:
             writeInt(&buf, Int32(4))
 
-        case .towardsNearestAndHalfTowardsZero:
+        case .toNearestMidpointTowardZero:
             writeInt(&buf, Int32(5))
 
-        case .towardsNearestAndHalfAwayFromZero:
+        case .toNearestMidpointAwayFromZero:
             writeInt(&buf, Int32(6))
+
+        case .toNearestMidpointToEven:
+            writeInt(&buf, Int32(7))
         }
     }
 }
@@ -7233,7 +7230,7 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_powi() != 11213 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_round() != 26660 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_round() != 685 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sqrt() != 43295 {
@@ -7386,7 +7383,7 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_powi() != 1798 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_round() != 38869 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_round() != 38035 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sqrt() != 18565 {
