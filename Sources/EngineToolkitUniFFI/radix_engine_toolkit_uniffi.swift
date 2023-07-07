@@ -7034,10 +7034,10 @@ public func manifestSborDecodeToStringRepresentation(bytes: [UInt8], representat
     )
 }
 
-public func sborDecodeToMetadataValue(bytes: [UInt8], networkId: UInt8) throws -> MetadataValue {
+public func metadataSborDecode(bytes: [UInt8], networkId: UInt8) throws -> MetadataValue {
     return try FfiConverterTypeMetadataValue.lift(
         rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-            uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_metadata_value(
+            uniffi_radix_engine_toolkit_uniffi_fn_func_metadata_sbor_decode(
                 FfiConverterSequenceUInt8.lower(bytes),
                 FfiConverterUInt8.lower(networkId), $0
             )
@@ -7045,11 +7045,41 @@ public func sborDecodeToMetadataValue(bytes: [UInt8], networkId: UInt8) throws -
     )
 }
 
-public func sborDecodeToNonFungibleLocalIdValue(bytes: [UInt8]) throws -> NonFungibleLocalId {
+public func metadataSborEncode(value: MetadataValue) throws -> [UInt8] {
+    return try FfiConverterSequenceUInt8.lift(
+        rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_func_metadata_sbor_encode(
+                FfiConverterTypeMetadataValue.lower(value), $0
+            )
+        }
+    )
+}
+
+public func nonFungibleLocalIdAsStr(value: NonFungibleLocalId) throws -> String {
+    return try FfiConverterString.lift(
+        rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_as_str(
+                FfiConverterTypeNonFungibleLocalId.lower(value), $0
+            )
+        }
+    )
+}
+
+public func nonFungibleLocalIdSborDecode(bytes: [UInt8]) throws -> NonFungibleLocalId {
     return try FfiConverterTypeNonFungibleLocalId.lift(
         rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-            uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_non_fungible_local_id_value(
+            uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_sbor_decode(
                 FfiConverterSequenceUInt8.lower(bytes), $0
+            )
+        }
+    )
+}
+
+public func nonFungibleLocalIdSborEncode(value: NonFungibleLocalId) throws -> [UInt8] {
+    return try FfiConverterSequenceUInt8.lift(
+        rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_sbor_encode(
+                FfiConverterTypeNonFungibleLocalId.lower(value), $0
             )
         }
     )
@@ -7063,26 +7093,6 @@ public func sborDecodeToStringRepresentation(bytes: [UInt8], representation: Ser
                 FfiConverterTypeSerializationMode.lower(representation),
                 FfiConverterUInt8.lower(networkId),
                 FfiConverterOptionTypeSchema.lower(schema), $0
-            )
-        }
-    )
-}
-
-public func sborEncodeMetadataValue(value: MetadataValue) throws -> [UInt8] {
-    return try FfiConverterSequenceUInt8.lift(
-        rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-            uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_encode_metadata_value(
-                FfiConverterTypeMetadataValue.lower(value), $0
-            )
-        }
-    )
-}
-
-public func sborEncodeNonFungibleLocalIdValue(value: NonFungibleLocalId) throws -> [UInt8] {
-    return try FfiConverterSequenceUInt8.lift(
-        rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-            uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_encode_non_fungible_local_id_value(
-                FfiConverterTypeNonFungibleLocalId.lower(value), $0
             )
         }
     )
@@ -7150,19 +7160,22 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_func_manifest_sbor_decode_to_string_representation() != 19578 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_metadata_value() != 36777 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_metadata_sbor_decode() != 54114 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_non_fungible_local_id_value() != 36991 {
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_metadata_sbor_encode() != 11090 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_as_str() != 10663 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_sbor_decode() != 5482 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_sbor_encode() != 44017 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_string_representation() != 11831 {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_encode_metadata_value() != 10730 {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_encode_non_fungible_local_id_value() != 46944 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_decode_to_string_representation() != 50232 {
