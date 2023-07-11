@@ -2188,6 +2188,130 @@ public func FfiConverterTypePreciseDecimal_lower(_ value: PreciseDecimal) -> Uns
     return FfiConverterTypePreciseDecimal.lower(value)
 }
 
+public protocol PrivateKeyProtocol {
+    func publicKey() -> PublicKey
+    func sign(hash: Hash) -> [UInt8]
+    func signToSignature(hash: Hash) -> Signature
+    func signToSignatureWithPublicKey(hash: Hash) -> SignatureWithPublicKey
+}
+
+public class PrivateKey: PrivateKeyProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    public convenience init(bytes: [UInt8], curve: Curve) throws {
+        try self.init(unsafeFromRawPointer: rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_constructor_privatekey_new(
+                FfiConverterSequenceUInt8.lower(bytes),
+                FfiConverterTypeCurve.lower(curve), $0
+            )
+        })
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_privatekey(pointer, $0) }
+    }
+
+    public static func newEd25519(bytes: [UInt8]) throws -> PrivateKey {
+        return try PrivateKey(unsafeFromRawPointer: rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_constructor_privatekey_new_ed25519(
+                FfiConverterSequenceUInt8.lower(bytes), $0
+            )
+        })
+    }
+
+    public static func newSecp256k1(bytes: [UInt8]) throws -> PrivateKey {
+        return try PrivateKey(unsafeFromRawPointer: rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_constructor_privatekey_new_secp256k1(
+                FfiConverterSequenceUInt8.lower(bytes), $0
+            )
+        })
+    }
+
+    public func publicKey() -> PublicKey {
+        return try! FfiConverterTypePublicKey.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_public_key(self.pointer, $0)
+                }
+        )
+    }
+
+    public func sign(hash: Hash) -> [UInt8] {
+        return try! FfiConverterSequenceUInt8.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_sign(self.pointer,
+                                                                                 FfiConverterTypeHash.lower(hash), $0)
+                }
+        )
+    }
+
+    public func signToSignature(hash: Hash) -> Signature {
+        return try! FfiConverterTypeSignature.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_sign_to_signature(self.pointer,
+                                                                                              FfiConverterTypeHash.lower(hash), $0)
+                }
+        )
+    }
+
+    public func signToSignatureWithPublicKey(hash: Hash) -> SignatureWithPublicKey {
+        return try! FfiConverterTypeSignatureWithPublicKey.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_sign_to_signature_with_public_key(self.pointer,
+                                                                                                              FfiConverterTypeHash.lower(hash), $0)
+                }
+        )
+    }
+}
+
+public struct FfiConverterTypePrivateKey: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = PrivateKey
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PrivateKey {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if ptr == nil {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: PrivateKey, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> PrivateKey {
+        return PrivateKey(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: PrivateKey) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+public func FfiConverterTypePrivateKey_lift(_ pointer: UnsafeMutableRawPointer) throws -> PrivateKey {
+    return try FfiConverterTypePrivateKey.lift(pointer)
+}
+
+public func FfiConverterTypePrivateKey_lower(_ value: PrivateKey) -> UnsafeMutableRawPointer {
+    return FfiConverterTypePrivateKey.lower(value)
+}
+
 public protocol SignedIntentProtocol {
     func compile() throws -> [UInt8]
     func hash() throws -> TransactionHash
@@ -2324,6 +2448,333 @@ public func FfiConverterTypeSignedIntent_lift(_ pointer: UnsafeMutableRawPointer
 
 public func FfiConverterTypeSignedIntent_lower(_ value: SignedIntent) -> UnsafeMutableRawPointer {
     return FfiConverterTypeSignedIntent.lower(value)
+}
+
+public protocol TransactionBuilderProtocol {
+    func header(header: TransactionHeader) -> TransactionBuilderHeaderStep
+}
+
+public class TransactionBuilder: TransactionBuilderProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    public convenience init() {
+        self.init(unsafeFromRawPointer: try! rustCall {
+            uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionbuilder_new($0)
+        })
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionbuilder(pointer, $0) }
+    }
+
+    public func header(header: TransactionHeader) -> TransactionBuilderHeaderStep {
+        return try! FfiConverterTypeTransactionBuilderHeaderStep.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilder_header(self.pointer,
+                                                                                           FfiConverterTypeTransactionHeader.lower(header), $0)
+                }
+        )
+    }
+}
+
+public struct FfiConverterTypeTransactionBuilder: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = TransactionBuilder
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransactionBuilder {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if ptr == nil {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: TransactionBuilder, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> TransactionBuilder {
+        return TransactionBuilder(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: TransactionBuilder) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+public func FfiConverterTypeTransactionBuilder_lift(_ pointer: UnsafeMutableRawPointer) throws -> TransactionBuilder {
+    return try FfiConverterTypeTransactionBuilder.lift(pointer)
+}
+
+public func FfiConverterTypeTransactionBuilder_lower(_ value: TransactionBuilder) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeTransactionBuilder.lower(value)
+}
+
+public protocol TransactionBuilderHeaderStepProtocol {
+    func manifest(manifest: TransactionManifest) -> TransactionBuilderMessageStep
+}
+
+public class TransactionBuilderHeaderStep: TransactionBuilderHeaderStepProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionbuilderheaderstep(pointer, $0) }
+    }
+
+    public func manifest(manifest: TransactionManifest) -> TransactionBuilderMessageStep {
+        return try! FfiConverterTypeTransactionBuilderMessageStep.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderheaderstep_manifest(self.pointer,
+                                                                                                       FfiConverterTypeTransactionManifest.lower(manifest), $0)
+                }
+        )
+    }
+}
+
+public struct FfiConverterTypeTransactionBuilderHeaderStep: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = TransactionBuilderHeaderStep
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransactionBuilderHeaderStep {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if ptr == nil {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: TransactionBuilderHeaderStep, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> TransactionBuilderHeaderStep {
+        return TransactionBuilderHeaderStep(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: TransactionBuilderHeaderStep) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+public func FfiConverterTypeTransactionBuilderHeaderStep_lift(_ pointer: UnsafeMutableRawPointer) throws -> TransactionBuilderHeaderStep {
+    return try FfiConverterTypeTransactionBuilderHeaderStep.lift(pointer)
+}
+
+public func FfiConverterTypeTransactionBuilderHeaderStep_lower(_ value: TransactionBuilderHeaderStep) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeTransactionBuilderHeaderStep.lower(value)
+}
+
+public protocol TransactionBuilderIntentSignaturesStepProtocol {
+    func notarizeWithPrivateKey(privateKey: PrivateKey) throws -> NotarizedTransaction
+    func notarizeWithSigner(signer: Signer) throws -> NotarizedTransaction
+    func signWithPrivateKey(privateKey: PrivateKey) -> TransactionBuilderIntentSignaturesStep
+    func signWithSigner(signer: Signer) -> TransactionBuilderIntentSignaturesStep
+}
+
+public class TransactionBuilderIntentSignaturesStep: TransactionBuilderIntentSignaturesStepProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionbuilderintentsignaturesstep(pointer, $0) }
+    }
+
+    public func notarizeWithPrivateKey(privateKey: PrivateKey) throws -> NotarizedTransaction {
+        return try FfiConverterTypeNotarizedTransaction.lift(
+            rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+                uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderintentsignaturesstep_notarize_with_private_key(self.pointer,
+                                                                                                                              FfiConverterTypePrivateKey.lower(privateKey), $0)
+            }
+        )
+    }
+
+    public func notarizeWithSigner(signer: Signer) throws -> NotarizedTransaction {
+        return try FfiConverterTypeNotarizedTransaction.lift(
+            rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+                uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderintentsignaturesstep_notarize_with_signer(self.pointer,
+                                                                                                                         FfiConverterCallbackInterfaceSigner.lower(signer), $0)
+            }
+        )
+    }
+
+    public func signWithPrivateKey(privateKey: PrivateKey) -> TransactionBuilderIntentSignaturesStep {
+        return try! FfiConverterTypeTransactionBuilderIntentSignaturesStep.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderintentsignaturesstep_sign_with_private_key(self.pointer,
+                                                                                                                              FfiConverterTypePrivateKey.lower(privateKey), $0)
+                }
+        )
+    }
+
+    public func signWithSigner(signer: Signer) -> TransactionBuilderIntentSignaturesStep {
+        return try! FfiConverterTypeTransactionBuilderIntentSignaturesStep.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderintentsignaturesstep_sign_with_signer(self.pointer,
+                                                                                                                         FfiConverterCallbackInterfaceSigner.lower(signer), $0)
+                }
+        )
+    }
+}
+
+public struct FfiConverterTypeTransactionBuilderIntentSignaturesStep: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = TransactionBuilderIntentSignaturesStep
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransactionBuilderIntentSignaturesStep {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if ptr == nil {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: TransactionBuilderIntentSignaturesStep, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> TransactionBuilderIntentSignaturesStep {
+        return TransactionBuilderIntentSignaturesStep(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: TransactionBuilderIntentSignaturesStep) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+public func FfiConverterTypeTransactionBuilderIntentSignaturesStep_lift(_ pointer: UnsafeMutableRawPointer) throws -> TransactionBuilderIntentSignaturesStep {
+    return try FfiConverterTypeTransactionBuilderIntentSignaturesStep.lift(pointer)
+}
+
+public func FfiConverterTypeTransactionBuilderIntentSignaturesStep_lower(_ value: TransactionBuilderIntentSignaturesStep) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeTransactionBuilderIntentSignaturesStep.lower(value)
+}
+
+public protocol TransactionBuilderMessageStepProtocol {
+    func message(message: Message) -> TransactionBuilderIntentSignaturesStep
+    func signWithPrivateKey(privateKey: PrivateKey) -> TransactionBuilderIntentSignaturesStep
+    func signWithSigner(signer: Signer) -> TransactionBuilderIntentSignaturesStep
+}
+
+public class TransactionBuilderMessageStep: TransactionBuilderMessageStepProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionbuildermessagestep(pointer, $0) }
+    }
+
+    public func message(message: Message) -> TransactionBuilderIntentSignaturesStep {
+        return try! FfiConverterTypeTransactionBuilderIntentSignaturesStep.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuildermessagestep_message(self.pointer,
+                                                                                                       FfiConverterTypeMessage.lower(message), $0)
+                }
+        )
+    }
+
+    public func signWithPrivateKey(privateKey: PrivateKey) -> TransactionBuilderIntentSignaturesStep {
+        return try! FfiConverterTypeTransactionBuilderIntentSignaturesStep.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuildermessagestep_sign_with_private_key(self.pointer,
+                                                                                                                     FfiConverterTypePrivateKey.lower(privateKey), $0)
+                }
+        )
+    }
+
+    public func signWithSigner(signer: Signer) -> TransactionBuilderIntentSignaturesStep {
+        return try! FfiConverterTypeTransactionBuilderIntentSignaturesStep.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuildermessagestep_sign_with_signer(self.pointer,
+                                                                                                                FfiConverterCallbackInterfaceSigner.lower(signer), $0)
+                }
+        )
+    }
+}
+
+public struct FfiConverterTypeTransactionBuilderMessageStep: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = TransactionBuilderMessageStep
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransactionBuilderMessageStep {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if ptr == nil {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: TransactionBuilderMessageStep, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> TransactionBuilderMessageStep {
+        return TransactionBuilderMessageStep(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: TransactionBuilderMessageStep) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+public func FfiConverterTypeTransactionBuilderMessageStep_lift(_ pointer: UnsafeMutableRawPointer) throws -> TransactionBuilderMessageStep {
+    return try FfiConverterTypeTransactionBuilderMessageStep.lift(pointer)
+}
+
+public func FfiConverterTypeTransactionBuilderMessageStep_lower(_ value: TransactionBuilderMessageStep) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeTransactionBuilderMessageStep.lower(value)
 }
 
 public protocol TransactionHashProtocol {
@@ -3623,6 +4074,48 @@ public func FfiConverterTypeTransactionHeader_lift(_ buf: RustBuffer) throws -> 
 public func FfiConverterTypeTransactionHeader_lower(_ value: TransactionHeader) -> RustBuffer {
     return FfiConverterTypeTransactionHeader.lower(value)
 }
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum Curve {
+    case secp256k1
+    case ed25519
+}
+
+public struct FfiConverterTypeCurve: FfiConverterRustBuffer {
+    typealias SwiftType = Curve
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Curve {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return .secp256k1
+
+        case 2: return .ed25519
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: Curve, into buf: inout [UInt8]) {
+        switch value {
+        case .secp256k1:
+            writeInt(&buf, Int32(1))
+
+        case .ed25519:
+            writeInt(&buf, Int32(2))
+        }
+    }
+}
+
+public func FfiConverterTypeCurve_lift(_ buf: RustBuffer) throws -> Curve {
+    return try FfiConverterTypeCurve.lift(buf)
+}
+
+public func FfiConverterTypeCurve_lower(_ value: Curve) -> RustBuffer {
+    return FfiConverterTypeCurve.lower(value)
+}
+
+extension Curve: Equatable, Hashable {}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
@@ -6139,6 +6632,261 @@ public func FfiConverterTypeTransactionType_lower(_ value: TransactionType) -> R
     return FfiConverterTypeTransactionType.lower(value)
 }
 
+private extension NSLock {
+    func withLock<T>(f: () throws -> T) rethrows -> T {
+        lock()
+        defer { self.unlock() }
+        return try f()
+    }
+}
+
+private typealias UniFFICallbackHandle = UInt64
+private class UniFFICallbackHandleMap<T> {
+    private var leftMap: [UniFFICallbackHandle: T] = [:]
+    private var counter: [UniFFICallbackHandle: UInt64] = [:]
+    private var rightMap: [ObjectIdentifier: UniFFICallbackHandle] = [:]
+
+    private let lock = NSLock()
+    private var currentHandle: UniFFICallbackHandle = 0
+    private let stride: UniFFICallbackHandle = 1
+
+    func insert(obj: T) -> UniFFICallbackHandle {
+        lock.withLock {
+            let id = ObjectIdentifier(obj as AnyObject)
+            let handle = rightMap[id] ?? {
+                currentHandle += stride
+                let handle = currentHandle
+                leftMap[handle] = obj
+                rightMap[id] = handle
+                return handle
+            }()
+            counter[handle] = (counter[handle] ?? 0) + 1
+            return handle
+        }
+    }
+
+    func get(handle: UniFFICallbackHandle) -> T? {
+        lock.withLock {
+            leftMap[handle]
+        }
+    }
+
+    func delete(handle: UniFFICallbackHandle) {
+        remove(handle: handle)
+    }
+
+    @discardableResult
+    func remove(handle: UniFFICallbackHandle) -> T? {
+        lock.withLock {
+            defer { counter[handle] = (counter[handle] ?? 1) - 1 }
+            guard counter[handle] == 1 else { return leftMap[handle] }
+            let obj = leftMap.removeValue(forKey: handle)
+            if let obj = obj {
+                rightMap.removeValue(forKey: ObjectIdentifier(obj as AnyObject))
+            }
+            return obj
+        }
+    }
+}
+
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
+// Declaration and FfiConverters for Signer Callback Interface
+
+public protocol Signer: AnyObject {
+    func sign(hash: Hash) -> [UInt8]
+    func signToSignature(hash: Hash) -> Signature
+    func signToSignatureWithPublicKey(hash: Hash) -> SignatureWithPublicKey
+    func publicKey() -> PublicKey
+}
+
+// The ForeignCallback that is passed to Rust.
+private let foreignCallbackCallbackInterfaceSigner: ForeignCallback =
+    { (handle: UniFFICallbackHandle, method: Int32, argsData: UnsafePointer<UInt8>, argsLen: Int32, out_buf: UnsafeMutablePointer<RustBuffer>) -> Int32 in
+
+        func invokeSign(_ swiftCallbackInterface: Signer, _ argsData: UnsafePointer<UInt8>, _ argsLen: Int32, _ out_buf: UnsafeMutablePointer<RustBuffer>) throws -> Int32 {
+            var reader = createReader(data: Data(bytes: argsData, count: Int(argsLen)))
+            func makeCall() throws -> Int32 {
+                let result = try swiftCallbackInterface.sign(
+                    hash: FfiConverterTypeHash.read(from: &reader)
+                )
+                var writer = [UInt8]()
+                FfiConverterSequenceUInt8.write(result, into: &writer)
+                out_buf.pointee = RustBuffer(bytes: writer)
+                return UNIFFI_CALLBACK_SUCCESS
+            }
+            return try makeCall()
+        }
+
+        func invokeSignToSignature(_ swiftCallbackInterface: Signer, _ argsData: UnsafePointer<UInt8>, _ argsLen: Int32, _ out_buf: UnsafeMutablePointer<RustBuffer>) throws -> Int32 {
+            var reader = createReader(data: Data(bytes: argsData, count: Int(argsLen)))
+            func makeCall() throws -> Int32 {
+                let result = try swiftCallbackInterface.signToSignature(
+                    hash: FfiConverterTypeHash.read(from: &reader)
+                )
+                var writer = [UInt8]()
+                FfiConverterTypeSignature.write(result, into: &writer)
+                out_buf.pointee = RustBuffer(bytes: writer)
+                return UNIFFI_CALLBACK_SUCCESS
+            }
+            return try makeCall()
+        }
+
+        func invokeSignToSignatureWithPublicKey(_ swiftCallbackInterface: Signer, _ argsData: UnsafePointer<UInt8>, _ argsLen: Int32, _ out_buf: UnsafeMutablePointer<RustBuffer>) throws -> Int32 {
+            var reader = createReader(data: Data(bytes: argsData, count: Int(argsLen)))
+            func makeCall() throws -> Int32 {
+                let result = try swiftCallbackInterface.signToSignatureWithPublicKey(
+                    hash: FfiConverterTypeHash.read(from: &reader)
+                )
+                var writer = [UInt8]()
+                FfiConverterTypeSignatureWithPublicKey.write(result, into: &writer)
+                out_buf.pointee = RustBuffer(bytes: writer)
+                return UNIFFI_CALLBACK_SUCCESS
+            }
+            return try makeCall()
+        }
+
+        func invokePublicKey(_ swiftCallbackInterface: Signer, _: UnsafePointer<UInt8>, _: Int32, _ out_buf: UnsafeMutablePointer<RustBuffer>) throws -> Int32 {
+            func makeCall() throws -> Int32 {
+                let result = try swiftCallbackInterface.publicKey(
+                )
+                var writer = [UInt8]()
+                FfiConverterTypePublicKey.write(result, into: &writer)
+                out_buf.pointee = RustBuffer(bytes: writer)
+                return UNIFFI_CALLBACK_SUCCESS
+            }
+            return try makeCall()
+        }
+
+        switch method {
+        case IDX_CALLBACK_FREE:
+            FfiConverterCallbackInterfaceSigner.drop(handle: handle)
+            // Sucessful return
+            // See docs of ForeignCallback in `uniffi_core/src/ffi/foreigncallbacks.rs`
+            return UNIFFI_CALLBACK_SUCCESS
+        case 1:
+            let cb: Signer
+            do {
+                cb = try FfiConverterCallbackInterfaceSigner.lift(handle)
+            } catch {
+                out_buf.pointee = FfiConverterString.lower("Signer: Invalid handle")
+                return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+            }
+            do {
+                return try invokeSign(cb, argsData, argsLen, out_buf)
+            } catch {
+                out_buf.pointee = FfiConverterString.lower(String(describing: error))
+                return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+            }
+        case 2:
+            let cb: Signer
+            do {
+                cb = try FfiConverterCallbackInterfaceSigner.lift(handle)
+            } catch {
+                out_buf.pointee = FfiConverterString.lower("Signer: Invalid handle")
+                return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+            }
+            do {
+                return try invokeSignToSignature(cb, argsData, argsLen, out_buf)
+            } catch {
+                out_buf.pointee = FfiConverterString.lower(String(describing: error))
+                return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+            }
+        case 3:
+            let cb: Signer
+            do {
+                cb = try FfiConverterCallbackInterfaceSigner.lift(handle)
+            } catch {
+                out_buf.pointee = FfiConverterString.lower("Signer: Invalid handle")
+                return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+            }
+            do {
+                return try invokeSignToSignatureWithPublicKey(cb, argsData, argsLen, out_buf)
+            } catch {
+                out_buf.pointee = FfiConverterString.lower(String(describing: error))
+                return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+            }
+        case 4:
+            let cb: Signer
+            do {
+                cb = try FfiConverterCallbackInterfaceSigner.lift(handle)
+            } catch {
+                out_buf.pointee = FfiConverterString.lower("Signer: Invalid handle")
+                return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+            }
+            do {
+                return try invokePublicKey(cb, argsData, argsLen, out_buf)
+            } catch {
+                out_buf.pointee = FfiConverterString.lower(String(describing: error))
+                return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+            }
+
+        // This should never happen, because an out of bounds method index won't
+        // ever be used. Once we can catch errors, we should return an InternalError.
+        // https://github.com/mozilla/uniffi-rs/issues/351
+        default:
+            // An unexpected error happened.
+            // See docs of ForeignCallback in `uniffi_core/src/ffi/foreigncallbacks.rs`
+            return UNIFFI_CALLBACK_UNEXPECTED_ERROR
+        }
+    }
+
+// FfiConverter protocol for callback interfaces
+private enum FfiConverterCallbackInterfaceSigner {
+    private static let initCallbackOnce: () = {
+        // Swift ensures this initializer code will once run once, even when accessed by multiple threads.
+        try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
+            uniffi_radix_engine_toolkit_uniffi_fn_init_callback_signer(foreignCallbackCallbackInterfaceSigner, err)
+        }
+    }()
+
+    private static func ensureCallbackinitialized() {
+        _ = initCallbackOnce
+    }
+
+    static func drop(handle: UniFFICallbackHandle) {
+        handleMap.remove(handle: handle)
+    }
+
+    private static var handleMap = UniFFICallbackHandleMap<Signer>()
+}
+
+extension FfiConverterCallbackInterfaceSigner: FfiConverter {
+    typealias SwiftType = Signer
+    // We can use Handle as the FfiType because it's a typealias to UInt64
+    typealias FfiType = UniFFICallbackHandle
+
+    public static func lift(_ handle: UniFFICallbackHandle) throws -> SwiftType {
+        ensureCallbackinitialized()
+        guard let callback = handleMap.get(handle: handle) else {
+            throw UniffiInternalError.unexpectedStaleHandle
+        }
+        return callback
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        ensureCallbackinitialized()
+        let handle: UniFFICallbackHandle = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func lower(_ v: SwiftType) -> UniFFICallbackHandle {
+        ensureCallbackinitialized()
+        return handleMap.insert(obj: v)
+    }
+
+    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
+        ensureCallbackinitialized()
+        writeInt(&buf, lower(v))
+    }
+}
+
 private struct FfiConverterOptionTypeDecimal: FfiConverterRustBuffer {
     typealias SwiftType = Decimal?
 
@@ -7454,6 +8202,18 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub() != 15847 {
         return InitializationResult.apiChecksumMismatch
     }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_public_key() != 49403 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_sign() != 21427 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_sign_to_signature() != 4246 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_sign_to_signature_with_public_key() != 41168 {
+        return InitializationResult.apiChecksumMismatch
+    }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_compile() != 26394 {
         return InitializationResult.apiChecksumMismatch
     }
@@ -7473,6 +8233,33 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_signedintent_statically_validate() != 27682 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuilder_header() != 40383 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuilderheaderstep_manifest() != 8446 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuilderintentsignaturesstep_notarize_with_private_key() != 57025 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuilderintentsignaturesstep_notarize_with_signer() != 32547 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuilderintentsignaturesstep_sign_with_private_key() != 29671 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuilderintentsignaturesstep_sign_with_signer() != 17372 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuildermessagestep_message() != 55782 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuildermessagestep_sign_with_private_key() != 60073 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuildermessagestep_sign_with_signer() != 21713 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_as_str() != 9829 {
@@ -7628,10 +8415,22 @@ private var initializationResult: InitializationResult {
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_zero() != 5648 {
         return InitializationResult.apiChecksumMismatch
     }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_privatekey_new() != 47612 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_privatekey_new_ed25519() != 4005 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_privatekey_new_secp256k1() != 20991 {
+        return InitializationResult.apiChecksumMismatch
+    }
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedintent_decompile() != 12765 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedintent_new() != 36392 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionbuilder_new() != 46196 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new() != 62865 {
@@ -7641,6 +8440,18 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_validationconfig_new() != 20792 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signer_sign() != 46892 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signer_sign_to_signature() != 15804 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signer_sign_to_signature_with_public_key() != 9393 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_signer_public_key() != 61195 {
         return InitializationResult.apiChecksumMismatch
     }
 
