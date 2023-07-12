@@ -514,6 +514,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_sbor
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_typed_native_event(RustBuffer event_type_identifier, RustBuffer event_data, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_scrypto_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
 );
 RustBuffer ffi_radix_engine_toolkit_uniffi_rustbuffer_alloc(int32_t size, RustCallStatus *_Nonnull out_status
@@ -573,6 +575,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_string_representation(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_typed_native_event(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_decode_to_string_representation(void
