@@ -5,13 +5,13 @@ import Foundation
 import PackageDescription
 
 let package = Package(
-    name: "EngineToolkitUniFFI",
+    name: "EngineToolkit",
     platforms: [.macOS(.v12), .iOS(.v16)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "EngineToolkitUniFFI",
-            targets: ["EngineToolkitUniFFI"]
+            name: "EngineToolkit",
+            targets: ["EngineToolkit"]
         ),
     ],
     dependencies: [
@@ -19,20 +19,20 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(
-            name: "RadixEngineToolkitUniFFI",
-            path: "Sources/RadixEngineToolkitUniFFI/RadixEngineToolkitUniFFI.xcframework"
+            name: "RadixEngineToolkit",
+            path: "Sources/RadixEngineToolkit/RadixEngineToolkit.xcframework"
         ),
         .target(
-            name: "EngineToolkitUniFFI",
+            name: "EngineToolkit",
             dependencies: [
-                "RadixEngineToolkitUniFFI",
+                "RadixEngineToolkit",
             ]
         ),
         .testTarget(
             name: "EngineToolkitTests",
             dependencies: [
                 "Difference",
-                "EngineToolkitUniFFI",
+                "EngineToolkit",
             ],
             resources: []
         ),
