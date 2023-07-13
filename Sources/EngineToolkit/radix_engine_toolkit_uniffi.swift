@@ -2936,16 +2936,7 @@ public func FfiConverterTypeExecutionAnalysis_lower(_ value: ExecutionAnalysis) 
 }
 
 public struct FeeLocks {
-        public var lock: Decimal{
-                set {
-
-                }
-
-                get {
-
-                }
-        }
-
+    public var lock: Decimal
     public var contingentLock: Decimal
 
     // Default memberwise initializers are never public by default, so we
