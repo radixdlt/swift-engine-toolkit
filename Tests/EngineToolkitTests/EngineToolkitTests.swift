@@ -1,4 +1,4 @@
-import EngineToolkitUniFFI
+import RadixEngineToolkit
 import XCTest
 
 class EngineToolkitTests: XCTestCase {

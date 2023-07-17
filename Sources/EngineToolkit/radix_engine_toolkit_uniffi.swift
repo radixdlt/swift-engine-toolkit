@@ -6,7 +6,7 @@ import Foundation
 // might be in a separate module, or it might be compiled inline into
 // this module. This is a bit of light hackery to work with both.
 
-import RustEngineToolkit
+import RadixEngineToolkit
 
 private extension RustBuffer {
     // Allocate a new buffer, copying the contents of a `UInt8` array.
