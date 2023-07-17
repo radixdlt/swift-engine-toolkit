@@ -22,7 +22,5 @@
 	<string>1.0.0</string>
 	<key>MinimumOSVersion</key>
 	<string>16.4</string>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
 </dict>
 </plist>
