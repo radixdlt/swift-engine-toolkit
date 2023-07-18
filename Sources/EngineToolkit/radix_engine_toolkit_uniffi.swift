@@ -2797,6 +2797,15 @@ public class TransactionHash: TransactionHashProtocol {
         try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionhash(pointer, $0) }
     }
 
+    public static func fromStr(string: String, networkId: UInt8) throws -> TransactionHash {
+        return try TransactionHash(unsafeFromRawPointer: rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionhash_from_str(
+                FfiConverterString.lower(string),
+                FfiConverterUInt8.lower(networkId), $0
+            )
+        })
+    }
+
     public func asStr() -> String {
         return try! FfiConverterString.lift(
             try!
@@ -8311,6 +8320,7 @@ public enum RadixEngineToolkitError {
     case ManifestSborError(error: String)
     case ScryptoSborError(error: String)
     case TypedNativeEventError(error: String)
+    case FailedToDecodeTransactionHash
 
     fileprivate static func uniffiErrorHandler(_ error: RustBuffer) throws -> Error {
         return try FfiConverterTypeRadixEngineToolkitError.lift(error)
@@ -8379,6 +8389,7 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         case 18: return try .TypedNativeEventError(
                 error: FfiConverterString.read(from: &buf)
             )
+        case 19: return .FailedToDecodeTransactionHash
 
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -8460,6 +8471,9 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         case let .TypedNativeEventError(error):
             writeInt(&buf, Int32(18))
             FfiConverterString.write(error, into: &buf)
+
+        case .FailedToDecodeTransactionHash:
+            writeInt(&buf, Int32(19))
         }
     }
 }
@@ -11898,6 +11912,16 @@ public func nonFungibleLocalIdAsStr(value: NonFungibleLocalId) throws -> String 
     )
 }
 
+public func nonFungibleLocalIdFromStr(string: String) throws -> NonFungibleLocalId {
+    return try FfiConverterTypeNonFungibleLocalId.lift(
+        rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_from_str(
+                FfiConverterString.lower(string), $0
+            )
+        }
+    )
+}
+
 public func nonFungibleLocalIdSborDecode(bytes: [UInt8]) throws -> NonFungibleLocalId {
     return try FfiConverterTypeNonFungibleLocalId.lift(
         rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -12012,6 +12036,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_as_str() != 10663 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_from_str() != 27404 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_sbor_decode() != 5482 {
@@ -12531,6 +12558,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionbuilder_new() != 46196 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str() != 37610 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new() != 62865 {

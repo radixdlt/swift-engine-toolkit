@@ -427,6 +427,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuildermes
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionhash(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionhash_from_str(RustBuffer string, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_as_str(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -508,6 +510,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_metadata_sbor_encode(RustB
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_as_str(RustBuffer value, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_from_str(RustBuffer string, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_sbor_decode(RustBuffer bytes, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_sbor_encode(RustBuffer value, RustCallStatus *_Nonnull out_status
@@ -566,6 +570,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_metadata_sbor_encode(v
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_as_str(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_from_str(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_sbor_decode(void
@@ -1085,6 +1092,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedintent_ne
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionbuilder_new(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new(void
