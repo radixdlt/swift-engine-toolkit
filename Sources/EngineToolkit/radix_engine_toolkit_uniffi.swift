@@ -2797,6 +2797,15 @@ public class TransactionHash: TransactionHashProtocol {
         try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionhash(pointer, $0) }
     }
 
+    public static func fromStr(string: String, networkId: UInt8) throws -> TransactionHash {
+        return try TransactionHash(unsafeFromRawPointer: rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionhash_from_str(
+                FfiConverterString.lower(string),
+                FfiConverterUInt8.lower(networkId), $0
+            )
+        })
+    }
+
     public func asStr() -> String {
         return try! FfiConverterString.lift(
             try!
@@ -6130,6 +6139,54 @@ extension CurveType: Equatable, Hashable {}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum DecimalSource {
+    case guaranteed(value: Decimal)
+    case predicted(instructionIndex: UInt64, value: Decimal)
+}
+
+public struct FfiConverterTypeDecimalSource: FfiConverterRustBuffer {
+    typealias SwiftType = DecimalSource
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> DecimalSource {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return try .guaranteed(
+                value: FfiConverterTypeDecimal.read(from: &buf)
+            )
+
+        case 2: return try .predicted(
+                instructionIndex: FfiConverterUInt64.read(from: &buf),
+                value: FfiConverterTypeDecimal.read(from: &buf)
+            )
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: DecimalSource, into buf: inout [UInt8]) {
+        switch value {
+        case let .guaranteed(value):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeDecimal.write(value, into: &buf)
+
+        case let .predicted(instructionIndex, value):
+            writeInt(&buf, Int32(2))
+            FfiConverterUInt64.write(instructionIndex, into: &buf)
+            FfiConverterTypeDecimal.write(value, into: &buf)
+        }
+    }
+}
+
+public func FfiConverterTypeDecimalSource_lift(_ buf: RustBuffer) throws -> DecimalSource {
+    return try FfiConverterTypeDecimalSource.lift(buf)
+}
+
+public func FfiConverterTypeDecimalSource_lower(_ value: DecimalSource) -> RustBuffer {
+    return FfiConverterTypeDecimalSource.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum DecryptorsByCurve {
     case ed25519(dhEphemeralPublicKey: Ed25519PublicKey, decryptors: [[UInt8]: [UInt8]])
     case secp256k1(dhEphemeralPublicKey: Secp256k1PublicKey, decryptors: [[UInt8]: [UInt8]])
@@ -7926,6 +7983,56 @@ extension NonFungibleLocalId: Equatable, Hashable {}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum NonFungibleLocalIdVecSource {
+    case guaranteed(value: [NonFungibleLocalId])
+    case predicted(instructionIndex: UInt64, value: [NonFungibleLocalId])
+}
+
+public struct FfiConverterTypeNonFungibleLocalIdVecSource: FfiConverterRustBuffer {
+    typealias SwiftType = NonFungibleLocalIdVecSource
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NonFungibleLocalIdVecSource {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return try .guaranteed(
+                value: FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+            )
+
+        case 2: return try .predicted(
+                instructionIndex: FfiConverterUInt64.read(from: &buf),
+                value: FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+            )
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: NonFungibleLocalIdVecSource, into buf: inout [UInt8]) {
+        switch value {
+        case let .guaranteed(value):
+            writeInt(&buf, Int32(1))
+            FfiConverterSequenceTypeNonFungibleLocalId.write(value, into: &buf)
+
+        case let .predicted(instructionIndex, value):
+            writeInt(&buf, Int32(2))
+            FfiConverterUInt64.write(instructionIndex, into: &buf)
+            FfiConverterSequenceTypeNonFungibleLocalId.write(value, into: &buf)
+        }
+    }
+}
+
+public func FfiConverterTypeNonFungibleLocalIdVecSource_lift(_ buf: RustBuffer) throws -> NonFungibleLocalIdVecSource {
+    return try FfiConverterTypeNonFungibleLocalIdVecSource.lift(buf)
+}
+
+public func FfiConverterTypeNonFungibleLocalIdVecSource_lower(_ value: NonFungibleLocalIdVecSource) -> RustBuffer {
+    return FfiConverterTypeNonFungibleLocalIdVecSource.lower(value)
+}
+
+extension NonFungibleLocalIdVecSource: Equatable, Hashable {}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum ObjectModuleId {
     case main
     case metadata
@@ -8213,6 +8320,7 @@ public enum RadixEngineToolkitError {
     case ManifestSborError(error: String)
     case ScryptoSborError(error: String)
     case TypedNativeEventError(error: String)
+    case FailedToDecodeTransactionHash
 
     fileprivate static func uniffiErrorHandler(_ error: RustBuffer) throws -> Error {
         return try FfiConverterTypeRadixEngineToolkitError.lift(error)
@@ -8281,6 +8389,7 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         case 18: return try .TypedNativeEventError(
                 error: FfiConverterString.read(from: &buf)
             )
+        case 19: return .FailedToDecodeTransactionHash
 
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -8362,6 +8471,9 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         case let .TypedNativeEventError(error):
             writeInt(&buf, Int32(18))
             FfiConverterString.write(error, into: &buf)
+
+        case .FailedToDecodeTransactionHash:
+            writeInt(&buf, Int32(19))
         }
     }
 }
@@ -8464,6 +8576,58 @@ public func FfiConverterTypeResourceSpecifier_lift(_ buf: RustBuffer) throws -> 
 
 public func FfiConverterTypeResourceSpecifier_lower(_ value: ResourceSpecifier) -> RustBuffer {
     return FfiConverterTypeResourceSpecifier.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ResourceTracker {
+    case fungible(resourceAddress: Address, amount: DecimalSource)
+    case nonFungible(resourceAddress: Address, amount: DecimalSource, ids: NonFungibleLocalIdVecSource)
+}
+
+public struct FfiConverterTypeResourceTracker: FfiConverterRustBuffer {
+    typealias SwiftType = ResourceTracker
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ResourceTracker {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return try .fungible(
+                resourceAddress: FfiConverterTypeAddress.read(from: &buf),
+                amount: FfiConverterTypeDecimalSource.read(from: &buf)
+            )
+
+        case 2: return try .nonFungible(
+                resourceAddress: FfiConverterTypeAddress.read(from: &buf),
+                amount: FfiConverterTypeDecimalSource.read(from: &buf),
+                ids: FfiConverterTypeNonFungibleLocalIdVecSource.read(from: &buf)
+            )
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ResourceTracker, into buf: inout [UInt8]) {
+        switch value {
+        case let .fungible(resourceAddress, amount):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeAddress.write(resourceAddress, into: &buf)
+            FfiConverterTypeDecimalSource.write(amount, into: &buf)
+
+        case let .nonFungible(resourceAddress, amount, ids):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeAddress.write(resourceAddress, into: &buf)
+            FfiConverterTypeDecimalSource.write(amount, into: &buf)
+            FfiConverterTypeNonFungibleLocalIdVecSource.write(ids, into: &buf)
+        }
+    }
+}
+
+public func FfiConverterTypeResourceTracker_lift(_ buf: RustBuffer) throws -> ResourceTracker {
+    return try FfiConverterTypeResourceTracker.lift(buf)
+}
+
+public func FfiConverterTypeResourceTracker_lower(_ value: ResourceTracker) -> RustBuffer {
+    return FfiConverterTypeResourceTracker.lower(value)
 }
 
 // Note that we don't yet support `indirect` for enums.
@@ -8774,58 +8938,10 @@ extension SignatureWithPublicKey: Equatable, Hashable {}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum Source {
-    case guaranteed(value: ResourceSpecifier)
-    case predicted(instructionIndex: UInt64, value: ResourceSpecifier)
-}
-
-public struct FfiConverterTypeSource: FfiConverterRustBuffer {
-    typealias SwiftType = Source
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Source {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        case 1: return try .guaranteed(
-                value: FfiConverterTypeResourceSpecifier.read(from: &buf)
-            )
-
-        case 2: return try .predicted(
-                instructionIndex: FfiConverterUInt64.read(from: &buf),
-                value: FfiConverterTypeResourceSpecifier.read(from: &buf)
-            )
-
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: Source, into buf: inout [UInt8]) {
-        switch value {
-        case let .guaranteed(value):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeResourceSpecifier.write(value, into: &buf)
-
-        case let .predicted(instructionIndex, value):
-            writeInt(&buf, Int32(2))
-            FfiConverterUInt64.write(instructionIndex, into: &buf)
-            FfiConverterTypeResourceSpecifier.write(value, into: &buf)
-        }
-    }
-}
-
-public func FfiConverterTypeSource_lift(_ buf: RustBuffer) throws -> Source {
-    return try FfiConverterTypeSource.lift(buf)
-}
-
-public func FfiConverterTypeSource_lower(_ value: Source) -> RustBuffer {
-    return FfiConverterTypeSource.lower(value)
-}
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TransactionType {
     case simpleTransfer(from: Address, to: Address, transferred: ResourceSpecifier)
     case transfer(from: Address, transfers: [String: [String: Resources]])
-    case generalTransaction(accountProofs: [Address], accountWithdraws: [String: [ResourceSpecifier]], accountDeposits: [String: [Source]], addressesInManifest: [EntityType: [Address]], metadataOfNewlyCreatedEntities: [String: [String: MetadataValue]], dataOfNewlyMintedNonFungibles: [String: [NonFungibleLocalId: [UInt8]]])
+    case generalTransaction(accountProofs: [Address], accountWithdraws: [String: [ResourceTracker]], accountDeposits: [String: [ResourceTracker]], addressesInManifest: [EntityType: [Address]], metadataOfNewlyCreatedEntities: [String: [String: MetadataValue]], dataOfNewlyMintedNonFungibles: [String: [NonFungibleLocalId: [UInt8]]])
     case nonConforming
 }
 
@@ -8848,8 +8964,8 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
 
         case 3: return try .generalTransaction(
                 accountProofs: FfiConverterSequenceTypeAddress.read(from: &buf),
-                accountWithdraws: FfiConverterDictionaryStringSequenceTypeResourceSpecifier.read(from: &buf),
-                accountDeposits: FfiConverterDictionaryStringSequenceTypeSource.read(from: &buf),
+                accountWithdraws: FfiConverterDictionaryStringSequenceTypeResourceTracker.read(from: &buf),
+                accountDeposits: FfiConverterDictionaryStringSequenceTypeResourceTracker.read(from: &buf),
                 addressesInManifest: FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress.read(from: &buf),
                 metadataOfNewlyCreatedEntities: FfiConverterDictionaryStringDictionaryStringTypeMetadataValue.read(from: &buf),
                 dataOfNewlyMintedNonFungibles: FfiConverterDictionaryStringDictionaryTypeNonFungibleLocalIdSequenceUInt8.read(from: &buf)
@@ -8877,8 +8993,8 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
         case let .generalTransaction(accountProofs, accountWithdraws, accountDeposits, addressesInManifest, metadataOfNewlyCreatedEntities, dataOfNewlyMintedNonFungibles):
             writeInt(&buf, Int32(3))
             FfiConverterSequenceTypeAddress.write(accountProofs, into: &buf)
-            FfiConverterDictionaryStringSequenceTypeResourceSpecifier.write(accountWithdraws, into: &buf)
-            FfiConverterDictionaryStringSequenceTypeSource.write(accountDeposits, into: &buf)
+            FfiConverterDictionaryStringSequenceTypeResourceTracker.write(accountWithdraws, into: &buf)
+            FfiConverterDictionaryStringSequenceTypeResourceTracker.write(accountDeposits, into: &buf)
             FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress.write(addressesInManifest, into: &buf)
             FfiConverterDictionaryStringDictionaryStringTypeMetadataValue.write(metadataOfNewlyCreatedEntities, into: &buf)
             FfiConverterDictionaryStringDictionaryTypeNonFungibleLocalIdSequenceUInt8.write(dataOfNewlyMintedNonFungibles, into: &buf)
@@ -11306,23 +11422,23 @@ private struct FfiConverterSequenceTypePublicKeyHash: FfiConverterRustBuffer {
     }
 }
 
-private struct FfiConverterSequenceTypeResourceSpecifier: FfiConverterRustBuffer {
-    typealias SwiftType = [ResourceSpecifier]
+private struct FfiConverterSequenceTypeResourceTracker: FfiConverterRustBuffer {
+    typealias SwiftType = [ResourceTracker]
 
-    public static func write(_ value: [ResourceSpecifier], into buf: inout [UInt8]) {
+    public static func write(_ value: [ResourceTracker], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for item in value {
-            FfiConverterTypeResourceSpecifier.write(item, into: &buf)
+            FfiConverterTypeResourceTracker.write(item, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [ResourceSpecifier] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [ResourceTracker] {
         let len: Int32 = try readInt(&buf)
-        var seq = [ResourceSpecifier]()
+        var seq = [ResourceTracker]()
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
-            try seq.append(FfiConverterTypeResourceSpecifier.read(from: &buf))
+            try seq.append(FfiConverterTypeResourceTracker.read(from: &buf))
         }
         return seq
     }
@@ -11345,28 +11461,6 @@ private struct FfiConverterSequenceTypeSignatureWithPublicKey: FfiConverterRustB
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             try seq.append(FfiConverterTypeSignatureWithPublicKey.read(from: &buf))
-        }
-        return seq
-    }
-}
-
-private struct FfiConverterSequenceTypeSource: FfiConverterRustBuffer {
-    typealias SwiftType = [Source]
-
-    public static func write(_ value: [Source], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for item in value {
-            FfiConverterTypeSource.write(item, into: &buf)
-        }
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [Source] {
-        let len: Int32 = try readInt(&buf)
-        var seq = [Source]()
-        seq.reserveCapacity(Int(len))
-        for _ in 0 ..< len {
-            try seq.append(FfiConverterTypeSource.read(from: &buf))
         }
         return seq
     }
@@ -11486,46 +11580,23 @@ private struct FfiConverterDictionaryStringTypeResources: FfiConverterRustBuffer
     }
 }
 
-private struct FfiConverterDictionaryStringSequenceTypeResourceSpecifier: FfiConverterRustBuffer {
-    public static func write(_ value: [String: [ResourceSpecifier]], into buf: inout [UInt8]) {
+private struct FfiConverterDictionaryStringSequenceTypeResourceTracker: FfiConverterRustBuffer {
+    public static func write(_ value: [String: [ResourceTracker]], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for (key, value) in value {
             FfiConverterString.write(key, into: &buf)
-            FfiConverterSequenceTypeResourceSpecifier.write(value, into: &buf)
+            FfiConverterSequenceTypeResourceTracker.write(value, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [ResourceSpecifier]] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [ResourceTracker]] {
         let len: Int32 = try readInt(&buf)
-        var dict = [String: [ResourceSpecifier]]()
+        var dict = [String: [ResourceTracker]]()
         dict.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             let key = try FfiConverterString.read(from: &buf)
-            let value = try FfiConverterSequenceTypeResourceSpecifier.read(from: &buf)
-            dict[key] = value
-        }
-        return dict
-    }
-}
-
-private struct FfiConverterDictionaryStringSequenceTypeSource: FfiConverterRustBuffer {
-    public static func write(_ value: [String: [Source]], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for (key, value) in value {
-            FfiConverterString.write(key, into: &buf)
-            FfiConverterSequenceTypeSource.write(value, into: &buf)
-        }
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [Source]] {
-        let len: Int32 = try readInt(&buf)
-        var dict = [String: [Source]]()
-        dict.reserveCapacity(Int(len))
-        for _ in 0 ..< len {
-            let key = try FfiConverterString.read(from: &buf)
-            let value = try FfiConverterSequenceTypeSource.read(from: &buf)
+            let value = try FfiConverterSequenceTypeResourceTracker.read(from: &buf)
             dict[key] = value
         }
         return dict
@@ -11841,6 +11912,16 @@ public func nonFungibleLocalIdAsStr(value: NonFungibleLocalId) throws -> String 
     )
 }
 
+public func nonFungibleLocalIdFromStr(string: String) throws -> NonFungibleLocalId {
+    return try FfiConverterTypeNonFungibleLocalId.lift(
+        rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+            uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_from_str(
+                FfiConverterString.lower(string), $0
+            )
+        }
+    )
+}
+
 public func nonFungibleLocalIdSborDecode(bytes: [UInt8]) throws -> NonFungibleLocalId {
     return try FfiConverterTypeNonFungibleLocalId.lift(
         rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -11955,6 +12036,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_as_str() != 10663 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_from_str() != 27404 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_sbor_decode() != 5482 {
@@ -12474,6 +12558,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionbuilder_new() != 46196 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str() != 37610 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new() != 62865 {
