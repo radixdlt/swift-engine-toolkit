@@ -2778,6 +2778,7 @@ public func FfiConverterTypeTransactionBuilderMessageStep_lower(_ value: Transac
 }
 
 public protocol TransactionHashProtocol {
+    func asHash() -> Hash
     func asStr() -> String
     func bytes() -> [UInt8]
     func networkId() -> UInt8
@@ -2804,6 +2805,15 @@ public class TransactionHash: TransactionHashProtocol {
                 FfiConverterUInt8.lower(networkId), $0
             )
         })
+    }
+
+    public func asHash() -> Hash {
+        return try! FfiConverterTypeHash.lift(
+            try!
+                rustCall {
+                    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_as_hash(self.pointer, $0)
+                }
+        )
     }
 
     public func asStr() -> String {
@@ -12387,6 +12397,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionbuildermessagestep_sign_with_signer() != 21713 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_as_hash() != 1343 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_as_str() != 9829 {
