@@ -118,8 +118,8 @@ jobs:
     name: "Snyk monitoring"
     runs-on: ubuntu-latest
    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs:
-      - unit_tests
+   # needs:
+   #   - unit_tests
     permissions:
       id-token: write
       pull-requests: read
