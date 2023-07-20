@@ -14,7 +14,8 @@ on:
 
 jobs:
 
-  snyk_scan_deps_licences:
+  snyk_scan:
+    name: "Snyk scan"
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -23,51 +24,44 @@ jobs:
       deployments: write
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: ${{ secrets.AWS_ROLE_NAME_SNYK_SECRET }}
           app_name: 'swift-engine-toolkit'
-          step_name: 'snyk-scan-deps-licenses'
+          step_name: 'snyk-scan'
           secret_prefix: 'SNYK'
           secret_name: ${{ secrets.AWS_SECRET_NAME_SNYK }}
           parse_json: true
-      - name: Run Snyk to check for deps vulnerabilities
-        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        with:
-          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
-
-  snyk_scan_code:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      pull-requests: read
-      contents: read
-      deployments: write
-    steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: ${{ secrets.AWS_ROLE_NAME_SNYK_SECRET }}
-          app_name: 'swift-engine-toolkit'
-          step_name: 'snyk-scan-code'
-          secret_prefix: 'SNYK'
-          secret_name: ${{ secrets.AWS_SECRET_NAME_SNYK }}
-          parse_json: true
-      - name: Run Snyk to check for code vulnerabilities
-        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        with:
-          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
-          command: code test
+      - name: Install snyk
+        run: |
+          npm install snyk -g
+          snyk -v
+          snyk auth ${{ env.SNYK_TOKEN }}
+      - name: Snyk deps and licences scan
+        run: |
+          snyk test --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
+      - name: Snyk code scan
+        run: |
+          snyk code test --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
 
   snyk_sbom:
+    name: "Snyk SBOM"
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       pull-requests: read
       contents: read
       deployments: write
+    needs:
+      - snyk_scan
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: ${{ secrets.AWS_ROLE_NAME_SNYK_SECRET }}
@@ -76,12 +70,16 @@ jobs:
           secret_prefix: 'SNYK'
           secret_name: ${{ secrets.AWS_SECRET_NAME_SNYK }}
           parse_json: true
+      - name: Install snyk
+        run: |
+          npm install snyk -g
+          snyk -v
+          snyk auth ${{ env.SNYK_TOKEN }}
       - name: Generate SBOM # check SBOM can be generated but nothing is done with it
-        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        with:
-          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json --json-file-output sbom.json
-          command: sbom
+        run: |
+          snyk sbom --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json --json-file-output sbom.json
       - name: Upload SBOM
+        if: github.event_name == 'release'
         uses: AButler/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a # v2.0.2
         with:
           files: sbom.json
@@ -91,8 +89,7 @@ jobs:
     name: "Unit tests"
     runs-on: macos-12
     needs:
-      - snyk_scan_deps_licences
-      - snyk_scan_code
+      - snyk_scan
     strategy:
       matrix:
         platform:
@@ -116,11 +113,12 @@ jobs:
           action: test
           platform: ${{ matrix.platform }}
 
-  snyk-monitor:
+  snyk_monitor:
+    name: "Snyk monitoring"
     runs-on: ubuntu-latest
-    #if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+   # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs:
-      - unit_tests
+      - test-and-build
     permissions:
       id-token: write
       pull-requests: read
@@ -128,16 +126,22 @@ jobs:
       deployments: write
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: ${{ secrets.AWS_ROLE_NAME_SNYK_SECRET }}
           app_name: 'swift-engine-toolkit'
-          step_name: 'snyk-monitor'
+          step_name: 'snyk-sbom'
           secret_prefix: 'SNYK'
           secret_name: ${{ secrets.AWS_SECRET_NAME_SNYK }}
           parse_json: true
+      - name: Install snyk
+        run: |
+          npm install snyk -g
+          snyk -v
+          snyk auth ${{ env.SNYK_TOKEN }}
       - name: Enable Snyk online monitoring to check for vulnerabilities
-        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        with:
-          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --target-reference=${{ github.ref_name }}
-          command: monitor
+        run: |
+          snyk monitor --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }}
