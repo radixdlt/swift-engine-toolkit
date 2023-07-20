@@ -43,9 +43,10 @@ jobs:
       - name: Snyk deps and licences scan
         run: |
           snyk test --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
-      - name: Snyk code scan
-        run: |
-          snyk code test --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high -d
+# snyk code test for this project runs in endless loop
+#      - name: Snyk code scan
+#        run: |
+#          snyk code test --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high -d
 
   snyk_sbom:
     name: "Snyk SBOM"
