@@ -10569,130 +10569,6 @@ extension TypedAccessRulesPackageEvent: Equatable, Hashable {}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedAccountBlueprintEvent {
-    
-}
-
-public struct FfiConverterTypeTypedAccountBlueprintEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedAccountBlueprintEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedAccountBlueprintEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedAccountBlueprintEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedAccountBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedAccountBlueprintEvent {
-    return try FfiConverterTypeTypedAccountBlueprintEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedAccountBlueprintEvent_lower(_ value: TypedAccountBlueprintEvent) -> RustBuffer {
-    return FfiConverterTypeTypedAccountBlueprintEvent.lower(value)
-}
-
-
-extension TypedAccountBlueprintEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedAccountPackageEvent {
-    
-    case `account`(`value`: TypedAccountBlueprintEvent)
-}
-
-public struct FfiConverterTypeTypedAccountPackageEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedAccountPackageEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedAccountPackageEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`account`(
-            `value`: try FfiConverterTypeTypedAccountBlueprintEvent.read(from: &buf)
-        )
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedAccountPackageEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case let .`account`(`value`):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeTypedAccountBlueprintEvent.write(`value`, into: &buf)
-            
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedAccountPackageEvent_lift(_ buf: RustBuffer) throws -> TypedAccountPackageEvent {
-    return try FfiConverterTypeTypedAccountPackageEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedAccountPackageEvent_lower(_ value: TypedAccountPackageEvent) -> RustBuffer {
-    return FfiConverterTypeTypedAccountPackageEvent.lower(value)
-}
-
-
-extension TypedAccountPackageEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedComponentRoyaltyBlueprintEvent {
-    
-}
-
-public struct FfiConverterTypeTypedComponentRoyaltyBlueprintEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedComponentRoyaltyBlueprintEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedComponentRoyaltyBlueprintEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedComponentRoyaltyBlueprintEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedComponentRoyaltyBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedComponentRoyaltyBlueprintEvent {
-    return try FfiConverterTypeTypedComponentRoyaltyBlueprintEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedComponentRoyaltyBlueprintEvent_lower(_ value: TypedComponentRoyaltyBlueprintEvent) -> RustBuffer {
-    return FfiConverterTypeTypedComponentRoyaltyBlueprintEvent.lower(value)
-}
-
-
-extension TypedComponentRoyaltyBlueprintEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedConsensusManagerBlueprintEvent {
     
     case `roundChangeEventValue`(`value`: RoundChangeEvent)
@@ -10947,92 +10823,6 @@ public func FfiConverterTypeTypedFungibleVaultBlueprintEvent_lower(_ value: Type
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedIdentityBlueprintEvent {
-    
-}
-
-public struct FfiConverterTypeTypedIdentityBlueprintEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedIdentityBlueprintEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedIdentityBlueprintEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedIdentityBlueprintEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedIdentityBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedIdentityBlueprintEvent {
-    return try FfiConverterTypeTypedIdentityBlueprintEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedIdentityBlueprintEvent_lower(_ value: TypedIdentityBlueprintEvent) -> RustBuffer {
-    return FfiConverterTypeTypedIdentityBlueprintEvent.lower(value)
-}
-
-
-extension TypedIdentityBlueprintEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedIdentityPackageEvent {
-    
-    case `identity`(`value`: TypedIdentityBlueprintEvent)
-}
-
-public struct FfiConverterTypeTypedIdentityPackageEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedIdentityPackageEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedIdentityPackageEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`identity`(
-            `value`: try FfiConverterTypeTypedIdentityBlueprintEvent.read(from: &buf)
-        )
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedIdentityPackageEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case let .`identity`(`value`):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeTypedIdentityBlueprintEvent.write(`value`, into: &buf)
-            
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedIdentityPackageEvent_lift(_ buf: RustBuffer) throws -> TypedIdentityPackageEvent {
-    return try FfiConverterTypeTypedIdentityPackageEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedIdentityPackageEvent_lower(_ value: TypedIdentityPackageEvent) -> RustBuffer {
-    return FfiConverterTypeTypedIdentityPackageEvent.lower(value)
-}
-
-
-extension TypedIdentityPackageEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedMetadataBlueprintEvent {
     
     case `setMetadataEventValue`(`value`: SetMetadataEvent)
@@ -11214,17 +11004,11 @@ public func FfiConverterTypeTypedMultiResourcePoolBlueprintEvent_lower(_ value: 
 public enum TypedNativeEvent {
     
     case `accessController`(`value`: TypedAccessControllerPackageEvent)
-    case `account`(`value`: TypedAccountPackageEvent)
-    case `identity`(`value`: TypedIdentityPackageEvent)
-    case `package`(`value`: TypedPackagePackageEvent)
     case `consensusManager`(`value`: TypedConsensusManagerPackageEvent)
     case `pool`(`value`: TypedPoolPackageEvent)
     case `resource`(`value`: TypedResourcePackageEvent)
-    case `transactionProcessor`(`value`: TypedTransactionProcessorPackageEvent)
-    case `transactionTracker`(`value`: TypedTransactionTrackerPackageEvent)
     case `accessRules`(`value`: TypedAccessRulesPackageEvent)
     case `metadata`(`value`: TypedMetadataPackageEvent)
-    case `royalty`(`value`: TypedRoyaltyPackageEvent)
 }
 
 public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
@@ -11238,48 +11022,24 @@ public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
             `value`: try FfiConverterTypeTypedAccessControllerPackageEvent.read(from: &buf)
         )
         
-        case 2: return .`account`(
-            `value`: try FfiConverterTypeTypedAccountPackageEvent.read(from: &buf)
-        )
-        
-        case 3: return .`identity`(
-            `value`: try FfiConverterTypeTypedIdentityPackageEvent.read(from: &buf)
-        )
-        
-        case 4: return .`package`(
-            `value`: try FfiConverterTypeTypedPackagePackageEvent.read(from: &buf)
-        )
-        
-        case 5: return .`consensusManager`(
+        case 2: return .`consensusManager`(
             `value`: try FfiConverterTypeTypedConsensusManagerPackageEvent.read(from: &buf)
         )
         
-        case 6: return .`pool`(
+        case 3: return .`pool`(
             `value`: try FfiConverterTypeTypedPoolPackageEvent.read(from: &buf)
         )
         
-        case 7: return .`resource`(
+        case 4: return .`resource`(
             `value`: try FfiConverterTypeTypedResourcePackageEvent.read(from: &buf)
         )
         
-        case 8: return .`transactionProcessor`(
-            `value`: try FfiConverterTypeTypedTransactionProcessorPackageEvent.read(from: &buf)
-        )
-        
-        case 9: return .`transactionTracker`(
-            `value`: try FfiConverterTypeTypedTransactionTrackerPackageEvent.read(from: &buf)
-        )
-        
-        case 10: return .`accessRules`(
+        case 5: return .`accessRules`(
             `value`: try FfiConverterTypeTypedAccessRulesPackageEvent.read(from: &buf)
         )
         
-        case 11: return .`metadata`(
+        case 6: return .`metadata`(
             `value`: try FfiConverterTypeTypedMetadataPackageEvent.read(from: &buf)
-        )
-        
-        case 12: return .`royalty`(
-            `value`: try FfiConverterTypeTypedRoyaltyPackageEvent.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -11295,59 +11055,29 @@ public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
             FfiConverterTypeTypedAccessControllerPackageEvent.write(`value`, into: &buf)
             
         
-        case let .`account`(`value`):
-            writeInt(&buf, Int32(2))
-            FfiConverterTypeTypedAccountPackageEvent.write(`value`, into: &buf)
-            
-        
-        case let .`identity`(`value`):
-            writeInt(&buf, Int32(3))
-            FfiConverterTypeTypedIdentityPackageEvent.write(`value`, into: &buf)
-            
-        
-        case let .`package`(`value`):
-            writeInt(&buf, Int32(4))
-            FfiConverterTypeTypedPackagePackageEvent.write(`value`, into: &buf)
-            
-        
         case let .`consensusManager`(`value`):
-            writeInt(&buf, Int32(5))
+            writeInt(&buf, Int32(2))
             FfiConverterTypeTypedConsensusManagerPackageEvent.write(`value`, into: &buf)
             
         
         case let .`pool`(`value`):
-            writeInt(&buf, Int32(6))
+            writeInt(&buf, Int32(3))
             FfiConverterTypeTypedPoolPackageEvent.write(`value`, into: &buf)
             
         
         case let .`resource`(`value`):
-            writeInt(&buf, Int32(7))
+            writeInt(&buf, Int32(4))
             FfiConverterTypeTypedResourcePackageEvent.write(`value`, into: &buf)
             
         
-        case let .`transactionProcessor`(`value`):
-            writeInt(&buf, Int32(8))
-            FfiConverterTypeTypedTransactionProcessorPackageEvent.write(`value`, into: &buf)
-            
-        
-        case let .`transactionTracker`(`value`):
-            writeInt(&buf, Int32(9))
-            FfiConverterTypeTypedTransactionTrackerPackageEvent.write(`value`, into: &buf)
-            
-        
         case let .`accessRules`(`value`):
-            writeInt(&buf, Int32(10))
+            writeInt(&buf, Int32(5))
             FfiConverterTypeTypedAccessRulesPackageEvent.write(`value`, into: &buf)
             
         
         case let .`metadata`(`value`):
-            writeInt(&buf, Int32(11))
+            writeInt(&buf, Int32(6))
             FfiConverterTypeTypedMetadataPackageEvent.write(`value`, into: &buf)
-            
-        
-        case let .`royalty`(`value`):
-            writeInt(&buf, Int32(12))
-            FfiConverterTypeTypedRoyaltyPackageEvent.write(`value`, into: &buf)
             
         }
     }
@@ -11585,92 +11315,6 @@ public func FfiConverterTypeTypedOneResourcePoolBlueprintEvent_lower(_ value: Ty
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedPackageBlueprintEvent {
-    
-}
-
-public struct FfiConverterTypeTypedPackageBlueprintEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedPackageBlueprintEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedPackageBlueprintEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedPackageBlueprintEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedPackageBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedPackageBlueprintEvent {
-    return try FfiConverterTypeTypedPackageBlueprintEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedPackageBlueprintEvent_lower(_ value: TypedPackageBlueprintEvent) -> RustBuffer {
-    return FfiConverterTypeTypedPackageBlueprintEvent.lower(value)
-}
-
-
-extension TypedPackageBlueprintEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedPackagePackageEvent {
-    
-    case `package`(`value`: TypedPackageBlueprintEvent)
-}
-
-public struct FfiConverterTypeTypedPackagePackageEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedPackagePackageEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedPackagePackageEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`package`(
-            `value`: try FfiConverterTypeTypedPackageBlueprintEvent.read(from: &buf)
-        )
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedPackagePackageEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case let .`package`(`value`):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeTypedPackageBlueprintEvent.write(`value`, into: &buf)
-            
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedPackagePackageEvent_lift(_ buf: RustBuffer) throws -> TypedPackagePackageEvent {
-    return try FfiConverterTypeTypedPackagePackageEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedPackagePackageEvent_lower(_ value: TypedPackagePackageEvent) -> RustBuffer {
-    return FfiConverterTypeTypedPackagePackageEvent.lower(value)
-}
-
-
-extension TypedPackagePackageEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedPoolPackageEvent {
     
     case `oneResourcePool`(`value`: TypedOneResourcePoolBlueprintEvent)
@@ -11808,226 +11452,6 @@ public func FfiConverterTypeTypedResourcePackageEvent_lower(_ value: TypedResour
     return FfiConverterTypeTypedResourcePackageEvent.lower(value)
 }
 
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedRoyaltyPackageEvent {
-    
-    case `componentRoyalty`(`value`: TypedComponentRoyaltyBlueprintEvent)
-}
-
-public struct FfiConverterTypeTypedRoyaltyPackageEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedRoyaltyPackageEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedRoyaltyPackageEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`componentRoyalty`(
-            `value`: try FfiConverterTypeTypedComponentRoyaltyBlueprintEvent.read(from: &buf)
-        )
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedRoyaltyPackageEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case let .`componentRoyalty`(`value`):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeTypedComponentRoyaltyBlueprintEvent.write(`value`, into: &buf)
-            
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedRoyaltyPackageEvent_lift(_ buf: RustBuffer) throws -> TypedRoyaltyPackageEvent {
-    return try FfiConverterTypeTypedRoyaltyPackageEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedRoyaltyPackageEvent_lower(_ value: TypedRoyaltyPackageEvent) -> RustBuffer {
-    return FfiConverterTypeTypedRoyaltyPackageEvent.lower(value)
-}
-
-
-extension TypedRoyaltyPackageEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedTransactionProcessorBlueprintEvent {
-    
-}
-
-public struct FfiConverterTypeTypedTransactionProcessorBlueprintEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedTransactionProcessorBlueprintEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedTransactionProcessorBlueprintEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedTransactionProcessorBlueprintEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedTransactionProcessorBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedTransactionProcessorBlueprintEvent {
-    return try FfiConverterTypeTypedTransactionProcessorBlueprintEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedTransactionProcessorBlueprintEvent_lower(_ value: TypedTransactionProcessorBlueprintEvent) -> RustBuffer {
-    return FfiConverterTypeTypedTransactionProcessorBlueprintEvent.lower(value)
-}
-
-
-extension TypedTransactionProcessorBlueprintEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedTransactionProcessorPackageEvent {
-    
-    case `transactionProcessor`(`value`: TypedTransactionProcessorBlueprintEvent)
-}
-
-public struct FfiConverterTypeTypedTransactionProcessorPackageEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedTransactionProcessorPackageEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedTransactionProcessorPackageEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`transactionProcessor`(
-            `value`: try FfiConverterTypeTypedTransactionProcessorBlueprintEvent.read(from: &buf)
-        )
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedTransactionProcessorPackageEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case let .`transactionProcessor`(`value`):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeTypedTransactionProcessorBlueprintEvent.write(`value`, into: &buf)
-            
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedTransactionProcessorPackageEvent_lift(_ buf: RustBuffer) throws -> TypedTransactionProcessorPackageEvent {
-    return try FfiConverterTypeTypedTransactionProcessorPackageEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedTransactionProcessorPackageEvent_lower(_ value: TypedTransactionProcessorPackageEvent) -> RustBuffer {
-    return FfiConverterTypeTypedTransactionProcessorPackageEvent.lower(value)
-}
-
-
-extension TypedTransactionProcessorPackageEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedTransactionTrackerBlueprintEvent {
-    
-}
-
-public struct FfiConverterTypeTypedTransactionTrackerBlueprintEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedTransactionTrackerBlueprintEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedTransactionTrackerBlueprintEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedTransactionTrackerBlueprintEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedTransactionTrackerBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedTransactionTrackerBlueprintEvent {
-    return try FfiConverterTypeTypedTransactionTrackerBlueprintEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedTransactionTrackerBlueprintEvent_lower(_ value: TypedTransactionTrackerBlueprintEvent) -> RustBuffer {
-    return FfiConverterTypeTypedTransactionTrackerBlueprintEvent.lower(value)
-}
-
-
-extension TypedTransactionTrackerBlueprintEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedTransactionTrackerPackageEvent {
-    
-    case `transactionTracker`(`value`: TypedTransactionTrackerBlueprintEvent)
-}
-
-public struct FfiConverterTypeTypedTransactionTrackerPackageEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedTransactionTrackerPackageEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedTransactionTrackerPackageEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`transactionTracker`(
-            `value`: try FfiConverterTypeTypedTransactionTrackerBlueprintEvent.read(from: &buf)
-        )
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedTransactionTrackerPackageEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case let .`transactionTracker`(`value`):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeTypedTransactionTrackerBlueprintEvent.write(`value`, into: &buf)
-            
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedTransactionTrackerPackageEvent_lift(_ buf: RustBuffer) throws -> TypedTransactionTrackerPackageEvent {
-    return try FfiConverterTypeTypedTransactionTrackerPackageEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedTransactionTrackerPackageEvent_lower(_ value: TypedTransactionTrackerPackageEvent) -> RustBuffer {
-    return FfiConverterTypeTypedTransactionTrackerPackageEvent.lower(value)
-}
-
-
-extension TypedTransactionTrackerPackageEvent: Equatable, Hashable {}
 
 
 
