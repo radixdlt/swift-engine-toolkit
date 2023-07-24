@@ -3615,6 +3615,44 @@ public func FfiConverterTypeValidationConfig_lower(_ value: ValidationConfig) ->
 }
 
 
+public struct AuthorizedDepositorsChanges {
+    public var `added`: [ResourceOrNonFungible]
+    public var `removed`: [ResourceOrNonFungible]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`added`: [ResourceOrNonFungible], `removed`: [ResourceOrNonFungible]) {
+        self.`added` = `added`
+        self.`removed` = `removed`
+    }
+}
+
+
+
+public struct FfiConverterTypeAuthorizedDepositorsChanges: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AuthorizedDepositorsChanges {
+        return try AuthorizedDepositorsChanges(
+            `added`: FfiConverterSequenceTypeResourceOrNonFungible.read(from: &buf), 
+            `removed`: FfiConverterSequenceTypeResourceOrNonFungible.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AuthorizedDepositorsChanges, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypeResourceOrNonFungible.write(value.`added`, into: &buf)
+        FfiConverterSequenceTypeResourceOrNonFungible.write(value.`removed`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeAuthorizedDepositorsChanges_lift(_ buf: RustBuffer) throws -> AuthorizedDepositorsChanges {
+    return try FfiConverterTypeAuthorizedDepositorsChanges.lift(buf)
+}
+
+public func FfiConverterTypeAuthorizedDepositorsChanges_lower(_ value: AuthorizedDepositorsChanges) -> RustBuffer {
+    return FfiConverterTypeAuthorizedDepositorsChanges.lower(value)
+}
+
+
 public struct BadgeWithdrawEvent {
     public var `proposer`: Proposer
 
@@ -4153,14 +4191,14 @@ public func FfiConverterTypeEventTypeIdentifier_lower(_ value: EventTypeIdentifi
 public struct ExecutionAnalysis {
     public var `feeLocks`: FeeLocks
     public var `feeSummary`: FeeSummary
-    public var `transactionType`: TransactionType
+    public var `transactionTypes`: [TransactionType]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`feeLocks`: FeeLocks, `feeSummary`: FeeSummary, `transactionType`: TransactionType) {
+    public init(`feeLocks`: FeeLocks, `feeSummary`: FeeSummary, `transactionTypes`: [TransactionType]) {
         self.`feeLocks` = `feeLocks`
         self.`feeSummary` = `feeSummary`
-        self.`transactionType` = `transactionType`
+        self.`transactionTypes` = `transactionTypes`
     }
 }
 
@@ -4171,14 +4209,14 @@ public struct FfiConverterTypeExecutionAnalysis: FfiConverterRustBuffer {
         return try ExecutionAnalysis(
             `feeLocks`: FfiConverterTypeFeeLocks.read(from: &buf), 
             `feeSummary`: FfiConverterTypeFeeSummary.read(from: &buf), 
-            `transactionType`: FfiConverterTypeTransactionType.read(from: &buf)
+            `transactionTypes`: FfiConverterSequenceTypeTransactionType.read(from: &buf)
         )
     }
 
     public static func write(_ value: ExecutionAnalysis, into buf: inout [UInt8]) {
         FfiConverterTypeFeeLocks.write(value.`feeLocks`, into: &buf)
         FfiConverterTypeFeeSummary.write(value.`feeSummary`, into: &buf)
-        FfiConverterTypeTransactionType.write(value.`transactionType`, into: &buf)
+        FfiConverterSequenceTypeTransactionType.write(value.`transactionTypes`, into: &buf)
     }
 }
 
@@ -6758,6 +6796,65 @@ public func FfiConverterTypeVaultCreationEvent_lift(_ buf: RustBuffer) throws ->
 public func FfiConverterTypeVaultCreationEvent_lower(_ value: VaultCreationEvent) -> RustBuffer {
     return FfiConverterTypeVaultCreationEvent.lower(value)
 }
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum AccountDefaultDepositRule {
+    
+    case `accept`
+    case `reject`
+    case `allowExisting`
+}
+
+public struct FfiConverterTypeAccountDefaultDepositRule: FfiConverterRustBuffer {
+    typealias SwiftType = AccountDefaultDepositRule
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountDefaultDepositRule {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`accept`
+        
+        case 2: return .`reject`
+        
+        case 3: return .`allowExisting`
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: AccountDefaultDepositRule, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .`accept`:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .`reject`:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .`allowExisting`:
+            writeInt(&buf, Int32(3))
+        
+        }
+    }
+}
+
+
+public func FfiConverterTypeAccountDefaultDepositRule_lift(_ buf: RustBuffer) throws -> AccountDefaultDepositRule {
+    return try FfiConverterTypeAccountDefaultDepositRule.lift(buf)
+}
+
+public func FfiConverterTypeAccountDefaultDepositRule_lower(_ value: AccountDefaultDepositRule) -> RustBuffer {
+    return FfiConverterTypeAccountDefaultDepositRule.lower(value)
+}
+
+
+extension AccountDefaultDepositRule: Equatable, Hashable {}
+
+
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
@@ -9664,6 +9761,121 @@ public func FfiConverterTypeRecallResourceEvent_lower(_ value: RecallResourceEve
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ResourceDepositRule {
+    
+    case `neither`
+    case `allowed`
+    case `disallowed`
+}
+
+public struct FfiConverterTypeResourceDepositRule: FfiConverterRustBuffer {
+    typealias SwiftType = ResourceDepositRule
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ResourceDepositRule {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`neither`
+        
+        case 2: return .`allowed`
+        
+        case 3: return .`disallowed`
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ResourceDepositRule, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .`neither`:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .`allowed`:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .`disallowed`:
+            writeInt(&buf, Int32(3))
+        
+        }
+    }
+}
+
+
+public func FfiConverterTypeResourceDepositRule_lift(_ buf: RustBuffer) throws -> ResourceDepositRule {
+    return try FfiConverterTypeResourceDepositRule.lift(buf)
+}
+
+public func FfiConverterTypeResourceDepositRule_lower(_ value: ResourceDepositRule) -> RustBuffer {
+    return FfiConverterTypeResourceDepositRule.lower(value)
+}
+
+
+extension ResourceDepositRule: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ResourceOrNonFungible {
+    
+    case `nonFungible`(`value`: NonFungibleGlobalId)
+    case `resource`(`value`: Address)
+}
+
+public struct FfiConverterTypeResourceOrNonFungible: FfiConverterRustBuffer {
+    typealias SwiftType = ResourceOrNonFungible
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ResourceOrNonFungible {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`nonFungible`(
+            `value`: try FfiConverterTypeNonFungibleGlobalId.read(from: &buf)
+        )
+        
+        case 2: return .`resource`(
+            `value`: try FfiConverterTypeAddress.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ResourceOrNonFungible, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`nonFungible`(`value`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeNonFungibleGlobalId.write(`value`, into: &buf)
+            
+        
+        case let .`resource`(`value`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeAddress.write(`value`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeResourceOrNonFungible_lift(_ buf: RustBuffer) throws -> ResourceOrNonFungible {
+    return try FfiConverterTypeResourceOrNonFungible.lift(buf)
+}
+
+public func FfiConverterTypeResourceOrNonFungible_lower(_ value: ResourceOrNonFungible) -> RustBuffer {
+    return FfiConverterTypeResourceOrNonFungible.lower(value)
+}
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum ResourceSpecifier {
     
     case `amount`(`resourceAddress`: Address, `amount`: Decimal)
@@ -10162,8 +10374,8 @@ public enum TransactionType {
     
     case `simpleTransfer`(`from`: Address, `to`: Address, `transferred`: ResourceSpecifier)
     case `transfer`(`from`: Address, `transfers`: [String: [String: Resources]])
+    case `accountDepositSettings`(`resourcePreferenceChanges`: [String: [String: ResourceDepositRule]], `defaultDepositRuleChanges`: [String: AccountDefaultDepositRule], `authorizedDepositorsChanges`: [String: AuthorizedDepositorsChanges])
     case `generalTransaction`(`accountProofs`: [Address], `accountWithdraws`: [String: [ResourceTracker]], `accountDeposits`: [String: [ResourceTracker]], `addressesInManifest`: [EntityType: [Address]], `metadataOfNewlyCreatedEntities`: [String: [String: MetadataValue]], `dataOfNewlyMintedNonFungibles`: [String: [NonFungibleLocalId: [UInt8]]])
-    case `nonConforming`
 }
 
 public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
@@ -10184,7 +10396,13 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             `transfers`: try FfiConverterDictionaryStringDictionaryStringTypeResources.read(from: &buf)
         )
         
-        case 3: return .`generalTransaction`(
+        case 3: return .`accountDepositSettings`(
+            `resourcePreferenceChanges`: try FfiConverterDictionaryStringDictionaryStringTypeResourceDepositRule.read(from: &buf), 
+            `defaultDepositRuleChanges`: try FfiConverterDictionaryStringTypeAccountDefaultDepositRule.read(from: &buf), 
+            `authorizedDepositorsChanges`: try FfiConverterDictionaryStringTypeAuthorizedDepositorsChanges.read(from: &buf)
+        )
+        
+        case 4: return .`generalTransaction`(
             `accountProofs`: try FfiConverterSequenceTypeAddress.read(from: &buf), 
             `accountWithdraws`: try FfiConverterDictionaryStringSequenceTypeResourceTracker.read(from: &buf), 
             `accountDeposits`: try FfiConverterDictionaryStringSequenceTypeResourceTracker.read(from: &buf), 
@@ -10192,8 +10410,6 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             `metadataOfNewlyCreatedEntities`: try FfiConverterDictionaryStringDictionaryStringTypeMetadataValue.read(from: &buf), 
             `dataOfNewlyMintedNonFungibles`: try FfiConverterDictionaryStringDictionaryTypeNonFungibleLocalIdSequenceUInt8.read(from: &buf)
         )
-        
-        case 4: return .`nonConforming`
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -10216,8 +10432,15 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             FfiConverterDictionaryStringDictionaryStringTypeResources.write(`transfers`, into: &buf)
             
         
-        case let .`generalTransaction`(`accountProofs`,`accountWithdraws`,`accountDeposits`,`addressesInManifest`,`metadataOfNewlyCreatedEntities`,`dataOfNewlyMintedNonFungibles`):
+        case let .`accountDepositSettings`(`resourcePreferenceChanges`,`defaultDepositRuleChanges`,`authorizedDepositorsChanges`):
             writeInt(&buf, Int32(3))
+            FfiConverterDictionaryStringDictionaryStringTypeResourceDepositRule.write(`resourcePreferenceChanges`, into: &buf)
+            FfiConverterDictionaryStringTypeAccountDefaultDepositRule.write(`defaultDepositRuleChanges`, into: &buf)
+            FfiConverterDictionaryStringTypeAuthorizedDepositorsChanges.write(`authorizedDepositorsChanges`, into: &buf)
+            
+        
+        case let .`generalTransaction`(`accountProofs`,`accountWithdraws`,`accountDeposits`,`addressesInManifest`,`metadataOfNewlyCreatedEntities`,`dataOfNewlyMintedNonFungibles`):
+            writeInt(&buf, Int32(4))
             FfiConverterSequenceTypeAddress.write(`accountProofs`, into: &buf)
             FfiConverterDictionaryStringSequenceTypeResourceTracker.write(`accountWithdraws`, into: &buf)
             FfiConverterDictionaryStringSequenceTypeResourceTracker.write(`accountDeposits`, into: &buf)
@@ -10225,10 +10448,6 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             FfiConverterDictionaryStringDictionaryStringTypeMetadataValue.write(`metadataOfNewlyCreatedEntities`, into: &buf)
             FfiConverterDictionaryStringDictionaryTypeNonFungibleLocalIdSequenceUInt8.write(`dataOfNewlyMintedNonFungibles`, into: &buf)
             
-        
-        case .`nonConforming`:
-            writeInt(&buf, Int32(4))
-        
         }
     }
 }
@@ -13005,6 +13224,28 @@ fileprivate struct FfiConverterSequenceTypePublicKeyHash: FfiConverterRustBuffer
     }
 }
 
+fileprivate struct FfiConverterSequenceTypeResourceOrNonFungible: FfiConverterRustBuffer {
+    typealias SwiftType = [ResourceOrNonFungible]
+
+    public static func write(_ value: [ResourceOrNonFungible], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeResourceOrNonFungible.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [ResourceOrNonFungible] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [ResourceOrNonFungible]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeResourceOrNonFungible.read(from: &buf))
+        }
+        return seq
+    }
+}
+
 fileprivate struct FfiConverterSequenceTypeResourceTracker: FfiConverterRustBuffer {
     typealias SwiftType = [ResourceTracker]
 
@@ -13044,6 +13285,28 @@ fileprivate struct FfiConverterSequenceTypeSignatureWithPublicKey: FfiConverterR
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeSignatureWithPublicKey.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+fileprivate struct FfiConverterSequenceTypeTransactionType: FfiConverterRustBuffer {
+    typealias SwiftType = [TransactionType]
+
+    public static func write(_ value: [TransactionType], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeTransactionType.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [TransactionType] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [TransactionType]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeTransactionType.read(from: &buf))
         }
         return seq
     }
@@ -13094,6 +13357,29 @@ fileprivate struct FfiConverterDictionaryStringTypeDecimal: FfiConverterRustBuff
     }
 }
 
+fileprivate struct FfiConverterDictionaryStringTypeAuthorizedDepositorsChanges: FfiConverterRustBuffer {
+    public static func write(_ value: [String: AuthorizedDepositorsChanges], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterTypeAuthorizedDepositorsChanges.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: AuthorizedDepositorsChanges] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: AuthorizedDepositorsChanges]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterTypeAuthorizedDepositorsChanges.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 fileprivate struct FfiConverterDictionaryStringTypeValidatorInfo: FfiConverterRustBuffer {
     public static func write(_ value: [String: ValidatorInfo], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -13117,6 +13403,29 @@ fileprivate struct FfiConverterDictionaryStringTypeValidatorInfo: FfiConverterRu
     }
 }
 
+fileprivate struct FfiConverterDictionaryStringTypeAccountDefaultDepositRule: FfiConverterRustBuffer {
+    public static func write(_ value: [String: AccountDefaultDepositRule], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterTypeAccountDefaultDepositRule.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: AccountDefaultDepositRule] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: AccountDefaultDepositRule]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterTypeAccountDefaultDepositRule.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 fileprivate struct FfiConverterDictionaryStringTypeMetadataValue: FfiConverterRustBuffer {
     public static func write(_ value: [String: MetadataValue], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -13134,6 +13443,29 @@ fileprivate struct FfiConverterDictionaryStringTypeMetadataValue: FfiConverterRu
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
             let value = try FfiConverterTypeMetadataValue.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+fileprivate struct FfiConverterDictionaryStringTypeResourceDepositRule: FfiConverterRustBuffer {
+    public static func write(_ value: [String: ResourceDepositRule], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterTypeResourceDepositRule.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: ResourceDepositRule] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: ResourceDepositRule]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterTypeResourceDepositRule.read(from: &buf)
             dict[key] = value
         }
         return dict
@@ -13203,6 +13535,29 @@ fileprivate struct FfiConverterDictionaryStringDictionaryStringTypeMetadataValue
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
             let value = try FfiConverterDictionaryStringTypeMetadataValue.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+fileprivate struct FfiConverterDictionaryStringDictionaryStringTypeResourceDepositRule: FfiConverterRustBuffer {
+    public static func write(_ value: [String: [String: ResourceDepositRule]], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterDictionaryStringTypeResourceDepositRule.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [String: ResourceDepositRule]] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: [String: ResourceDepositRule]]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterDictionaryStringTypeResourceDepositRule.read(from: &buf)
             dict[key] = value
         }
         return dict
