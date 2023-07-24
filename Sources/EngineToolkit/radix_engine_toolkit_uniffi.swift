@@ -5188,13 +5188,13 @@ public struct PackageAddresses {
     public var `transactionProcessorPackage`: Address
     public var `metadataModulePackage`: Address
     public var `royaltyModulePackage`: Address
-    public var `accessRulesModulePackage`: Address
+    public var `roleAssignmentModulePackage`: Address
     public var `genesisHelperPackage`: Address
     public var `faucetPackage`: Address
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`packagePackage`: Address, `resourcePackage`: Address, `accountPackage`: Address, `identityPackage`: Address, `consensusManagerPackage`: Address, `accessControllerPackage`: Address, `poolPackage`: Address, `transactionProcessorPackage`: Address, `metadataModulePackage`: Address, `royaltyModulePackage`: Address, `accessRulesModulePackage`: Address, `genesisHelperPackage`: Address, `faucetPackage`: Address) {
+    public init(`packagePackage`: Address, `resourcePackage`: Address, `accountPackage`: Address, `identityPackage`: Address, `consensusManagerPackage`: Address, `accessControllerPackage`: Address, `poolPackage`: Address, `transactionProcessorPackage`: Address, `metadataModulePackage`: Address, `royaltyModulePackage`: Address, `roleAssignmentModulePackage`: Address, `genesisHelperPackage`: Address, `faucetPackage`: Address) {
         self.`packagePackage` = `packagePackage`
         self.`resourcePackage` = `resourcePackage`
         self.`accountPackage` = `accountPackage`
@@ -5205,7 +5205,7 @@ public struct PackageAddresses {
         self.`transactionProcessorPackage` = `transactionProcessorPackage`
         self.`metadataModulePackage` = `metadataModulePackage`
         self.`royaltyModulePackage` = `royaltyModulePackage`
-        self.`accessRulesModulePackage` = `accessRulesModulePackage`
+        self.`roleAssignmentModulePackage` = `roleAssignmentModulePackage`
         self.`genesisHelperPackage` = `genesisHelperPackage`
         self.`faucetPackage` = `faucetPackage`
     }
@@ -5226,7 +5226,7 @@ public struct FfiConverterTypePackageAddresses: FfiConverterRustBuffer {
             `transactionProcessorPackage`: FfiConverterTypeAddress.read(from: &buf), 
             `metadataModulePackage`: FfiConverterTypeAddress.read(from: &buf), 
             `royaltyModulePackage`: FfiConverterTypeAddress.read(from: &buf), 
-            `accessRulesModulePackage`: FfiConverterTypeAddress.read(from: &buf), 
+            `roleAssignmentModulePackage`: FfiConverterTypeAddress.read(from: &buf), 
             `genesisHelperPackage`: FfiConverterTypeAddress.read(from: &buf), 
             `faucetPackage`: FfiConverterTypeAddress.read(from: &buf)
         )
@@ -5243,7 +5243,7 @@ public struct FfiConverterTypePackageAddresses: FfiConverterRustBuffer {
         FfiConverterTypeAddress.write(value.`transactionProcessorPackage`, into: &buf)
         FfiConverterTypeAddress.write(value.`metadataModulePackage`, into: &buf)
         FfiConverterTypeAddress.write(value.`royaltyModulePackage`, into: &buf)
-        FfiConverterTypeAddress.write(value.`accessRulesModulePackage`, into: &buf)
+        FfiConverterTypeAddress.write(value.`roleAssignmentModulePackage`, into: &buf)
         FfiConverterTypeAddress.write(value.`genesisHelperPackage`, into: &buf)
         FfiConverterTypeAddress.write(value.`faucetPackage`, into: &buf)
     }
@@ -7399,7 +7399,7 @@ public enum Instruction {
     case `callMethod`(`address`: ManifestAddress, `methodName`: String, `args`: ManifestValue)
     case `callRoyaltyMethod`(`address`: ManifestAddress, `methodName`: String, `args`: ManifestValue)
     case `callMetadataMethod`(`address`: ManifestAddress, `methodName`: String, `args`: ManifestValue)
-    case `callAccessRulesMethod`(`address`: ManifestAddress, `methodName`: String, `args`: ManifestValue)
+    case `callRoleAssignmentMethod`(`address`: ManifestAddress, `methodName`: String, `args`: ManifestValue)
     case `callDirectVaultMethod`(`address`: Address, `methodName`: String, `args`: ManifestValue)
     case `dropAllProofs`
     case `allocateGlobalAddress`(`packageAddress`: Address, `blueprintName`: String)
@@ -7519,7 +7519,7 @@ public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
             `args`: try FfiConverterTypeManifestValue.read(from: &buf)
         )
         
-        case 25: return .`callAccessRulesMethod`(
+        case 25: return .`callRoleAssignmentMethod`(
             `address`: try FfiConverterTypeManifestAddress.read(from: &buf), 
             `methodName`: try FfiConverterString.read(from: &buf), 
             `args`: try FfiConverterTypeManifestValue.read(from: &buf)
@@ -7680,7 +7680,7 @@ public struct FfiConverterTypeInstruction: FfiConverterRustBuffer {
             FfiConverterTypeManifestValue.write(`args`, into: &buf)
             
         
-        case let .`callAccessRulesMethod`(`address`,`methodName`,`args`):
+        case let .`callRoleAssignmentMethod`(`address`,`methodName`,`args`):
             writeInt(&buf, Int32(25))
             FfiConverterTypeManifestAddress.write(`address`, into: &buf)
             FfiConverterString.write(`methodName`, into: &buf)
@@ -9071,7 +9071,7 @@ public enum ObjectModuleId {
     case `main`
     case `metadata`
     case `royalty`
-    case `accessRules`
+    case `roleAssignment`
 }
 
 public struct FfiConverterTypeObjectModuleId: FfiConverterRustBuffer {
@@ -9087,7 +9087,7 @@ public struct FfiConverterTypeObjectModuleId: FfiConverterRustBuffer {
         
         case 3: return .`royalty`
         
-        case 4: return .`accessRules`
+        case 4: return .`roleAssignment`
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -9109,7 +9109,7 @@ public struct FfiConverterTypeObjectModuleId: FfiConverterRustBuffer {
             writeInt(&buf, Int32(3))
         
         
-        case .`accessRules`:
+        case .`roleAssignment`:
             writeInt(&buf, Int32(4))
         
         }
@@ -10423,152 +10423,6 @@ extension TypedAccessControllerPackageEvent: Equatable, Hashable {}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedAccessRulesBlueprintEvent {
-    
-    case `setRoleEventValue`(`value`: SetRoleEvent)
-    case `lockRoleEventValue`(`value`: LockRoleEvent)
-    case `setAndLockRoleEventValue`(`value`: SetAndLockRoleEvent)
-    case `setOwnerRoleEventValue`(`value`: SetOwnerRoleEvent)
-    case `lockOwnerRoleEventValue`(`value`: LockOwnerRoleEvent)
-    case `setAndLockOwnerRoleEventValue`(`value`: SetAndLockOwnerRoleEvent)
-}
-
-public struct FfiConverterTypeTypedAccessRulesBlueprintEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedAccessRulesBlueprintEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedAccessRulesBlueprintEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`setRoleEventValue`(
-            `value`: try FfiConverterTypeSetRoleEvent.read(from: &buf)
-        )
-        
-        case 2: return .`lockRoleEventValue`(
-            `value`: try FfiConverterTypeLockRoleEvent.read(from: &buf)
-        )
-        
-        case 3: return .`setAndLockRoleEventValue`(
-            `value`: try FfiConverterTypeSetAndLockRoleEvent.read(from: &buf)
-        )
-        
-        case 4: return .`setOwnerRoleEventValue`(
-            `value`: try FfiConverterTypeSetOwnerRoleEvent.read(from: &buf)
-        )
-        
-        case 5: return .`lockOwnerRoleEventValue`(
-            `value`: try FfiConverterTypeLockOwnerRoleEvent.read(from: &buf)
-        )
-        
-        case 6: return .`setAndLockOwnerRoleEventValue`(
-            `value`: try FfiConverterTypeSetAndLockOwnerRoleEvent.read(from: &buf)
-        )
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedAccessRulesBlueprintEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case let .`setRoleEventValue`(`value`):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeSetRoleEvent.write(`value`, into: &buf)
-            
-        
-        case let .`lockRoleEventValue`(`value`):
-            writeInt(&buf, Int32(2))
-            FfiConverterTypeLockRoleEvent.write(`value`, into: &buf)
-            
-        
-        case let .`setAndLockRoleEventValue`(`value`):
-            writeInt(&buf, Int32(3))
-            FfiConverterTypeSetAndLockRoleEvent.write(`value`, into: &buf)
-            
-        
-        case let .`setOwnerRoleEventValue`(`value`):
-            writeInt(&buf, Int32(4))
-            FfiConverterTypeSetOwnerRoleEvent.write(`value`, into: &buf)
-            
-        
-        case let .`lockOwnerRoleEventValue`(`value`):
-            writeInt(&buf, Int32(5))
-            FfiConverterTypeLockOwnerRoleEvent.write(`value`, into: &buf)
-            
-        
-        case let .`setAndLockOwnerRoleEventValue`(`value`):
-            writeInt(&buf, Int32(6))
-            FfiConverterTypeSetAndLockOwnerRoleEvent.write(`value`, into: &buf)
-            
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedAccessRulesBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedAccessRulesBlueprintEvent {
-    return try FfiConverterTypeTypedAccessRulesBlueprintEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedAccessRulesBlueprintEvent_lower(_ value: TypedAccessRulesBlueprintEvent) -> RustBuffer {
-    return FfiConverterTypeTypedAccessRulesBlueprintEvent.lower(value)
-}
-
-
-extension TypedAccessRulesBlueprintEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum TypedAccessRulesPackageEvent {
-    
-    case `accessRules`(`value`: TypedAccessRulesBlueprintEvent)
-}
-
-public struct FfiConverterTypeTypedAccessRulesPackageEvent: FfiConverterRustBuffer {
-    typealias SwiftType = TypedAccessRulesPackageEvent
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedAccessRulesPackageEvent {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`accessRules`(
-            `value`: try FfiConverterTypeTypedAccessRulesBlueprintEvent.read(from: &buf)
-        )
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: TypedAccessRulesPackageEvent, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case let .`accessRules`(`value`):
-            writeInt(&buf, Int32(1))
-            FfiConverterTypeTypedAccessRulesBlueprintEvent.write(`value`, into: &buf)
-            
-        }
-    }
-}
-
-
-public func FfiConverterTypeTypedAccessRulesPackageEvent_lift(_ buf: RustBuffer) throws -> TypedAccessRulesPackageEvent {
-    return try FfiConverterTypeTypedAccessRulesPackageEvent.lift(buf)
-}
-
-public func FfiConverterTypeTypedAccessRulesPackageEvent_lower(_ value: TypedAccessRulesPackageEvent) -> RustBuffer {
-    return FfiConverterTypeTypedAccessRulesPackageEvent.lower(value)
-}
-
-
-extension TypedAccessRulesPackageEvent: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedAccountBlueprintEvent {
     
 }
@@ -11222,7 +11076,7 @@ public enum TypedNativeEvent {
     case `resource`(`value`: TypedResourcePackageEvent)
     case `transactionProcessor`(`value`: TypedTransactionProcessorPackageEvent)
     case `transactionTracker`(`value`: TypedTransactionTrackerPackageEvent)
-    case `accessRules`(`value`: TypedAccessRulesPackageEvent)
+    case `roleAssignment`(`value`: TypedRoleAssignmentPackageEvent)
     case `metadata`(`value`: TypedMetadataPackageEvent)
     case `royalty`(`value`: TypedRoyaltyPackageEvent)
 }
@@ -11270,8 +11124,8 @@ public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
             `value`: try FfiConverterTypeTypedTransactionTrackerPackageEvent.read(from: &buf)
         )
         
-        case 10: return .`accessRules`(
-            `value`: try FfiConverterTypeTypedAccessRulesPackageEvent.read(from: &buf)
+        case 10: return .`roleAssignment`(
+            `value`: try FfiConverterTypeTypedRoleAssignmentPackageEvent.read(from: &buf)
         )
         
         case 11: return .`metadata`(
@@ -11335,9 +11189,9 @@ public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
             FfiConverterTypeTypedTransactionTrackerPackageEvent.write(`value`, into: &buf)
             
         
-        case let .`accessRules`(`value`):
+        case let .`roleAssignment`(`value`):
             writeInt(&buf, Int32(10))
-            FfiConverterTypeTypedAccessRulesPackageEvent.write(`value`, into: &buf)
+            FfiConverterTypeTypedRoleAssignmentPackageEvent.write(`value`, into: &buf)
             
         
         case let .`metadata`(`value`):
@@ -11808,6 +11662,152 @@ public func FfiConverterTypeTypedResourcePackageEvent_lower(_ value: TypedResour
     return FfiConverterTypeTypedResourcePackageEvent.lower(value)
 }
 
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum TypedRoleAssignmentBlueprintEvent {
+    
+    case `setRoleEventValue`(`value`: SetRoleEvent)
+    case `lockRoleEventValue`(`value`: LockRoleEvent)
+    case `setAndLockRoleEventValue`(`value`: SetAndLockRoleEvent)
+    case `setOwnerRoleEventValue`(`value`: SetOwnerRoleEvent)
+    case `lockOwnerRoleEventValue`(`value`: LockOwnerRoleEvent)
+    case `setAndLockOwnerRoleEventValue`(`value`: SetAndLockOwnerRoleEvent)
+}
+
+public struct FfiConverterTypeTypedRoleAssignmentBlueprintEvent: FfiConverterRustBuffer {
+    typealias SwiftType = TypedRoleAssignmentBlueprintEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedRoleAssignmentBlueprintEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`setRoleEventValue`(
+            `value`: try FfiConverterTypeSetRoleEvent.read(from: &buf)
+        )
+        
+        case 2: return .`lockRoleEventValue`(
+            `value`: try FfiConverterTypeLockRoleEvent.read(from: &buf)
+        )
+        
+        case 3: return .`setAndLockRoleEventValue`(
+            `value`: try FfiConverterTypeSetAndLockRoleEvent.read(from: &buf)
+        )
+        
+        case 4: return .`setOwnerRoleEventValue`(
+            `value`: try FfiConverterTypeSetOwnerRoleEvent.read(from: &buf)
+        )
+        
+        case 5: return .`lockOwnerRoleEventValue`(
+            `value`: try FfiConverterTypeLockOwnerRoleEvent.read(from: &buf)
+        )
+        
+        case 6: return .`setAndLockOwnerRoleEventValue`(
+            `value`: try FfiConverterTypeSetAndLockOwnerRoleEvent.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: TypedRoleAssignmentBlueprintEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`setRoleEventValue`(`value`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeSetRoleEvent.write(`value`, into: &buf)
+            
+        
+        case let .`lockRoleEventValue`(`value`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeLockRoleEvent.write(`value`, into: &buf)
+            
+        
+        case let .`setAndLockRoleEventValue`(`value`):
+            writeInt(&buf, Int32(3))
+            FfiConverterTypeSetAndLockRoleEvent.write(`value`, into: &buf)
+            
+        
+        case let .`setOwnerRoleEventValue`(`value`):
+            writeInt(&buf, Int32(4))
+            FfiConverterTypeSetOwnerRoleEvent.write(`value`, into: &buf)
+            
+        
+        case let .`lockOwnerRoleEventValue`(`value`):
+            writeInt(&buf, Int32(5))
+            FfiConverterTypeLockOwnerRoleEvent.write(`value`, into: &buf)
+            
+        
+        case let .`setAndLockOwnerRoleEventValue`(`value`):
+            writeInt(&buf, Int32(6))
+            FfiConverterTypeSetAndLockOwnerRoleEvent.write(`value`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeTypedRoleAssignmentBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedRoleAssignmentBlueprintEvent {
+    return try FfiConverterTypeTypedRoleAssignmentBlueprintEvent.lift(buf)
+}
+
+public func FfiConverterTypeTypedRoleAssignmentBlueprintEvent_lower(_ value: TypedRoleAssignmentBlueprintEvent) -> RustBuffer {
+    return FfiConverterTypeTypedRoleAssignmentBlueprintEvent.lower(value)
+}
+
+
+extension TypedRoleAssignmentBlueprintEvent: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum TypedRoleAssignmentPackageEvent {
+    
+    case `roleAssignment`(`value`: TypedRoleAssignmentBlueprintEvent)
+}
+
+public struct FfiConverterTypeTypedRoleAssignmentPackageEvent: FfiConverterRustBuffer {
+    typealias SwiftType = TypedRoleAssignmentPackageEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedRoleAssignmentPackageEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`roleAssignment`(
+            `value`: try FfiConverterTypeTypedRoleAssignmentBlueprintEvent.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: TypedRoleAssignmentPackageEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`roleAssignment`(`value`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeTypedRoleAssignmentBlueprintEvent.write(`value`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeTypedRoleAssignmentPackageEvent_lift(_ buf: RustBuffer) throws -> TypedRoleAssignmentPackageEvent {
+    return try FfiConverterTypeTypedRoleAssignmentPackageEvent.lift(buf)
+}
+
+public func FfiConverterTypeTypedRoleAssignmentPackageEvent_lower(_ value: TypedRoleAssignmentPackageEvent) -> RustBuffer {
+    return FfiConverterTypeTypedRoleAssignmentPackageEvent.lower(value)
+}
+
+
+extension TypedRoleAssignmentPackageEvent: Equatable, Hashable {}
 
 
 
