@@ -10162,7 +10162,7 @@ public enum TransactionType {
     
     case `simpleTransfer`(`from`: Address, `to`: Address, `transferred`: ResourceSpecifier)
     case `transfer`(`from`: Address, `transfers`: [String: [String: Resources]])
-    case `generalTransaction`(`accountProofs`: [Address], `accountWithdraws`: [String: [ResourceTracker]], `accountDeposits`: [String: [ResourceTracker]], `addressesInManifest`: [EntityType: [Address]], `metadataOfNewlyCreatedEntities`: [String: [String: MetadataValue?]], `dataOfNewlyMintedNonFungibles`: [String: [NonFungibleLocalId: [UInt8]]])
+    case `generalTransaction`(`accountProofs`: [Address], `accountWithdraws`: [String: [ResourceTracker]], `accountDeposits`: [String: [ResourceTracker]], `addressesInManifest`: [EntityType: [Address]], `metadataOfNewlyCreatedEntities`: [String: [String: MetadataValue?]], `dataOfNewlyMintedNonFungibles`: [String: [NonFungibleLocalId: [UInt8]]], `addressesOfNewlyCreatedEntities`: [Address])
     case `nonConforming`
 }
 
@@ -10190,7 +10190,8 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             `accountDeposits`: try FfiConverterDictionaryStringSequenceTypeResourceTracker.read(from: &buf), 
             `addressesInManifest`: try FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress.read(from: &buf), 
             `metadataOfNewlyCreatedEntities`: try FfiConverterDictionaryStringDictionaryStringOptionTypeMetadataValue.read(from: &buf), 
-            `dataOfNewlyMintedNonFungibles`: try FfiConverterDictionaryStringDictionaryTypeNonFungibleLocalIdSequenceUInt8.read(from: &buf)
+            `dataOfNewlyMintedNonFungibles`: try FfiConverterDictionaryStringDictionaryTypeNonFungibleLocalIdSequenceUInt8.read(from: &buf), 
+            `addressesOfNewlyCreatedEntities`: try FfiConverterSequenceTypeAddress.read(from: &buf)
         )
         
         case 4: return .`nonConforming`
@@ -10216,7 +10217,7 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             FfiConverterDictionaryStringDictionaryStringTypeResources.write(`transfers`, into: &buf)
             
         
-        case let .`generalTransaction`(`accountProofs`,`accountWithdraws`,`accountDeposits`,`addressesInManifest`,`metadataOfNewlyCreatedEntities`,`dataOfNewlyMintedNonFungibles`):
+        case let .`generalTransaction`(`accountProofs`,`accountWithdraws`,`accountDeposits`,`addressesInManifest`,`metadataOfNewlyCreatedEntities`,`dataOfNewlyMintedNonFungibles`,`addressesOfNewlyCreatedEntities`):
             writeInt(&buf, Int32(3))
             FfiConverterSequenceTypeAddress.write(`accountProofs`, into: &buf)
             FfiConverterDictionaryStringSequenceTypeResourceTracker.write(`accountWithdraws`, into: &buf)
@@ -10224,6 +10225,7 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress.write(`addressesInManifest`, into: &buf)
             FfiConverterDictionaryStringDictionaryStringOptionTypeMetadataValue.write(`metadataOfNewlyCreatedEntities`, into: &buf)
             FfiConverterDictionaryStringDictionaryTypeNonFungibleLocalIdSequenceUInt8.write(`dataOfNewlyMintedNonFungibles`, into: &buf)
+            FfiConverterSequenceTypeAddress.write(`addressesOfNewlyCreatedEntities`, into: &buf)
             
         
         case .`nonConforming`:
