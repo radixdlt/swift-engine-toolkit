@@ -479,6 +479,22 @@ public class AccessRule: AccessRuleProtocol {
 
     
 
+    public static func `allowAll`()  -> AccessRule {
+        return AccessRule(unsafeFromRawPointer: try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_allow_all($0)
+})
+    }
+
+    
+
+    public static func `denyAll`()  -> AccessRule {
+        return AccessRule(unsafeFromRawPointer: try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_deny_all($0)
+})
+    }
+
+    
+
     public static func `require`(`resourceOrNonFungible`: ResourceOrNonFungible) throws -> AccessRule {
         return AccessRule(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require(
@@ -521,6 +537,15 @@ public class AccessRule: AccessRuleProtocol {
     uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_count_of(
         FfiConverterUInt8.lower(`count`),
         FfiConverterSequenceTypeResourceOrNonFungible.lower(`resources`),$0)
+})
+    }
+
+    
+
+    public static func `requireVirtualSignature`(`publicKey`: PublicKey) throws -> AccessRule {
+        return AccessRule(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_virtual_signature(
+        FfiConverterTypePublicKey.lower(`publicKey`),$0)
 })
     }
 
@@ -1734,11 +1759,14 @@ public protocol ManifestBuilderProtocol {
     func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
     func `dropAllProofs`()  throws -> ManifestBuilder
     func `dropProof`(`proof`: ManifestBuilderProof)  throws -> ManifestBuilder
-    func `freeXrdFromFaucet`()  throws -> ManifestBuilder
+    func `faucetFreeXrd`()  throws -> ManifestBuilder
+    func `faucetLockFee`()  throws -> ManifestBuilder
+    func `mintFungible`(`resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
     func `popFromAuthZone`(`intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `publishPackage`(`code`: [UInt8], `definition`: [UInt8], `metadata`: [String: MetadataInitEntry])  throws -> ManifestBuilder
     func `pushToAuthZone`(`proof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `returnToWorktop`(`bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `setRole`(`address`: Address, `module`: ObjectModuleId, `roleKey`: String, `rule`: AccessRule)  throws -> ManifestBuilder
     func `takeAllFromWorktop`(`resourceAddress`: Address, `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `takeFromWorktop`(`resourceAddress`: Address, `amount`: Decimal, `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `takeNonFungiblesFromWorktop`(`resourceAddress`: Address, `ids`: [NonFungibleLocalId], `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
@@ -2161,11 +2189,33 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `freeXrdFromFaucet`() throws -> ManifestBuilder {
+    public func `faucetFreeXrd`() throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_free_xrd_from_faucet(self.pointer, $0
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_faucet_free_xrd(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `faucetLockFee`() throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_faucet_lock_fee(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `mintFungible`(`resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_mint_fungible(self.pointer, 
+        FfiConverterTypeAddress.lower(`resourceAddress`),
+        FfiConverterTypeDecimal.lower(`amount`),$0
     )
 }
         )
@@ -2212,6 +2262,20 @@ public class ManifestBuilder: ManifestBuilderProtocol {
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_return_to_worktop(self.pointer, 
         FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `setRole`(`address`: Address, `module`: ObjectModuleId, `roleKey`: String, `rule`: AccessRule) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_set_role(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeObjectModuleId.lower(`module`),
+        FfiConverterString.lower(`roleKey`),
+        FfiConverterTypeAccessRule.lower(`rule`),$0
     )
 }
         )
@@ -15378,7 +15442,13 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_drop_proof() != 29894) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_free_xrd_from_faucet() != 43036) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_faucet_free_xrd() != 59721) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_faucet_lock_fee() != 5856) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_mint_fungible() != 41635) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_pop_from_auth_zone() != 54385) {
@@ -15391,6 +15461,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_return_to_worktop() != 48542) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_set_role() != 58550) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_take_all_from_worktop() != 61948) {
@@ -15642,6 +15715,12 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_network_id() != 63098) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_allow_all() != 26074) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_deny_all() != 40312) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require() != 10110) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -15655,6 +15734,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require_count_of() != 59472) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require_virtual_signature() != 41270) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_from_raw() != 43797) {

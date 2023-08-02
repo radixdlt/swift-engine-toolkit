@@ -91,6 +91,12 @@ typedef void (*UniFfiFutureCallbackRustBuffer)(const void * _Nonnull, RustBuffer
 // Scaffolding functions
 void uniffi_radix_engine_toolkit_uniffi_fn_free_accessrule(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_allow_all(RustCallStatus *_Nonnull out_status
+    
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_deny_all(RustCallStatus *_Nonnull out_status
+    
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require(RustBuffer resource_or_non_fungible, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_all_of(RustBuffer resources, RustCallStatus *_Nonnull out_status
@@ -100,6 +106,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_requi
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_any_of(RustBuffer resources, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_count_of(uint8_t count, RustBuffer resources, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_virtual_signature(RustBuffer public_key, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_accessrule_and(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
@@ -328,7 +336,11 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_drop_
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_drop_proof(void*_Nonnull ptr, RustBuffer proof, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_free_xrd_from_faucet(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_faucet_free_xrd(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_faucet_lock_fee(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_mint_fungible(void*_Nonnull ptr, void*_Nonnull resource_address, void*_Nonnull amount, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_pop_from_auth_zone(void*_Nonnull ptr, RustBuffer into_proof, RustCallStatus *_Nonnull out_status
 );
@@ -337,6 +349,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_publi
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_push_to_auth_zone(void*_Nonnull ptr, RustBuffer proof, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_return_to_worktop(void*_Nonnull ptr, RustBuffer bucket, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_set_role(void*_Nonnull ptr, void*_Nonnull address, RustBuffer module, RustBuffer role_key, void*_Nonnull rule, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_take_all_from_worktop(void*_Nonnull ptr, void*_Nonnull resource_address, RustBuffer into_bucket, RustCallStatus *_Nonnull out_status
 );
@@ -953,7 +967,13 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_drop
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_drop_proof(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_free_xrd_from_faucet(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_faucet_free_xrd(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_faucet_lock_fee(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_mint_fungible(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_pop_from_auth_zone(void
@@ -966,6 +986,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_push
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_return_to_worktop(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_set_role(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_take_all_from_worktop(void
@@ -1217,6 +1240,12 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_min
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_network_id(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_allow_all(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_deny_all(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require(void
     
 );
@@ -1230,6 +1259,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_requ
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require_count_of(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require_virtual_signature(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_from_raw(void
