@@ -1729,10 +1729,10 @@ public func FfiConverterTypeIntent_lower(_ value: Intent) -> UnsafeMutableRawPoi
 public protocol ManifestBuilderProtocol {
     func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `accountDepositBatch`(`accountAddress`: Address)  throws -> ManifestBuilder
-    func `accountTryDepositBatchOrAbort`(`accountAddress`: Address)  throws -> ManifestBuilder
-    func `accountTryDepositBatchOrRefund`(`accountAddress`: Address)  throws -> ManifestBuilder
-    func `accountTryDepositOrAbort`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
-    func `accountTryDepositOrRefund`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `accountTryDepositBatchOrAbort`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
+    func `accountTryDepositBatchOrRefund`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
+    func `accountTryDepositOrAbort`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `accountTryDepositOrRefund`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `allocateGlobalAddress`(`packageAddress`: Address, `blueprintName`: String, `intoAddressReservation`: ManifestBuilderAddressReservation, `intoNamedAddress`: ManifestBuilderNamedAddress)  throws -> ManifestBuilder
     func `assertWorktopContains`(`resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
     func `assertWorktopContainsAny`(`resourceAddress`: Address)  throws -> ManifestBuilder
@@ -1820,46 +1820,50 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountTryDepositBatchOrAbort`(`accountAddress`: Address) throws -> ManifestBuilder {
+    public func `accountTryDepositBatchOrAbort`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_try_deposit_batch_or_abort(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),$0
+        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterOptionTypeResourceOrNonFungible.lower(`authorizedDepositorBadge`),$0
     )
 }
         )
     }
 
-    public func `accountTryDepositBatchOrRefund`(`accountAddress`: Address) throws -> ManifestBuilder {
+    public func `accountTryDepositBatchOrRefund`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_try_deposit_batch_or_refund(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),$0
+        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterOptionTypeResourceOrNonFungible.lower(`authorizedDepositorBadge`),$0
     )
 }
         )
     }
 
-    public func `accountTryDepositOrAbort`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+    public func `accountTryDepositOrAbort`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_try_deposit_or_abort(self.pointer, 
         FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterOptionTypeResourceOrNonFungible.lower(`authorizedDepositorBadge`),
         FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
     )
 }
         )
     }
 
-    public func `accountTryDepositOrRefund`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+    public func `accountTryDepositOrRefund`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_try_deposit_or_refund(self.pointer, 
         FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterOptionTypeResourceOrNonFungible.lower(`authorizedDepositorBadge`),
         FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
     )
 }
@@ -11662,65 +11666,6 @@ public func FfiConverterTypeRecallResourceEvent_lower(_ value: RecallResourceEve
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum ResourceDepositRule {
-    
-    case `neither`
-    case `allowed`
-    case `disallowed`
-}
-
-public struct FfiConverterTypeResourceDepositRule: FfiConverterRustBuffer {
-    typealias SwiftType = ResourceDepositRule
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ResourceDepositRule {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`neither`
-        
-        case 2: return .`allowed`
-        
-        case 3: return .`disallowed`
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: ResourceDepositRule, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case .`neither`:
-            writeInt(&buf, Int32(1))
-        
-        
-        case .`allowed`:
-            writeInt(&buf, Int32(2))
-        
-        
-        case .`disallowed`:
-            writeInt(&buf, Int32(3))
-        
-        }
-    }
-}
-
-
-public func FfiConverterTypeResourceDepositRule_lift(_ buf: RustBuffer) throws -> ResourceDepositRule {
-    return try FfiConverterTypeResourceDepositRule.lift(buf)
-}
-
-public func FfiConverterTypeResourceDepositRule_lower(_ value: ResourceDepositRule) -> RustBuffer {
-    return FfiConverterTypeResourceDepositRule.lower(value)
-}
-
-
-extension ResourceDepositRule: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum ResourceOrNonFungible {
     
     case `nonFungible`(`value`: NonFungibleGlobalId)
@@ -11772,6 +11717,113 @@ public func FfiConverterTypeResourceOrNonFungible_lower(_ value: ResourceOrNonFu
     return FfiConverterTypeResourceOrNonFungible.lower(value)
 }
 
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ResourcePreference {
+    
+    case `allowed`
+    case `disallowed`
+}
+
+public struct FfiConverterTypeResourcePreference: FfiConverterRustBuffer {
+    typealias SwiftType = ResourcePreference
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ResourcePreference {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`allowed`
+        
+        case 2: return .`disallowed`
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ResourcePreference, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .`allowed`:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .`disallowed`:
+            writeInt(&buf, Int32(2))
+        
+        }
+    }
+}
+
+
+public func FfiConverterTypeResourcePreference_lift(_ buf: RustBuffer) throws -> ResourcePreference {
+    return try FfiConverterTypeResourcePreference.lift(buf)
+}
+
+public func FfiConverterTypeResourcePreference_lower(_ value: ResourcePreference) -> RustBuffer {
+    return FfiConverterTypeResourcePreference.lower(value)
+}
+
+
+extension ResourcePreference: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ResourcePreferenceAction {
+    
+    case `set`(`value`: ResourcePreference)
+    case `remove`
+}
+
+public struct FfiConverterTypeResourcePreferenceAction: FfiConverterRustBuffer {
+    typealias SwiftType = ResourcePreferenceAction
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ResourcePreferenceAction {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`set`(
+            `value`: try FfiConverterTypeResourcePreference.read(from: &buf)
+        )
+        
+        case 2: return .`remove`
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ResourcePreferenceAction, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`set`(`value`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeResourcePreference.write(`value`, into: &buf)
+            
+        
+        case .`remove`:
+            writeInt(&buf, Int32(2))
+        
+        }
+    }
+}
+
+
+public func FfiConverterTypeResourcePreferenceAction_lift(_ buf: RustBuffer) throws -> ResourcePreferenceAction {
+    return try FfiConverterTypeResourcePreferenceAction.lift(buf)
+}
+
+public func FfiConverterTypeResourcePreferenceAction_lower(_ value: ResourcePreferenceAction) -> RustBuffer {
+    return FfiConverterTypeResourcePreferenceAction.lower(value)
+}
+
+
+extension ResourcePreferenceAction: Equatable, Hashable {}
 
 
 
@@ -12275,7 +12327,7 @@ public enum TransactionType {
     
     case `simpleTransfer`(`from`: Address, `to`: Address, `transferred`: ResourceSpecifier)
     case `transfer`(`from`: Address, `transfers`: [String: [String: Resources]])
-    case `accountDepositSettings`(`resourcePreferenceChanges`: [String: [String: ResourceDepositRule]], `defaultDepositRuleChanges`: [String: AccountDefaultDepositRule], `authorizedDepositorsChanges`: [String: AuthorizedDepositorsChanges])
+    case `accountDepositSettings`(`resourcePreferenceChanges`: [String: [String: ResourcePreferenceAction]], `defaultDepositRuleChanges`: [String: AccountDefaultDepositRule], `authorizedDepositorsChanges`: [String: AuthorizedDepositorsChanges])
     case `generalTransaction`(`accountProofs`: [Address], `accountWithdraws`: [String: [ResourceTracker]], `accountDeposits`: [String: [ResourceTracker]], `addressesInManifest`: [EntityType: [Address]], `metadataOfNewlyCreatedEntities`: [String: [String: MetadataValue?]], `dataOfNewlyMintedNonFungibles`: [String: [NonFungibleLocalId: [UInt8]]], `addressesOfNewlyCreatedEntities`: [Address])
 }
 
@@ -12298,7 +12350,7 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
         )
         
         case 3: return .`accountDepositSettings`(
-            `resourcePreferenceChanges`: try FfiConverterDictionaryStringDictionaryStringTypeResourceDepositRule.read(from: &buf), 
+            `resourcePreferenceChanges`: try FfiConverterDictionaryStringDictionaryStringTypeResourcePreferenceAction.read(from: &buf), 
             `defaultDepositRuleChanges`: try FfiConverterDictionaryStringTypeAccountDefaultDepositRule.read(from: &buf), 
             `authorizedDepositorsChanges`: try FfiConverterDictionaryStringTypeAuthorizedDepositorsChanges.read(from: &buf)
         )
@@ -12336,7 +12388,7 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
         
         case let .`accountDepositSettings`(`resourcePreferenceChanges`,`defaultDepositRuleChanges`,`authorizedDepositorsChanges`):
             writeInt(&buf, Int32(3))
-            FfiConverterDictionaryStringDictionaryStringTypeResourceDepositRule.write(`resourcePreferenceChanges`, into: &buf)
+            FfiConverterDictionaryStringDictionaryStringTypeResourcePreferenceAction.write(`resourcePreferenceChanges`, into: &buf)
             FfiConverterDictionaryStringTypeAccountDefaultDepositRule.write(`defaultDepositRuleChanges`, into: &buf)
             FfiConverterDictionaryStringTypeAuthorizedDepositorsChanges.write(`authorizedDepositorsChanges`, into: &buf)
             
@@ -14261,6 +14313,27 @@ fileprivate struct FfiConverterOptionTypeMetadataValue: FfiConverterRustBuffer {
     }
 }
 
+fileprivate struct FfiConverterOptionTypeResourceOrNonFungible: FfiConverterRustBuffer {
+    typealias SwiftType = ResourceOrNonFungible?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeResourceOrNonFungible.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeResourceOrNonFungible.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
 fileprivate struct FfiConverterSequenceUInt8: FfiConverterRustBuffer {
     typealias SwiftType = [UInt8]
 
@@ -14904,23 +14977,23 @@ fileprivate struct FfiConverterDictionaryStringTypeAccountDefaultDepositRule: Ff
     }
 }
 
-fileprivate struct FfiConverterDictionaryStringTypeResourceDepositRule: FfiConverterRustBuffer {
-    public static func write(_ value: [String: ResourceDepositRule], into buf: inout [UInt8]) {
+fileprivate struct FfiConverterDictionaryStringTypeResourcePreferenceAction: FfiConverterRustBuffer {
+    public static func write(_ value: [String: ResourcePreferenceAction], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for (key, value) in value {
             FfiConverterString.write(key, into: &buf)
-            FfiConverterTypeResourceDepositRule.write(value, into: &buf)
+            FfiConverterTypeResourcePreferenceAction.write(value, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: ResourceDepositRule] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: ResourcePreferenceAction] {
         let len: Int32 = try readInt(&buf)
-        var dict = [String: ResourceDepositRule]()
+        var dict = [String: ResourcePreferenceAction]()
         dict.reserveCapacity(Int(len))
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
-            let value = try FfiConverterTypeResourceDepositRule.read(from: &buf)
+            let value = try FfiConverterTypeResourcePreferenceAction.read(from: &buf)
             dict[key] = value
         }
         return dict
@@ -15019,23 +15092,23 @@ fileprivate struct FfiConverterDictionaryStringSequenceTypeResourceTracker: FfiC
     }
 }
 
-fileprivate struct FfiConverterDictionaryStringDictionaryStringTypeResourceDepositRule: FfiConverterRustBuffer {
-    public static func write(_ value: [String: [String: ResourceDepositRule]], into buf: inout [UInt8]) {
+fileprivate struct FfiConverterDictionaryStringDictionaryStringTypeResourcePreferenceAction: FfiConverterRustBuffer {
+    public static func write(_ value: [String: [String: ResourcePreferenceAction]], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for (key, value) in value {
             FfiConverterString.write(key, into: &buf)
-            FfiConverterDictionaryStringTypeResourceDepositRule.write(value, into: &buf)
+            FfiConverterDictionaryStringTypeResourcePreferenceAction.write(value, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [String: ResourceDepositRule]] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [String: ResourcePreferenceAction]] {
         let len: Int32 = try readInt(&buf)
-        var dict = [String: [String: ResourceDepositRule]]()
+        var dict = [String: [String: ResourcePreferenceAction]]()
         dict.reserveCapacity(Int(len))
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
-            let value = try FfiConverterDictionaryStringTypeResourceDepositRule.read(from: &buf)
+            let value = try FfiConverterDictionaryStringTypeResourcePreferenceAction.read(from: &buf)
             dict[key] = value
         }
         return dict
@@ -15643,16 +15716,16 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit_batch() != 3828) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_batch_or_abort() != 772) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_batch_or_abort() != 14294) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_batch_or_refund() != 33577) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_batch_or_refund() != 51871) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_or_abort() != 31265) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_or_abort() != 44832) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_or_refund() != 21126) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_or_refund() != 50194) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_allocate_global_address() != 18604) {
