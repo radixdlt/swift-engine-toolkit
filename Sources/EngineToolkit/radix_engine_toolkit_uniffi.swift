@@ -1746,6 +1746,7 @@ public protocol ManifestBuilderProtocol {
     func `callMethod`(`address`: ManifestBuilderAddress, `methodName`: String, `args`: [ManifestBuilderValue])  throws -> ManifestBuilder
     func `callRoyaltyMethod`(`address`: ManifestBuilderAddress, `methodName`: String, `args`: [ManifestBuilderValue])  throws -> ManifestBuilder
     func `cloneProof`(`proof`: ManifestBuilderProof, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
+    func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
     func `createAccountAdvanced`(`ownerRole`: OwnerRole)  throws -> ManifestBuilder
     func `createFungibleResourceManager`(`ownerRole`: OwnerRole, `trackTotalSupply`: Bool, `divisibility`: UInt8, `initialSupply`: Decimal?, `resourceRoles`: FungibleResourceRoles, `metadata`: MetadataModuleConfig, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `createProofFromAuthZoneOfAll`(`resourceAddress`: Address, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
@@ -2028,6 +2029,21 @@ public class ManifestBuilder: ManifestBuilderProtocol {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_clone_proof(self.pointer, 
         FfiConverterTypeManifestBuilderProof.lower(`proof`),
         FfiConverterTypeManifestBuilderProof.lower(`intoProof`),$0
+    )
+}
+        )
+    }
+
+    public func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_access_controller_with_securify_structure(self.pointer, 
+        FfiConverterTypeManifestBuilderBucket.lower(`controlledAsset`),
+        FfiConverterTypeSecurityStructureRole.lower(`primaryRole`),
+        FfiConverterTypeSecurityStructureRole.lower(`recoveryRole`),
+        FfiConverterTypeSecurityStructureRole.lower(`confirmationRole`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
     )
 }
         )
@@ -4992,13 +5008,15 @@ public struct ExecutionAnalysis {
     public var `feeLocks`: FeeLocks
     public var `feeSummary`: FeeSummary
     public var `transactionTypes`: [TransactionType]
+    public var `reservedInstructions`: [ReservedInstruction]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`feeLocks`: FeeLocks, `feeSummary`: FeeSummary, `transactionTypes`: [TransactionType]) {
+    public init(`feeLocks`: FeeLocks, `feeSummary`: FeeSummary, `transactionTypes`: [TransactionType], `reservedInstructions`: [ReservedInstruction]) {
         self.`feeLocks` = `feeLocks`
         self.`feeSummary` = `feeSummary`
         self.`transactionTypes` = `transactionTypes`
+        self.`reservedInstructions` = `reservedInstructions`
     }
 }
 
@@ -5009,7 +5027,8 @@ public struct FfiConverterTypeExecutionAnalysis: FfiConverterRustBuffer {
         return try ExecutionAnalysis(
             `feeLocks`: FfiConverterTypeFeeLocks.read(from: &buf), 
             `feeSummary`: FfiConverterTypeFeeSummary.read(from: &buf), 
-            `transactionTypes`: FfiConverterSequenceTypeTransactionType.read(from: &buf)
+            `transactionTypes`: FfiConverterSequenceTypeTransactionType.read(from: &buf), 
+            `reservedInstructions`: FfiConverterSequenceTypeReservedInstruction.read(from: &buf)
         )
     }
 
@@ -5017,6 +5036,7 @@ public struct FfiConverterTypeExecutionAnalysis: FfiConverterRustBuffer {
         FfiConverterTypeFeeLocks.write(value.`feeLocks`, into: &buf)
         FfiConverterTypeFeeSummary.write(value.`feeSummary`, into: &buf)
         FfiConverterSequenceTypeTransactionType.write(value.`transactionTypes`, into: &buf)
+        FfiConverterSequenceTypeReservedInstruction.write(value.`reservedInstructions`, into: &buf)
     }
 }
 
@@ -7076,6 +7096,69 @@ public func FfiConverterTypeSecp256k1PublicKey_lift(_ buf: RustBuffer) throws ->
 
 public func FfiConverterTypeSecp256k1PublicKey_lower(_ value: Secp256k1PublicKey) -> RustBuffer {
     return FfiConverterTypeSecp256k1PublicKey.lower(value)
+}
+
+
+public struct SecurityStructureRole {
+    public var `superAdminFactors`: [PublicKey]
+    public var `thresholdFactors`: [PublicKey]
+    public var `threshold`: UInt8
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`superAdminFactors`: [PublicKey], `thresholdFactors`: [PublicKey], `threshold`: UInt8) {
+        self.`superAdminFactors` = `superAdminFactors`
+        self.`thresholdFactors` = `thresholdFactors`
+        self.`threshold` = `threshold`
+    }
+}
+
+
+extension SecurityStructureRole: Equatable, Hashable {
+    public static func ==(lhs: SecurityStructureRole, rhs: SecurityStructureRole) -> Bool {
+        if lhs.`superAdminFactors` != rhs.`superAdminFactors` {
+            return false
+        }
+        if lhs.`thresholdFactors` != rhs.`thresholdFactors` {
+            return false
+        }
+        if lhs.`threshold` != rhs.`threshold` {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(`superAdminFactors`)
+        hasher.combine(`thresholdFactors`)
+        hasher.combine(`threshold`)
+    }
+}
+
+
+public struct FfiConverterTypeSecurityStructureRole: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SecurityStructureRole {
+        return try SecurityStructureRole(
+            `superAdminFactors`: FfiConverterSequenceTypePublicKey.read(from: &buf), 
+            `thresholdFactors`: FfiConverterSequenceTypePublicKey.read(from: &buf), 
+            `threshold`: FfiConverterUInt8.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: SecurityStructureRole, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypePublicKey.write(value.`superAdminFactors`, into: &buf)
+        FfiConverterSequenceTypePublicKey.write(value.`thresholdFactors`, into: &buf)
+        FfiConverterUInt8.write(value.`threshold`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeSecurityStructureRole_lift(_ buf: RustBuffer) throws -> SecurityStructureRole {
+    return try FfiConverterTypeSecurityStructureRole.lift(buf)
+}
+
+public func FfiConverterTypeSecurityStructureRole_lower(_ value: SecurityStructureRole) -> RustBuffer {
+    return FfiConverterTypeSecurityStructureRole.lower(value)
 }
 
 
@@ -11664,6 +11747,79 @@ public func FfiConverterTypeRecallResourceEvent_lower(_ value: RecallResourceEve
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ReservedInstruction {
+    
+    case `accountLockFee`
+    case `accountSecurify`
+    case `identitySecurify`
+    case `accountUpdateSettings`
+    case `accessController`
+}
+
+public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
+    typealias SwiftType = ReservedInstruction
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ReservedInstruction {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`accountLockFee`
+        
+        case 2: return .`accountSecurify`
+        
+        case 3: return .`identitySecurify`
+        
+        case 4: return .`accountUpdateSettings`
+        
+        case 5: return .`accessController`
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ReservedInstruction, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .`accountLockFee`:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .`accountSecurify`:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .`identitySecurify`:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .`accountUpdateSettings`:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .`accessController`:
+            writeInt(&buf, Int32(5))
+        
+        }
+    }
+}
+
+
+public func FfiConverterTypeReservedInstruction_lift(_ buf: RustBuffer) throws -> ReservedInstruction {
+    return try FfiConverterTypeReservedInstruction.lift(buf)
+}
+
+public func FfiConverterTypeReservedInstruction_lower(_ value: ReservedInstruction) -> RustBuffer {
+    return FfiConverterTypeReservedInstruction.lower(value)
+}
+
+
+extension ReservedInstruction: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum ResourceOrNonFungible {
     
     case `nonFungible`(`value`: NonFungibleGlobalId)
@@ -14750,6 +14906,28 @@ fileprivate struct FfiConverterSequenceTypePublicKeyHash: FfiConverterRustBuffer
     }
 }
 
+fileprivate struct FfiConverterSequenceTypeReservedInstruction: FfiConverterRustBuffer {
+    typealias SwiftType = [ReservedInstruction]
+
+    public static func write(_ value: [ReservedInstruction], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeReservedInstruction.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [ReservedInstruction] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [ReservedInstruction]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeReservedInstruction.read(from: &buf))
+        }
+        return seq
+    }
+}
+
 fileprivate struct FfiConverterSequenceTypeResourceOrNonFungible: FfiConverterRustBuffer {
     typealias SwiftType = [ResourceOrNonFungible]
 
@@ -15763,6 +15941,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_clone_proof() != 52407) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_access_controller_with_securify_structure() != 12292) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_account_advanced() != 27856) {
