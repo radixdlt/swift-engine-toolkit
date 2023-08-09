@@ -4082,6 +4082,7 @@ public protocol TransactionManifestProtocol {
     func `extractAddresses`()   -> [EntityType: [Address]]
     func `identitiesRequiringAuth`()   -> [Address]
     func `instructions`()   -> Instructions
+    func `modify`(`modifications`: TransactionManifestModifications)  throws -> TransactionManifest
     func `staticallyValidate`()  throws
     
 }
@@ -4195,6 +4196,17 @@ public class TransactionManifest: TransactionManifestProtocol {
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_instructions(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `modify`(`modifications`: TransactionManifestModifications) throws -> TransactionManifest {
+        return try  FfiConverterTypeTransactionManifest.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_modify(self.pointer, 
+        FfiConverterTypeTransactionManifestModifications.lower(`modifications`),$0
     )
 }
         )
@@ -5188,6 +5200,44 @@ public func FfiConverterTypeFungibleResourceRoles_lower(_ value: FungibleResourc
 }
 
 
+public struct IndexedAssertion {
+    public var `index`: UInt64
+    public var `assertion`: Assertion
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`index`: UInt64, `assertion`: Assertion) {
+        self.`index` = `index`
+        self.`assertion` = `assertion`
+    }
+}
+
+
+
+public struct FfiConverterTypeIndexedAssertion: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> IndexedAssertion {
+        return try IndexedAssertion(
+            `index`: FfiConverterUInt64.read(from: &buf), 
+            `assertion`: FfiConverterTypeAssertion.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: IndexedAssertion, into buf: inout [UInt8]) {
+        FfiConverterUInt64.write(value.`index`, into: &buf)
+        FfiConverterTypeAssertion.write(value.`assertion`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeIndexedAssertion_lift(_ buf: RustBuffer) throws -> IndexedAssertion {
+    return try FfiConverterTypeIndexedAssertion.lift(buf)
+}
+
+public func FfiConverterTypeIndexedAssertion_lower(_ value: IndexedAssertion) -> RustBuffer {
+    return FfiConverterTypeIndexedAssertion.lower(value)
+}
+
+
 public struct InitiateBadgeWithdrawAttemptEvent {
     public var `proposer`: Proposer
 
@@ -5363,6 +5413,44 @@ public func FfiConverterTypeLockFeeEvent_lift(_ buf: RustBuffer) throws -> LockF
 
 public func FfiConverterTypeLockFeeEvent_lower(_ value: LockFeeEvent) -> RustBuffer {
     return FfiConverterTypeLockFeeEvent.lower(value)
+}
+
+
+public struct LockFeeModification {
+    public var `accountAddress`: Address
+    public var `amount`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`accountAddress`: Address, `amount`: Decimal) {
+        self.`accountAddress` = `accountAddress`
+        self.`amount` = `amount`
+    }
+}
+
+
+
+public struct FfiConverterTypeLockFeeModification: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> LockFeeModification {
+        return try LockFeeModification(
+            `accountAddress`: FfiConverterTypeAddress.read(from: &buf), 
+            `amount`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: LockFeeModification, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.`accountAddress`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`amount`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeLockFeeModification_lift(_ buf: RustBuffer) throws -> LockFeeModification {
+    return try FfiConverterTypeLockFeeModification.lift(buf)
+}
+
+public func FfiConverterTypeLockFeeModification_lower(_ value: LockFeeModification) -> RustBuffer {
+    return FfiConverterTypeLockFeeModification.lower(value)
 }
 
 
@@ -7588,6 +7676,48 @@ public func FfiConverterTypeTransactionHeader_lower(_ value: TransactionHeader) 
 }
 
 
+public struct TransactionManifestModifications {
+    public var `addAccessControllerProofs`: [Address]
+    public var `addLockFee`: LockFeeModification?
+    public var `addAssertions`: [IndexedAssertion]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`addAccessControllerProofs`: [Address], `addLockFee`: LockFeeModification?, `addAssertions`: [IndexedAssertion]) {
+        self.`addAccessControllerProofs` = `addAccessControllerProofs`
+        self.`addLockFee` = `addLockFee`
+        self.`addAssertions` = `addAssertions`
+    }
+}
+
+
+
+public struct FfiConverterTypeTransactionManifestModifications: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransactionManifestModifications {
+        return try TransactionManifestModifications(
+            `addAccessControllerProofs`: FfiConverterSequenceTypeAddress.read(from: &buf), 
+            `addLockFee`: FfiConverterOptionTypeLockFeeModification.read(from: &buf), 
+            `addAssertions`: FfiConverterSequenceTypeIndexedAssertion.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: TransactionManifestModifications, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypeAddress.write(value.`addAccessControllerProofs`, into: &buf)
+        FfiConverterOptionTypeLockFeeModification.write(value.`addLockFee`, into: &buf)
+        FfiConverterSequenceTypeIndexedAssertion.write(value.`addAssertions`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeTransactionManifestModifications_lift(_ buf: RustBuffer) throws -> TransactionManifestModifications {
+    return try FfiConverterTypeTransactionManifestModifications.lift(buf)
+}
+
+public func FfiConverterTypeTransactionManifestModifications_lower(_ value: TransactionManifestModifications) -> RustBuffer {
+    return FfiConverterTypeTransactionManifestModifications.lower(value)
+}
+
+
 public struct TwoResourcePoolContributionEvent {
     public var `contributedResources`: [String: Decimal]
     public var `poolUnitsMinted`: Decimal
@@ -8138,6 +8268,66 @@ public func FfiConverterTypeAccountDefaultDepositRule_lower(_ value: AccountDefa
 
 
 extension AccountDefaultDepositRule: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum Assertion {
+    
+    case `amount`(`resourceAddress`: Address, `amount`: Decimal)
+    case `ids`(`resourceAddress`: Address, `ids`: [NonFungibleLocalId])
+}
+
+public struct FfiConverterTypeAssertion: FfiConverterRustBuffer {
+    typealias SwiftType = Assertion
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Assertion {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`amount`(
+            `resourceAddress`: try FfiConverterTypeAddress.read(from: &buf), 
+            `amount`: try FfiConverterTypeDecimal.read(from: &buf)
+        )
+        
+        case 2: return .`ids`(
+            `resourceAddress`: try FfiConverterTypeAddress.read(from: &buf), 
+            `ids`: try FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: Assertion, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`amount`(`resourceAddress`,`amount`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeAddress.write(`resourceAddress`, into: &buf)
+            FfiConverterTypeDecimal.write(`amount`, into: &buf)
+            
+        
+        case let .`ids`(`resourceAddress`,`ids`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeAddress.write(`resourceAddress`, into: &buf)
+            FfiConverterSequenceTypeNonFungibleLocalId.write(`ids`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeAssertion_lift(_ buf: RustBuffer) throws -> Assertion {
+    return try FfiConverterTypeAssertion.lift(buf)
+}
+
+public func FfiConverterTypeAssertion_lower(_ value: Assertion) -> RustBuffer {
+    return FfiConverterTypeAssertion.lower(value)
+}
+
 
 
 
@@ -11498,6 +11688,7 @@ public enum RadixEngineToolkitError {
     case TypedNativeEventError(`error`: String)
     case FailedToDecodeTransactionHash
     case ManifestBuilderNameRecordError(`error`: NameRecordError)
+    case ManifestModificationError(`error`: String)
 
     fileprivate static func uniffiErrorHandler(_ error: RustBuffer) throws -> Error {
         return try FfiConverterTypeRadixEngineToolkitError.lift(error)
@@ -11574,6 +11765,9 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         case 19: return .FailedToDecodeTransactionHash
         case 20: return .ManifestBuilderNameRecordError(
             `error`: try FfiConverterTypeNameRecordError.read(from: &buf)
+            )
+        case 21: return .ManifestModificationError(
+            `error`: try FfiConverterString.read(from: &buf)
             )
 
          default: throw UniffiInternalError.unexpectedEnumCase
@@ -11687,6 +11881,11 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         case let .ManifestBuilderNameRecordError(`error`):
             writeInt(&buf, Int32(20))
             FfiConverterTypeNameRecordError.write(`error`, into: &buf)
+            
+        
+        case let .ManifestModificationError(`error`):
+            writeInt(&buf, Int32(21))
+            FfiConverterString.write(`error`, into: &buf)
             
         }
     }
@@ -14391,6 +14590,27 @@ fileprivate struct FfiConverterOptionTypePreciseDecimal: FfiConverterRustBuffer 
     }
 }
 
+fileprivate struct FfiConverterOptionTypeLockFeeModification: FfiConverterRustBuffer {
+    typealias SwiftType = LockFeeModification?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeLockFeeModification.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeLockFeeModification.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
 fileprivate struct FfiConverterOptionTypeManifestBuilderAddressReservation: FfiConverterRustBuffer {
     typealias SwiftType = ManifestBuilderAddressReservation?
 
@@ -14711,6 +14931,28 @@ fileprivate struct FfiConverterSequenceTypeNonFungibleGlobalId: FfiConverterRust
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeNonFungibleGlobalId.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+fileprivate struct FfiConverterSequenceTypeIndexedAssertion: FfiConverterRustBuffer {
+    typealias SwiftType = [IndexedAssertion]
+
+    public static func write(_ value: [IndexedAssertion], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeIndexedAssertion.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [IndexedAssertion] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [IndexedAssertion]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeIndexedAssertion.read(from: &buf))
         }
         return seq
     }
@@ -16237,6 +16479,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_instructions() != 3783) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_modify() != 4850) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate() != 42656) {
