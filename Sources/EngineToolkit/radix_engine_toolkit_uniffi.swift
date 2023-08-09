@@ -5092,15 +5092,15 @@ public struct FeeSummary {
     public var `executionCost`: Decimal
     public var `finalizationCost`: Decimal
     public var `storageExpansionCost`: Decimal
-    public var `royaltyFee`: Decimal
+    public var `royaltyCost`: Decimal
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`executionCost`: Decimal, `finalizationCost`: Decimal, `storageExpansionCost`: Decimal, `royaltyFee`: Decimal) {
+    public init(`executionCost`: Decimal, `finalizationCost`: Decimal, `storageExpansionCost`: Decimal, `royaltyCost`: Decimal) {
         self.`executionCost` = `executionCost`
         self.`finalizationCost` = `finalizationCost`
         self.`storageExpansionCost` = `storageExpansionCost`
-        self.`royaltyFee` = `royaltyFee`
+        self.`royaltyCost` = `royaltyCost`
     }
 }
 
@@ -5112,7 +5112,7 @@ public struct FfiConverterTypeFeeSummary: FfiConverterRustBuffer {
             `executionCost`: FfiConverterTypeDecimal.read(from: &buf), 
             `finalizationCost`: FfiConverterTypeDecimal.read(from: &buf), 
             `storageExpansionCost`: FfiConverterTypeDecimal.read(from: &buf), 
-            `royaltyFee`: FfiConverterTypeDecimal.read(from: &buf)
+            `royaltyCost`: FfiConverterTypeDecimal.read(from: &buf)
         )
     }
 
@@ -5120,7 +5120,7 @@ public struct FfiConverterTypeFeeSummary: FfiConverterRustBuffer {
         FfiConverterTypeDecimal.write(value.`executionCost`, into: &buf)
         FfiConverterTypeDecimal.write(value.`finalizationCost`, into: &buf)
         FfiConverterTypeDecimal.write(value.`storageExpansionCost`, into: &buf)
-        FfiConverterTypeDecimal.write(value.`royaltyFee`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`royaltyCost`, into: &buf)
     }
 }
 
