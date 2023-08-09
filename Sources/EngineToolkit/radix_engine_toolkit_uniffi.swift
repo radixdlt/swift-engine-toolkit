@@ -5089,13 +5089,17 @@ public func FfiConverterTypeFeeLocks_lower(_ value: FeeLocks) -> RustBuffer {
 
 
 public struct FeeSummary {
-    public var `networkFee`: Decimal
+    public var `executionCost`: Decimal
+    public var `finalizationCost`: Decimal
+    public var `storageExpansionCost`: Decimal
     public var `royaltyFee`: Decimal
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`networkFee`: Decimal, `royaltyFee`: Decimal) {
-        self.`networkFee` = `networkFee`
+    public init(`executionCost`: Decimal, `finalizationCost`: Decimal, `storageExpansionCost`: Decimal, `royaltyFee`: Decimal) {
+        self.`executionCost` = `executionCost`
+        self.`finalizationCost` = `finalizationCost`
+        self.`storageExpansionCost` = `storageExpansionCost`
         self.`royaltyFee` = `royaltyFee`
     }
 }
@@ -5105,13 +5109,17 @@ public struct FeeSummary {
 public struct FfiConverterTypeFeeSummary: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeeSummary {
         return try FeeSummary(
-            `networkFee`: FfiConverterTypeDecimal.read(from: &buf), 
+            `executionCost`: FfiConverterTypeDecimal.read(from: &buf), 
+            `finalizationCost`: FfiConverterTypeDecimal.read(from: &buf), 
+            `storageExpansionCost`: FfiConverterTypeDecimal.read(from: &buf), 
             `royaltyFee`: FfiConverterTypeDecimal.read(from: &buf)
         )
     }
 
     public static func write(_ value: FeeSummary, into buf: inout [UInt8]) {
-        FfiConverterTypeDecimal.write(value.`networkFee`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`executionCost`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`finalizationCost`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`storageExpansionCost`, into: &buf)
         FfiConverterTypeDecimal.write(value.`royaltyFee`, into: &buf)
     }
 }
