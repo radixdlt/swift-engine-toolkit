@@ -15810,8 +15810,8 @@ public func `scryptoSborDecodeToStringRepresentation`(`bytes`: [UInt8], `represe
     )
 }
 
-public func `testPanic`(`message`: String)  {
-    try! rustCall() {
+public func `testPanic`(`message`: String) throws {
+    try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_func_test_panic(
         FfiConverterString.lower(`message`),$0)
 }
@@ -15894,7 +15894,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_decode_to_string_representation() != 50232) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_test_panic() != 6826) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_test_panic() != 25407) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_accessrule_and() != 5785) {
