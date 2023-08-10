@@ -5340,23 +5340,6 @@ public struct InitiateRecoveryEvent {
 }
 
 
-extension InitiateRecoveryEvent: Equatable, Hashable {
-    public static func ==(lhs: InitiateRecoveryEvent, rhs: InitiateRecoveryEvent) -> Bool {
-        if lhs.`proposer` != rhs.`proposer` {
-            return false
-        }
-        if lhs.`proposal` != rhs.`proposal` {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(`proposer`)
-        hasher.combine(`proposal`)
-    }
-}
-
 
 public struct FfiConverterTypeInitiateRecoveryEvent: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> InitiateRecoveryEvent {
@@ -6726,23 +6709,6 @@ public struct RecoveryProposal {
 }
 
 
-extension RecoveryProposal: Equatable, Hashable {
-    public static func ==(lhs: RecoveryProposal, rhs: RecoveryProposal) -> Bool {
-        if lhs.`ruleSet` != rhs.`ruleSet` {
-            return false
-        }
-        if lhs.`timedRecoveryDelayInMinutes` != rhs.`timedRecoveryDelayInMinutes` {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(`ruleSet`)
-        hasher.combine(`timedRecoveryDelayInMinutes`)
-    }
-}
-
 
 public struct FfiConverterTypeRecoveryProposal: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RecoveryProposal {
@@ -7018,13 +6984,13 @@ public func FfiConverterTypeRoundChangeEvent_lower(_ value: RoundChangeEvent) ->
 
 
 public struct RuleSet {
-    public var `primaryRole`: [UInt8]
-    public var `recoveryRole`: [UInt8]
-    public var `confirmationRole`: [UInt8]
+    public var `primaryRole`: AccessRule
+    public var `recoveryRole`: AccessRule
+    public var `confirmationRole`: AccessRule
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`primaryRole`: [UInt8], `recoveryRole`: [UInt8], `confirmationRole`: [UInt8]) {
+    public init(`primaryRole`: AccessRule, `recoveryRole`: AccessRule, `confirmationRole`: AccessRule) {
         self.`primaryRole` = `primaryRole`
         self.`recoveryRole` = `recoveryRole`
         self.`confirmationRole` = `confirmationRole`
@@ -7032,41 +6998,20 @@ public struct RuleSet {
 }
 
 
-extension RuleSet: Equatable, Hashable {
-    public static func ==(lhs: RuleSet, rhs: RuleSet) -> Bool {
-        if lhs.`primaryRole` != rhs.`primaryRole` {
-            return false
-        }
-        if lhs.`recoveryRole` != rhs.`recoveryRole` {
-            return false
-        }
-        if lhs.`confirmationRole` != rhs.`confirmationRole` {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(`primaryRole`)
-        hasher.combine(`recoveryRole`)
-        hasher.combine(`confirmationRole`)
-    }
-}
-
 
 public struct FfiConverterTypeRuleSet: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RuleSet {
         return try RuleSet(
-            `primaryRole`: FfiConverterSequenceUInt8.read(from: &buf), 
-            `recoveryRole`: FfiConverterSequenceUInt8.read(from: &buf), 
-            `confirmationRole`: FfiConverterSequenceUInt8.read(from: &buf)
+            `primaryRole`: FfiConverterTypeAccessRule.read(from: &buf), 
+            `recoveryRole`: FfiConverterTypeAccessRule.read(from: &buf), 
+            `confirmationRole`: FfiConverterTypeAccessRule.read(from: &buf)
         )
     }
 
     public static func write(_ value: RuleSet, into buf: inout [UInt8]) {
-        FfiConverterSequenceUInt8.write(value.`primaryRole`, into: &buf)
-        FfiConverterSequenceUInt8.write(value.`recoveryRole`, into: &buf)
-        FfiConverterSequenceUInt8.write(value.`confirmationRole`, into: &buf)
+        FfiConverterTypeAccessRule.write(value.`primaryRole`, into: &buf)
+        FfiConverterTypeAccessRule.write(value.`recoveryRole`, into: &buf)
+        FfiConverterTypeAccessRule.write(value.`confirmationRole`, into: &buf)
     }
 }
 
@@ -7092,23 +7037,6 @@ public struct RuleSetUpdateEvent {
     }
 }
 
-
-extension RuleSetUpdateEvent: Equatable, Hashable {
-    public static func ==(lhs: RuleSetUpdateEvent, rhs: RuleSetUpdateEvent) -> Bool {
-        if lhs.`proposer` != rhs.`proposer` {
-            return false
-        }
-        if lhs.`proposal` != rhs.`proposal` {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(`proposer`)
-        hasher.combine(`proposal`)
-    }
-}
 
 
 public struct FfiConverterTypeRuleSetUpdateEvent: FfiConverterRustBuffer {
@@ -7301,39 +7229,26 @@ public func FfiConverterTypeSecurityStructureRole_lower(_ value: SecurityStructu
 
 
 public struct SetAndLockOwnerRoleEvent {
-    public var `rule`: [UInt8]
+    public var `rule`: AccessRule
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`rule`: [UInt8]) {
+    public init(`rule`: AccessRule) {
         self.`rule` = `rule`
     }
 }
 
 
-extension SetAndLockOwnerRoleEvent: Equatable, Hashable {
-    public static func ==(lhs: SetAndLockOwnerRoleEvent, rhs: SetAndLockOwnerRoleEvent) -> Bool {
-        if lhs.`rule` != rhs.`rule` {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(`rule`)
-    }
-}
-
 
 public struct FfiConverterTypeSetAndLockOwnerRoleEvent: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SetAndLockOwnerRoleEvent {
         return try SetAndLockOwnerRoleEvent(
-            `rule`: FfiConverterSequenceUInt8.read(from: &buf)
+            `rule`: FfiConverterTypeAccessRule.read(from: &buf)
         )
     }
 
     public static func write(_ value: SetAndLockOwnerRoleEvent, into buf: inout [UInt8]) {
-        FfiConverterSequenceUInt8.write(value.`rule`, into: &buf)
+        FfiConverterTypeAccessRule.write(value.`rule`, into: &buf)
     }
 }
 
@@ -7349,46 +7264,29 @@ public func FfiConverterTypeSetAndLockOwnerRoleEvent_lower(_ value: SetAndLockOw
 
 public struct SetAndLockRoleEvent {
     public var `roleKey`: String
-    public var `rule`: [UInt8]
+    public var `rule`: AccessRule
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`roleKey`: String, `rule`: [UInt8]) {
+    public init(`roleKey`: String, `rule`: AccessRule) {
         self.`roleKey` = `roleKey`
         self.`rule` = `rule`
     }
 }
 
 
-extension SetAndLockRoleEvent: Equatable, Hashable {
-    public static func ==(lhs: SetAndLockRoleEvent, rhs: SetAndLockRoleEvent) -> Bool {
-        if lhs.`roleKey` != rhs.`roleKey` {
-            return false
-        }
-        if lhs.`rule` != rhs.`rule` {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(`roleKey`)
-        hasher.combine(`rule`)
-    }
-}
-
 
 public struct FfiConverterTypeSetAndLockRoleEvent: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SetAndLockRoleEvent {
         return try SetAndLockRoleEvent(
             `roleKey`: FfiConverterString.read(from: &buf), 
-            `rule`: FfiConverterSequenceUInt8.read(from: &buf)
+            `rule`: FfiConverterTypeAccessRule.read(from: &buf)
         )
     }
 
     public static func write(_ value: SetAndLockRoleEvent, into buf: inout [UInt8]) {
         FfiConverterString.write(value.`roleKey`, into: &buf)
-        FfiConverterSequenceUInt8.write(value.`rule`, into: &buf)
+        FfiConverterTypeAccessRule.write(value.`rule`, into: &buf)
     }
 }
 
@@ -7441,39 +7339,26 @@ public func FfiConverterTypeSetMetadataEvent_lower(_ value: SetMetadataEvent) ->
 
 
 public struct SetOwnerRoleEvent {
-    public var `rule`: [UInt8]
+    public var `rule`: AccessRule
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`rule`: [UInt8]) {
+    public init(`rule`: AccessRule) {
         self.`rule` = `rule`
     }
 }
 
 
-extension SetOwnerRoleEvent: Equatable, Hashable {
-    public static func ==(lhs: SetOwnerRoleEvent, rhs: SetOwnerRoleEvent) -> Bool {
-        if lhs.`rule` != rhs.`rule` {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(`rule`)
-    }
-}
-
 
 public struct FfiConverterTypeSetOwnerRoleEvent: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SetOwnerRoleEvent {
         return try SetOwnerRoleEvent(
-            `rule`: FfiConverterSequenceUInt8.read(from: &buf)
+            `rule`: FfiConverterTypeAccessRule.read(from: &buf)
         )
     }
 
     public static func write(_ value: SetOwnerRoleEvent, into buf: inout [UInt8]) {
-        FfiConverterSequenceUInt8.write(value.`rule`, into: &buf)
+        FfiConverterTypeAccessRule.write(value.`rule`, into: &buf)
     }
 }
 
@@ -7489,46 +7374,29 @@ public func FfiConverterTypeSetOwnerRoleEvent_lower(_ value: SetOwnerRoleEvent) 
 
 public struct SetRoleEvent {
     public var `roleKey`: String
-    public var `rule`: [UInt8]
+    public var `rule`: AccessRule
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`roleKey`: String, `rule`: [UInt8]) {
+    public init(`roleKey`: String, `rule`: AccessRule) {
         self.`roleKey` = `roleKey`
         self.`rule` = `rule`
     }
 }
 
 
-extension SetRoleEvent: Equatable, Hashable {
-    public static func ==(lhs: SetRoleEvent, rhs: SetRoleEvent) -> Bool {
-        if lhs.`roleKey` != rhs.`roleKey` {
-            return false
-        }
-        if lhs.`rule` != rhs.`rule` {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(`roleKey`)
-        hasher.combine(`rule`)
-    }
-}
-
 
 public struct FfiConverterTypeSetRoleEvent: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SetRoleEvent {
         return try SetRoleEvent(
             `roleKey`: FfiConverterString.read(from: &buf), 
-            `rule`: FfiConverterSequenceUInt8.read(from: &buf)
+            `rule`: FfiConverterTypeAccessRule.read(from: &buf)
         )
     }
 
     public static func write(_ value: SetRoleEvent, into buf: inout [UInt8]) {
         FfiConverterString.write(value.`roleKey`, into: &buf)
-        FfiConverterSequenceUInt8.write(value.`rule`, into: &buf)
+        FfiConverterTypeAccessRule.write(value.`rule`, into: &buf)
     }
 }
 
@@ -11731,6 +11599,7 @@ public enum RadixEngineToolkitError {
     case FailedToDecodeTransactionHash
     case ManifestBuilderNameRecordError(`error`: NameRecordError)
     case ManifestModificationError(`error`: String)
+    case InvalidEntityTypeIdError(`error`: String)
 
     fileprivate static func uniffiErrorHandler(_ error: RustBuffer) throws -> Error {
         return try FfiConverterTypeRadixEngineToolkitError.lift(error)
@@ -11809,6 +11678,9 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
             `error`: try FfiConverterTypeNameRecordError.read(from: &buf)
             )
         case 21: return .ManifestModificationError(
+            `error`: try FfiConverterString.read(from: &buf)
+            )
+        case 22: return .InvalidEntityTypeIdError(
             `error`: try FfiConverterString.read(from: &buf)
             )
 
@@ -11927,6 +11799,11 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         
         case let .ManifestModificationError(`error`):
             writeInt(&buf, Int32(21))
+            FfiConverterString.write(`error`, into: &buf)
+            
+        
+        case let .InvalidEntityTypeIdError(`error`):
+            writeInt(&buf, Int32(22))
             FfiConverterString.write(`error`, into: &buf)
             
         }
@@ -12946,8 +12823,6 @@ public func FfiConverterTypeTypedAccessControllerBlueprintEvent_lower(_ value: T
 }
 
 
-extension TypedAccessControllerBlueprintEvent: Equatable, Hashable {}
-
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -12993,8 +12868,6 @@ public func FfiConverterTypeTypedAccessControllerPackageEvent_lower(_ value: Typ
     return FfiConverterTypeTypedAccessControllerPackageEvent.lower(value)
 }
 
-
-extension TypedAccessControllerPackageEvent: Equatable, Hashable {}
 
 
 
@@ -13980,8 +13853,6 @@ public func FfiConverterTypeTypedRoleAssignmentBlueprintEvent_lower(_ value: Typ
 }
 
 
-extension TypedRoleAssignmentBlueprintEvent: Equatable, Hashable {}
-
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -14027,8 +13898,6 @@ public func FfiConverterTypeTypedRoleAssignmentPackageEvent_lower(_ value: Typed
     return FfiConverterTypeTypedRoleAssignmentPackageEvent.lower(value)
 }
 
-
-extension TypedRoleAssignmentPackageEvent: Equatable, Hashable {}
 
 
 
@@ -15941,6 +15810,15 @@ public func `scryptoSborDecodeToStringRepresentation`(`bytes`: [UInt8], `represe
     )
 }
 
+public func `testPanic`(`message`: String)  {
+    try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_test_panic(
+        FfiConverterString.lower(`message`),$0)
+}
+}
+
+
+
 private enum InitializationResult {
     case ok
     case contractVersionMismatch
@@ -16014,6 +15892,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_decode_to_string_representation() != 50232) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_test_panic() != 6826) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_accessrule_and() != 5785) {
