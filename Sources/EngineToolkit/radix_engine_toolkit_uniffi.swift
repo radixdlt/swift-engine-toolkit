@@ -1767,6 +1767,7 @@ public protocol ManifestBuilderProtocol {
     func `publishPackage`(`code`: [UInt8], `definition`: [UInt8], `metadata`: [String: MetadataInitEntry])  throws -> ManifestBuilder
     func `pushToAuthZone`(`proof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `returnToWorktop`(`bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `setMetadata`(`address`: Address, `key`: String, `value`: MetadataValue)  throws -> ManifestBuilder
     func `setRole`(`address`: Address, `module`: ObjectModuleId, `roleKey`: String, `rule`: AccessRule)  throws -> ManifestBuilder
     func `takeAllFromWorktop`(`resourceAddress`: Address, `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `takeFromWorktop`(`resourceAddress`: Address, `amount`: Decimal, `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
@@ -2282,6 +2283,19 @@ public class ManifestBuilder: ManifestBuilderProtocol {
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_return_to_worktop(self.pointer, 
         FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `setMetadata`(`address`: Address, `key`: String, `value`: MetadataValue) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_set_metadata(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterString.lower(`key`),
+        FfiConverterTypeMetadataValue.lower(`value`),$0
     )
 }
         )
@@ -16254,6 +16268,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_return_to_worktop() != 48542) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_set_metadata() != 4065) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_set_role() != 58550) {

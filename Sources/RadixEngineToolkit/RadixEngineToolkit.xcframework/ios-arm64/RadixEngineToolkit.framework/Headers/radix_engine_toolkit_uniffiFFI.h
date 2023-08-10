@@ -352,6 +352,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_push_
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_return_to_worktop(void*_Nonnull ptr, RustBuffer bucket, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_set_metadata(void*_Nonnull ptr, void*_Nonnull address, RustBuffer key, RustBuffer value, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_set_role(void*_Nonnull ptr, void*_Nonnull address, RustBuffer module, RustBuffer role_key, void*_Nonnull rule, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_take_all_from_worktop(void*_Nonnull ptr, void*_Nonnull resource_address, RustBuffer into_bucket, RustCallStatus *_Nonnull out_status
@@ -993,6 +995,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_push
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_return_to_worktop(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_set_metadata(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_set_role(void
