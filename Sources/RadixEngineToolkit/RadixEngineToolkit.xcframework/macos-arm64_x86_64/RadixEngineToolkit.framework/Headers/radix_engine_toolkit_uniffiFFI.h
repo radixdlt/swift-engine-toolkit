@@ -362,6 +362,10 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_take_
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_take_non_fungibles_from_worktop(void*_Nonnull ptr, void*_Nonnull resource_address, RustBuffer ids, RustBuffer into_bucket, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_withdraw_from_account(void*_Nonnull ptr, void*_Nonnull account_address, void*_Nonnull resource_address, void*_Nonnull amount, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_withdraw_non_fungibles_from_account(void*_Nonnull ptr, void*_Nonnull account_address, void*_Nonnull resource_address, RustBuffer ids, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_messagevalidationconfig(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_messagevalidationconfig_default(RustCallStatus *_Nonnull out_status
@@ -1010,6 +1014,12 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_take
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_take_non_fungibles_from_worktop(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_withdraw_from_account(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_withdraw_non_fungibles_from_account(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_messagevalidationconfig_max_decryptors(void

@@ -1772,6 +1772,8 @@ public protocol ManifestBuilderProtocol {
     func `takeAllFromWorktop`(`resourceAddress`: Address, `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `takeFromWorktop`(`resourceAddress`: Address, `amount`: Decimal, `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `takeNonFungiblesFromWorktop`(`resourceAddress`: Address, `ids`: [NonFungibleLocalId], `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `withdrawFromAccount`(`accountAddress`: Address, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
+    func `withdrawNonFungiblesFromAccount`(`accountAddress`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
     
 }
 
@@ -2348,6 +2350,32 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterSequenceTypeNonFungibleLocalId.lower(`ids`),
         FfiConverterTypeManifestBuilderBucket.lower(`intoBucket`),$0
+    )
+}
+        )
+    }
+
+    public func `withdrawFromAccount`(`accountAddress`: Address, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_withdraw_from_account(self.pointer, 
+        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`resourceAddress`),
+        FfiConverterTypeDecimal.lower(`amount`),$0
+    )
+}
+        )
+    }
+
+    public func `withdrawNonFungiblesFromAccount`(`accountAddress`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_withdraw_non_fungibles_from_account(self.pointer, 
+        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`resourceAddress`),
+        FfiConverterSequenceTypeNonFungibleLocalId.lower(`ids`),$0
     )
 }
         )
@@ -16283,6 +16311,12 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_take_non_fungibles_from_worktop() != 49676) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_withdraw_from_account() != 4369) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_withdraw_non_fungibles_from_account() != 36610) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_messagevalidationconfig_max_decryptors() != 45350) {
