@@ -4304,12 +4304,10 @@ public func FfiConverterTypeTransactionManifest_lower(_ value: TransactionManife
 
 
 public protocol ValidationConfigProtocol {
-    func `maxCostUnitLimit`()   -> UInt32
     func `maxEpochRange`()   -> UInt64
     func `maxNotarizedPayloadSize`()   -> UInt64
     func `maxTipPercentage`()   -> UInt16
     func `messageValidation`()   -> MessageValidationConfig
-    func `minCostUnitLimit`()   -> UInt32
     func `minTipPercentage`()   -> UInt16
     func `networkId`()   -> UInt8
     
@@ -4324,13 +4322,11 @@ public class ValidationConfig: ValidationConfigProtocol {
     required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
-    public convenience init(`networkId`: UInt8, `maxNotarizedPayloadSize`: UInt64, `minCostUnitLimit`: UInt32, `maxCostUnitLimit`: UInt32, `minTipPercentage`: UInt16, `maxTipPercentage`: UInt16, `maxEpochRange`: UInt64, `messageValidation`: MessageValidationConfig)  {
+    public convenience init(`networkId`: UInt8, `maxNotarizedPayloadSize`: UInt64, `minTipPercentage`: UInt16, `maxTipPercentage`: UInt16, `maxEpochRange`: UInt64, `messageValidation`: MessageValidationConfig)  {
         self.init(unsafeFromRawPointer: try! rustCall() {
     uniffi_radix_engine_toolkit_uniffi_fn_constructor_validationconfig_new(
         FfiConverterUInt8.lower(`networkId`),
         FfiConverterUInt64.lower(`maxNotarizedPayloadSize`),
-        FfiConverterUInt32.lower(`minCostUnitLimit`),
-        FfiConverterUInt32.lower(`maxCostUnitLimit`),
         FfiConverterUInt16.lower(`minTipPercentage`),
         FfiConverterUInt16.lower(`maxTipPercentage`),
         FfiConverterUInt64.lower(`maxEpochRange`),
@@ -4355,17 +4351,6 @@ public class ValidationConfig: ValidationConfigProtocol {
 
     
     
-
-    public func `maxCostUnitLimit`()  -> UInt32 {
-        return try!  FfiConverterUInt32.lift(
-            try! 
-    rustCall() {
-    
-    uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_max_cost_unit_limit(self.pointer, $0
-    )
-}
-        )
-    }
 
     public func `maxEpochRange`()  -> UInt64 {
         return try!  FfiConverterUInt64.lift(
@@ -4406,17 +4391,6 @@ public class ValidationConfig: ValidationConfigProtocol {
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_message_validation(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func `minCostUnitLimit`()  -> UInt32 {
-        return try!  FfiConverterUInt32.lift(
-            try! 
-    rustCall() {
-    
-    uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_min_cost_unit_limit(self.pointer, $0
     )
 }
         )
@@ -4482,6 +4456,193 @@ public func FfiConverterTypeValidationConfig_lift(_ pointer: UnsafeMutableRawPoi
 
 public func FfiConverterTypeValidationConfig_lower(_ value: ValidationConfig) -> UnsafeMutableRawPointer {
     return FfiConverterTypeValidationConfig.lower(value)
+}
+
+
+public struct AccountAddAuthorizedDepositorEvent {
+    public var `authorizedDepositorBadge`: ResourceOrNonFungible
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`authorizedDepositorBadge`: ResourceOrNonFungible) {
+        self.`authorizedDepositorBadge` = `authorizedDepositorBadge`
+    }
+}
+
+
+
+public struct FfiConverterTypeAccountAddAuthorizedDepositorEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountAddAuthorizedDepositorEvent {
+        return try AccountAddAuthorizedDepositorEvent(
+            `authorizedDepositorBadge`: FfiConverterTypeResourceOrNonFungible.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AccountAddAuthorizedDepositorEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeResourceOrNonFungible.write(value.`authorizedDepositorBadge`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeAccountAddAuthorizedDepositorEvent_lift(_ buf: RustBuffer) throws -> AccountAddAuthorizedDepositorEvent {
+    return try FfiConverterTypeAccountAddAuthorizedDepositorEvent.lift(buf)
+}
+
+public func FfiConverterTypeAccountAddAuthorizedDepositorEvent_lower(_ value: AccountAddAuthorizedDepositorEvent) -> RustBuffer {
+    return FfiConverterTypeAccountAddAuthorizedDepositorEvent.lower(value)
+}
+
+
+public struct AccountRemoveAuthorizedDepositorEvent {
+    public var `authorizedDepositorBadge`: ResourceOrNonFungible
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`authorizedDepositorBadge`: ResourceOrNonFungible) {
+        self.`authorizedDepositorBadge` = `authorizedDepositorBadge`
+    }
+}
+
+
+
+public struct FfiConverterTypeAccountRemoveAuthorizedDepositorEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountRemoveAuthorizedDepositorEvent {
+        return try AccountRemoveAuthorizedDepositorEvent(
+            `authorizedDepositorBadge`: FfiConverterTypeResourceOrNonFungible.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AccountRemoveAuthorizedDepositorEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeResourceOrNonFungible.write(value.`authorizedDepositorBadge`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeAccountRemoveAuthorizedDepositorEvent_lift(_ buf: RustBuffer) throws -> AccountRemoveAuthorizedDepositorEvent {
+    return try FfiConverterTypeAccountRemoveAuthorizedDepositorEvent.lift(buf)
+}
+
+public func FfiConverterTypeAccountRemoveAuthorizedDepositorEvent_lower(_ value: AccountRemoveAuthorizedDepositorEvent) -> RustBuffer {
+    return FfiConverterTypeAccountRemoveAuthorizedDepositorEvent.lower(value)
+}
+
+
+public struct AccountRemoveResourcePreferenceEvent {
+    public var `resourceAddress`: Address
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`resourceAddress`: Address) {
+        self.`resourceAddress` = `resourceAddress`
+    }
+}
+
+
+
+public struct FfiConverterTypeAccountRemoveResourcePreferenceEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountRemoveResourcePreferenceEvent {
+        return try AccountRemoveResourcePreferenceEvent(
+            `resourceAddress`: FfiConverterTypeAddress.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AccountRemoveResourcePreferenceEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.`resourceAddress`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeAccountRemoveResourcePreferenceEvent_lift(_ buf: RustBuffer) throws -> AccountRemoveResourcePreferenceEvent {
+    return try FfiConverterTypeAccountRemoveResourcePreferenceEvent.lift(buf)
+}
+
+public func FfiConverterTypeAccountRemoveResourcePreferenceEvent_lower(_ value: AccountRemoveResourcePreferenceEvent) -> RustBuffer {
+    return FfiConverterTypeAccountRemoveResourcePreferenceEvent.lower(value)
+}
+
+
+public struct AccountSetDefaultDepositRuleEvent {
+    public var `defaultDepositRule`: AccountDefaultDepositRule
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`defaultDepositRule`: AccountDefaultDepositRule) {
+        self.`defaultDepositRule` = `defaultDepositRule`
+    }
+}
+
+
+extension AccountSetDefaultDepositRuleEvent: Equatable, Hashable {
+    public static func ==(lhs: AccountSetDefaultDepositRuleEvent, rhs: AccountSetDefaultDepositRuleEvent) -> Bool {
+        if lhs.`defaultDepositRule` != rhs.`defaultDepositRule` {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(`defaultDepositRule`)
+    }
+}
+
+
+public struct FfiConverterTypeAccountSetDefaultDepositRuleEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountSetDefaultDepositRuleEvent {
+        return try AccountSetDefaultDepositRuleEvent(
+            `defaultDepositRule`: FfiConverterTypeAccountDefaultDepositRule.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AccountSetDefaultDepositRuleEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeAccountDefaultDepositRule.write(value.`defaultDepositRule`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeAccountSetDefaultDepositRuleEvent_lift(_ buf: RustBuffer) throws -> AccountSetDefaultDepositRuleEvent {
+    return try FfiConverterTypeAccountSetDefaultDepositRuleEvent.lift(buf)
+}
+
+public func FfiConverterTypeAccountSetDefaultDepositRuleEvent_lower(_ value: AccountSetDefaultDepositRuleEvent) -> RustBuffer {
+    return FfiConverterTypeAccountSetDefaultDepositRuleEvent.lower(value)
+}
+
+
+public struct AccountSetResourcePreferenceEvent {
+    public var `resourceAddress`: Address
+    public var `preference`: ResourcePreference
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`resourceAddress`: Address, `preference`: ResourcePreference) {
+        self.`resourceAddress` = `resourceAddress`
+        self.`preference` = `preference`
+    }
+}
+
+
+
+public struct FfiConverterTypeAccountSetResourcePreferenceEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountSetResourcePreferenceEvent {
+        return try AccountSetResourcePreferenceEvent(
+            `resourceAddress`: FfiConverterTypeAddress.read(from: &buf), 
+            `preference`: FfiConverterTypeResourcePreference.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AccountSetResourcePreferenceEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.`resourceAddress`, into: &buf)
+        FfiConverterTypeResourcePreference.write(value.`preference`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeAccountSetResourcePreferenceEvent_lift(_ buf: RustBuffer) throws -> AccountSetResourcePreferenceEvent {
+    return try FfiConverterTypeAccountSetResourcePreferenceEvent.lift(buf)
+}
+
+public func FfiConverterTypeAccountSetResourcePreferenceEvent_lower(_ value: AccountSetResourcePreferenceEvent) -> RustBuffer {
+    return FfiConverterTypeAccountSetResourcePreferenceEvent.lower(value)
 }
 
 
@@ -5239,6 +5400,142 @@ public func FfiConverterTypeFungibleResourceRoles_lift(_ buf: RustBuffer) throws
 
 public func FfiConverterTypeFungibleResourceRoles_lower(_ value: FungibleResourceRoles) -> RustBuffer {
     return FfiConverterTypeFungibleResourceRoles.lower(value)
+}
+
+
+public struct FungibleVaultDepositEvent {
+    public var `amount`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`amount`: Decimal) {
+        self.`amount` = `amount`
+    }
+}
+
+
+
+public struct FfiConverterTypeFungibleVaultDepositEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FungibleVaultDepositEvent {
+        return try FungibleVaultDepositEvent(
+            `amount`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FungibleVaultDepositEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeDecimal.write(value.`amount`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeFungibleVaultDepositEvent_lift(_ buf: RustBuffer) throws -> FungibleVaultDepositEvent {
+    return try FfiConverterTypeFungibleVaultDepositEvent.lift(buf)
+}
+
+public func FfiConverterTypeFungibleVaultDepositEvent_lower(_ value: FungibleVaultDepositEvent) -> RustBuffer {
+    return FfiConverterTypeFungibleVaultDepositEvent.lower(value)
+}
+
+
+public struct FungibleVaultLockFeeEvent {
+    public var `amount`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`amount`: Decimal) {
+        self.`amount` = `amount`
+    }
+}
+
+
+
+public struct FfiConverterTypeFungibleVaultLockFeeEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FungibleVaultLockFeeEvent {
+        return try FungibleVaultLockFeeEvent(
+            `amount`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FungibleVaultLockFeeEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeDecimal.write(value.`amount`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeFungibleVaultLockFeeEvent_lift(_ buf: RustBuffer) throws -> FungibleVaultLockFeeEvent {
+    return try FfiConverterTypeFungibleVaultLockFeeEvent.lift(buf)
+}
+
+public func FfiConverterTypeFungibleVaultLockFeeEvent_lower(_ value: FungibleVaultLockFeeEvent) -> RustBuffer {
+    return FfiConverterTypeFungibleVaultLockFeeEvent.lower(value)
+}
+
+
+public struct FungibleVaultRecallEvent {
+    public var `amount`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`amount`: Decimal) {
+        self.`amount` = `amount`
+    }
+}
+
+
+
+public struct FfiConverterTypeFungibleVaultRecallEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FungibleVaultRecallEvent {
+        return try FungibleVaultRecallEvent(
+            `amount`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FungibleVaultRecallEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeDecimal.write(value.`amount`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeFungibleVaultRecallEvent_lift(_ buf: RustBuffer) throws -> FungibleVaultRecallEvent {
+    return try FfiConverterTypeFungibleVaultRecallEvent.lift(buf)
+}
+
+public func FfiConverterTypeFungibleVaultRecallEvent_lower(_ value: FungibleVaultRecallEvent) -> RustBuffer {
+    return FfiConverterTypeFungibleVaultRecallEvent.lower(value)
+}
+
+
+public struct FungibleVaultWithdrawEvent {
+    public var `amount`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`amount`: Decimal) {
+        self.`amount` = `amount`
+    }
+}
+
+
+
+public struct FfiConverterTypeFungibleVaultWithdrawEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FungibleVaultWithdrawEvent {
+        return try FungibleVaultWithdrawEvent(
+            `amount`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FungibleVaultWithdrawEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeDecimal.write(value.`amount`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeFungibleVaultWithdrawEvent_lift(_ buf: RustBuffer) throws -> FungibleVaultWithdrawEvent {
+    return try FfiConverterTypeFungibleVaultWithdrawEvent.lift(buf)
+}
+
+public func FfiConverterTypeFungibleVaultWithdrawEvent_lower(_ value: FungibleVaultWithdrawEvent) -> RustBuffer {
+    return FfiConverterTypeFungibleVaultWithdrawEvent.lower(value)
 }
 
 
@@ -6368,6 +6665,147 @@ public func FfiConverterTypeMultiResourcePoolWithdrawEvent_lower(_ value: MultiR
 }
 
 
+public struct NonFungibleVaultDepositEvent {
+    public var `ids`: [NonFungibleLocalId]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`ids`: [NonFungibleLocalId]) {
+        self.`ids` = `ids`
+    }
+}
+
+
+extension NonFungibleVaultDepositEvent: Equatable, Hashable {
+    public static func ==(lhs: NonFungibleVaultDepositEvent, rhs: NonFungibleVaultDepositEvent) -> Bool {
+        if lhs.`ids` != rhs.`ids` {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(`ids`)
+    }
+}
+
+
+public struct FfiConverterTypeNonFungibleVaultDepositEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NonFungibleVaultDepositEvent {
+        return try NonFungibleVaultDepositEvent(
+            `ids`: FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: NonFungibleVaultDepositEvent, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypeNonFungibleLocalId.write(value.`ids`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeNonFungibleVaultDepositEvent_lift(_ buf: RustBuffer) throws -> NonFungibleVaultDepositEvent {
+    return try FfiConverterTypeNonFungibleVaultDepositEvent.lift(buf)
+}
+
+public func FfiConverterTypeNonFungibleVaultDepositEvent_lower(_ value: NonFungibleVaultDepositEvent) -> RustBuffer {
+    return FfiConverterTypeNonFungibleVaultDepositEvent.lower(value)
+}
+
+
+public struct NonFungibleVaultRecallEvent {
+    public var `ids`: [NonFungibleLocalId]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`ids`: [NonFungibleLocalId]) {
+        self.`ids` = `ids`
+    }
+}
+
+
+extension NonFungibleVaultRecallEvent: Equatable, Hashable {
+    public static func ==(lhs: NonFungibleVaultRecallEvent, rhs: NonFungibleVaultRecallEvent) -> Bool {
+        if lhs.`ids` != rhs.`ids` {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(`ids`)
+    }
+}
+
+
+public struct FfiConverterTypeNonFungibleVaultRecallEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NonFungibleVaultRecallEvent {
+        return try NonFungibleVaultRecallEvent(
+            `ids`: FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: NonFungibleVaultRecallEvent, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypeNonFungibleLocalId.write(value.`ids`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeNonFungibleVaultRecallEvent_lift(_ buf: RustBuffer) throws -> NonFungibleVaultRecallEvent {
+    return try FfiConverterTypeNonFungibleVaultRecallEvent.lift(buf)
+}
+
+public func FfiConverterTypeNonFungibleVaultRecallEvent_lower(_ value: NonFungibleVaultRecallEvent) -> RustBuffer {
+    return FfiConverterTypeNonFungibleVaultRecallEvent.lower(value)
+}
+
+
+public struct NonFungibleVaultWithdrawEvent {
+    public var `ids`: [NonFungibleLocalId]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`ids`: [NonFungibleLocalId]) {
+        self.`ids` = `ids`
+    }
+}
+
+
+extension NonFungibleVaultWithdrawEvent: Equatable, Hashable {
+    public static func ==(lhs: NonFungibleVaultWithdrawEvent, rhs: NonFungibleVaultWithdrawEvent) -> Bool {
+        if lhs.`ids` != rhs.`ids` {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(`ids`)
+    }
+}
+
+
+public struct FfiConverterTypeNonFungibleVaultWithdrawEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NonFungibleVaultWithdrawEvent {
+        return try NonFungibleVaultWithdrawEvent(
+            `ids`: FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: NonFungibleVaultWithdrawEvent, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypeNonFungibleLocalId.write(value.`ids`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeNonFungibleVaultWithdrawEvent_lift(_ buf: RustBuffer) throws -> NonFungibleVaultWithdrawEvent {
+    return try FfiConverterTypeNonFungibleVaultWithdrawEvent.lift(buf)
+}
+
+public func FfiConverterTypeNonFungibleVaultWithdrawEvent_lower(_ value: NonFungibleVaultWithdrawEvent) -> RustBuffer {
+    return FfiConverterTypeNonFungibleVaultWithdrawEvent.lower(value)
+}
+
+
 public struct OneResourcePoolContributionEvent {
     public var `amountOfResourcesContributed`: Decimal
     public var `poolUnitsMinted`: Decimal
@@ -7225,40 +7663,6 @@ public func FfiConverterTypeSecurityStructureRole_lift(_ buf: RustBuffer) throws
 
 public func FfiConverterTypeSecurityStructureRole_lower(_ value: SecurityStructureRole) -> RustBuffer {
     return FfiConverterTypeSecurityStructureRole.lower(value)
-}
-
-
-public struct SetAndLockOwnerRoleEvent {
-    public var `rule`: AccessRule
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(`rule`: AccessRule) {
-        self.`rule` = `rule`
-    }
-}
-
-
-
-public struct FfiConverterTypeSetAndLockOwnerRoleEvent: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SetAndLockOwnerRoleEvent {
-        return try SetAndLockOwnerRoleEvent(
-            `rule`: FfiConverterTypeAccessRule.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: SetAndLockOwnerRoleEvent, into buf: inout [UInt8]) {
-        FfiConverterTypeAccessRule.write(value.`rule`, into: &buf)
-    }
-}
-
-
-public func FfiConverterTypeSetAndLockOwnerRoleEvent_lift(_ buf: RustBuffer) throws -> SetAndLockOwnerRoleEvent {
-    return try FfiConverterTypeSetAndLockOwnerRoleEvent.lift(buf)
-}
-
-public func FfiConverterTypeSetAndLockOwnerRoleEvent_lower(_ value: SetAndLockOwnerRoleEvent) -> RustBuffer {
-    return FfiConverterTypeSetAndLockOwnerRoleEvent.lower(value)
 }
 
 
@@ -8178,6 +8582,186 @@ public func FfiConverterTypeAccountDefaultDepositRule_lower(_ value: AccountDefa
 
 
 extension AccountDefaultDepositRule: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum AccountDepositEvent {
+    
+    case `fungible`(`resourceAddress`: Address, `amount`: Decimal)
+    case `nonFungible`(`resourceAddress`: Address, `ids`: [NonFungibleLocalId])
+}
+
+public struct FfiConverterTypeAccountDepositEvent: FfiConverterRustBuffer {
+    typealias SwiftType = AccountDepositEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountDepositEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`fungible`(
+            `resourceAddress`: try FfiConverterTypeAddress.read(from: &buf), 
+            `amount`: try FfiConverterTypeDecimal.read(from: &buf)
+        )
+        
+        case 2: return .`nonFungible`(
+            `resourceAddress`: try FfiConverterTypeAddress.read(from: &buf), 
+            `ids`: try FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: AccountDepositEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`fungible`(`resourceAddress`,`amount`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeAddress.write(`resourceAddress`, into: &buf)
+            FfiConverterTypeDecimal.write(`amount`, into: &buf)
+            
+        
+        case let .`nonFungible`(`resourceAddress`,`ids`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeAddress.write(`resourceAddress`, into: &buf)
+            FfiConverterSequenceTypeNonFungibleLocalId.write(`ids`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeAccountDepositEvent_lift(_ buf: RustBuffer) throws -> AccountDepositEvent {
+    return try FfiConverterTypeAccountDepositEvent.lift(buf)
+}
+
+public func FfiConverterTypeAccountDepositEvent_lower(_ value: AccountDepositEvent) -> RustBuffer {
+    return FfiConverterTypeAccountDepositEvent.lower(value)
+}
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum AccountRejectedDepositEvent {
+    
+    case `fungible`(`resourceAddress`: Address, `amount`: Decimal)
+    case `nonFungible`(`resourceAddress`: Address, `ids`: [NonFungibleLocalId])
+}
+
+public struct FfiConverterTypeAccountRejectedDepositEvent: FfiConverterRustBuffer {
+    typealias SwiftType = AccountRejectedDepositEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountRejectedDepositEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`fungible`(
+            `resourceAddress`: try FfiConverterTypeAddress.read(from: &buf), 
+            `amount`: try FfiConverterTypeDecimal.read(from: &buf)
+        )
+        
+        case 2: return .`nonFungible`(
+            `resourceAddress`: try FfiConverterTypeAddress.read(from: &buf), 
+            `ids`: try FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: AccountRejectedDepositEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`fungible`(`resourceAddress`,`amount`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeAddress.write(`resourceAddress`, into: &buf)
+            FfiConverterTypeDecimal.write(`amount`, into: &buf)
+            
+        
+        case let .`nonFungible`(`resourceAddress`,`ids`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeAddress.write(`resourceAddress`, into: &buf)
+            FfiConverterSequenceTypeNonFungibleLocalId.write(`ids`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeAccountRejectedDepositEvent_lift(_ buf: RustBuffer) throws -> AccountRejectedDepositEvent {
+    return try FfiConverterTypeAccountRejectedDepositEvent.lift(buf)
+}
+
+public func FfiConverterTypeAccountRejectedDepositEvent_lower(_ value: AccountRejectedDepositEvent) -> RustBuffer {
+    return FfiConverterTypeAccountRejectedDepositEvent.lower(value)
+}
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum AccountWithdrawEvent {
+    
+    case `fungible`(`resourceAddress`: Address, `amount`: Decimal)
+    case `nonFungible`(`resourceAddress`: Address, `ids`: [NonFungibleLocalId])
+}
+
+public struct FfiConverterTypeAccountWithdrawEvent: FfiConverterRustBuffer {
+    typealias SwiftType = AccountWithdrawEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AccountWithdrawEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`fungible`(
+            `resourceAddress`: try FfiConverterTypeAddress.read(from: &buf), 
+            `amount`: try FfiConverterTypeDecimal.read(from: &buf)
+        )
+        
+        case 2: return .`nonFungible`(
+            `resourceAddress`: try FfiConverterTypeAddress.read(from: &buf), 
+            `ids`: try FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: AccountWithdrawEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`fungible`(`resourceAddress`,`amount`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeAddress.write(`resourceAddress`, into: &buf)
+            FfiConverterTypeDecimal.write(`amount`, into: &buf)
+            
+        
+        case let .`nonFungible`(`resourceAddress`,`ids`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeAddress.write(`resourceAddress`, into: &buf)
+            FfiConverterSequenceTypeNonFungibleLocalId.write(`ids`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeAccountWithdrawEvent_lift(_ buf: RustBuffer) throws -> AccountWithdrawEvent {
+    return try FfiConverterTypeAccountWithdrawEvent.lift(buf)
+}
+
+public func FfiConverterTypeAccountWithdrawEvent_lower(_ value: AccountWithdrawEvent) -> RustBuffer {
+    return FfiConverterTypeAccountWithdrawEvent.lower(value)
+}
+
 
 
 
@@ -12873,6 +13457,168 @@ public func FfiConverterTypeTypedAccessControllerPackageEvent_lower(_ value: Typ
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum TypedAccountBlueprintEvent {
+    
+    case `accountWithdrawEventValue`(`value`: AccountWithdrawEvent)
+    case `accountDepositEventValue`(`value`: AccountDepositEvent)
+    case `accountRejectedDepositEventValue`(`value`: AccountRejectedDepositEvent)
+    case `accountSetResourcePreferenceEventValue`(`value`: AccountSetResourcePreferenceEvent)
+    case `accountRemoveResourcePreferenceEventValue`(`value`: AccountRemoveResourcePreferenceEvent)
+    case `accountSetDefaultDepositRuleEventValue`(`value`: AccountSetDefaultDepositRuleEvent)
+    case `accountAddAuthorizedDepositorEventValue`(`value`: AccountAddAuthorizedDepositorEvent)
+    case `accountRemoveAuthorizedDepositorEventValue`(`value`: AccountRemoveAuthorizedDepositorEvent)
+}
+
+public struct FfiConverterTypeTypedAccountBlueprintEvent: FfiConverterRustBuffer {
+    typealias SwiftType = TypedAccountBlueprintEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedAccountBlueprintEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`accountWithdrawEventValue`(
+            `value`: try FfiConverterTypeAccountWithdrawEvent.read(from: &buf)
+        )
+        
+        case 2: return .`accountDepositEventValue`(
+            `value`: try FfiConverterTypeAccountDepositEvent.read(from: &buf)
+        )
+        
+        case 3: return .`accountRejectedDepositEventValue`(
+            `value`: try FfiConverterTypeAccountRejectedDepositEvent.read(from: &buf)
+        )
+        
+        case 4: return .`accountSetResourcePreferenceEventValue`(
+            `value`: try FfiConverterTypeAccountSetResourcePreferenceEvent.read(from: &buf)
+        )
+        
+        case 5: return .`accountRemoveResourcePreferenceEventValue`(
+            `value`: try FfiConverterTypeAccountRemoveResourcePreferenceEvent.read(from: &buf)
+        )
+        
+        case 6: return .`accountSetDefaultDepositRuleEventValue`(
+            `value`: try FfiConverterTypeAccountSetDefaultDepositRuleEvent.read(from: &buf)
+        )
+        
+        case 7: return .`accountAddAuthorizedDepositorEventValue`(
+            `value`: try FfiConverterTypeAccountAddAuthorizedDepositorEvent.read(from: &buf)
+        )
+        
+        case 8: return .`accountRemoveAuthorizedDepositorEventValue`(
+            `value`: try FfiConverterTypeAccountRemoveAuthorizedDepositorEvent.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: TypedAccountBlueprintEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`accountWithdrawEventValue`(`value`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeAccountWithdrawEvent.write(`value`, into: &buf)
+            
+        
+        case let .`accountDepositEventValue`(`value`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeAccountDepositEvent.write(`value`, into: &buf)
+            
+        
+        case let .`accountRejectedDepositEventValue`(`value`):
+            writeInt(&buf, Int32(3))
+            FfiConverterTypeAccountRejectedDepositEvent.write(`value`, into: &buf)
+            
+        
+        case let .`accountSetResourcePreferenceEventValue`(`value`):
+            writeInt(&buf, Int32(4))
+            FfiConverterTypeAccountSetResourcePreferenceEvent.write(`value`, into: &buf)
+            
+        
+        case let .`accountRemoveResourcePreferenceEventValue`(`value`):
+            writeInt(&buf, Int32(5))
+            FfiConverterTypeAccountRemoveResourcePreferenceEvent.write(`value`, into: &buf)
+            
+        
+        case let .`accountSetDefaultDepositRuleEventValue`(`value`):
+            writeInt(&buf, Int32(6))
+            FfiConverterTypeAccountSetDefaultDepositRuleEvent.write(`value`, into: &buf)
+            
+        
+        case let .`accountAddAuthorizedDepositorEventValue`(`value`):
+            writeInt(&buf, Int32(7))
+            FfiConverterTypeAccountAddAuthorizedDepositorEvent.write(`value`, into: &buf)
+            
+        
+        case let .`accountRemoveAuthorizedDepositorEventValue`(`value`):
+            writeInt(&buf, Int32(8))
+            FfiConverterTypeAccountRemoveAuthorizedDepositorEvent.write(`value`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeTypedAccountBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedAccountBlueprintEvent {
+    return try FfiConverterTypeTypedAccountBlueprintEvent.lift(buf)
+}
+
+public func FfiConverterTypeTypedAccountBlueprintEvent_lower(_ value: TypedAccountBlueprintEvent) -> RustBuffer {
+    return FfiConverterTypeTypedAccountBlueprintEvent.lower(value)
+}
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum TypedAccountPackageEvent {
+    
+    case `account`(`value`: TypedAccountBlueprintEvent)
+}
+
+public struct FfiConverterTypeTypedAccountPackageEvent: FfiConverterRustBuffer {
+    typealias SwiftType = TypedAccountPackageEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedAccountPackageEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`account`(
+            `value`: try FfiConverterTypeTypedAccountBlueprintEvent.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: TypedAccountPackageEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`account`(`value`):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeTypedAccountBlueprintEvent.write(`value`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeTypedAccountPackageEvent_lift(_ buf: RustBuffer) throws -> TypedAccountPackageEvent {
+    return try FfiConverterTypeTypedAccountPackageEvent.lift(buf)
+}
+
+public func FfiConverterTypeTypedAccountPackageEvent_lower(_ value: TypedAccountPackageEvent) -> RustBuffer {
+    return FfiConverterTypeTypedAccountPackageEvent.lower(value)
+}
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedConsensusManagerBlueprintEvent {
     
     case `roundChangeEventValue`(`value`: RoundChangeEvent)
@@ -13053,10 +13799,10 @@ public func FfiConverterTypeTypedFungibleResourceManagerBlueprintEvent_lower(_ v
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedFungibleVaultBlueprintEvent {
     
-    case `lockFeeEventValue`(`value`: LockFeeEvent)
-    case `withdrawResourceEventValue`(`value`: WithdrawResourceEvent)
-    case `depositResourceEventValue`(`value`: DepositResourceEvent)
-    case `recallResourceEventValue`(`value`: RecallResourceEvent)
+    case `fungibleVaultLockFeeEventValue`(`value`: FungibleVaultLockFeeEvent)
+    case `fungibleVaultWithdrawEventValue`(`value`: FungibleVaultWithdrawEvent)
+    case `fungibleVaultDepositEventValue`(`value`: FungibleVaultDepositEvent)
+    case `fungibleVaultRecallEventValue`(`value`: FungibleVaultRecallEvent)
 }
 
 public struct FfiConverterTypeTypedFungibleVaultBlueprintEvent: FfiConverterRustBuffer {
@@ -13066,20 +13812,20 @@ public struct FfiConverterTypeTypedFungibleVaultBlueprintEvent: FfiConverterRust
         let variant: Int32 = try readInt(&buf)
         switch variant {
         
-        case 1: return .`lockFeeEventValue`(
-            `value`: try FfiConverterTypeLockFeeEvent.read(from: &buf)
+        case 1: return .`fungibleVaultLockFeeEventValue`(
+            `value`: try FfiConverterTypeFungibleVaultLockFeeEvent.read(from: &buf)
         )
         
-        case 2: return .`withdrawResourceEventValue`(
-            `value`: try FfiConverterTypeWithdrawResourceEvent.read(from: &buf)
+        case 2: return .`fungibleVaultWithdrawEventValue`(
+            `value`: try FfiConverterTypeFungibleVaultWithdrawEvent.read(from: &buf)
         )
         
-        case 3: return .`depositResourceEventValue`(
-            `value`: try FfiConverterTypeDepositResourceEvent.read(from: &buf)
+        case 3: return .`fungibleVaultDepositEventValue`(
+            `value`: try FfiConverterTypeFungibleVaultDepositEvent.read(from: &buf)
         )
         
-        case 4: return .`recallResourceEventValue`(
-            `value`: try FfiConverterTypeRecallResourceEvent.read(from: &buf)
+        case 4: return .`fungibleVaultRecallEventValue`(
+            `value`: try FfiConverterTypeFungibleVaultRecallEvent.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -13090,24 +13836,24 @@ public struct FfiConverterTypeTypedFungibleVaultBlueprintEvent: FfiConverterRust
         switch value {
         
         
-        case let .`lockFeeEventValue`(`value`):
+        case let .`fungibleVaultLockFeeEventValue`(`value`):
             writeInt(&buf, Int32(1))
-            FfiConverterTypeLockFeeEvent.write(`value`, into: &buf)
+            FfiConverterTypeFungibleVaultLockFeeEvent.write(`value`, into: &buf)
             
         
-        case let .`withdrawResourceEventValue`(`value`):
+        case let .`fungibleVaultWithdrawEventValue`(`value`):
             writeInt(&buf, Int32(2))
-            FfiConverterTypeWithdrawResourceEvent.write(`value`, into: &buf)
+            FfiConverterTypeFungibleVaultWithdrawEvent.write(`value`, into: &buf)
             
         
-        case let .`depositResourceEventValue`(`value`):
+        case let .`fungibleVaultDepositEventValue`(`value`):
             writeInt(&buf, Int32(3))
-            FfiConverterTypeDepositResourceEvent.write(`value`, into: &buf)
+            FfiConverterTypeFungibleVaultDepositEvent.write(`value`, into: &buf)
             
         
-        case let .`recallResourceEventValue`(`value`):
+        case let .`fungibleVaultRecallEventValue`(`value`):
             writeInt(&buf, Int32(4))
-            FfiConverterTypeRecallResourceEvent.write(`value`, into: &buf)
+            FfiConverterTypeFungibleVaultRecallEvent.write(`value`, into: &buf)
             
         }
     }
@@ -13308,6 +14054,7 @@ public func FfiConverterTypeTypedMultiResourcePoolBlueprintEvent_lower(_ value: 
 public enum TypedNativeEvent {
     
     case `accessController`(`value`: TypedAccessControllerPackageEvent)
+    case `account`(`value`: TypedAccountPackageEvent)
     case `consensusManager`(`value`: TypedConsensusManagerPackageEvent)
     case `pool`(`value`: TypedPoolPackageEvent)
     case `resource`(`value`: TypedResourcePackageEvent)
@@ -13326,23 +14073,27 @@ public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
             `value`: try FfiConverterTypeTypedAccessControllerPackageEvent.read(from: &buf)
         )
         
-        case 2: return .`consensusManager`(
+        case 2: return .`account`(
+            `value`: try FfiConverterTypeTypedAccountPackageEvent.read(from: &buf)
+        )
+        
+        case 3: return .`consensusManager`(
             `value`: try FfiConverterTypeTypedConsensusManagerPackageEvent.read(from: &buf)
         )
         
-        case 3: return .`pool`(
+        case 4: return .`pool`(
             `value`: try FfiConverterTypeTypedPoolPackageEvent.read(from: &buf)
         )
         
-        case 4: return .`resource`(
+        case 5: return .`resource`(
             `value`: try FfiConverterTypeTypedResourcePackageEvent.read(from: &buf)
         )
         
-        case 5: return .`roleAssignment`(
+        case 6: return .`roleAssignment`(
             `value`: try FfiConverterTypeTypedRoleAssignmentPackageEvent.read(from: &buf)
         )
         
-        case 6: return .`metadata`(
+        case 7: return .`metadata`(
             `value`: try FfiConverterTypeTypedMetadataPackageEvent.read(from: &buf)
         )
         
@@ -13359,28 +14110,33 @@ public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
             FfiConverterTypeTypedAccessControllerPackageEvent.write(`value`, into: &buf)
             
         
-        case let .`consensusManager`(`value`):
+        case let .`account`(`value`):
             writeInt(&buf, Int32(2))
+            FfiConverterTypeTypedAccountPackageEvent.write(`value`, into: &buf)
+            
+        
+        case let .`consensusManager`(`value`):
+            writeInt(&buf, Int32(3))
             FfiConverterTypeTypedConsensusManagerPackageEvent.write(`value`, into: &buf)
             
         
         case let .`pool`(`value`):
-            writeInt(&buf, Int32(3))
+            writeInt(&buf, Int32(4))
             FfiConverterTypeTypedPoolPackageEvent.write(`value`, into: &buf)
             
         
         case let .`resource`(`value`):
-            writeInt(&buf, Int32(4))
+            writeInt(&buf, Int32(5))
             FfiConverterTypeTypedResourcePackageEvent.write(`value`, into: &buf)
             
         
         case let .`roleAssignment`(`value`):
-            writeInt(&buf, Int32(5))
+            writeInt(&buf, Int32(6))
             FfiConverterTypeTypedRoleAssignmentPackageEvent.write(`value`, into: &buf)
             
         
         case let .`metadata`(`value`):
-            writeInt(&buf, Int32(6))
+            writeInt(&buf, Int32(7))
             FfiConverterTypeTypedMetadataPackageEvent.write(`value`, into: &buf)
             
         }
@@ -13469,10 +14225,9 @@ public func FfiConverterTypeTypedNonFungibleResourceManagerBlueprintEvent_lower(
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedNonFungibleVaultBlueprintEvent {
     
-    case `lockFeeEventValue`(`value`: LockFeeEvent)
-    case `withdrawResourceEventValue`(`value`: WithdrawResourceEvent)
-    case `depositResourceEventValue`(`value`: DepositResourceEvent)
-    case `recallResourceEventValue`(`value`: RecallResourceEvent)
+    case `nonFungibleVaultWithdrawEventValue`(`value`: NonFungibleVaultWithdrawEvent)
+    case `nonFungibleVaultDepositEventValue`(`value`: NonFungibleVaultDepositEvent)
+    case `nonFungibleVaultRecallEventValue`(`value`: NonFungibleVaultRecallEvent)
 }
 
 public struct FfiConverterTypeTypedNonFungibleVaultBlueprintEvent: FfiConverterRustBuffer {
@@ -13482,20 +14237,16 @@ public struct FfiConverterTypeTypedNonFungibleVaultBlueprintEvent: FfiConverterR
         let variant: Int32 = try readInt(&buf)
         switch variant {
         
-        case 1: return .`lockFeeEventValue`(
-            `value`: try FfiConverterTypeLockFeeEvent.read(from: &buf)
+        case 1: return .`nonFungibleVaultWithdrawEventValue`(
+            `value`: try FfiConverterTypeNonFungibleVaultWithdrawEvent.read(from: &buf)
         )
         
-        case 2: return .`withdrawResourceEventValue`(
-            `value`: try FfiConverterTypeWithdrawResourceEvent.read(from: &buf)
+        case 2: return .`nonFungibleVaultDepositEventValue`(
+            `value`: try FfiConverterTypeNonFungibleVaultDepositEvent.read(from: &buf)
         )
         
-        case 3: return .`depositResourceEventValue`(
-            `value`: try FfiConverterTypeDepositResourceEvent.read(from: &buf)
-        )
-        
-        case 4: return .`recallResourceEventValue`(
-            `value`: try FfiConverterTypeRecallResourceEvent.read(from: &buf)
+        case 3: return .`nonFungibleVaultRecallEventValue`(
+            `value`: try FfiConverterTypeNonFungibleVaultRecallEvent.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -13506,24 +14257,19 @@ public struct FfiConverterTypeTypedNonFungibleVaultBlueprintEvent: FfiConverterR
         switch value {
         
         
-        case let .`lockFeeEventValue`(`value`):
+        case let .`nonFungibleVaultWithdrawEventValue`(`value`):
             writeInt(&buf, Int32(1))
-            FfiConverterTypeLockFeeEvent.write(`value`, into: &buf)
+            FfiConverterTypeNonFungibleVaultWithdrawEvent.write(`value`, into: &buf)
             
         
-        case let .`withdrawResourceEventValue`(`value`):
+        case let .`nonFungibleVaultDepositEventValue`(`value`):
             writeInt(&buf, Int32(2))
-            FfiConverterTypeWithdrawResourceEvent.write(`value`, into: &buf)
+            FfiConverterTypeNonFungibleVaultDepositEvent.write(`value`, into: &buf)
             
         
-        case let .`depositResourceEventValue`(`value`):
+        case let .`nonFungibleVaultRecallEventValue`(`value`):
             writeInt(&buf, Int32(3))
-            FfiConverterTypeDepositResourceEvent.write(`value`, into: &buf)
-            
-        
-        case let .`recallResourceEventValue`(`value`):
-            writeInt(&buf, Int32(4))
-            FfiConverterTypeRecallResourceEvent.write(`value`, into: &buf)
+            FfiConverterTypeNonFungibleVaultRecallEvent.write(`value`, into: &buf)
             
         }
     }
@@ -13538,6 +14284,8 @@ public func FfiConverterTypeTypedNonFungibleVaultBlueprintEvent_lower(_ value: T
     return FfiConverterTypeTypedNonFungibleVaultBlueprintEvent.lower(value)
 }
 
+
+extension TypedNonFungibleVaultBlueprintEvent: Equatable, Hashable {}
 
 
 
@@ -13764,11 +14512,8 @@ public func FfiConverterTypeTypedResourcePackageEvent_lower(_ value: TypedResour
 public enum TypedRoleAssignmentBlueprintEvent {
     
     case `setRoleEventValue`(`value`: SetRoleEvent)
-    case `lockRoleEventValue`(`value`: LockRoleEvent)
-    case `setAndLockRoleEventValue`(`value`: SetAndLockRoleEvent)
     case `setOwnerRoleEventValue`(`value`: SetOwnerRoleEvent)
     case `lockOwnerRoleEventValue`(`value`: LockOwnerRoleEvent)
-    case `setAndLockOwnerRoleEventValue`(`value`: SetAndLockOwnerRoleEvent)
 }
 
 public struct FfiConverterTypeTypedRoleAssignmentBlueprintEvent: FfiConverterRustBuffer {
@@ -13782,24 +14527,12 @@ public struct FfiConverterTypeTypedRoleAssignmentBlueprintEvent: FfiConverterRus
             `value`: try FfiConverterTypeSetRoleEvent.read(from: &buf)
         )
         
-        case 2: return .`lockRoleEventValue`(
-            `value`: try FfiConverterTypeLockRoleEvent.read(from: &buf)
-        )
-        
-        case 3: return .`setAndLockRoleEventValue`(
-            `value`: try FfiConverterTypeSetAndLockRoleEvent.read(from: &buf)
-        )
-        
-        case 4: return .`setOwnerRoleEventValue`(
+        case 2: return .`setOwnerRoleEventValue`(
             `value`: try FfiConverterTypeSetOwnerRoleEvent.read(from: &buf)
         )
         
-        case 5: return .`lockOwnerRoleEventValue`(
+        case 3: return .`lockOwnerRoleEventValue`(
             `value`: try FfiConverterTypeLockOwnerRoleEvent.read(from: &buf)
-        )
-        
-        case 6: return .`setAndLockOwnerRoleEventValue`(
-            `value`: try FfiConverterTypeSetAndLockOwnerRoleEvent.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -13815,29 +14548,14 @@ public struct FfiConverterTypeTypedRoleAssignmentBlueprintEvent: FfiConverterRus
             FfiConverterTypeSetRoleEvent.write(`value`, into: &buf)
             
         
-        case let .`lockRoleEventValue`(`value`):
-            writeInt(&buf, Int32(2))
-            FfiConverterTypeLockRoleEvent.write(`value`, into: &buf)
-            
-        
-        case let .`setAndLockRoleEventValue`(`value`):
-            writeInt(&buf, Int32(3))
-            FfiConverterTypeSetAndLockRoleEvent.write(`value`, into: &buf)
-            
-        
         case let .`setOwnerRoleEventValue`(`value`):
-            writeInt(&buf, Int32(4))
+            writeInt(&buf, Int32(2))
             FfiConverterTypeSetOwnerRoleEvent.write(`value`, into: &buf)
             
         
         case let .`lockOwnerRoleEventValue`(`value`):
-            writeInt(&buf, Int32(5))
+            writeInt(&buf, Int32(3))
             FfiConverterTypeLockOwnerRoleEvent.write(`value`, into: &buf)
-            
-        
-        case let .`setAndLockOwnerRoleEventValue`(`value`):
-            writeInt(&buf, Int32(6))
-            FfiConverterTypeSetAndLockOwnerRoleEvent.write(`value`, into: &buf)
             
         }
     }
@@ -16419,9 +17137,6 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate() != 42656) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_max_cost_unit_limit() != 3389) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_max_epoch_range() != 31430) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -16432,9 +17147,6 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_message_validation() != 52946) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_min_cost_unit_limit() != 51406) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_min_tip_percentage() != 2069) {
@@ -16590,7 +17302,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_validationconfig_default() != 1435) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_validationconfig_new() != 20792) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_validationconfig_new() != 36594) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_signer_sign() != 46892) {
