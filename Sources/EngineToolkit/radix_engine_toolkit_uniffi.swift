@@ -957,11 +957,11 @@ public func FfiConverterTypeAddress_lower(_ value: Address) -> UnsafeMutableRawP
 
 public protocol DecimalProtocol {
     func `abs`()   -> Decimal
-    func `add`(`other`: Decimal)   -> Decimal
+    func `add`(`other`: Decimal)  throws -> Decimal
     func `asStr`()   -> String
-    func `cbrt`()   -> Decimal
+    func `cbrt`()  throws -> Decimal
     func `ceiling`()   -> Decimal
-    func `div`(`other`: Decimal)   -> Decimal
+    func `div`(`other`: Decimal)  throws -> Decimal
     func `equal`(`other`: Decimal)   -> Bool
     func `floor`()   -> Decimal
     func `greaterThan`(`other`: Decimal)   -> Bool
@@ -971,13 +971,13 @@ public protocol DecimalProtocol {
     func `isZero`()   -> Bool
     func `lessThan`(`other`: Decimal)   -> Bool
     func `lessThanOrEqual`(`other`: Decimal)   -> Bool
-    func `mul`(`other`: Decimal)   -> Decimal
+    func `mul`(`other`: Decimal)  throws -> Decimal
     func `notEqual`(`other`: Decimal)   -> Bool
     func `nthRoot`(`n`: UInt32)   -> Decimal?
-    func `powi`(`exp`: Int64)   -> Decimal
+    func `powi`(`exp`: Int64)  throws -> Decimal
     func `round`(`decimalPlaces`: Int32, `roundingMode`: RoundingMode)   -> Decimal
     func `sqrt`()   -> Decimal?
-    func `sub`(`other`: Decimal)   -> Decimal
+    func `sub`(`other`: Decimal)  throws -> Decimal
     
 }
 
@@ -1049,11 +1049,10 @@ public class Decimal: DecimalProtocol {
         )
     }
 
-    public func `add`(`other`: Decimal)  -> Decimal {
-        return try!  FfiConverterTypeDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `add`(`other`: Decimal) throws -> Decimal {
+        return try  FfiConverterTypeDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_add(self.pointer, 
         FfiConverterTypeDecimal.lower(`other`),$0
     )
@@ -1072,11 +1071,10 @@ public class Decimal: DecimalProtocol {
         )
     }
 
-    public func `cbrt`()  -> Decimal {
-        return try!  FfiConverterTypeDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `cbrt`() throws -> Decimal {
+        return try  FfiConverterTypeDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_cbrt(self.pointer, $0
     )
 }
@@ -1094,11 +1092,10 @@ public class Decimal: DecimalProtocol {
         )
     }
 
-    public func `div`(`other`: Decimal)  -> Decimal {
-        return try!  FfiConverterTypeDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `div`(`other`: Decimal) throws -> Decimal {
+        return try  FfiConverterTypeDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_div(self.pointer, 
         FfiConverterTypeDecimal.lower(`other`),$0
     )
@@ -1210,11 +1207,10 @@ public class Decimal: DecimalProtocol {
         )
     }
 
-    public func `mul`(`other`: Decimal)  -> Decimal {
-        return try!  FfiConverterTypeDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `mul`(`other`: Decimal) throws -> Decimal {
+        return try  FfiConverterTypeDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_mul(self.pointer, 
         FfiConverterTypeDecimal.lower(`other`),$0
     )
@@ -1246,11 +1242,10 @@ public class Decimal: DecimalProtocol {
         )
     }
 
-    public func `powi`(`exp`: Int64)  -> Decimal {
-        return try!  FfiConverterTypeDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `powi`(`exp`: Int64) throws -> Decimal {
+        return try  FfiConverterTypeDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_powi(self.pointer, 
         FfiConverterInt64.lower(`exp`),$0
     )
@@ -1282,11 +1277,10 @@ public class Decimal: DecimalProtocol {
         )
     }
 
-    public func `sub`(`other`: Decimal)  -> Decimal {
-        return try!  FfiConverterTypeDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `sub`(`other`: Decimal) throws -> Decimal {
+        return try  FfiConverterTypeDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_sub(self.pointer, 
         FfiConverterTypeDecimal.lower(`other`),$0
     )
@@ -2941,11 +2935,11 @@ public func FfiConverterTypeOlympiaAddress_lower(_ value: OlympiaAddress) -> Uns
 
 public protocol PreciseDecimalProtocol {
     func `abs`()   -> PreciseDecimal
-    func `add`(`other`: PreciseDecimal)   -> PreciseDecimal
+    func `add`(`other`: PreciseDecimal)  throws -> PreciseDecimal
     func `asStr`()   -> String
-    func `cbrt`()   -> PreciseDecimal
+    func `cbrt`()  throws -> PreciseDecimal
     func `ceiling`()   -> PreciseDecimal
-    func `div`(`other`: PreciseDecimal)   -> PreciseDecimal
+    func `div`(`other`: PreciseDecimal)  throws -> PreciseDecimal
     func `equal`(`other`: PreciseDecimal)   -> Bool
     func `floor`()   -> PreciseDecimal
     func `greaterThan`(`other`: PreciseDecimal)   -> Bool
@@ -2955,13 +2949,13 @@ public protocol PreciseDecimalProtocol {
     func `isZero`()   -> Bool
     func `lessThan`(`other`: PreciseDecimal)   -> Bool
     func `lessThanOrEqual`(`other`: PreciseDecimal)   -> Bool
-    func `mul`(`other`: PreciseDecimal)   -> PreciseDecimal
+    func `mul`(`other`: PreciseDecimal)  throws -> PreciseDecimal
     func `notEqual`(`other`: PreciseDecimal)   -> Bool
     func `nthRoot`(`n`: UInt32)   -> PreciseDecimal?
-    func `powi`(`exp`: Int64)   -> PreciseDecimal
+    func `powi`(`exp`: Int64)  throws -> PreciseDecimal
     func `round`(`decimalPlaces`: Int32, `roundingMode`: RoundingMode)   -> PreciseDecimal
     func `sqrt`()   -> PreciseDecimal?
-    func `sub`(`other`: PreciseDecimal)   -> PreciseDecimal
+    func `sub`(`other`: PreciseDecimal)  throws -> PreciseDecimal
     
 }
 
@@ -3033,11 +3027,10 @@ public class PreciseDecimal: PreciseDecimalProtocol {
         )
     }
 
-    public func `add`(`other`: PreciseDecimal)  -> PreciseDecimal {
-        return try!  FfiConverterTypePreciseDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `add`(`other`: PreciseDecimal) throws -> PreciseDecimal {
+        return try  FfiConverterTypePreciseDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_add(self.pointer, 
         FfiConverterTypePreciseDecimal.lower(`other`),$0
     )
@@ -3056,11 +3049,10 @@ public class PreciseDecimal: PreciseDecimalProtocol {
         )
     }
 
-    public func `cbrt`()  -> PreciseDecimal {
-        return try!  FfiConverterTypePreciseDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `cbrt`() throws -> PreciseDecimal {
+        return try  FfiConverterTypePreciseDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_cbrt(self.pointer, $0
     )
 }
@@ -3078,11 +3070,10 @@ public class PreciseDecimal: PreciseDecimalProtocol {
         )
     }
 
-    public func `div`(`other`: PreciseDecimal)  -> PreciseDecimal {
-        return try!  FfiConverterTypePreciseDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `div`(`other`: PreciseDecimal) throws -> PreciseDecimal {
+        return try  FfiConverterTypePreciseDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_div(self.pointer, 
         FfiConverterTypePreciseDecimal.lower(`other`),$0
     )
@@ -3194,11 +3185,10 @@ public class PreciseDecimal: PreciseDecimalProtocol {
         )
     }
 
-    public func `mul`(`other`: PreciseDecimal)  -> PreciseDecimal {
-        return try!  FfiConverterTypePreciseDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `mul`(`other`: PreciseDecimal) throws -> PreciseDecimal {
+        return try  FfiConverterTypePreciseDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_mul(self.pointer, 
         FfiConverterTypePreciseDecimal.lower(`other`),$0
     )
@@ -3230,11 +3220,10 @@ public class PreciseDecimal: PreciseDecimalProtocol {
         )
     }
 
-    public func `powi`(`exp`: Int64)  -> PreciseDecimal {
-        return try!  FfiConverterTypePreciseDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `powi`(`exp`: Int64) throws -> PreciseDecimal {
+        return try  FfiConverterTypePreciseDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_powi(self.pointer, 
         FfiConverterInt64.lower(`exp`),$0
     )
@@ -3266,11 +3255,10 @@ public class PreciseDecimal: PreciseDecimalProtocol {
         )
     }
 
-    public func `sub`(`other`: PreciseDecimal)  -> PreciseDecimal {
-        return try!  FfiConverterTypePreciseDecimal.lift(
-            try! 
-    rustCall() {
-    
+    public func `sub`(`other`: PreciseDecimal) throws -> PreciseDecimal {
+        return try  FfiConverterTypePreciseDecimal.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sub(self.pointer, 
         FfiConverterTypePreciseDecimal.lower(`other`),$0
     )
@@ -5179,15 +5167,13 @@ public func FfiConverterTypeEpochChangeEvent_lower(_ value: EpochChangeEvent) ->
 
 public struct EventTypeIdentifier {
     public var `emitter`: Emitter
-    public var `schemaHash`: Hash
-    public var `localTypeIndex`: LocalTypeIndex
+    public var `eventName`: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(`emitter`: Emitter, `schemaHash`: Hash, `localTypeIndex`: LocalTypeIndex) {
+    public init(`emitter`: Emitter, `eventName`: String) {
         self.`emitter` = `emitter`
-        self.`schemaHash` = `schemaHash`
-        self.`localTypeIndex` = `localTypeIndex`
+        self.`eventName` = `eventName`
     }
 }
 
@@ -5197,15 +5183,13 @@ public struct FfiConverterTypeEventTypeIdentifier: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EventTypeIdentifier {
         return try EventTypeIdentifier(
             `emitter`: FfiConverterTypeEmitter.read(from: &buf), 
-            `schemaHash`: FfiConverterTypeHash.read(from: &buf), 
-            `localTypeIndex`: FfiConverterTypeLocalTypeIndex.read(from: &buf)
+            `eventName`: FfiConverterString.read(from: &buf)
         )
     }
 
     public static func write(_ value: EventTypeIdentifier, into buf: inout [UInt8]) {
         FfiConverterTypeEmitter.write(value.`emitter`, into: &buf)
-        FfiConverterTypeHash.write(value.`schemaHash`, into: &buf)
-        FfiConverterTypeLocalTypeIndex.write(value.`localTypeIndex`, into: &buf)
+        FfiConverterString.write(value.`eventName`, into: &buf)
     }
 }
 
@@ -12184,6 +12168,7 @@ public enum RadixEngineToolkitError {
     case ManifestBuilderNameRecordError(`error`: NameRecordError)
     case ManifestModificationError(`error`: String)
     case InvalidEntityTypeIdError(`error`: String)
+    case DecimalError
 
     fileprivate static func uniffiErrorHandler(_ error: RustBuffer) throws -> Error {
         return try FfiConverterTypeRadixEngineToolkitError.lift(error)
@@ -12267,6 +12252,7 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         case 22: return .InvalidEntityTypeIdError(
             `error`: try FfiConverterString.read(from: &buf)
             )
+        case 23: return .DecimalError
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -12390,6 +12376,10 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
             writeInt(&buf, Int32(22))
             FfiConverterString.write(`error`, into: &buf)
             
+        
+        case .DecimalError:
+            writeInt(&buf, Int32(23))
+        
         }
     }
 }
@@ -16678,19 +16668,19 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_abs() != 47552) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_add() != 29792) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_add() != 42883) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_as_str() != 18253) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_cbrt() != 31267) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_cbrt() != 18756) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_ceiling() != 53104) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_div() != 7427) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_div() != 25038) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_equal() != 45597) {
@@ -16720,7 +16710,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_less_than_or_equal() != 2387) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_mul() != 52430) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_mul() != 18912) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_not_equal() != 61801) {
@@ -16729,7 +16719,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_nth_root() != 6178) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_powi() != 11213) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_powi() != 35861) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_round() != 685) {
@@ -16738,7 +16728,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sqrt() != 43295) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sub() != 15109) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sub() != 26365) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_hash_as_str() != 46597) {
@@ -16972,19 +16962,19 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_abs() != 2924) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_add() != 36087) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_add() != 50067) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_as_str() != 50135) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_cbrt() != 60153) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_cbrt() != 31353) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_ceiling() != 35397) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_div() != 55154) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_div() != 47336) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_equal() != 35658) {
@@ -17014,7 +17004,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_less_than_or_equal() != 33893) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_mul() != 61496) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_mul() != 35568) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_not_equal() != 17368) {
@@ -17023,7 +17013,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_nth_root() != 60037) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_powi() != 1798) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_powi() != 57119) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_round() != 38035) {
@@ -17032,7 +17022,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sqrt() != 18565) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub() != 15847) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub() != 2969) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_public_key() != 49403) {
