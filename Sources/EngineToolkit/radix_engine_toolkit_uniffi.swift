@@ -13007,6 +13007,54 @@ extension RoundingMode: Equatable, Hashable {}
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ScryptoSborString {
+    
+    case `programmaticJson`(`value`: String)
+}
+
+public struct FfiConverterTypeScryptoSborString: FfiConverterRustBuffer {
+    typealias SwiftType = ScryptoSborString
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ScryptoSborString {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`programmaticJson`(
+            `value`: try FfiConverterString.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ScryptoSborString, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .`programmaticJson`(`value`):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(`value`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeScryptoSborString_lift(_ buf: RustBuffer) throws -> ScryptoSborString {
+    return try FfiConverterTypeScryptoSborString.lift(buf)
+}
+
+public func FfiConverterTypeScryptoSborString_lower(_ value: ScryptoSborString) -> RustBuffer {
+    return FfiConverterTypeScryptoSborString.lower(value)
+}
+
+
+extension ScryptoSborString: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum SerializationMode {
     
     case `programmatic`
@@ -16518,6 +16566,15 @@ public func `scryptoSborDecodeToStringRepresentation`(`bytes`: [UInt8], `represe
     )
 }
 
+public func `scryptoSborEncodeStringRepresentation`(`representation`: ScryptoSborString) throws -> [UInt8] {
+    return try  FfiConverterSequenceUInt8.lift(
+        try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_scrypto_sbor_encode_string_representation(
+        FfiConverterTypeScryptoSborString.lower(`representation`),$0)
+}
+    )
+}
+
 public func `testPanic`(`message`: String) throws {
     try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_func_test_panic(
@@ -16600,6 +16657,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_decode_to_string_representation() != 50232) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_encode_string_representation() != 24947) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_test_panic() != 25407) {

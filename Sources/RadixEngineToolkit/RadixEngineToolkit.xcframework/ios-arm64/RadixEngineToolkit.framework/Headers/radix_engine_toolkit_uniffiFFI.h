@@ -646,6 +646,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_typed_nativ
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_scrypto_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_scrypto_sbor_encode_string_representation(RustBuffer representation, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_func_test_panic(RustBuffer message, RustCallStatus *_Nonnull out_status
 );
 RustBuffer ffi_radix_engine_toolkit_uniffi_rustbuffer_alloc(int32_t size, RustCallStatus *_Nonnull out_status
@@ -714,6 +716,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_typed_n
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_decode_to_string_representation(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_encode_string_representation(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_test_panic(void
