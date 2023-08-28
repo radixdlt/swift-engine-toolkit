@@ -5455,6 +5455,40 @@ public func FfiConverterTypeFungibleVaultLockFeeEvent_lower(_ value: FungibleVau
 }
 
 
+public struct FungibleVaultPayFeeEvent {
+    public var `amount`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`amount`: Decimal) {
+        self.`amount` = `amount`
+    }
+}
+
+
+
+public struct FfiConverterTypeFungibleVaultPayFeeEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FungibleVaultPayFeeEvent {
+        return try FungibleVaultPayFeeEvent(
+            `amount`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FungibleVaultPayFeeEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeDecimal.write(value.`amount`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeFungibleVaultPayFeeEvent_lift(_ buf: RustBuffer) throws -> FungibleVaultPayFeeEvent {
+    return try FfiConverterTypeFungibleVaultPayFeeEvent.lift(buf)
+}
+
+public func FfiConverterTypeFungibleVaultPayFeeEvent_lower(_ value: FungibleVaultPayFeeEvent) -> RustBuffer {
+    return FfiConverterTypeFungibleVaultPayFeeEvent.lower(value)
+}
+
+
 public struct FungibleVaultRecallEvent {
     public var `amount`: Decimal
 
@@ -13841,6 +13875,7 @@ public enum TypedFungibleVaultBlueprintEvent {
     case `fungibleVaultWithdrawEventValue`(`value`: FungibleVaultWithdrawEvent)
     case `fungibleVaultDepositEventValue`(`value`: FungibleVaultDepositEvent)
     case `fungibleVaultRecallEventValue`(`value`: FungibleVaultRecallEvent)
+    case `fungibleVaultPayFeeEventValue`(`value`: FungibleVaultPayFeeEvent)
 }
 
 public struct FfiConverterTypeTypedFungibleVaultBlueprintEvent: FfiConverterRustBuffer {
@@ -13864,6 +13899,10 @@ public struct FfiConverterTypeTypedFungibleVaultBlueprintEvent: FfiConverterRust
         
         case 4: return .`fungibleVaultRecallEventValue`(
             `value`: try FfiConverterTypeFungibleVaultRecallEvent.read(from: &buf)
+        )
+        
+        case 5: return .`fungibleVaultPayFeeEventValue`(
+            `value`: try FfiConverterTypeFungibleVaultPayFeeEvent.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -13892,6 +13931,11 @@ public struct FfiConverterTypeTypedFungibleVaultBlueprintEvent: FfiConverterRust
         case let .`fungibleVaultRecallEventValue`(`value`):
             writeInt(&buf, Int32(4))
             FfiConverterTypeFungibleVaultRecallEvent.write(`value`, into: &buf)
+            
+        
+        case let .`fungibleVaultPayFeeEventValue`(`value`):
+            writeInt(&buf, Int32(5))
+            FfiConverterTypeFungibleVaultPayFeeEvent.write(`value`, into: &buf)
             
         }
     }
