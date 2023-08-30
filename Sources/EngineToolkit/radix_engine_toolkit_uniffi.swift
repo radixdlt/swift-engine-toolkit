@@ -9284,7 +9284,6 @@ public enum EntityType {
     case `globalTransactionTracker`
     case `internalFungibleVault`
     case `internalNonFungibleVault`
-    case `internalAccount`
     case `internalGenericComponent`
     case `internalKeyValueStore`
 }
@@ -9334,11 +9333,9 @@ public struct FfiConverterTypeEntityType: FfiConverterRustBuffer {
         
         case 19: return .`internalNonFungibleVault`
         
-        case 20: return .`internalAccount`
+        case 20: return .`internalGenericComponent`
         
-        case 21: return .`internalGenericComponent`
-        
-        case 22: return .`internalKeyValueStore`
+        case 21: return .`internalKeyValueStore`
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -9424,16 +9421,12 @@ public struct FfiConverterTypeEntityType: FfiConverterRustBuffer {
             writeInt(&buf, Int32(19))
         
         
-        case .`internalAccount`:
+        case .`internalGenericComponent`:
             writeInt(&buf, Int32(20))
         
         
-        case .`internalGenericComponent`:
-            writeInt(&buf, Int32(21))
-        
-        
         case .`internalKeyValueStore`:
-            writeInt(&buf, Int32(22))
+            writeInt(&buf, Int32(21))
         
         }
     }
