@@ -63,7 +63,6 @@ typedef struct RustCallStatus {
 typedef void (*UniFfiFutureCallbackUInt8)(const void * _Nonnull, uint8_t, RustCallStatus);
 typedef void (*UniFfiFutureCallbackInt8)(const void * _Nonnull, int8_t, RustCallStatus);
 typedef void (*UniFfiFutureCallbackUInt16)(const void * _Nonnull, uint16_t, RustCallStatus);
-typedef void (*UniFfiFutureCallbackUInt32)(const void * _Nonnull, uint32_t, RustCallStatus);
 typedef void (*UniFfiFutureCallbackUInt64)(const void * _Nonnull, uint64_t, RustCallStatus);
 typedef void (*UniFfiFutureCallbackUnsafeMutableRawPointer)(const void * _Nonnull, void*_Nonnull, RustCallStatus);
 typedef void (*UniFfiFutureCallbackUnsafeMutableRawPointer)(const void * _Nonnull, void*_Nonnull, RustCallStatus);
@@ -590,9 +589,7 @@ void uniffi_radix_engine_toolkit_uniffi_fn_free_validationconfig(void*_Nonnull p
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_validationconfig_default(uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_validationconfig_new(uint8_t network_id, uint64_t max_notarized_payload_size, uint32_t min_cost_unit_limit, uint32_t max_cost_unit_limit, uint16_t min_tip_percentage, uint16_t max_tip_percentage, uint64_t max_epoch_range, void*_Nonnull message_validation, RustCallStatus *_Nonnull out_status
-);
-uint32_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_max_cost_unit_limit(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_validationconfig_new(uint8_t network_id, uint64_t max_notarized_payload_size, uint16_t min_tip_percentage, uint16_t max_tip_percentage, uint64_t max_epoch_range, void*_Nonnull message_validation, RustCallStatus *_Nonnull out_status
 );
 uint64_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_max_epoch_range(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -601,8 +598,6 @@ uint64_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_max_notar
 uint16_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_max_tip_percentage(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_message_validation(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
-);
-uint32_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_min_cost_unit_limit(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_min_tip_percentage(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -650,6 +645,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_string_repr
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_typed_native_event(RustBuffer event_type_identifier, RustBuffer event_data, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_scrypto_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_scrypto_sbor_encode_string_representation(RustBuffer representation, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_func_test_panic(RustBuffer message, RustCallStatus *_Nonnull out_status
 );
@@ -719,6 +716,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_typed_n
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_decode_to_string_representation(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_scrypto_sbor_encode_string_representation(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_test_panic(void
@@ -1246,9 +1246,6 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_max_cost_unit_limit(void
-    
-);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_max_epoch_range(void
     
 );
@@ -1259,9 +1256,6 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_max
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_message_validation(void
-    
-);
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_min_cost_unit_limit(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_min_tip_percentage(void
