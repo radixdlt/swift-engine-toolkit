@@ -4101,6 +4101,7 @@ public protocol TransactionManifestProtocol {
     func `accountsWithdrawnFrom`()   -> [Address]
     func `analyzeExecution`(`transactionReceipt`: [UInt8])  throws -> ExecutionAnalysis
     func `blobs`()   -> [[UInt8]]
+    func `compile`()  throws -> [UInt8]
     func `extractAddresses`()   -> [EntityType: [Address]]
     func `identitiesRequiringAuth`()   -> [Address]
     func `instructions`()   -> Instructions
@@ -4128,6 +4129,16 @@ public class TransactionManifest: TransactionManifestProtocol {
 
     deinit {
         try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionmanifest(pointer, $0) }
+    }
+
+    
+
+    public static func `decompile`(`compiled`: [UInt8], `networkId`: UInt8) throws -> TransactionManifest {
+        return TransactionManifest(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanifest_decompile(
+        FfiConverterSequenceUInt8.lower(`compiled`),
+        FfiConverterUInt8.lower(`networkId`),$0)
+})
     }
 
     
@@ -4185,6 +4196,16 @@ public class TransactionManifest: TransactionManifestProtocol {
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_blobs(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `compile`() throws -> [UInt8] {
+        return try  FfiConverterSequenceUInt8.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_compile(self.pointer, $0
     )
 }
         )
@@ -17201,6 +17222,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_blobs() != 55127) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_compile() != 11452) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses() != 5474) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -17373,6 +17397,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str() != 37610) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_decompile() != 51209) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new() != 62865) {
