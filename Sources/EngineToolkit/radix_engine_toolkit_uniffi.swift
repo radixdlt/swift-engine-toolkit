@@ -1721,6 +1721,8 @@ public func FfiConverterTypeIntent_lower(_ value: Intent) -> UnsafeMutableRawPoi
 
 
 public protocol ManifestBuilderProtocol {
+    func `accessControllerInitiateRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerQuickConfirmRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
     func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `accountDepositBatch`(`accountAddress`: Address)  throws -> ManifestBuilder
     func `accountTryDepositBatchOrAbort`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
@@ -1794,6 +1796,38 @@ public class ManifestBuilder: ManifestBuilderProtocol {
 
     
     
+
+    public func `accessControllerInitiateRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`accessControllerAddress`),
+        FfiConverterTypeProposer.lower(`proposer`),
+        FfiConverterTypeAccessRule.lower(`proposedPrimaryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedRecoveryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedConfirmationRole`),
+        FfiConverterOptionUInt32.lower(`proposedTimedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerQuickConfirmRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`accessControllerAddress`),
+        FfiConverterTypeProposer.lower(`proposer`),
+        FfiConverterTypeAccessRule.lower(`proposedPrimaryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedRecoveryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedConfirmationRole`),
+        FfiConverterOptionUInt32.lower(`proposedTimedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
 
     public func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
@@ -4109,6 +4143,7 @@ public protocol TransactionManifestProtocol {
     func `accountsWithdrawnFrom`()   -> [Address]
     func `analyzeExecution`(`transactionReceipt`: [UInt8])  throws -> ExecutionAnalysis
     func `blobs`()   -> [[UInt8]]
+    func `compile`()  throws -> [UInt8]
     func `extractAddresses`()   -> [EntityType: [Address]]
     func `identitiesRequiringAuth`()   -> [Address]
     func `instructions`()   -> Instructions
@@ -4136,6 +4171,16 @@ public class TransactionManifest: TransactionManifestProtocol {
 
     deinit {
         try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionmanifest(pointer, $0) }
+    }
+
+    
+
+    public static func `decompile`(`compiled`: [UInt8], `networkId`: UInt8) throws -> TransactionManifest {
+        return TransactionManifest(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanifest_decompile(
+        FfiConverterSequenceUInt8.lower(`compiled`),
+        FfiConverterUInt8.lower(`networkId`),$0)
+})
     }
 
     
@@ -4193,6 +4238,16 @@ public class TransactionManifest: TransactionManifestProtocol {
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_blobs(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `compile`() throws -> [UInt8] {
+        return try  FfiConverterSequenceUInt8.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_compile(self.pointer, $0
     )
 }
         )
@@ -16864,6 +16919,12 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_statically_validate() != 18502) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_recovery() != 9147) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_recovery() != 6850) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit() != 58477) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -17209,6 +17270,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_blobs() != 55127) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_compile() != 11452) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses() != 5474) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -17381,6 +17445,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str() != 37610) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_decompile() != 51209) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new() != 62865) {
