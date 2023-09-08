@@ -1717,6 +1717,8 @@ public func FfiConverterTypeIntent_lower(_ value: Intent) -> UnsafeMutableRawPoi
 
 
 public protocol ManifestBuilderProtocol {
+    func `accessControllerInitiateRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerQuickConfirmRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
     func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `accountDepositBatch`(`accountAddress`: Address)  throws -> ManifestBuilder
     func `accountTryDepositBatchOrAbort`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
@@ -1790,6 +1792,38 @@ public class ManifestBuilder: ManifestBuilderProtocol {
 
     
     
+
+    public func `accessControllerInitiateRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`accessControllerAddress`),
+        FfiConverterTypeProposer.lower(`proposer`),
+        FfiConverterTypeAccessRule.lower(`proposedPrimaryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedRecoveryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedConfirmationRole`),
+        FfiConverterOptionUInt32.lower(`proposedTimedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerQuickConfirmRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`accessControllerAddress`),
+        FfiConverterTypeProposer.lower(`proposer`),
+        FfiConverterTypeAccessRule.lower(`proposedPrimaryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedRecoveryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedConfirmationRole`),
+        FfiConverterOptionUInt32.lower(`proposedTimedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
 
     public func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
@@ -16875,6 +16909,12 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_statically_validate() != 18502) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_recovery() != 9147) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_recovery() != 6850) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit() != 58477) {
