@@ -4140,6 +4140,7 @@ public protocol TransactionManifestProtocol {
     func `identitiesRequiringAuth`()   -> [Address]
     func `instructions`()   -> Instructions
     func `modify`(`modifications`: TransactionManifestModifications)  throws -> TransactionManifest
+    func `parseTransferInformation`(`allowLockFeeInstructions`: Bool)  throws -> TransferTransactionType?
     func `staticallyValidate`()  throws
     
 }
@@ -4284,6 +4285,17 @@ public class TransactionManifest: TransactionManifestProtocol {
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_modify(self.pointer, 
         FfiConverterTypeTransactionManifestModifications.lower(`modifications`),$0
+    )
+}
+        )
+    }
+
+    public func `parseTransferInformation`(`allowLockFeeInstructions`: Bool) throws -> TransferTransactionType? {
+        return try  FfiConverterOptionTypeTransferTransactionType.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_parse_transfer_information(self.pointer, 
+        FfiConverterBool.lower(`allowLockFeeInstructions`),$0
     )
 }
         )
@@ -8094,6 +8106,44 @@ public func FfiConverterTypeTransactionManifestModifications_lift(_ buf: RustBuf
 
 public func FfiConverterTypeTransactionManifestModifications_lower(_ value: TransactionManifestModifications) -> RustBuffer {
     return FfiConverterTypeTransactionManifestModifications.lower(value)
+}
+
+
+public struct TransferTransactionType {
+    public var `from`: Address
+    public var `transfers`: [String: [String: Resources]]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`from`: Address, `transfers`: [String: [String: Resources]]) {
+        self.`from` = `from`
+        self.`transfers` = `transfers`
+    }
+}
+
+
+
+public struct FfiConverterTypeTransferTransactionType: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransferTransactionType {
+        return try TransferTransactionType(
+            `from`: FfiConverterTypeAddress.read(from: &buf), 
+            `transfers`: FfiConverterDictionaryStringDictionaryStringTypeResources.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: TransferTransactionType, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.`from`, into: &buf)
+        FfiConverterDictionaryStringDictionaryStringTypeResources.write(value.`transfers`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeTransferTransactionType_lift(_ buf: RustBuffer) throws -> TransferTransactionType {
+    return try FfiConverterTypeTransferTransactionType.lift(buf)
+}
+
+public func FfiConverterTypeTransferTransactionType_lower(_ value: TransferTransactionType) -> RustBuffer {
+    return FfiConverterTypeTransferTransactionType.lower(value)
 }
 
 
@@ -15425,6 +15475,27 @@ fileprivate struct FfiConverterOptionTypeSchema: FfiConverterRustBuffer {
     }
 }
 
+fileprivate struct FfiConverterOptionTypeTransferTransactionType: FfiConverterRustBuffer {
+    typealias SwiftType = TransferTransactionType?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeTransferTransactionType.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeTransferTransactionType.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
 fileprivate struct FfiConverterOptionTypeMetadataValue: FfiConverterRustBuffer {
     typealias SwiftType = MetadataValue?
 
@@ -17275,6 +17346,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_modify() != 4850) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_parse_transfer_information() != 59253) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate() != 42656) {
