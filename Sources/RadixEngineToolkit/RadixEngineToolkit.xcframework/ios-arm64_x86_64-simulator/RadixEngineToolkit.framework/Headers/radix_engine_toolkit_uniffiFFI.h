@@ -313,7 +313,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_call_
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_clone_proof(void*_Nonnull ptr, RustBuffer proof, RustBuffer into_proof, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_access_controller_with_securify_structure(void*_Nonnull ptr, RustBuffer controlled_asset, RustBuffer primary_role, RustBuffer recovery_role, RustBuffer confirmation_role, RustBuffer timed_recovery_delay_in_minutes, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_access_controller_with_securify_structure(void*_Nonnull ptr, RustBuffer controlled_asset, RustBuffer primary_role, RustBuffer recovery_role, RustBuffer confirmation_role, RustBuffer timed_recovery_delay_in_minutes, RustBuffer address_reservation, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_account_advanced(void*_Nonnull ptr, RustBuffer owner_role, RustCallStatus *_Nonnull out_status
 );
@@ -331,7 +331,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_creat
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_proof_from_bucket_of_non_fungibles(void*_Nonnull ptr, RustBuffer ids, RustBuffer bucket, RustBuffer into_proof, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_signature_based_access_controller(void*_Nonnull ptr, RustBuffer controlled_asset, RustBuffer primary_role, RustBuffer recovery_role, RustBuffer confirmation_role, RustBuffer timed_recovery_delay_in_minutes, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_signature_based_access_controller(void*_Nonnull ptr, RustBuffer controlled_asset, RustBuffer primary_role, RustBuffer recovery_role, RustBuffer confirmation_role, RustBuffer timed_recovery_delay_in_minutes, RustBuffer address_reservation, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_drop_all_proofs(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );

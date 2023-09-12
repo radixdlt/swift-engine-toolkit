@@ -1738,7 +1738,7 @@ public protocol ManifestBuilderProtocol {
     func `callMethod`(`address`: ManifestBuilderAddress, `methodName`: String, `args`: [ManifestBuilderValue])  throws -> ManifestBuilder
     func `callRoyaltyMethod`(`address`: ManifestBuilderAddress, `methodName`: String, `args`: [ManifestBuilderValue])  throws -> ManifestBuilder
     func `cloneProof`(`proof`: ManifestBuilderProof, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
-    func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `createAccountAdvanced`(`ownerRole`: OwnerRole)  throws -> ManifestBuilder
     func `createFungibleResourceManager`(`ownerRole`: OwnerRole, `trackTotalSupply`: Bool, `divisibility`: UInt8, `initialSupply`: Decimal?, `resourceRoles`: FungibleResourceRoles, `metadata`: MetadataModuleConfig, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `createProofFromAuthZoneOfAll`(`resourceAddress`: Address, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
@@ -1747,7 +1747,7 @@ public protocol ManifestBuilderProtocol {
     func `createProofFromBucketOfAll`(`bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `createProofFromBucketOfAmount`(`amount`: Decimal, `bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `createProofFromBucketOfNonFungibles`(`ids`: [NonFungibleLocalId], `bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
-    func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `dropAllProofs`()  throws -> ManifestBuilder
     func `dropAuthZoneProofs`()  throws -> ManifestBuilder
     func `dropAuthZoneSignatureProofs`()  throws -> ManifestBuilder
@@ -2061,7 +2061,7 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+    public func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -2070,7 +2070,8 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         FfiConverterTypeSecurityStructureRole.lower(`primaryRole`),
         FfiConverterTypeSecurityStructureRole.lower(`recoveryRole`),
         FfiConverterTypeSecurityStructureRole.lower(`confirmationRole`),
-        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
     )
 }
         )
@@ -2180,7 +2181,7 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+    public func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -2189,7 +2190,8 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         FfiConverterTypePublicKey.lower(`primaryRole`),
         FfiConverterTypePublicKey.lower(`recoveryRole`),
         FfiConverterTypePublicKey.lower(`confirmationRole`),
-        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
     )
 }
         )
@@ -17045,7 +17047,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_clone_proof() != 52407) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_access_controller_with_securify_structure() != 12292) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_access_controller_with_securify_structure() != 21421) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_account_advanced() != 27856) {
@@ -17072,7 +17074,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_proof_from_bucket_of_non_fungibles() != 25333) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_signature_based_access_controller() != 47497) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_signature_based_access_controller() != 676) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_drop_all_proofs() != 12341) {
