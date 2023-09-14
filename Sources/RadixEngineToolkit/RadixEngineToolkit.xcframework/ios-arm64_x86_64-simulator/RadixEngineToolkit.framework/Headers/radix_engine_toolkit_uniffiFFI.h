@@ -271,6 +271,10 @@ void uniffi_radix_engine_toolkit_uniffi_fn_free_manifestbuilder(void*_Nonnull pt
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_manifestbuilder_new(RustCallStatus *_Nonnull out_status
     
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_recovery(void*_Nonnull ptr, void*_Nonnull access_controller_address, RustBuffer proposer, void*_Nonnull proposed_primary_role, void*_Nonnull proposed_recovery_role, void*_Nonnull proposed_confirmation_role, RustBuffer proposed_timed_recovery_delay_in_minutes, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_recovery(void*_Nonnull ptr, void*_Nonnull access_controller_address, RustBuffer proposer, void*_Nonnull proposed_primary_role, void*_Nonnull proposed_recovery_role, void*_Nonnull proposed_confirmation_role, RustBuffer proposed_timed_recovery_delay_in_minutes, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_deposit(void*_Nonnull ptr, void*_Nonnull account_address, RustBuffer bucket, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_deposit_batch(void*_Nonnull ptr, void*_Nonnull account_address, RustCallStatus *_Nonnull out_status
@@ -309,7 +313,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_call_
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_clone_proof(void*_Nonnull ptr, RustBuffer proof, RustBuffer into_proof, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_access_controller_with_securify_structure(void*_Nonnull ptr, RustBuffer controlled_asset, RustBuffer primary_role, RustBuffer recovery_role, RustBuffer confirmation_role, RustBuffer timed_recovery_delay_in_minutes, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_access_controller_with_securify_structure(void*_Nonnull ptr, RustBuffer controlled_asset, RustBuffer primary_role, RustBuffer recovery_role, RustBuffer confirmation_role, RustBuffer timed_recovery_delay_in_minutes, RustBuffer address_reservation, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_account_advanced(void*_Nonnull ptr, RustBuffer owner_role, RustCallStatus *_Nonnull out_status
 );
@@ -327,7 +331,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_creat
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_proof_from_bucket_of_non_fungibles(void*_Nonnull ptr, RustBuffer ids, RustBuffer bucket, RustBuffer into_proof, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_signature_based_access_controller(void*_Nonnull ptr, RustBuffer controlled_asset, RustBuffer primary_role, RustBuffer recovery_role, RustBuffer confirmation_role, RustBuffer timed_recovery_delay_in_minutes, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_signature_based_access_controller(void*_Nonnull ptr, RustBuffer controlled_asset, RustBuffer primary_role, RustBuffer recovery_role, RustBuffer confirmation_role, RustBuffer timed_recovery_delay_in_minutes, RustBuffer address_reservation, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_drop_all_proofs(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -563,6 +567,8 @@ uint8_t uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_network_id(
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionmanifest(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanifest_decompile(RustBuffer compiled, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanifest_new(void*_Nonnull instructions, RustBuffer blobs, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_accounts_deposited_into(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -575,6 +581,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_anal
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_blobs(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_compile(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_extract_addresses(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_identities_requiring_auth(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -582,6 +590,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_iden
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_instructions(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_modify(void*_Nonnull ptr, RustBuffer modifications, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_parse_transfer_information(void*_Nonnull ptr, int8_t allow_lock_fee_instructions, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_statically_validate(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -884,6 +894,12 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_message(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_statically_validate(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_recovery(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_recovery(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit(void
@@ -1231,6 +1247,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_blobs(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_compile(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses(void
     
 );
@@ -1241,6 +1260,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_modify(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_parse_transfer_information(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate(void
@@ -1403,6 +1425,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionbuil
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_decompile(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new(void

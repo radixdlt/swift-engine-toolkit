@@ -1717,6 +1717,8 @@ public func FfiConverterTypeIntent_lower(_ value: Intent) -> UnsafeMutableRawPoi
 
 
 public protocol ManifestBuilderProtocol {
+    func `accessControllerInitiateRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerQuickConfirmRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
     func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `accountDepositBatch`(`accountAddress`: Address)  throws -> ManifestBuilder
     func `accountTryDepositBatchOrAbort`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
@@ -1736,7 +1738,7 @@ public protocol ManifestBuilderProtocol {
     func `callMethod`(`address`: ManifestBuilderAddress, `methodName`: String, `args`: [ManifestBuilderValue])  throws -> ManifestBuilder
     func `callRoyaltyMethod`(`address`: ManifestBuilderAddress, `methodName`: String, `args`: [ManifestBuilderValue])  throws -> ManifestBuilder
     func `cloneProof`(`proof`: ManifestBuilderProof, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
-    func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `createAccountAdvanced`(`ownerRole`: OwnerRole)  throws -> ManifestBuilder
     func `createFungibleResourceManager`(`ownerRole`: OwnerRole, `trackTotalSupply`: Bool, `divisibility`: UInt8, `initialSupply`: Decimal?, `resourceRoles`: FungibleResourceRoles, `metadata`: MetadataModuleConfig, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `createProofFromAuthZoneOfAll`(`resourceAddress`: Address, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
@@ -1745,7 +1747,7 @@ public protocol ManifestBuilderProtocol {
     func `createProofFromBucketOfAll`(`bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `createProofFromBucketOfAmount`(`amount`: Decimal, `bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `createProofFromBucketOfNonFungibles`(`ids`: [NonFungibleLocalId], `bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
-    func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `dropAllProofs`()  throws -> ManifestBuilder
     func `dropAuthZoneProofs`()  throws -> ManifestBuilder
     func `dropAuthZoneSignatureProofs`()  throws -> ManifestBuilder
@@ -1790,6 +1792,38 @@ public class ManifestBuilder: ManifestBuilderProtocol {
 
     
     
+
+    public func `accessControllerInitiateRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`accessControllerAddress`),
+        FfiConverterTypeProposer.lower(`proposer`),
+        FfiConverterTypeAccessRule.lower(`proposedPrimaryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedRecoveryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedConfirmationRole`),
+        FfiConverterOptionUInt32.lower(`proposedTimedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerQuickConfirmRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`accessControllerAddress`),
+        FfiConverterTypeProposer.lower(`proposer`),
+        FfiConverterTypeAccessRule.lower(`proposedPrimaryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedRecoveryRole`),
+        FfiConverterTypeAccessRule.lower(`proposedConfirmationRole`),
+        FfiConverterOptionUInt32.lower(`proposedTimedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
 
     public func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
@@ -2027,7 +2061,7 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+    public func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -2036,7 +2070,8 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         FfiConverterTypeSecurityStructureRole.lower(`primaryRole`),
         FfiConverterTypeSecurityStructureRole.lower(`recoveryRole`),
         FfiConverterTypeSecurityStructureRole.lower(`confirmationRole`),
-        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
     )
 }
         )
@@ -2146,7 +2181,7 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+    public func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -2155,7 +2190,8 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         FfiConverterTypePublicKey.lower(`primaryRole`),
         FfiConverterTypePublicKey.lower(`recoveryRole`),
         FfiConverterTypePublicKey.lower(`confirmationRole`),
-        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
     )
 }
         )
@@ -4101,10 +4137,12 @@ public protocol TransactionManifestProtocol {
     func `accountsWithdrawnFrom`()   -> [Address]
     func `analyzeExecution`(`transactionReceipt`: [UInt8])  throws -> ExecutionAnalysis
     func `blobs`()   -> [[UInt8]]
+    func `compile`()  throws -> [UInt8]
     func `extractAddresses`()   -> [EntityType: [Address]]
     func `identitiesRequiringAuth`()   -> [Address]
     func `instructions`()   -> Instructions
     func `modify`(`modifications`: TransactionManifestModifications)  throws -> TransactionManifest
+    func `parseTransferInformation`(`allowLockFeeInstructions`: Bool)  throws -> TransferTransactionType?
     func `staticallyValidate`()  throws
     
 }
@@ -4128,6 +4166,16 @@ public class TransactionManifest: TransactionManifestProtocol {
 
     deinit {
         try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_transactionmanifest(pointer, $0) }
+    }
+
+    
+
+    public static func `decompile`(`compiled`: [UInt8], `networkId`: UInt8) throws -> TransactionManifest {
+        return TransactionManifest(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanifest_decompile(
+        FfiConverterSequenceUInt8.lower(`compiled`),
+        FfiConverterUInt8.lower(`networkId`),$0)
+})
     }
 
     
@@ -4190,6 +4238,16 @@ public class TransactionManifest: TransactionManifestProtocol {
         )
     }
 
+    public func `compile`() throws -> [UInt8] {
+        return try  FfiConverterSequenceUInt8.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_compile(self.pointer, $0
+    )
+}
+        )
+    }
+
     public func `extractAddresses`()  -> [EntityType: [Address]] {
         return try!  FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress.lift(
             try! 
@@ -4229,6 +4287,17 @@ public class TransactionManifest: TransactionManifestProtocol {
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_modify(self.pointer, 
         FfiConverterTypeTransactionManifestModifications.lower(`modifications`),$0
+    )
+}
+        )
+    }
+
+    public func `parseTransferInformation`(`allowLockFeeInstructions`: Bool) throws -> TransferTransactionType? {
+        return try  FfiConverterOptionTypeTransferTransactionType.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_parse_transfer_information(self.pointer, 
+        FfiConverterBool.lower(`allowLockFeeInstructions`),$0
     )
 }
         )
@@ -8039,6 +8108,44 @@ public func FfiConverterTypeTransactionManifestModifications_lift(_ buf: RustBuf
 
 public func FfiConverterTypeTransactionManifestModifications_lower(_ value: TransactionManifestModifications) -> RustBuffer {
     return FfiConverterTypeTransactionManifestModifications.lower(value)
+}
+
+
+public struct TransferTransactionType {
+    public var `from`: Address
+    public var `transfers`: [String: [String: Resources]]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`from`: Address, `transfers`: [String: [String: Resources]]) {
+        self.`from` = `from`
+        self.`transfers` = `transfers`
+    }
+}
+
+
+
+public struct FfiConverterTypeTransferTransactionType: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransferTransactionType {
+        return try TransferTransactionType(
+            `from`: FfiConverterTypeAddress.read(from: &buf), 
+            `transfers`: FfiConverterDictionaryStringDictionaryStringTypeResources.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: TransferTransactionType, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.`from`, into: &buf)
+        FfiConverterDictionaryStringDictionaryStringTypeResources.write(value.`transfers`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeTransferTransactionType_lift(_ buf: RustBuffer) throws -> TransferTransactionType {
+    return try FfiConverterTypeTransferTransactionType.lift(buf)
+}
+
+public func FfiConverterTypeTransferTransactionType_lower(_ value: TransferTransactionType) -> RustBuffer {
+    return FfiConverterTypeTransferTransactionType.lower(value)
 }
 
 
@@ -15370,6 +15477,27 @@ fileprivate struct FfiConverterOptionTypeSchema: FfiConverterRustBuffer {
     }
 }
 
+fileprivate struct FfiConverterOptionTypeTransferTransactionType: FfiConverterRustBuffer {
+    typealias SwiftType = TransferTransactionType?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeTransferTransactionType.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeTransferTransactionType.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
 fileprivate struct FfiConverterOptionTypeMetadataValue: FfiConverterRustBuffer {
     typealias SwiftType = MetadataValue?
 
@@ -16856,6 +16984,12 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_statically_validate() != 18502) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_recovery() != 9147) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_recovery() != 6850) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit() != 58477) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -16913,7 +17047,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_clone_proof() != 52407) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_access_controller_with_securify_structure() != 12292) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_access_controller_with_securify_structure() != 21421) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_account_advanced() != 27856) {
@@ -16940,7 +17074,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_proof_from_bucket_of_non_fungibles() != 25333) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_signature_based_access_controller() != 47497) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_signature_based_access_controller() != 676) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_drop_all_proofs() != 12341) {
@@ -17201,6 +17335,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_blobs() != 55127) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_compile() != 11452) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses() != 5474) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -17211,6 +17348,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_modify() != 4850) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_parse_transfer_information() != 59253) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate() != 42656) {
@@ -17373,6 +17513,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str() != 37610) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_decompile() != 51209) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifest_new() != 62865) {
