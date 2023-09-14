@@ -5010,6 +5010,56 @@ public func FfiConverterTypeCancelRecoveryProposalEvent_lower(_ value: CancelRec
 }
 
 
+public struct ClaimStakeInformation {
+    public var `fromAccount`: Address
+    public var `validatorAddress`: Address
+    public var `claimNftResource`: Address
+    public var `claimNftLocalIds`: [NonFungibleLocalId]
+    public var `claimedXrd`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`fromAccount`: Address, `validatorAddress`: Address, `claimNftResource`: Address, `claimNftLocalIds`: [NonFungibleLocalId], `claimedXrd`: Decimal) {
+        self.`fromAccount` = `fromAccount`
+        self.`validatorAddress` = `validatorAddress`
+        self.`claimNftResource` = `claimNftResource`
+        self.`claimNftLocalIds` = `claimNftLocalIds`
+        self.`claimedXrd` = `claimedXrd`
+    }
+}
+
+
+
+public struct FfiConverterTypeClaimStakeInformation: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ClaimStakeInformation {
+        return try ClaimStakeInformation(
+            `fromAccount`: FfiConverterTypeAddress.read(from: &buf), 
+            `validatorAddress`: FfiConverterTypeAddress.read(from: &buf), 
+            `claimNftResource`: FfiConverterTypeAddress.read(from: &buf), 
+            `claimNftLocalIds`: FfiConverterSequenceTypeNonFungibleLocalId.read(from: &buf), 
+            `claimedXrd`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: ClaimStakeInformation, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.`fromAccount`, into: &buf)
+        FfiConverterTypeAddress.write(value.`validatorAddress`, into: &buf)
+        FfiConverterTypeAddress.write(value.`claimNftResource`, into: &buf)
+        FfiConverterSequenceTypeNonFungibleLocalId.write(value.`claimNftLocalIds`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`claimedXrd`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeClaimStakeInformation_lift(_ buf: RustBuffer) throws -> ClaimStakeInformation {
+    return try FfiConverterTypeClaimStakeInformation.lift(buf)
+}
+
+public func FfiConverterTypeClaimStakeInformation_lower(_ value: ClaimStakeInformation) -> RustBuffer {
+    return FfiConverterTypeClaimStakeInformation.lower(value)
+}
+
+
 public struct ClaimXrdEvent {
     public var `claimedXrd`: Decimal
 
@@ -7927,6 +7977,56 @@ public func FfiConverterTypeStakeEvent_lower(_ value: StakeEvent) -> RustBuffer 
 }
 
 
+public struct StakeInformation {
+    public var `fromAccount`: Address
+    public var `validatorAddress`: Address
+    public var `stakeUnitResource`: Address
+    public var `stakeUnitAmount`: Decimal
+    public var `stakedXrd`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`fromAccount`: Address, `validatorAddress`: Address, `stakeUnitResource`: Address, `stakeUnitAmount`: Decimal, `stakedXrd`: Decimal) {
+        self.`fromAccount` = `fromAccount`
+        self.`validatorAddress` = `validatorAddress`
+        self.`stakeUnitResource` = `stakeUnitResource`
+        self.`stakeUnitAmount` = `stakeUnitAmount`
+        self.`stakedXrd` = `stakedXrd`
+    }
+}
+
+
+
+public struct FfiConverterTypeStakeInformation: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> StakeInformation {
+        return try StakeInformation(
+            `fromAccount`: FfiConverterTypeAddress.read(from: &buf), 
+            `validatorAddress`: FfiConverterTypeAddress.read(from: &buf), 
+            `stakeUnitResource`: FfiConverterTypeAddress.read(from: &buf), 
+            `stakeUnitAmount`: FfiConverterTypeDecimal.read(from: &buf), 
+            `stakedXrd`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: StakeInformation, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.`fromAccount`, into: &buf)
+        FfiConverterTypeAddress.write(value.`validatorAddress`, into: &buf)
+        FfiConverterTypeAddress.write(value.`stakeUnitResource`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`stakeUnitAmount`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`stakedXrd`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeStakeInformation_lift(_ buf: RustBuffer) throws -> StakeInformation {
+    return try FfiConverterTypeStakeInformation.lift(buf)
+}
+
+public func FfiConverterTypeStakeInformation_lower(_ value: StakeInformation) -> RustBuffer {
+    return FfiConverterTypeStakeInformation.lower(value)
+}
+
+
 public struct StopTimedRecoveryEvent {
     public var `placeholderField`: Bool
 
@@ -8395,6 +8495,48 @@ public func FfiConverterTypeUnregisterValidatorEvent_lower(_ value: UnregisterVa
 }
 
 
+public struct UnstakeData {
+    public var `name`: String
+    public var `claimEpoch`: UInt64
+    public var `claimAmount`: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`name`: String, `claimEpoch`: UInt64, `claimAmount`: Decimal) {
+        self.`name` = `name`
+        self.`claimEpoch` = `claimEpoch`
+        self.`claimAmount` = `claimAmount`
+    }
+}
+
+
+
+public struct FfiConverterTypeUnstakeData: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UnstakeData {
+        return try UnstakeData(
+            `name`: FfiConverterString.read(from: &buf), 
+            `claimEpoch`: FfiConverterUInt64.read(from: &buf), 
+            `claimAmount`: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UnstakeData, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.`name`, into: &buf)
+        FfiConverterUInt64.write(value.`claimEpoch`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`claimAmount`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeUnstakeData_lift(_ buf: RustBuffer) throws -> UnstakeData {
+    return try FfiConverterTypeUnstakeData.lift(buf)
+}
+
+public func FfiConverterTypeUnstakeData_lower(_ value: UnstakeData) -> RustBuffer {
+    return FfiConverterTypeUnstakeData.lower(value)
+}
+
+
 public struct UnstakeEvent {
     public var `stakeUnits`: Decimal
 
@@ -8426,6 +8568,64 @@ public func FfiConverterTypeUnstakeEvent_lift(_ buf: RustBuffer) throws -> Unsta
 
 public func FfiConverterTypeUnstakeEvent_lower(_ value: UnstakeEvent) -> RustBuffer {
     return FfiConverterTypeUnstakeEvent.lower(value)
+}
+
+
+public struct UnstakeInformation {
+    public var `fromAccount`: Address
+    public var `stakeUnitAddress`: Address
+    public var `stakeUnitAmount`: Decimal
+    public var `validatorAddress`: Address
+    public var `claimNftResource`: Address
+    public var `claimNftLocalId`: NonFungibleLocalId
+    public var `claimNftData`: UnstakeData
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(`fromAccount`: Address, `stakeUnitAddress`: Address, `stakeUnitAmount`: Decimal, `validatorAddress`: Address, `claimNftResource`: Address, `claimNftLocalId`: NonFungibleLocalId, `claimNftData`: UnstakeData) {
+        self.`fromAccount` = `fromAccount`
+        self.`stakeUnitAddress` = `stakeUnitAddress`
+        self.`stakeUnitAmount` = `stakeUnitAmount`
+        self.`validatorAddress` = `validatorAddress`
+        self.`claimNftResource` = `claimNftResource`
+        self.`claimNftLocalId` = `claimNftLocalId`
+        self.`claimNftData` = `claimNftData`
+    }
+}
+
+
+
+public struct FfiConverterTypeUnstakeInformation: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UnstakeInformation {
+        return try UnstakeInformation(
+            `fromAccount`: FfiConverterTypeAddress.read(from: &buf), 
+            `stakeUnitAddress`: FfiConverterTypeAddress.read(from: &buf), 
+            `stakeUnitAmount`: FfiConverterTypeDecimal.read(from: &buf), 
+            `validatorAddress`: FfiConverterTypeAddress.read(from: &buf), 
+            `claimNftResource`: FfiConverterTypeAddress.read(from: &buf), 
+            `claimNftLocalId`: FfiConverterTypeNonFungibleLocalId.read(from: &buf), 
+            `claimNftData`: FfiConverterTypeUnstakeData.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UnstakeInformation, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.`fromAccount`, into: &buf)
+        FfiConverterTypeAddress.write(value.`stakeUnitAddress`, into: &buf)
+        FfiConverterTypeDecimal.write(value.`stakeUnitAmount`, into: &buf)
+        FfiConverterTypeAddress.write(value.`validatorAddress`, into: &buf)
+        FfiConverterTypeAddress.write(value.`claimNftResource`, into: &buf)
+        FfiConverterTypeNonFungibleLocalId.write(value.`claimNftLocalId`, into: &buf)
+        FfiConverterTypeUnstakeData.write(value.`claimNftData`, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeUnstakeInformation_lift(_ buf: RustBuffer) throws -> UnstakeInformation {
+    return try FfiConverterTypeUnstakeInformation.lift(buf)
+}
+
+public func FfiConverterTypeUnstakeInformation_lower(_ value: UnstakeInformation) -> RustBuffer {
+    return FfiConverterTypeUnstakeInformation.lower(value)
 }
 
 
@@ -13356,6 +13556,9 @@ public enum TransactionType {
     case `simpleTransfer`(`from`: Address, `to`: Address, `transferred`: ResourceSpecifier)
     case `transfer`(`from`: Address, `transfers`: [String: [String: Resources]])
     case `accountDepositSettings`(`resourcePreferenceChanges`: [String: [String: ResourcePreferenceAction]], `defaultDepositRuleChanges`: [String: AccountDefaultDepositRule], `authorizedDepositorsChanges`: [String: AuthorizedDepositorsChanges])
+    case `stakeTransaction`(`stakes`: [StakeInformation])
+    case `unstakeTransaction`(`unstakes`: [UnstakeInformation])
+    case `claimStakeTransaction`(`claims`: [ClaimStakeInformation])
     case `generalTransaction`(`accountProofs`: [Address], `accountWithdraws`: [String: [ResourceTracker]], `accountDeposits`: [String: [ResourceTracker]], `addressesInManifest`: [EntityType: [Address]], `metadataOfNewlyCreatedEntities`: [String: [String: MetadataValue?]], `dataOfNewlyMintedNonFungibles`: [String: [NonFungibleLocalId: [UInt8]]], `addressesOfNewlyCreatedEntities`: [Address])
 }
 
@@ -13383,7 +13586,19 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             `authorizedDepositorsChanges`: try FfiConverterDictionaryStringTypeAuthorizedDepositorsChanges.read(from: &buf)
         )
         
-        case 4: return .`generalTransaction`(
+        case 4: return .`stakeTransaction`(
+            `stakes`: try FfiConverterSequenceTypeStakeInformation.read(from: &buf)
+        )
+        
+        case 5: return .`unstakeTransaction`(
+            `unstakes`: try FfiConverterSequenceTypeUnstakeInformation.read(from: &buf)
+        )
+        
+        case 6: return .`claimStakeTransaction`(
+            `claims`: try FfiConverterSequenceTypeClaimStakeInformation.read(from: &buf)
+        )
+        
+        case 7: return .`generalTransaction`(
             `accountProofs`: try FfiConverterSequenceTypeAddress.read(from: &buf), 
             `accountWithdraws`: try FfiConverterDictionaryStringSequenceTypeResourceTracker.read(from: &buf), 
             `accountDeposits`: try FfiConverterDictionaryStringSequenceTypeResourceTracker.read(from: &buf), 
@@ -13421,8 +13636,23 @@ public struct FfiConverterTypeTransactionType: FfiConverterRustBuffer {
             FfiConverterDictionaryStringTypeAuthorizedDepositorsChanges.write(`authorizedDepositorsChanges`, into: &buf)
             
         
-        case let .`generalTransaction`(`accountProofs`,`accountWithdraws`,`accountDeposits`,`addressesInManifest`,`metadataOfNewlyCreatedEntities`,`dataOfNewlyMintedNonFungibles`,`addressesOfNewlyCreatedEntities`):
+        case let .`stakeTransaction`(`stakes`):
             writeInt(&buf, Int32(4))
+            FfiConverterSequenceTypeStakeInformation.write(`stakes`, into: &buf)
+            
+        
+        case let .`unstakeTransaction`(`unstakes`):
+            writeInt(&buf, Int32(5))
+            FfiConverterSequenceTypeUnstakeInformation.write(`unstakes`, into: &buf)
+            
+        
+        case let .`claimStakeTransaction`(`claims`):
+            writeInt(&buf, Int32(6))
+            FfiConverterSequenceTypeClaimStakeInformation.write(`claims`, into: &buf)
+            
+        
+        case let .`generalTransaction`(`accountProofs`,`accountWithdraws`,`accountDeposits`,`addressesInManifest`,`metadataOfNewlyCreatedEntities`,`dataOfNewlyMintedNonFungibles`,`addressesOfNewlyCreatedEntities`):
+            writeInt(&buf, Int32(7))
             FfiConverterSequenceTypeAddress.write(`accountProofs`, into: &buf)
             FfiConverterDictionaryStringSequenceTypeResourceTracker.write(`accountWithdraws`, into: &buf)
             FfiConverterDictionaryStringSequenceTypeResourceTracker.write(`accountDeposits`, into: &buf)
@@ -15760,6 +15990,28 @@ fileprivate struct FfiConverterSequenceTypeNonFungibleGlobalId: FfiConverterRust
     }
 }
 
+fileprivate struct FfiConverterSequenceTypeClaimStakeInformation: FfiConverterRustBuffer {
+    typealias SwiftType = [ClaimStakeInformation]
+
+    public static func write(_ value: [ClaimStakeInformation], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeClaimStakeInformation.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [ClaimStakeInformation] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [ClaimStakeInformation]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeClaimStakeInformation.read(from: &buf))
+        }
+        return seq
+    }
+}
+
 fileprivate struct FfiConverterSequenceTypeIndexedAssertion: FfiConverterRustBuffer {
     typealias SwiftType = [IndexedAssertion]
 
@@ -15821,6 +16073,50 @@ fileprivate struct FfiConverterSequenceTypeMapEntry: FfiConverterRustBuffer {
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeMapEntry.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+fileprivate struct FfiConverterSequenceTypeStakeInformation: FfiConverterRustBuffer {
+    typealias SwiftType = [StakeInformation]
+
+    public static func write(_ value: [StakeInformation], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeStakeInformation.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [StakeInformation] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [StakeInformation]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeStakeInformation.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+fileprivate struct FfiConverterSequenceTypeUnstakeInformation: FfiConverterRustBuffer {
+    typealias SwiftType = [UnstakeInformation]
+
+    public static func write(_ value: [UnstakeInformation], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeUnstakeInformation.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [UnstakeInformation] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [UnstakeInformation]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeUnstakeInformation.read(from: &buf))
         }
         return seq
     }
