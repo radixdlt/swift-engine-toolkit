@@ -23,4 +23,4 @@ The process of of building the Radix Engine Toolkit is outlined in their repo, f
 
 # License
 
-The Swift Radix Engine Toolkit code is released under the [Apache 2.0 license](./LICENSE).
+The Swift Radix Engine Toolkit code is released under the [Apache 2.0 license](./LICENSE). Binaries are licensed under the [Radix Generic EULA](https://www.radixdlt.com/terms/genericEULA).
