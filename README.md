@@ -20,3 +20,7 @@ The underlying binary is built for these platforms:
 This Package distributes the RadixEngineToolkit.XCFrmawork as an SPM binaryTarget, which has been build by the build script here in Radix Engine Toolkit repo.
 
 The process of of building the Radix Engine Toolkit is outlined in their repo, found [here](https://github.com/radixdlt/radix-engine-toolkit).
+
+# License
+
+The Swift Radix Engine Toolkit code is released under the [Apache 2.0 license](./LICENSE).
