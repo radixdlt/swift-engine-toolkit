@@ -988,6 +988,7 @@ public protocol DecimalProtocol {
     func `isZero`()   -> Bool
     func `lessThan`(`other`: Decimal)   -> Bool
     func `lessThanOrEqual`(`other`: Decimal)   -> Bool
+    func `mantissa`()   -> String
     func `mul`(`other`: Decimal)  throws -> Decimal
     func `notEqual`(`other`: Decimal)   -> Bool
     func `nthRoot`(`n`: UInt32)   -> Decimal?
@@ -1216,6 +1217,17 @@ public class Decimal: DecimalProtocol {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_less_than_or_equal(self.pointer, 
         FfiConverterTypeDecimal.lower(`other`),$0
+    )
+}
+        )
+    }
+
+    public func `mantissa`()  -> String {
+        return try!  FfiConverterString.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_mantissa(self.pointer, $0
     )
 }
         )
@@ -2998,6 +3010,7 @@ public protocol PreciseDecimalProtocol {
     func `isZero`()   -> Bool
     func `lessThan`(`other`: PreciseDecimal)   -> Bool
     func `lessThanOrEqual`(`other`: PreciseDecimal)   -> Bool
+    func `mantissa`()   -> String
     func `mul`(`other`: PreciseDecimal)  throws -> PreciseDecimal
     func `notEqual`(`other`: PreciseDecimal)   -> Bool
     func `nthRoot`(`n`: UInt32)   -> PreciseDecimal?
@@ -3226,6 +3239,17 @@ public class PreciseDecimal: PreciseDecimalProtocol {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_less_than_or_equal(self.pointer, 
         FfiConverterTypePreciseDecimal.lower(`other`),$0
+    )
+}
+        )
+    }
+
+    public func `mantissa`()  -> String {
+        return try!  FfiConverterString.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_mantissa(self.pointer, $0
     )
 }
         )
@@ -17240,6 +17264,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_less_than_or_equal() != 2387) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_mantissa() != 41794) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_mul() != 18912) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -17538,6 +17565,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_less_than_or_equal() != 33893) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_mantissa() != 2374) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_mul() != 35568) {

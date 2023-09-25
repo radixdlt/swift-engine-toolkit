@@ -208,6 +208,8 @@ int8_t uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_less_than(void*_Nonn
 );
 int8_t uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_less_than_or_equal(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_mantissa(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_mul(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
 int8_t uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_not_equal(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
@@ -473,6 +475,8 @@ int8_t uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_is_zero(void*
 int8_t uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_less_than(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
 int8_t uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_less_than_or_equal(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_mantissa(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_mul(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
@@ -839,6 +843,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_less_than(vo
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_less_than_or_equal(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_mantissa(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_mul(void
     
 );
@@ -1137,6 +1144,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_less_
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_less_than_or_equal(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_mantissa(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_mul(void
