@@ -311,7 +311,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_accou
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_securify(void*_Nonnull ptr, void*_Nonnull account_address, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_set_default_deposit_rule(void*_Nonnull ptr, void*_Nonnull account_address, RustBuffer default, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_set_default_deposit_rule(void*_Nonnull ptr, void*_Nonnull account_address, RustBuffer default_deposit_rule, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_set_resource_preference(void*_Nonnull ptr, void*_Nonnull account_address, void*_Nonnull resource_address, RustBuffer resource_preference, RustCallStatus *_Nonnull out_status
 );
@@ -536,7 +536,15 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_privatekey_new_e
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_privatekey_new_secp256k1(RustBuffer bytes, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_curve(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_public_key(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_public_key_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_raw(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_raw_hex(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_sign(void*_Nonnull ptr, void*_Nonnull hash, RustCallStatus *_Nonnull out_status
 );
@@ -1260,7 +1268,19 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sqrt(
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_curve(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_public_key(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_public_key_bytes(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_raw(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_raw_hex(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_sign(void

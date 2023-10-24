@@ -1765,7 +1765,7 @@ public protocol ManifestBuilderProtocol {
     func `accountRemoveAuthorizedDepositor`(`accountAddress`: Address, `badge`: ResourceOrNonFungible)  throws -> ManifestBuilder
     func `accountRemoveResourcePreference`(`accountAddress`: Address, `resourceAddress`: Address)  throws -> ManifestBuilder
     func `accountSecurify`(`accountAddress`: Address)  throws -> ManifestBuilder
-    func `accountSetDefaultDepositRule`(`accountAddress`: Address, `default`: AccountDefaultDepositRule)  throws -> ManifestBuilder
+    func `accountSetDefaultDepositRule`(`accountAddress`: Address, `defaultDepositRule`: AccountDefaultDepositRule)  throws -> ManifestBuilder
     func `accountSetResourcePreference`(`accountAddress`: Address, `resourceAddress`: Address, `resourcePreference`: ResourcePreference)  throws -> ManifestBuilder
     func `accountTryDepositBatchOrAbort`(`accountAddress`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
     func `accountTryDepositBatchOrRefund`(`accountAddress`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
@@ -2080,13 +2080,13 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountSetDefaultDepositRule`(`accountAddress`: Address, `default`: AccountDefaultDepositRule) throws -> ManifestBuilder {
+    public func `accountSetDefaultDepositRule`(`accountAddress`: Address, `defaultDepositRule`: AccountDefaultDepositRule) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_set_default_deposit_rule(self.pointer, 
         FfiConverterTypeAddress.lower(`accountAddress`),
-        FfiConverterTypeAccountDefaultDepositRule.lower(`default`),$0
+        FfiConverterTypeAccountDefaultDepositRule.lower(`defaultDepositRule`),$0
     )
 }
         )
@@ -3620,7 +3620,11 @@ public func FfiConverterTypePreciseDecimal_lower(_ value: PreciseDecimal) -> Uns
 
 
 public protocol PrivateKeyProtocol {
+    func `curve`()   -> Curve
     func `publicKey`()   -> PublicKey
+    func `publicKeyBytes`()   -> [UInt8]
+    func `raw`()   -> [UInt8]
+    func `rawHex`()   -> String
     func `sign`(`hash`: Hash)   -> [UInt8]
     func `signToSignature`(`hash`: Hash)   -> Signature
     func `signToSignatureWithPublicKey`(`hash`: Hash)   -> SignatureWithPublicKey
@@ -3671,12 +3675,56 @@ public class PrivateKey: PrivateKeyProtocol {
     
     
 
+    public func `curve`()  -> Curve {
+        return try!  FfiConverterTypeCurve.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_curve(self.pointer, $0
+    )
+}
+        )
+    }
+
     public func `publicKey`()  -> PublicKey {
         return try!  FfiConverterTypePublicKey.lift(
             try! 
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_public_key(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `publicKeyBytes`()  -> [UInt8] {
+        return try!  FfiConverterSequenceUInt8.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_public_key_bytes(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `raw`()  -> [UInt8] {
+        return try!  FfiConverterSequenceUInt8.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_raw(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `rawHex`()  -> String {
+        return try!  FfiConverterString.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_raw_hex(self.pointer, $0
     )
 }
         )
@@ -12779,6 +12827,7 @@ public enum RadixEngineToolkitError {
     case ManifestModificationError(`error`: String)
     case InvalidEntityTypeIdError(`error`: String)
     case DecimalError
+    case SignerError(`error`: String)
 
     fileprivate static func uniffiErrorHandler(_ error: RustBuffer) throws -> Error {
         return try FfiConverterTypeRadixEngineToolkitError.lift(error)
@@ -12863,6 +12912,9 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
             `error`: try FfiConverterString.read(from: &buf)
             )
         case 23: return .DecimalError
+        case 24: return .SignerError(
+            `error`: try FfiConverterString.read(from: &buf)
+            )
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -12990,6 +13042,11 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
         case .DecimalError:
             writeInt(&buf, Int32(23))
         
+        
+        case let .SignerError(`error`):
+            writeInt(&buf, Int32(24))
+            FfiConverterString.write(`error`, into: &buf)
+            
         }
     }
 }
@@ -17646,7 +17703,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_securify() != 54813) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_set_default_deposit_rule() != 24638) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_set_default_deposit_rule() != 32207) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_set_resource_preference() != 36563) {
@@ -17910,7 +17967,19 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub() != 2969) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_curve() != 56035) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_public_key() != 49403) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_public_key_bytes() != 8464) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_raw() != 43216) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_raw_hex() != 64460) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_sign() != 21427) {
