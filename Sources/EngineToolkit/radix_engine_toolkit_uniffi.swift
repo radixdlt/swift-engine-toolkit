@@ -1746,35 +1746,54 @@ public func FfiConverterTypeIntent_lower(_ value: Intent) -> UnsafeMutableRawPoi
 
 
 public protocol ManifestBuilderProtocol {
-    func `accessControllerInitiateRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
-    func `accessControllerQuickConfirmRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
-    func `accountAddAuthorizedDepositor`(`accountAddress`: Address, `badge`: ResourceOrNonFungible)  throws -> ManifestBuilder
-    func `accountBurn`(`accountAddress`: Address, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
-    func `accountBurnNonFungibles`(`accountAddress`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
+    func `accessControllerCancelPrimaryRoleBadgeWithdrawAttempt`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerCancelPrimaryRoleRecoveryProposal`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerCancelRecoveryRoleBadgeWithdrawAttempt`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerCancelRecoveryRoleRecoveryProposal`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerCreate`(`controlledAsset`: ManifestBuilderBucket, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
+    func `accessControllerCreateProof`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerCreateWithSecurityStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
+    func `accessControllerInitiateBadgeWithdrawAsPrimary`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerInitiateBadgeWithdrawAsRecovery`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerInitiateRecoveryAsPrimary`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerInitiateRecoveryAsRecovery`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerLockPrimaryRole`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerMintRecoveryBadges`(`address`: Address, `nonFungibleLocalIds`: [NonFungibleLocalId])  throws -> ManifestBuilder
+    func `accessControllerNewFromPublicKeys`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
+    func `accessControllerQuickConfirmPrimaryRoleBadgeWithdrawAttempt`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerQuickConfirmPrimaryRoleRecoveryProposal`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerQuickConfirmRecoveryRoleBadgeWithdrawAttempt`(`address`: Address)  throws -> ManifestBuilder
+    func `accessControllerQuickConfirmRecoveryRoleRecoveryProposal`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerStopTimedRecovery`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerTimedConfirmRecovery`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?)  throws -> ManifestBuilder
+    func `accessControllerUnlockPrimaryRole`(`address`: Address)  throws -> ManifestBuilder
+    func `accountAddAuthorizedDepositor`(`address`: Address, `badge`: ResourceOrNonFungible)  throws -> ManifestBuilder
+    func `accountBurn`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
+    func `accountBurnNonFungibles`(`address`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
     func `accountCreate`()  throws -> ManifestBuilder
     func `accountCreateAdvanced`(`ownerRole`: OwnerRole, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
-    func `accountCreateProofOfAmount`(`accountAddress`: Address, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
-    func `accountCreateProofOfNonFungibles`(`accountAddress`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
-    func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
-    func `accountDepositBatch`(`accountAddress`: Address, `buckets`: [ManifestBuilderBucket])  throws -> ManifestBuilder
+    func `accountCreateProofOfAmount`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
+    func `accountCreateProofOfNonFungibles`(`address`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
+    func `accountDeposit`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `accountDepositBatch`(`address`: Address, `buckets`: [ManifestBuilderBucket])  throws -> ManifestBuilder
     func `accountDepositEntireWorktop`(`accountAddress`: Address)  throws -> ManifestBuilder
-    func `accountLockContingentFee`(`accountAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
-    func `accountLockFee`(`accountAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
-    func `accountLockFeeAndWithdraw`(`accountAddress`: Address, `amountToLock`: Decimal, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
-    func `accountLockFeeAndWithdrawNonFungibles`(`accountAddress`: Address, `amountToLock`: Decimal, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
-    func `accountRemoveAuthorizedDepositor`(`accountAddress`: Address, `badge`: ResourceOrNonFungible)  throws -> ManifestBuilder
-    func `accountRemoveResourcePreference`(`accountAddress`: Address, `resourceAddress`: Address)  throws -> ManifestBuilder
-    func `accountSecurify`(`accountAddress`: Address)  throws -> ManifestBuilder
-    func `accountSetDefaultDepositRule`(`accountAddress`: Address, `defaultDepositRule`: AccountDefaultDepositRule)  throws -> ManifestBuilder
-    func `accountSetResourcePreference`(`accountAddress`: Address, `resourceAddress`: Address, `resourcePreference`: ResourcePreference)  throws -> ManifestBuilder
-    func `accountTryDepositBatchOrAbort`(`accountAddress`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
-    func `accountTryDepositBatchOrRefund`(`accountAddress`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
+    func `accountLockContingentFee`(`address`: Address, `amount`: Decimal)  throws -> ManifestBuilder
+    func `accountLockFee`(`address`: Address, `amount`: Decimal)  throws -> ManifestBuilder
+    func `accountLockFeeAndWithdraw`(`address`: Address, `amountToLock`: Decimal, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
+    func `accountLockFeeAndWithdrawNonFungibles`(`address`: Address, `amountToLock`: Decimal, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
+    func `accountRemoveAuthorizedDepositor`(`address`: Address, `badge`: ResourceOrNonFungible)  throws -> ManifestBuilder
+    func `accountRemoveResourcePreference`(`address`: Address, `resourceAddress`: Address)  throws -> ManifestBuilder
+    func `accountSecurify`(`address`: Address)  throws -> ManifestBuilder
+    func `accountSetDefaultDepositRule`(`address`: Address, `defaultDepositRule`: AccountDefaultDepositRule)  throws -> ManifestBuilder
+    func `accountSetResourcePreference`(`address`: Address, `resourceAddress`: Address, `resourcePreference`: ResourcePreference)  throws -> ManifestBuilder
+    func `accountTryDepositBatchOrAbort`(`address`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
+    func `accountTryDepositBatchOrRefund`(`address`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
     func `accountTryDepositEntireWorktopOrAbort`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
     func `accountTryDepositEntireWorktopOrRefund`(`accountAddress`: Address, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
-    func `accountTryDepositOrAbort`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
-    func `accountTryDepositOrRefund`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
-    func `accountWithdraw`(`accountAddress`: Address, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
-    func `accountWithdrawNonFungibles`(`accountAddress`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
+    func `accountTryDepositOrAbort`(`address`: Address, `bucket`: ManifestBuilderBucket, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
+    func `accountTryDepositOrRefund`(`address`: Address, `bucket`: ManifestBuilderBucket, `authorizedDepositorBadge`: ResourceOrNonFungible?)  throws -> ManifestBuilder
+    func `accountWithdraw`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
+    func `accountWithdrawNonFungibles`(`address`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId])  throws -> ManifestBuilder
     func `allocateGlobalAddress`(`packageAddress`: Address, `blueprintName`: String, `intoAddressReservation`: ManifestBuilderAddressReservation, `intoNamedAddress`: ManifestBuilderNamedAddress)  throws -> ManifestBuilder
     func `assertWorktopContains`(`resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
     func `assertWorktopContainsAny`(`resourceAddress`: Address)  throws -> ManifestBuilder
@@ -1788,7 +1807,6 @@ public protocol ManifestBuilderProtocol {
     func `callMethod`(`address`: ManifestBuilderAddress, `methodName`: String, `args`: [ManifestBuilderValue])  throws -> ManifestBuilder
     func `callRoyaltyMethod`(`address`: ManifestBuilderAddress, `methodName`: String, `args`: [ManifestBuilderValue])  throws -> ManifestBuilder
     func `cloneProof`(`proof`: ManifestBuilderProof, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
-    func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `createFungibleResourceManager`(`ownerRole`: OwnerRole, `trackTotalSupply`: Bool, `divisibility`: UInt8, `initialSupply`: Decimal?, `resourceRoles`: FungibleResourceRoles, `metadata`: MetadataModuleConfig, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `createProofFromAuthZoneOfAll`(`resourceAddress`: Address, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `createProofFromAuthZoneOfAmount`(`resourceAddress`: Address, `amount`: Decimal, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
@@ -1796,23 +1814,75 @@ public protocol ManifestBuilderProtocol {
     func `createProofFromBucketOfAll`(`bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `createProofFromBucketOfAmount`(`amount`: Decimal, `bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `createProofFromBucketOfNonFungibles`(`ids`: [NonFungibleLocalId], `bucket`: ManifestBuilderBucket, `intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
-    func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `dropAllProofs`()  throws -> ManifestBuilder
     func `dropAuthZoneProofs`()  throws -> ManifestBuilder
     func `dropAuthZoneSignatureProofs`()  throws -> ManifestBuilder
     func `dropProof`(`proof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `faucetFreeXrd`()  throws -> ManifestBuilder
     func `faucetLockFee`()  throws -> ManifestBuilder
+    func `identityCreate`()  throws -> ManifestBuilder
+    func `identityCreateAdvanced`(`ownerRole`: OwnerRole)  throws -> ManifestBuilder
+    func `identitySecurify`(`address`: Address)  throws -> ManifestBuilder
+    func `metadataGet`(`address`: Address, `key`: String)  throws -> ManifestBuilder
+    func `metadataLock`(`address`: Address, `key`: String)  throws -> ManifestBuilder
+    func `metadataRemove`(`address`: Address, `key`: String)  throws -> ManifestBuilder
+    func `metadataSet`(`address`: Address, `key`: String, `value`: MetadataValue)  throws -> ManifestBuilder
     func `mintFungible`(`resourceAddress`: Address, `amount`: Decimal)  throws -> ManifestBuilder
+    func `multiResourcePoolContribute`(`address`: Address, `buckets`: [ManifestBuilderBucket])  throws -> ManifestBuilder
+    func `multiResourcePoolGetRedemptionValue`(`address`: Address, `amountOfPoolUnits`: Decimal)  throws -> ManifestBuilder
+    func `multiResourcePoolGetVaultAmount`(`address`: Address)  throws -> ManifestBuilder
+    func `multiResourcePoolInstantiate`(`ownerRole`: OwnerRole, `poolManagerRule`: AccessRule, `resourceAddresses`: [Address], `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
+    func `multiResourcePoolProtectedDeposit`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `multiResourcePoolProtectedWithdraw`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal, `withdrawStrategy`: WithdrawStrategy)  throws -> ManifestBuilder
+    func `multiResourcePoolRedeem`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `oneResourcePoolContribute`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `oneResourcePoolGetRedemptionValue`(`address`: Address, `amountOfPoolUnits`: Decimal)  throws -> ManifestBuilder
+    func `oneResourcePoolGetVaultAmount`(`address`: Address)  throws -> ManifestBuilder
+    func `oneResourcePoolInstantiate`(`ownerRole`: OwnerRole, `poolManagerRule`: AccessRule, `resourceAddress`: Address, `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
+    func `oneResourcePoolProtectedDeposit`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `oneResourcePoolProtectedWithdraw`(`address`: Address, `amount`: Decimal, `withdrawStrategy`: WithdrawStrategy)  throws -> ManifestBuilder
+    func `oneResourcePoolRedeem`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `packageClaimRoyalty`(`address`: Address)  throws -> ManifestBuilder
+    func `packagePublish`(`code`: [UInt8], `definition`: [UInt8], `metadata`: [String: MetadataInitEntry])  throws -> ManifestBuilder
+    func `packagePublishAdvanced`(`ownerRole`: OwnerRole, `code`: [UInt8], `definition`: [UInt8], `metadata`: [String: MetadataInitEntry], `packageAddress`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
     func `popFromAuthZone`(`intoProof`: ManifestBuilderProof)  throws -> ManifestBuilder
-    func `publishPackage`(`code`: [UInt8], `definition`: [UInt8], `metadata`: [String: MetadataInitEntry])  throws -> ManifestBuilder
     func `pushToAuthZone`(`proof`: ManifestBuilderProof)  throws -> ManifestBuilder
     func `returnToWorktop`(`bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
-    func `setMetadata`(`address`: Address, `key`: String, `value`: MetadataValue)  throws -> ManifestBuilder
-    func `setRole`(`address`: Address, `module`: ObjectModuleId, `roleKey`: String, `rule`: AccessRule)  throws -> ManifestBuilder
+    func `roleAssignmentGet`(`address`: Address, `module`: ModuleId, `roleKey`: String)  throws -> ManifestBuilder
+    func `roleAssignmentLockOwner`(`address`: Address)  throws -> ManifestBuilder
+    func `roleAssignmentSet`(`address`: Address, `module`: ModuleId, `roleKey`: String, `rule`: AccessRule)  throws -> ManifestBuilder
+    func `roleAssignmentSetOwner`(`address`: Address, `rule`: AccessRule)  throws -> ManifestBuilder
+    func `royaltyClaim`(`address`: Address)  throws -> ManifestBuilder
+    func `royaltyLock`(`address`: Address, `method`: String)  throws -> ManifestBuilder
+    func `royaltySet`(`address`: Address, `method`: String, `amount`: RoyaltyAmount)  throws -> ManifestBuilder
     func `takeAllFromWorktop`(`resourceAddress`: Address, `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `takeFromWorktop`(`resourceAddress`: Address, `amount`: Decimal, `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
     func `takeNonFungiblesFromWorktop`(`resourceAddress`: Address, `ids`: [NonFungibleLocalId], `intoBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `twoResourcePoolContribute`(`address`: Address, `buckets`: [ManifestBuilderBucket])  throws -> ManifestBuilder
+    func `twoResourcePoolGetRedemptionValue`(`address`: Address, `amountOfPoolUnits`: Decimal)  throws -> ManifestBuilder
+    func `twoResourcePoolGetVaultAmount`(`address`: Address)  throws -> ManifestBuilder
+    func `twoResourcePoolInstantiate`(`ownerRole`: OwnerRole, `poolManagerRule`: AccessRule, `resourceAddresses`: [Address], `addressReservation`: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
+    func `twoResourcePoolProtectedDeposit`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `twoResourcePoolProtectedWithdraw`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal, `withdrawStrategy`: WithdrawStrategy)  throws -> ManifestBuilder
+    func `twoResourcePoolRedeem`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `validatorAcceptsDelegatedStake`(`address`: Address)  throws -> ManifestBuilder
+    func `validatorClaimXrd`(`address`: Address, `bucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `validatorFinishUnlockOwnerStakeUnits`(`address`: Address)  throws -> ManifestBuilder
+    func `validatorGetProtocolUpdateReadiness`(`address`: Address)  throws -> ManifestBuilder
+    func `validatorGetRedemptionValue`(`address`: Address, `amountOfStakeUnits`: Decimal)  throws -> ManifestBuilder
+    func `validatorLockOwnerStakeUnits`(`address`: Address, `stakeUnitBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `validatorRegister`(`address`: Address)  throws -> ManifestBuilder
+    func `validatorSignalProtocolUpdateReadiness`(`address`: Address, `vote`: String)  throws -> ManifestBuilder
+    func `validatorStake`(`address`: Address, `stake`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `validatorStakeAsOwner`(`address`: Address, `stake`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `validatorStartUnlockOwnerStakeUnits`(`address`: Address, `requestedStakeUnitAmount`: Decimal)  throws -> ManifestBuilder
+    func `validatorTotalStakeUnitSupply`(`address`: Address)  throws -> ManifestBuilder
+    func `validatorTotalStakeXrdAmount`(`address`: Address)  throws -> ManifestBuilder
+    func `validatorUnregister`(`address`: Address)  throws -> ManifestBuilder
+    func `validatorUnstake`(`address`: Address, `stakeUnitBucket`: ManifestBuilderBucket)  throws -> ManifestBuilder
+    func `validatorUpdateAcceptDelegatedStake`(`address`: Address, `acceptDelegatedStake`: Bool)  throws -> ManifestBuilder
+    func `validatorUpdateFee`(`address`: Address, `newFeeFactor`: Decimal)  throws -> ManifestBuilder
+    func `validatorUpdateKey`(`address`: Address, `key`: PublicKey)  throws -> ManifestBuilder
     
 }
 
@@ -1840,56 +1910,281 @@ public class ManifestBuilder: ManifestBuilderProtocol {
     
     
 
-    public func `accessControllerInitiateRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+    public func `accessControllerCancelPrimaryRoleBadgeWithdrawAttempt`(`address`: Address) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_recovery(self.pointer, 
-        FfiConverterTypeAddress.lower(`accessControllerAddress`),
-        FfiConverterTypeProposer.lower(`proposer`),
-        FfiConverterTypeAccessRule.lower(`proposedPrimaryRole`),
-        FfiConverterTypeAccessRule.lower(`proposedRecoveryRole`),
-        FfiConverterTypeAccessRule.lower(`proposedConfirmationRole`),
-        FfiConverterOptionUInt32.lower(`proposedTimedRecoveryDelayInMinutes`),$0
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_cancel_primary_role_badge_withdraw_attempt(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
     )
 }
         )
     }
 
-    public func `accessControllerQuickConfirmRecovery`(`accessControllerAddress`: Address, `proposer`: Proposer, `proposedPrimaryRole`: AccessRule, `proposedRecoveryRole`: AccessRule, `proposedConfirmationRole`: AccessRule, `proposedTimedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+    public func `accessControllerCancelPrimaryRoleRecoveryProposal`(`address`: Address) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_recovery(self.pointer, 
-        FfiConverterTypeAddress.lower(`accessControllerAddress`),
-        FfiConverterTypeProposer.lower(`proposer`),
-        FfiConverterTypeAccessRule.lower(`proposedPrimaryRole`),
-        FfiConverterTypeAccessRule.lower(`proposedRecoveryRole`),
-        FfiConverterTypeAccessRule.lower(`proposedConfirmationRole`),
-        FfiConverterOptionUInt32.lower(`proposedTimedRecoveryDelayInMinutes`),$0
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_cancel_primary_role_recovery_proposal(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
     )
 }
         )
     }
 
-    public func `accountAddAuthorizedDepositor`(`accountAddress`: Address, `badge`: ResourceOrNonFungible) throws -> ManifestBuilder {
+    public func `accessControllerCancelRecoveryRoleBadgeWithdrawAttempt`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_cancel_recovery_role_badge_withdraw_attempt(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerCancelRecoveryRoleRecoveryProposal`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_cancel_recovery_role_recovery_proposal(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerCreate`(`controlledAsset`: ManifestBuilderBucket, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_create(self.pointer, 
+        FfiConverterTypeManifestBuilderBucket.lower(`controlledAsset`),
+        FfiConverterTypeRuleSet.lower(`ruleSet`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerCreateProof`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_create_proof(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerCreateWithSecurityStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_create_with_security_structure(self.pointer, 
+        FfiConverterTypeManifestBuilderBucket.lower(`controlledAsset`),
+        FfiConverterTypeSecurityStructureRole.lower(`primaryRole`),
+        FfiConverterTypeSecurityStructureRole.lower(`recoveryRole`),
+        FfiConverterTypeSecurityStructureRole.lower(`confirmationRole`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerInitiateBadgeWithdrawAsPrimary`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_badge_withdraw_as_primary(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerInitiateBadgeWithdrawAsRecovery`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_badge_withdraw_as_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerInitiateRecoveryAsPrimary`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_recovery_as_primary(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeRuleSet.lower(`ruleSet`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerInitiateRecoveryAsRecovery`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_initiate_recovery_as_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeRuleSet.lower(`ruleSet`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerLockPrimaryRole`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_lock_primary_role(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerMintRecoveryBadges`(`address`: Address, `nonFungibleLocalIds`: [NonFungibleLocalId]) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_mint_recovery_badges(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterSequenceTypeNonFungibleLocalId.lower(`nonFungibleLocalIds`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerNewFromPublicKeys`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_new_from_public_keys(self.pointer, 
+        FfiConverterTypeManifestBuilderBucket.lower(`controlledAsset`),
+        FfiConverterTypePublicKey.lower(`primaryRole`),
+        FfiConverterTypePublicKey.lower(`recoveryRole`),
+        FfiConverterTypePublicKey.lower(`confirmationRole`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerQuickConfirmPrimaryRoleBadgeWithdrawAttempt`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_primary_role_badge_withdraw_attempt(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerQuickConfirmPrimaryRoleRecoveryProposal`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_primary_role_recovery_proposal(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeRuleSet.lower(`ruleSet`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerQuickConfirmRecoveryRoleBadgeWithdrawAttempt`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_recovery_role_badge_withdraw_attempt(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerQuickConfirmRecoveryRoleRecoveryProposal`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_quick_confirm_recovery_role_recovery_proposal(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeRuleSet.lower(`ruleSet`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerStopTimedRecovery`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_stop_timed_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeRuleSet.lower(`ruleSet`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerTimedConfirmRecovery`(`address`: Address, `ruleSet`: RuleSet, `timedRecoveryDelayInMinutes`: UInt32?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_timed_confirm_recovery(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeRuleSet.lower(`ruleSet`),
+        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),$0
+    )
+}
+        )
+    }
+
+    public func `accessControllerUnlockPrimaryRole`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_access_controller_unlock_primary_role(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `accountAddAuthorizedDepositor`(`address`: Address, `badge`: ResourceOrNonFungible) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_add_authorized_depositor(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeResourceOrNonFungible.lower(`badge`),$0
     )
 }
         )
     }
 
-    public func `accountBurn`(`accountAddress`: Address, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
+    public func `accountBurn`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_burn(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterTypeDecimal.lower(`amount`),$0
     )
@@ -1897,12 +2192,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountBurnNonFungibles`(`accountAddress`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
+    public func `accountBurnNonFungibles`(`address`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_burn_non_fungibles(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterSequenceTypeNonFungibleLocalId.lower(`ids`),$0
     )
@@ -1932,12 +2227,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountCreateProofOfAmount`(`accountAddress`: Address, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
+    public func `accountCreateProofOfAmount`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_create_proof_of_amount(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterTypeDecimal.lower(`amount`),$0
     )
@@ -1945,12 +2240,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountCreateProofOfNonFungibles`(`accountAddress`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
+    public func `accountCreateProofOfNonFungibles`(`address`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_create_proof_of_non_fungibles(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterSequenceTypeNonFungibleLocalId.lower(`ids`),$0
     )
@@ -1958,24 +2253,24 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountDeposit`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+    public func `accountDeposit`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_deposit(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
     )
 }
         )
     }
 
-    public func `accountDepositBatch`(`accountAddress`: Address, `buckets`: [ManifestBuilderBucket]) throws -> ManifestBuilder {
+    public func `accountDepositBatch`(`address`: Address, `buckets`: [ManifestBuilderBucket]) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_deposit_batch(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterSequenceTypeManifestBuilderBucket.lower(`buckets`),$0
     )
 }
@@ -1993,36 +2288,36 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountLockContingentFee`(`accountAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
+    public func `accountLockContingentFee`(`address`: Address, `amount`: Decimal) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_lock_contingent_fee(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeDecimal.lower(`amount`),$0
     )
 }
         )
     }
 
-    public func `accountLockFee`(`accountAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
+    public func `accountLockFee`(`address`: Address, `amount`: Decimal) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_lock_fee(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeDecimal.lower(`amount`),$0
     )
 }
         )
     }
 
-    public func `accountLockFeeAndWithdraw`(`accountAddress`: Address, `amountToLock`: Decimal, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
+    public func `accountLockFeeAndWithdraw`(`address`: Address, `amountToLock`: Decimal, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_lock_fee_and_withdraw(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeDecimal.lower(`amountToLock`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterTypeDecimal.lower(`amount`),$0
@@ -2031,12 +2326,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountLockFeeAndWithdrawNonFungibles`(`accountAddress`: Address, `amountToLock`: Decimal, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
+    public func `accountLockFeeAndWithdrawNonFungibles`(`address`: Address, `amountToLock`: Decimal, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_lock_fee_and_withdraw_non_fungibles(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeDecimal.lower(`amountToLock`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterSequenceTypeNonFungibleLocalId.lower(`ids`),$0
@@ -2045,59 +2340,59 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountRemoveAuthorizedDepositor`(`accountAddress`: Address, `badge`: ResourceOrNonFungible) throws -> ManifestBuilder {
+    public func `accountRemoveAuthorizedDepositor`(`address`: Address, `badge`: ResourceOrNonFungible) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_remove_authorized_depositor(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeResourceOrNonFungible.lower(`badge`),$0
     )
 }
         )
     }
 
-    public func `accountRemoveResourcePreference`(`accountAddress`: Address, `resourceAddress`: Address) throws -> ManifestBuilder {
+    public func `accountRemoveResourcePreference`(`address`: Address, `resourceAddress`: Address) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_remove_resource_preference(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAddress.lower(`resourceAddress`),$0
     )
 }
         )
     }
 
-    public func `accountSecurify`(`accountAddress`: Address) throws -> ManifestBuilder {
+    public func `accountSecurify`(`address`: Address) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_securify(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),$0
+        FfiConverterTypeAddress.lower(`address`),$0
     )
 }
         )
     }
 
-    public func `accountSetDefaultDepositRule`(`accountAddress`: Address, `defaultDepositRule`: AccountDefaultDepositRule) throws -> ManifestBuilder {
+    public func `accountSetDefaultDepositRule`(`address`: Address, `defaultDepositRule`: AccountDefaultDepositRule) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_set_default_deposit_rule(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAccountDefaultDepositRule.lower(`defaultDepositRule`),$0
     )
 }
         )
     }
 
-    public func `accountSetResourcePreference`(`accountAddress`: Address, `resourceAddress`: Address, `resourcePreference`: ResourcePreference) throws -> ManifestBuilder {
+    public func `accountSetResourcePreference`(`address`: Address, `resourceAddress`: Address, `resourcePreference`: ResourcePreference) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_set_resource_preference(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterTypeResourcePreference.lower(`resourcePreference`),$0
     )
@@ -2105,12 +2400,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountTryDepositBatchOrAbort`(`accountAddress`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
+    public func `accountTryDepositBatchOrAbort`(`address`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_try_deposit_batch_or_abort(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterSequenceTypeManifestBuilderBucket.lower(`buckets`),
         FfiConverterOptionTypeResourceOrNonFungible.lower(`authorizedDepositorBadge`),$0
     )
@@ -2118,12 +2413,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountTryDepositBatchOrRefund`(`accountAddress`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
+    public func `accountTryDepositBatchOrRefund`(`address`: Address, `buckets`: [ManifestBuilderBucket], `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_try_deposit_batch_or_refund(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterSequenceTypeManifestBuilderBucket.lower(`buckets`),
         FfiConverterOptionTypeResourceOrNonFungible.lower(`authorizedDepositorBadge`),$0
     )
@@ -2155,12 +2450,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountTryDepositOrAbort`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket, `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
+    public func `accountTryDepositOrAbort`(`address`: Address, `bucket`: ManifestBuilderBucket, `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_try_deposit_or_abort(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeManifestBuilderBucket.lower(`bucket`),
         FfiConverterOptionTypeResourceOrNonFungible.lower(`authorizedDepositorBadge`),$0
     )
@@ -2168,12 +2463,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountTryDepositOrRefund`(`accountAddress`: Address, `bucket`: ManifestBuilderBucket, `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
+    public func `accountTryDepositOrRefund`(`address`: Address, `bucket`: ManifestBuilderBucket, `authorizedDepositorBadge`: ResourceOrNonFungible?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_try_deposit_or_refund(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeManifestBuilderBucket.lower(`bucket`),
         FfiConverterOptionTypeResourceOrNonFungible.lower(`authorizedDepositorBadge`),$0
     )
@@ -2181,12 +2476,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountWithdraw`(`accountAddress`: Address, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
+    public func `accountWithdraw`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_withdraw(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterTypeDecimal.lower(`amount`),$0
     )
@@ -2194,12 +2489,12 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `accountWithdrawNonFungibles`(`accountAddress`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
+    public func `accountWithdrawNonFungibles`(`address`: Address, `resourceAddress`: Address, `ids`: [NonFungibleLocalId]) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_withdraw_non_fungibles(self.pointer, 
-        FfiConverterTypeAddress.lower(`accountAddress`),
+        FfiConverterTypeAddress.lower(`address`),
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterSequenceTypeNonFungibleLocalId.lower(`ids`),$0
     )
@@ -2370,22 +2665,6 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `createAccessControllerWithSecurifyStructure`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: SecurityStructureRole, `recoveryRole`: SecurityStructureRole, `confirmationRole`: SecurityStructureRole, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
-        return try  FfiConverterTypeManifestBuilder.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_access_controller_with_securify_structure(self.pointer, 
-        FfiConverterTypeManifestBuilderBucket.lower(`controlledAsset`),
-        FfiConverterTypeSecurityStructureRole.lower(`primaryRole`),
-        FfiConverterTypeSecurityStructureRole.lower(`recoveryRole`),
-        FfiConverterTypeSecurityStructureRole.lower(`confirmationRole`),
-        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
-        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
-    )
-}
-        )
-    }
-
     public func `createFungibleResourceManager`(`ownerRole`: OwnerRole, `trackTotalSupply`: Bool, `divisibility`: UInt8, `initialSupply`: Decimal?, `resourceRoles`: FungibleResourceRoles, `metadata`: MetadataModuleConfig, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
@@ -2479,22 +2758,6 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `createSignatureBasedAccessController`(`controlledAsset`: ManifestBuilderBucket, `primaryRole`: PublicKey, `recoveryRole`: PublicKey, `confirmationRole`: PublicKey, `timedRecoveryDelayInMinutes`: UInt32?, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
-        return try  FfiConverterTypeManifestBuilder.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_create_signature_based_access_controller(self.pointer, 
-        FfiConverterTypeManifestBuilderBucket.lower(`controlledAsset`),
-        FfiConverterTypePublicKey.lower(`primaryRole`),
-        FfiConverterTypePublicKey.lower(`recoveryRole`),
-        FfiConverterTypePublicKey.lower(`confirmationRole`),
-        FfiConverterOptionUInt32.lower(`timedRecoveryDelayInMinutes`),
-        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
-    )
-}
-        )
-    }
-
     public func `dropAllProofs`() throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
@@ -2556,6 +2819,87 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
+    public func `identityCreate`() throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_identity_create(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func `identityCreateAdvanced`(`ownerRole`: OwnerRole) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_identity_create_advanced(self.pointer, 
+        FfiConverterTypeOwnerRole.lower(`ownerRole`),$0
+    )
+}
+        )
+    }
+
+    public func `identitySecurify`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_identity_securify(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `metadataGet`(`address`: Address, `key`: String) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_metadata_get(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterString.lower(`key`),$0
+    )
+}
+        )
+    }
+
+    public func `metadataLock`(`address`: Address, `key`: String) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_metadata_lock(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterString.lower(`key`),$0
+    )
+}
+        )
+    }
+
+    public func `metadataRemove`(`address`: Address, `key`: String) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_metadata_remove(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterString.lower(`key`),$0
+    )
+}
+        )
+    }
+
+    public func `metadataSet`(`address`: Address, `key`: String, `value`: MetadataValue) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_metadata_set(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterString.lower(`key`),
+        FfiConverterTypeMetadataValue.lower(`value`),$0
+    )
+}
+        )
+    }
+
     public func `mintFungible`(`resourceAddress`: Address, `amount`: Decimal) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
@@ -2568,25 +2912,224 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
+    public func `multiResourcePoolContribute`(`address`: Address, `buckets`: [ManifestBuilderBucket]) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_multi_resource_pool_contribute(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterSequenceTypeManifestBuilderBucket.lower(`buckets`),$0
+    )
+}
+        )
+    }
+
+    public func `multiResourcePoolGetRedemptionValue`(`address`: Address, `amountOfPoolUnits`: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_multi_resource_pool_get_redemption_value(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeDecimal.lower(`amountOfPoolUnits`),$0
+    )
+}
+        )
+    }
+
+    public func `multiResourcePoolGetVaultAmount`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_multi_resource_pool_get_vault_amount(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `multiResourcePoolInstantiate`(`ownerRole`: OwnerRole, `poolManagerRule`: AccessRule, `resourceAddresses`: [Address], `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_multi_resource_pool_instantiate(self.pointer, 
+        FfiConverterTypeOwnerRole.lower(`ownerRole`),
+        FfiConverterTypeAccessRule.lower(`poolManagerRule`),
+        FfiConverterSequenceTypeAddress.lower(`resourceAddresses`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
+    )
+}
+        )
+    }
+
+    public func `multiResourcePoolProtectedDeposit`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_multi_resource_pool_protected_deposit(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `multiResourcePoolProtectedWithdraw`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal, `withdrawStrategy`: WithdrawStrategy) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_multi_resource_pool_protected_withdraw(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeAddress.lower(`resourceAddress`),
+        FfiConverterTypeDecimal.lower(`amount`),
+        FfiConverterTypeWithdrawStrategy.lower(`withdrawStrategy`),$0
+    )
+}
+        )
+    }
+
+    public func `multiResourcePoolRedeem`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_multi_resource_pool_redeem(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `oneResourcePoolContribute`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_one_resource_pool_contribute(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `oneResourcePoolGetRedemptionValue`(`address`: Address, `amountOfPoolUnits`: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_one_resource_pool_get_redemption_value(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeDecimal.lower(`amountOfPoolUnits`),$0
+    )
+}
+        )
+    }
+
+    public func `oneResourcePoolGetVaultAmount`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_one_resource_pool_get_vault_amount(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `oneResourcePoolInstantiate`(`ownerRole`: OwnerRole, `poolManagerRule`: AccessRule, `resourceAddress`: Address, `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_one_resource_pool_instantiate(self.pointer, 
+        FfiConverterTypeOwnerRole.lower(`ownerRole`),
+        FfiConverterTypeAccessRule.lower(`poolManagerRule`),
+        FfiConverterTypeAddress.lower(`resourceAddress`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
+    )
+}
+        )
+    }
+
+    public func `oneResourcePoolProtectedDeposit`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_one_resource_pool_protected_deposit(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `oneResourcePoolProtectedWithdraw`(`address`: Address, `amount`: Decimal, `withdrawStrategy`: WithdrawStrategy) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_one_resource_pool_protected_withdraw(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeDecimal.lower(`amount`),
+        FfiConverterTypeWithdrawStrategy.lower(`withdrawStrategy`),$0
+    )
+}
+        )
+    }
+
+    public func `oneResourcePoolRedeem`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_one_resource_pool_redeem(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `packageClaimRoyalty`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_package_claim_royalty(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `packagePublish`(`code`: [UInt8], `definition`: [UInt8], `metadata`: [String: MetadataInitEntry]) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_package_publish(self.pointer, 
+        FfiConverterSequenceUInt8.lower(`code`),
+        FfiConverterSequenceUInt8.lower(`definition`),
+        FfiConverterDictionaryStringTypeMetadataInitEntry.lower(`metadata`),$0
+    )
+}
+        )
+    }
+
+    public func `packagePublishAdvanced`(`ownerRole`: OwnerRole, `code`: [UInt8], `definition`: [UInt8], `metadata`: [String: MetadataInitEntry], `packageAddress`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_package_publish_advanced(self.pointer, 
+        FfiConverterTypeOwnerRole.lower(`ownerRole`),
+        FfiConverterSequenceUInt8.lower(`code`),
+        FfiConverterSequenceUInt8.lower(`definition`),
+        FfiConverterDictionaryStringTypeMetadataInitEntry.lower(`metadata`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`packageAddress`),$0
+    )
+}
+        )
+    }
+
     public func `popFromAuthZone`(`intoProof`: ManifestBuilderProof) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_pop_from_auth_zone(self.pointer, 
         FfiConverterTypeManifestBuilderProof.lower(`intoProof`),$0
-    )
-}
-        )
-    }
-
-    public func `publishPackage`(`code`: [UInt8], `definition`: [UInt8], `metadata`: [String: MetadataInitEntry]) throws -> ManifestBuilder {
-        return try  FfiConverterTypeManifestBuilder.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_publish_package(self.pointer, 
-        FfiConverterSequenceUInt8.lower(`code`),
-        FfiConverterSequenceUInt8.lower(`definition`),
-        FfiConverterDictionaryStringTypeMetadataInitEntry.lower(`metadata`),$0
     )
 }
         )
@@ -2614,28 +3157,87 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         )
     }
 
-    public func `setMetadata`(`address`: Address, `key`: String, `value`: MetadataValue) throws -> ManifestBuilder {
+    public func `roleAssignmentGet`(`address`: Address, `module`: ModuleId, `roleKey`: String) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_set_metadata(self.pointer, 
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_role_assignment_get(self.pointer, 
         FfiConverterTypeAddress.lower(`address`),
-        FfiConverterString.lower(`key`),
-        FfiConverterTypeMetadataValue.lower(`value`),$0
+        FfiConverterTypeModuleId.lower(`module`),
+        FfiConverterString.lower(`roleKey`),$0
     )
 }
         )
     }
 
-    public func `setRole`(`address`: Address, `module`: ObjectModuleId, `roleKey`: String, `rule`: AccessRule) throws -> ManifestBuilder {
+    public func `roleAssignmentLockOwner`(`address`: Address) throws -> ManifestBuilder {
         return try  FfiConverterTypeManifestBuilder.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_set_role(self.pointer, 
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_role_assignment_lock_owner(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `roleAssignmentSet`(`address`: Address, `module`: ModuleId, `roleKey`: String, `rule`: AccessRule) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_role_assignment_set(self.pointer, 
         FfiConverterTypeAddress.lower(`address`),
-        FfiConverterTypeObjectModuleId.lower(`module`),
+        FfiConverterTypeModuleId.lower(`module`),
         FfiConverterString.lower(`roleKey`),
         FfiConverterTypeAccessRule.lower(`rule`),$0
+    )
+}
+        )
+    }
+
+    public func `roleAssignmentSetOwner`(`address`: Address, `rule`: AccessRule) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_role_assignment_set_owner(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeAccessRule.lower(`rule`),$0
+    )
+}
+        )
+    }
+
+    public func `royaltyClaim`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_royalty_claim(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `royaltyLock`(`address`: Address, `method`: String) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_royalty_lock(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterString.lower(`method`),$0
+    )
+}
+        )
+    }
+
+    public func `royaltySet`(`address`: Address, `method`: String, `amount`: RoyaltyAmount) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_royalty_set(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterString.lower(`method`),
+        FfiConverterTypeRoyaltyAmount.lower(`amount`),$0
     )
 }
         )
@@ -2674,6 +3276,302 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         FfiConverterTypeAddress.lower(`resourceAddress`),
         FfiConverterSequenceTypeNonFungibleLocalId.lower(`ids`),
         FfiConverterTypeManifestBuilderBucket.lower(`intoBucket`),$0
+    )
+}
+        )
+    }
+
+    public func `twoResourcePoolContribute`(`address`: Address, `buckets`: [ManifestBuilderBucket]) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_two_resource_pool_contribute(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterSequenceTypeManifestBuilderBucket.lower(`buckets`),$0
+    )
+}
+        )
+    }
+
+    public func `twoResourcePoolGetRedemptionValue`(`address`: Address, `amountOfPoolUnits`: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_two_resource_pool_get_redemption_value(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeDecimal.lower(`amountOfPoolUnits`),$0
+    )
+}
+        )
+    }
+
+    public func `twoResourcePoolGetVaultAmount`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_two_resource_pool_get_vault_amount(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `twoResourcePoolInstantiate`(`ownerRole`: OwnerRole, `poolManagerRule`: AccessRule, `resourceAddresses`: [Address], `addressReservation`: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_two_resource_pool_instantiate(self.pointer, 
+        FfiConverterTypeOwnerRole.lower(`ownerRole`),
+        FfiConverterTypeAccessRule.lower(`poolManagerRule`),
+        FfiConverterSequenceTypeAddress.lower(`resourceAddresses`),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(`addressReservation`),$0
+    )
+}
+        )
+    }
+
+    public func `twoResourcePoolProtectedDeposit`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_two_resource_pool_protected_deposit(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `twoResourcePoolProtectedWithdraw`(`address`: Address, `resourceAddress`: Address, `amount`: Decimal, `withdrawStrategy`: WithdrawStrategy) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_two_resource_pool_protected_withdraw(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeAddress.lower(`resourceAddress`),
+        FfiConverterTypeDecimal.lower(`amount`),
+        FfiConverterTypeWithdrawStrategy.lower(`withdrawStrategy`),$0
+    )
+}
+        )
+    }
+
+    public func `twoResourcePoolRedeem`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_two_resource_pool_redeem(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorAcceptsDelegatedStake`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_accepts_delegated_stake(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorClaimXrd`(`address`: Address, `bucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_claim_xrd(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`bucket`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorFinishUnlockOwnerStakeUnits`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_finish_unlock_owner_stake_units(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorGetProtocolUpdateReadiness`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_get_protocol_update_readiness(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorGetRedemptionValue`(`address`: Address, `amountOfStakeUnits`: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_get_redemption_value(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeDecimal.lower(`amountOfStakeUnits`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorLockOwnerStakeUnits`(`address`: Address, `stakeUnitBucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_lock_owner_stake_units(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`stakeUnitBucket`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorRegister`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_register(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorSignalProtocolUpdateReadiness`(`address`: Address, `vote`: String) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_signal_protocol_update_readiness(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterString.lower(`vote`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorStake`(`address`: Address, `stake`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_stake(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`stake`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorStakeAsOwner`(`address`: Address, `stake`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_stake_as_owner(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`stake`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorStartUnlockOwnerStakeUnits`(`address`: Address, `requestedStakeUnitAmount`: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_start_unlock_owner_stake_units(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeDecimal.lower(`requestedStakeUnitAmount`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorTotalStakeUnitSupply`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_total_stake_unit_supply(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorTotalStakeXrdAmount`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_total_stake_xrd_amount(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorUnregister`(`address`: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_unregister(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorUnstake`(`address`: Address, `stakeUnitBucket`: ManifestBuilderBucket) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_unstake(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeManifestBuilderBucket.lower(`stakeUnitBucket`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorUpdateAcceptDelegatedStake`(`address`: Address, `acceptDelegatedStake`: Bool) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_update_accept_delegated_stake(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterBool.lower(`acceptDelegatedStake`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorUpdateFee`(`address`: Address, `newFeeFactor`: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_update_fee(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypeDecimal.lower(`newFeeFactor`),$0
+    )
+}
+        )
+    }
+
+    public func `validatorUpdateKey`(`address`: Address, `key`: PublicKey) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_update_key(self.pointer, 
+        FfiConverterTypeAddress.lower(`address`),
+        FfiConverterTypePublicKey.lower(`key`),$0
     )
 }
         )
@@ -6162,40 +7060,6 @@ public func FfiConverterTypeKnownAddresses_lift(_ buf: RustBuffer) throws -> Kno
 
 public func FfiConverterTypeKnownAddresses_lower(_ value: KnownAddresses) -> RustBuffer {
     return FfiConverterTypeKnownAddresses.lower(value)
-}
-
-
-public struct LockFeeEvent {
-    public var `amount`: Decimal
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(`amount`: Decimal) {
-        self.`amount` = `amount`
-    }
-}
-
-
-
-public struct FfiConverterTypeLockFeeEvent: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> LockFeeEvent {
-        return try LockFeeEvent(
-            `amount`: FfiConverterTypeDecimal.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: LockFeeEvent, into buf: inout [UInt8]) {
-        FfiConverterTypeDecimal.write(value.`amount`, into: &buf)
-    }
-}
-
-
-public func FfiConverterTypeLockFeeEvent_lift(_ buf: RustBuffer) throws -> LockFeeEvent {
-    return try FfiConverterTypeLockFeeEvent.lift(buf)
-}
-
-public func FfiConverterTypeLockFeeEvent_lower(_ value: LockFeeEvent) -> RustBuffer {
-    return FfiConverterTypeLockFeeEvent.lower(value)
 }
 
 
@@ -9837,7 +10701,7 @@ public func FfiConverterTypeDepositResourceEvent_lower(_ value: DepositResourceE
 public enum Emitter {
     
     case `function`(`address`: Address, `blueprintName`: String)
-    case `method`(`address`: Address, `objectModuleId`: ObjectModuleId)
+    case `method`(`address`: Address, `objectModuleId`: ModuleId)
 }
 
 public struct FfiConverterTypeEmitter: FfiConverterRustBuffer {
@@ -9854,7 +10718,7 @@ public struct FfiConverterTypeEmitter: FfiConverterRustBuffer {
         
         case 2: return .`method`(
             `address`: try FfiConverterTypeAddress.read(from: &buf), 
-            `objectModuleId`: try FfiConverterTypeObjectModuleId.read(from: &buf)
+            `objectModuleId`: try FfiConverterTypeModuleId.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -9874,7 +10738,7 @@ public struct FfiConverterTypeEmitter: FfiConverterRustBuffer {
         case let .`method`(`address`,`objectModuleId`):
             writeInt(&buf, Int32(2))
             FfiConverterTypeAddress.write(`address`, into: &buf)
-            FfiConverterTypeObjectModuleId.write(`objectModuleId`, into: &buf)
+            FfiConverterTypeModuleId.write(`objectModuleId`, into: &buf)
             
         }
     }
@@ -12211,6 +13075,72 @@ public func FfiConverterTypeMetadataValue_lower(_ value: MetadataValue) -> RustB
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum ModuleId {
+    
+    case `main`
+    case `metadata`
+    case `royalty`
+    case `roleAssignment`
+}
+
+public struct FfiConverterTypeModuleId: FfiConverterRustBuffer {
+    typealias SwiftType = ModuleId
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ModuleId {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`main`
+        
+        case 2: return .`metadata`
+        
+        case 3: return .`royalty`
+        
+        case 4: return .`roleAssignment`
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ModuleId, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .`main`:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .`metadata`:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .`royalty`:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .`roleAssignment`:
+            writeInt(&buf, Int32(4))
+        
+        }
+    }
+}
+
+
+public func FfiConverterTypeModuleId_lift(_ buf: RustBuffer) throws -> ModuleId {
+    return try FfiConverterTypeModuleId.lift(buf)
+}
+
+public func FfiConverterTypeModuleId_lower(_ value: ModuleId) -> RustBuffer {
+    return FfiConverterTypeModuleId.lower(value)
+}
+
+
+extension ModuleId: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum NameRecordError {
     
     case `objectNameIsAlreadyTaken`(`object`: String, `name`: String)
@@ -12406,72 +13336,6 @@ public func FfiConverterTypeNonFungibleLocalIdVecSource_lower(_ value: NonFungib
 
 
 extension NonFungibleLocalIdVecSource: Equatable, Hashable {}
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-public enum ObjectModuleId {
-    
-    case `main`
-    case `metadata`
-    case `royalty`
-    case `roleAssignment`
-}
-
-public struct FfiConverterTypeObjectModuleId: FfiConverterRustBuffer {
-    typealias SwiftType = ObjectModuleId
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ObjectModuleId {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .`main`
-        
-        case 2: return .`metadata`
-        
-        case 3: return .`royalty`
-        
-        case 4: return .`roleAssignment`
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: ObjectModuleId, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case .`main`:
-            writeInt(&buf, Int32(1))
-        
-        
-        case .`metadata`:
-            writeInt(&buf, Int32(2))
-        
-        
-        case .`royalty`:
-            writeInt(&buf, Int32(3))
-        
-        
-        case .`roleAssignment`:
-            writeInt(&buf, Int32(4))
-        
-        }
-    }
-}
-
-
-public func FfiConverterTypeObjectModuleId_lift(_ buf: RustBuffer) throws -> ObjectModuleId {
-    return try FfiConverterTypeObjectModuleId.lift(buf)
-}
-
-public func FfiConverterTypeObjectModuleId_lower(_ value: ObjectModuleId) -> RustBuffer {
-    return FfiConverterTypeObjectModuleId.lower(value)
-}
-
-
-extension ObjectModuleId: Equatable, Hashable {}
 
 
 
@@ -13669,6 +14533,69 @@ public func FfiConverterTypeRoundingMode_lower(_ value: RoundingMode) -> RustBuf
 
 
 extension RoundingMode: Equatable, Hashable {}
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum RoyaltyAmount {
+    
+    case `free`
+    case `xrd`(`value`: Decimal)
+    case `usd`(`value`: Decimal)
+}
+
+public struct FfiConverterTypeRoyaltyAmount: FfiConverterRustBuffer {
+    typealias SwiftType = RoyaltyAmount
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RoyaltyAmount {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`free`
+        
+        case 2: return .`xrd`(
+            `value`: try FfiConverterTypeDecimal.read(from: &buf)
+        )
+        
+        case 3: return .`usd`(
+            `value`: try FfiConverterTypeDecimal.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: RoyaltyAmount, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .`free`:
+            writeInt(&buf, Int32(1))
+        
+        
+        case let .`xrd`(`value`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeDecimal.write(`value`, into: &buf)
+            
+        
+        case let .`usd`(`value`):
+            writeInt(&buf, Int32(3))
+            FfiConverterTypeDecimal.write(`value`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeRoyaltyAmount_lift(_ buf: RustBuffer) throws -> RoyaltyAmount {
+    return try FfiConverterTypeRoyaltyAmount.lift(buf)
+}
+
+public func FfiConverterTypeRoyaltyAmount_lower(_ value: RoyaltyAmount) -> RustBuffer {
+    return FfiConverterTypeRoyaltyAmount.lower(value)
+}
+
 
 
 
@@ -15619,6 +16546,61 @@ public func FfiConverterTypeWithdrawResourceEvent_lower(_ value: WithdrawResourc
     return FfiConverterTypeWithdrawResourceEvent.lower(value)
 }
 
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum WithdrawStrategy {
+    
+    case `exact`
+    case `rounded`(`roundingMode`: RoundingMode)
+}
+
+public struct FfiConverterTypeWithdrawStrategy: FfiConverterRustBuffer {
+    typealias SwiftType = WithdrawStrategy
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WithdrawStrategy {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .`exact`
+        
+        case 2: return .`rounded`(
+            `roundingMode`: try FfiConverterTypeRoundingMode.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: WithdrawStrategy, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .`exact`:
+            writeInt(&buf, Int32(1))
+        
+        
+        case let .`rounded`(`roundingMode`):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeRoundingMode.write(`roundingMode`, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeWithdrawStrategy_lift(_ buf: RustBuffer) throws -> WithdrawStrategy {
+    return try FfiConverterTypeWithdrawStrategy.lift(buf)
+}
+
+public func FfiConverterTypeWithdrawStrategy_lower(_ value: WithdrawStrategy) -> RustBuffer {
+    return FfiConverterTypeWithdrawStrategy.lower(value)
+}
+
+
+extension WithdrawStrategy: Equatable, Hashable {}
 
 
 
@@ -17646,19 +18628,76 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intent_statically_validate() != 18502) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_recovery() != 9147) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_cancel_primary_role_badge_withdraw_attempt() != 48569) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_recovery() != 6850) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_cancel_primary_role_recovery_proposal() != 15034) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_add_authorized_depositor() != 12038) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_cancel_recovery_role_badge_withdraw_attempt() != 302) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_burn() != 19304) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_cancel_recovery_role_recovery_proposal() != 29975) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_burn_non_fungibles() != 47679) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_create() != 58316) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_create_proof() != 64981) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_create_with_security_structure() != 28637) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_badge_withdraw_as_primary() != 61645) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_badge_withdraw_as_recovery() != 57712) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_recovery_as_primary() != 20119) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_initiate_recovery_as_recovery() != 33445) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_lock_primary_role() != 31780) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_mint_recovery_badges() != 4851) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_new_from_public_keys() != 6146) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_primary_role_badge_withdraw_attempt() != 12412) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_primary_role_recovery_proposal() != 45088) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_recovery_role_badge_withdraw_attempt() != 17833) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_quick_confirm_recovery_role_recovery_proposal() != 62781) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_stop_timed_recovery() != 34245) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_timed_confirm_recovery() != 45733) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_access_controller_unlock_primary_role() != 30029) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_add_authorized_depositor() != 59221) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_burn() != 64728) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_burn_non_fungibles() != 40710) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_create() != 6013) {
@@ -17667,52 +18706,52 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_create_advanced() != 54940) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_create_proof_of_amount() != 32890) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_create_proof_of_amount() != 17393) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_create_proof_of_non_fungibles() != 5597) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_create_proof_of_non_fungibles() != 43091) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit() != 58477) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit() != 3687) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit_batch() != 12319) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit_batch() != 43520) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_deposit_entire_worktop() != 59635) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_contingent_fee() != 1195) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_contingent_fee() != 54668) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_fee() != 64803) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_fee() != 38082) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_fee_and_withdraw() != 58397) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_fee_and_withdraw() != 19367) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_fee_and_withdraw_non_fungibles() != 12575) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_fee_and_withdraw_non_fungibles() != 46012) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_remove_authorized_depositor() != 44710) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_remove_authorized_depositor() != 17654) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_remove_resource_preference() != 18718) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_remove_resource_preference() != 57432) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_securify() != 54813) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_securify() != 20811) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_set_default_deposit_rule() != 32207) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_set_default_deposit_rule() != 28798) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_set_resource_preference() != 36563) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_set_resource_preference() != 24940) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_batch_or_abort() != 38243) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_batch_or_abort() != 18649) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_batch_or_refund() != 34338) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_batch_or_refund() != 34909) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_entire_worktop_or_abort() != 42658) {
@@ -17721,16 +18760,16 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_entire_worktop_or_refund() != 9020) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_or_abort() != 20248) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_or_abort() != 21998) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_or_refund() != 40752) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_try_deposit_or_refund() != 39086) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_withdraw() != 46951) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_withdraw() != 29156) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_withdraw_non_fungibles() != 55318) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_withdraw_non_fungibles() != 56678) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_allocate_global_address() != 18604) {
@@ -17772,9 +18811,6 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_clone_proof() != 52407) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_access_controller_with_securify_structure() != 21421) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_fungible_resource_manager() != 45955) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -17796,9 +18832,6 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_proof_from_bucket_of_non_fungibles() != 25333) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_create_signature_based_access_controller() != 676) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_drop_all_proofs() != 12341) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -17817,13 +18850,82 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_faucet_lock_fee() != 5856) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_identity_create() != 22657) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_identity_create_advanced() != 53046) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_identity_securify() != 24322) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_metadata_get() != 37782) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_metadata_lock() != 53375) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_metadata_remove() != 30456) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_metadata_set() != 11186) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_mint_fungible() != 41635) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_pop_from_auth_zone() != 54385) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_multi_resource_pool_contribute() != 54648) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_publish_package() != 13228) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_multi_resource_pool_get_redemption_value() != 1278) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_multi_resource_pool_get_vault_amount() != 53964) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_multi_resource_pool_instantiate() != 17825) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_multi_resource_pool_protected_deposit() != 10939) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_multi_resource_pool_protected_withdraw() != 3505) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_multi_resource_pool_redeem() != 16912) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_one_resource_pool_contribute() != 25120) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_one_resource_pool_get_redemption_value() != 27814) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_one_resource_pool_get_vault_amount() != 37942) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_one_resource_pool_instantiate() != 5474) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_one_resource_pool_protected_deposit() != 1325) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_one_resource_pool_protected_withdraw() != 47007) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_one_resource_pool_redeem() != 16139) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_package_claim_royalty() != 54897) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_package_publish() != 43039) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_package_publish_advanced() != 7234) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_pop_from_auth_zone() != 54385) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_push_to_auth_zone() != 59668) {
@@ -17832,10 +18934,25 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_return_to_worktop() != 48542) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_set_metadata() != 4065) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_role_assignment_get() != 57962) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_set_role() != 58550) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_role_assignment_lock_owner() != 26186) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_role_assignment_set() != 27207) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_role_assignment_set_owner() != 64161) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_royalty_claim() != 23601) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_royalty_lock() != 50599) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_royalty_set() != 26584) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_take_all_from_worktop() != 61948) {
@@ -17845,6 +18962,81 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_take_non_fungibles_from_worktop() != 49676) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_two_resource_pool_contribute() != 3256) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_two_resource_pool_get_redemption_value() != 41038) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_two_resource_pool_get_vault_amount() != 44545) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_two_resource_pool_instantiate() != 22784) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_two_resource_pool_protected_deposit() != 8937) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_two_resource_pool_protected_withdraw() != 35351) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_two_resource_pool_redeem() != 4503) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_accepts_delegated_stake() != 63411) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_claim_xrd() != 13361) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_finish_unlock_owner_stake_units() != 24114) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_get_protocol_update_readiness() != 56572) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_get_redemption_value() != 30890) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_lock_owner_stake_units() != 26840) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_register() != 38592) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_signal_protocol_update_readiness() != 41037) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_stake() != 46849) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_stake_as_owner() != 43974) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_start_unlock_owner_stake_units() != 53351) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_total_stake_unit_supply() != 14885) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_total_stake_xrd_amount() != 44141) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_unregister() != 55641) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_unstake() != 53557) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_update_accept_delegated_stake() != 38363) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_update_fee() != 10602) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_validator_update_key() != 41122) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_messagevalidationconfig_max_decryptors() != 45350) {
