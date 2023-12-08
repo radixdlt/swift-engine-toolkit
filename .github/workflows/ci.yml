@@ -80,7 +80,7 @@ jobs:
           snyk sbom --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json --json-file-output sbom.json
       - name: Upload SBOM
         if: github.event_name == 'release'
-        uses: AButler/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a # v2.0.2
+        uses: RDXWorks-actions/upload-release-assets@master
         with:
           files: sbom.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -99,7 +99,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3.1.0
 
-      - uses: webfactory/ssh-agent@v0.6.0
+      - uses: RDXWorks-actions/ssh-agent@master
         with:
           ssh-private-key: |
             ${{ secrets.BITE_UNIT_TESTS_SSH_KEY }}
@@ -107,7 +107,7 @@ jobs:
             ${{ secrets.MNEMONIC_UNIT_TESTS_SSH_KEY }}
 
       - name: Run unit tests
-        uses: mxcl/xcodebuild@v1
+        uses: RDXWorks-actions/xcodebuild@master
         with:
           xcode: ^14.2
           action: test
