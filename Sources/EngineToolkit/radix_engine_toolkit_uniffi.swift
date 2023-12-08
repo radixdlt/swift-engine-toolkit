@@ -221,6 +221,7 @@ fileprivate enum UniffiInternalError: LocalizedError {
     case unexpectedRustCallError
     case unexpectedStaleHandle
     case rustPanic(_ message: String)
+    case cancellationError
 
     public var errorDescription: String? {
         switch self {
@@ -233,6 +234,7 @@ fileprivate enum UniffiInternalError: LocalizedError {
         case .unexpectedRustCallError: return "CALL_ERROR but no errorClass specified"
         case .unexpectedStaleHandle: return "The object in the handle map has been dropped already"
         case let .rustPanic(message): return message
+        case .cancellationError: return "Call cancelled"
         }
     }
 }
@@ -304,9 +306,7 @@ private func uniffiCheckCallStatus(
             }
 
         case CALL_CANCELLED:
-               // throw CancellationError()
-        // Temporary replacement of CancellationError which is availble only from iOS 13.
-         throw UniffiInternalError.unexpectedRustCallError
+         throw UniffiInternalError.cancellationError
 
         default:
             throw UniffiInternalError.unexpectedRustCallStatusCode
