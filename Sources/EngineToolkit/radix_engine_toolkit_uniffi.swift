@@ -304,7 +304,9 @@ private func uniffiCheckCallStatus(
             }
 
         case CALL_CANCELLED:
-                throw CancellationError()
+               // throw CancellationError()
+        // Temporary replacement of CancellationError which is availble only from iOS 13.
+         throw UniffiInternalError.unexpectedRustCallError
 
         default:
             throw UniffiInternalError.unexpectedRustCallStatusCode
