@@ -31,18 +31,6 @@ typedef struct RustBuffer
 
 typedef int32_t (*ForeignCallback)(uint64_t, int32_t, const uint8_t *_Nonnull, int32_t, RustBuffer *_Nonnull);
 
-// Task defined in Rust that Swift executes
-typedef void (*UniFfiRustTaskCallback)(const void * _Nullable, int8_t);
-
-// Callback to execute Rust tasks using a Swift Task
-//
-// Args:
-//   executor: ForeignExecutor lowered into a size_t value
-//   delay: Delay in MS
-//   task: UniFfiRustTaskCallback to call
-//   task_data: data to pass the task callback
-typedef int8_t (*UniFfiForeignExecutorCallback)(size_t, uint32_t, UniFfiRustTaskCallback _Nullable, const void * _Nullable);
-
 typedef struct ForeignBytes
 {
     int32_t len;
@@ -63,6 +51,8 @@ typedef struct RustCallStatus {
 typedef void (*UniFfiRustFutureContinuation)(void * _Nonnull, int8_t);
 
 // Scaffolding functions
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_accessrule(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_accessrule(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_allow_all(RustCallStatus *_Nonnull out_status
@@ -86,6 +76,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_requi
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_accessrule_and(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_accessrule_or(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_address(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_address(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -136,6 +128,8 @@ int8_t uniffi_radix_engine_toolkit_uniffi_fn_method_address_is_internal_non_fung
 int8_t uniffi_radix_engine_toolkit_uniffi_fn_method_address_is_internal_vault(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 uint8_t uniffi_radix_engine_toolkit_uniffi_fn_method_address_network_id(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_decimal(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_decimal(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -199,6 +193,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_sqrt(void*_Nonnu
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_sub(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_hash(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_hash(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_hash_from_hex_string(RustBuffer hash, RustCallStatus *_Nonnull out_status
@@ -211,6 +207,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_hash_as_str(void*_Nonnul
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_hash_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_instructions(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_instructions(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_instructions_from_instructions(RustBuffer instructions, uint8_t network_id, RustCallStatus *_Nonnull out_status
@@ -222,6 +220,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_as_str(void
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_instructions_list(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 uint8_t uniffi_radix_engine_toolkit_uniffi_fn_method_instructions_network_id(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_intent(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_intent(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -242,6 +242,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_intent_manifest(void*
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_intent_message(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_method_intent_statically_validate(void*_Nonnull ptr, void*_Nonnull validation_config, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_manifestbuilder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_manifestbuilder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -522,6 +524,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_valid
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_validator_update_key(void*_Nonnull ptr, void*_Nonnull address, RustBuffer key, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_messagevalidationconfig(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_messagevalidationconfig(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_messagevalidationconfig_default(RustCallStatus *_Nonnull out_status
@@ -537,6 +541,8 @@ uint64_t uniffi_radix_engine_toolkit_uniffi_fn_method_messagevalidationconfig_ma
 );
 uint64_t uniffi_radix_engine_toolkit_uniffi_fn_method_messagevalidationconfig_max_plaintext_message_length(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_nonfungibleglobalid(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_nonfungibleglobalid(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_from_parts(void*_Nonnull resource_address, RustBuffer non_fungible_local_id, RustCallStatus *_Nonnull out_status
@@ -550,6 +556,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_nonfungibleglobalid_as_s
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_nonfungibleglobalid_local_id(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_nonfungibleglobalid_resource_address(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_notarizedtransaction(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_notarizedtransaction(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -573,6 +581,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_notarizedtransaction_
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_method_notarizedtransaction_statically_validate(void*_Nonnull ptr, void*_Nonnull validation_config, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_olympiaaddress(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_olympiaaddress(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_olympiaaddress_new(RustBuffer address, RustCallStatus *_Nonnull out_status
@@ -580,6 +590,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_olympiaaddress_n
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_olympiaaddress_as_str(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_olympiaaddress_public_key(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_precisedecimal(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_precisedecimal(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -643,6 +655,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sqrt(void
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sub(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_privatekey(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_privatekey(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_privatekey_new(RustBuffer bytes, RustBuffer curve, RustCallStatus *_Nonnull out_status
@@ -667,6 +681,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_sign_to_signa
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_privatekey_sign_to_signature_with_public_key(void*_Nonnull ptr, void*_Nonnull hash, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_signedintent(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_signedintent(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_signedintent_decompile(RustBuffer compiled_signed_intent, RustCallStatus *_Nonnull out_status
@@ -687,6 +703,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_signedintent_signed_i
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_method_signedintent_statically_validate(void*_Nonnull ptr, void*_Nonnull validation_config, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_transactionbuilder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionbuilder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionbuilder_new(RustCallStatus *_Nonnull out_status
@@ -694,11 +712,17 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionbuild
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilder_header(void*_Nonnull ptr, RustBuffer header, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_transactionbuilderheaderstep(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionbuilderheaderstep(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderheaderstep_manifest(void*_Nonnull ptr, void*_Nonnull manifest, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_transactionbuilderintentsignaturesstep(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionbuilderintentsignaturesstep(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionbuilderintentsignaturesstep_new(void*_Nonnull message_step, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderintentsignaturesstep_notarize_with_private_key(void*_Nonnull ptr, void*_Nonnull private_key, RustCallStatus *_Nonnull out_status
 );
@@ -708,6 +732,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderint
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuilderintentsignaturesstep_sign_with_signer(void*_Nonnull ptr, uint64_t signer, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_transactionbuildermessagestep(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionbuildermessagestep(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuildermessagestep_message(void*_Nonnull ptr, RustBuffer message, RustCallStatus *_Nonnull out_status
@@ -715,6 +741,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuildermes
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuildermessagestep_sign_with_private_key(void*_Nonnull ptr, void*_Nonnull private_key, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionbuildermessagestep_sign_with_signer(void*_Nonnull ptr, uint64_t signer, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_transactionhash(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionhash(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -727,6 +755,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_as_str(v
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 uint8_t uniffi_radix_engine_toolkit_uniffi_fn_method_transactionhash_network_id(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_transactionmanifest(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionmanifest(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -758,6 +788,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_pars
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_statically_validate(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_clone_validationconfig(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_validationconfig(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_validationconfig_default(uint8_t network_id, RustCallStatus *_Nonnull out_status
@@ -776,7 +808,7 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_min_tip_p
 );
 uint8_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_network_id(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
-void uniffi_radix_engine_toolkit_uniffi_fn_init_callback_signer(ForeignCallback _Nonnull callback_stub, RustCallStatus *_Nonnull out_status
+void uniffi_radix_engine_toolkit_uniffi_fn_init_callback_signer(ForeignCallback _Nonnull handle
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_build_information(RustCallStatus *_Nonnull out_status
     
@@ -831,9 +863,7 @@ void ffi_radix_engine_toolkit_uniffi_rustbuffer_free(RustBuffer buf, RustCallSta
 );
 RustBuffer ffi_radix_engine_toolkit_uniffi_rustbuffer_reserve(RustBuffer buf, int32_t additional, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_continuation_callback_set(UniFfiRustFutureContinuation _Nonnull callback
-);
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_u8(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_u8(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_u8(void* _Nonnull handle
 );
@@ -841,7 +871,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_u8(void* _Nonnull handle
 );
 uint8_t ffi_radix_engine_toolkit_uniffi_rust_future_complete_u8(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_i8(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_i8(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_i8(void* _Nonnull handle
 );
@@ -849,7 +879,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_i8(void* _Nonnull handle
 );
 int8_t ffi_radix_engine_toolkit_uniffi_rust_future_complete_i8(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_u16(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_u16(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_u16(void* _Nonnull handle
 );
@@ -857,7 +887,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_u16(void* _Nonnull handle
 );
 uint16_t ffi_radix_engine_toolkit_uniffi_rust_future_complete_u16(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_i16(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_i16(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_i16(void* _Nonnull handle
 );
@@ -865,7 +895,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_i16(void* _Nonnull handle
 );
 int16_t ffi_radix_engine_toolkit_uniffi_rust_future_complete_i16(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_u32(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_u32(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_u32(void* _Nonnull handle
 );
@@ -873,7 +903,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_u32(void* _Nonnull handle
 );
 uint32_t ffi_radix_engine_toolkit_uniffi_rust_future_complete_u32(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_i32(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_i32(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_i32(void* _Nonnull handle
 );
@@ -881,7 +911,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_i32(void* _Nonnull handle
 );
 int32_t ffi_radix_engine_toolkit_uniffi_rust_future_complete_i32(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_u64(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_u64(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_u64(void* _Nonnull handle
 );
@@ -889,7 +919,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_u64(void* _Nonnull handle
 );
 uint64_t ffi_radix_engine_toolkit_uniffi_rust_future_complete_u64(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_i64(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_i64(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_i64(void* _Nonnull handle
 );
@@ -897,7 +927,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_i64(void* _Nonnull handle
 );
 int64_t ffi_radix_engine_toolkit_uniffi_rust_future_complete_i64(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_f32(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_f32(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_f32(void* _Nonnull handle
 );
@@ -905,7 +935,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_f32(void* _Nonnull handle
 );
 float ffi_radix_engine_toolkit_uniffi_rust_future_complete_f32(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_f64(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_f64(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_f64(void* _Nonnull handle
 );
@@ -913,7 +943,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_f64(void* _Nonnull handle
 );
 double ffi_radix_engine_toolkit_uniffi_rust_future_complete_f64(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_pointer(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_pointer(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_pointer(void* _Nonnull handle
 );
@@ -921,7 +951,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_pointer(void* _Nonnull han
 );
 void*_Nonnull ffi_radix_engine_toolkit_uniffi_rust_future_complete_pointer(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_rust_buffer(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_rust_buffer(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_rust_buffer(void* _Nonnull handle
 );
@@ -929,7 +959,7 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_rust_buffer(void* _Nonnull
 );
 RustBuffer ffi_radix_engine_toolkit_uniffi_rust_future_complete_rust_buffer(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-void ffi_radix_engine_toolkit_uniffi_rust_future_poll_void(void* _Nonnull handle, void* _Nonnull uniffi_callback
+void ffi_radix_engine_toolkit_uniffi_rust_future_poll_void(void* _Nonnull handle, UniFfiRustFutureContinuation _Nonnull callback, void* _Nonnull callback_data
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_cancel_void(void* _Nonnull handle
 );
@@ -1973,6 +2003,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedintent_ne
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionbuilder_new(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionbuilderintentsignaturesstep_new(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str(void
