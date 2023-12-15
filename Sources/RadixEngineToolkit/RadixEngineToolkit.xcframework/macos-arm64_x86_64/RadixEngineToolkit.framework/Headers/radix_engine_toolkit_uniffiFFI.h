@@ -736,29 +736,21 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanif
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanifest_new(void*_Nonnull instructions, RustBuffer blobs, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_accounts_deposited_into(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
-);
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_accounts_requiring_auth(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
-);
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_accounts_withdrawn_from(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
-);
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_analyze_execution(void*_Nonnull ptr, RustBuffer transaction_receipt, RustCallStatus *_Nonnull out_status
-);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_blobs(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_compile(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_extract_addresses(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_execution_summary(void*_Nonnull ptr, uint8_t network_id, RustBuffer encoded_receipt, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_identities_requiring_auth(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_extract_addresses(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_instructions(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_modify(void*_Nonnull ptr, RustBuffer modifications, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_parse_transfer_information(void*_Nonnull ptr, int8_t allow_lock_fee_instructions, RustCallStatus *_Nonnull out_status
-);
 void uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_statically_validate(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_summary(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_validationconfig(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -1785,28 +1777,16 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_byte
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_network_id(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_deposited_into(void
-    
-);
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_requiring_auth(void
-    
-);
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_accounts_withdrawn_from(void
-    
-);
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_analyze_execution(void
-    
-);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_blobs(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_compile(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_execution_summary(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_identities_requiring_auth(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_instructions(void
@@ -1815,10 +1795,10 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_modify(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_parse_transfer_information(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_statically_validate(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_summary(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_validationconfig_max_epoch_range(void
