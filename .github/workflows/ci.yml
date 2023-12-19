@@ -23,8 +23,8 @@ jobs:
       contents: read
       deployments: write
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
-      - uses: actions/setup-node@v2
+      - uses: RDXWorks-actions/checkout@main
+      - uses: RDXWorks-actions/setup-node@main
         with:
           node-version: '14'
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
@@ -58,8 +58,8 @@ jobs:
     needs:
       - snyk_scan
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
-      - uses: actions/setup-node@v2
+      - uses: RDXWorks-actions/checkout@main
+      - uses: RDXWorks-actions/setup-node@main
         with:
           node-version: '14'
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
@@ -97,7 +97,7 @@ jobs:
           - iOS
 
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: RDXWorks-actions/checkout@main
 
       - uses: RDXWorks-actions/ssh-agent@master
         with:
@@ -125,8 +125,8 @@ jobs:
       contents: read
       deployments: write
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
-      - uses: actions/setup-node@v2
+      - uses: RDXWorks-actions/checkout@main
+      - uses: RDXWorks-actions/setup-node@main
         with:
           node-version: '14'
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
