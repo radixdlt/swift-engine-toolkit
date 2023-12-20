@@ -1018,7 +1018,7 @@ public protocol DecimalProtocol {
     
 }
 
-public class Decimal: DecimalProtocol {
+public final class Decimal: DecimalProtocol {
     fileprivate let pointer: UnsafeMutableRawPointer
 
     // TODO: We'd like this to be `private` but for Swifty reasons,
@@ -3773,7 +3773,7 @@ public protocol NonFungibleGlobalIdProtocol {
     
 }
 
-public class NonFungibleGlobalId: NonFungibleGlobalIdProtocol {
+public final class NonFungibleGlobalId: NonFungibleGlobalIdProtocol {
     fileprivate let pointer: UnsafeMutableRawPointer
 
     // TODO: We'd like this to be `private` but for Swifty reasons,
