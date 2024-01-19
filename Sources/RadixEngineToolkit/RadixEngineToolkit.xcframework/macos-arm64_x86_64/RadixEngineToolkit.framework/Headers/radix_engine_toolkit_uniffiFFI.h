@@ -207,6 +207,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_hash_from_unhash
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_hash_new(RustBuffer hash, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_hash_sbor_decode(RustBuffer bytes, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_hash_as_str(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_hash_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -1883,6 +1885,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_from_unhas
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_new(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_sbor_decode(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_instructions_from_instructions(void

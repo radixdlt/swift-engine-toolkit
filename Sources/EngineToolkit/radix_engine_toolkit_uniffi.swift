@@ -1419,6 +1419,15 @@ public class Hash: HashProtocol {
 
     
 
+    public static func sborDecode(bytes: Data) throws -> Hash {
+        return Hash(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_hash_sbor_decode(
+        FfiConverterData.lower(bytes),$0)
+})
+    }
+
+    
+
     
     
 
@@ -6447,10 +6456,11 @@ public struct ExecutionSummary {
     public var feeLocks: FeeLocks
     public var feeSummary: FeeSummary
     public var detailedClassification: [DetailedManifestClass]
+    public var newlyCreatedNonFungibles: [NonFungibleGlobalId]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(accountWithdraws: [String: [ResourceIndicator]], accountDeposits: [String: [ResourceIndicator]], presentedProofs: [Address], newEntities: NewEntities, encounteredEntities: [Address], accountsRequiringAuth: [Address], identitiesRequiringAuth: [Address], reservedInstructions: [ReservedInstruction], feeLocks: FeeLocks, feeSummary: FeeSummary, detailedClassification: [DetailedManifestClass]) {
+    public init(accountWithdraws: [String: [ResourceIndicator]], accountDeposits: [String: [ResourceIndicator]], presentedProofs: [Address], newEntities: NewEntities, encounteredEntities: [Address], accountsRequiringAuth: [Address], identitiesRequiringAuth: [Address], reservedInstructions: [ReservedInstruction], feeLocks: FeeLocks, feeSummary: FeeSummary, detailedClassification: [DetailedManifestClass], newlyCreatedNonFungibles: [NonFungibleGlobalId]) {
         self.accountWithdraws = accountWithdraws
         self.accountDeposits = accountDeposits
         self.presentedProofs = presentedProofs
@@ -6462,6 +6472,7 @@ public struct ExecutionSummary {
         self.feeLocks = feeLocks
         self.feeSummary = feeSummary
         self.detailedClassification = detailedClassification
+        self.newlyCreatedNonFungibles = newlyCreatedNonFungibles
     }
 }
 
@@ -6480,7 +6491,8 @@ public struct FfiConverterTypeExecutionSummary: FfiConverterRustBuffer {
             reservedInstructions: FfiConverterSequenceTypeReservedInstruction.read(from: &buf), 
             feeLocks: FfiConverterTypeFeeLocks.read(from: &buf), 
             feeSummary: FfiConverterTypeFeeSummary.read(from: &buf), 
-            detailedClassification: FfiConverterSequenceTypeDetailedManifestClass.read(from: &buf)
+            detailedClassification: FfiConverterSequenceTypeDetailedManifestClass.read(from: &buf), 
+            newlyCreatedNonFungibles: FfiConverterSequenceTypeNonFungibleGlobalId.read(from: &buf)
         )
     }
 
@@ -6496,6 +6508,7 @@ public struct FfiConverterTypeExecutionSummary: FfiConverterRustBuffer {
         FfiConverterTypeFeeLocks.write(value.feeLocks, into: &buf)
         FfiConverterTypeFeeSummary.write(value.feeSummary, into: &buf)
         FfiConverterSequenceTypeDetailedManifestClass.write(value.detailedClassification, into: &buf)
+        FfiConverterSequenceTypeNonFungibleGlobalId.write(value.newlyCreatedNonFungibles, into: &buf)
     }
 }
 
@@ -9957,6 +9970,86 @@ public func FfiConverterTypeUnregisterValidatorEvent_lower(_ value: UnregisterVa
 }
 
 
+public struct UnstakeData {
+    public var name: String
+    public var claimEpoch: UInt64
+    public var claimAmount: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(name: String, claimEpoch: UInt64, claimAmount: Decimal) {
+        self.name = name
+        self.claimEpoch = claimEpoch
+        self.claimAmount = claimAmount
+    }
+}
+
+
+
+public struct FfiConverterTypeUnstakeData: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UnstakeData {
+        return try UnstakeData(
+            name: FfiConverterString.read(from: &buf), 
+            claimEpoch: FfiConverterUInt64.read(from: &buf), 
+            claimAmount: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UnstakeData, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.name, into: &buf)
+        FfiConverterUInt64.write(value.claimEpoch, into: &buf)
+        FfiConverterTypeDecimal.write(value.claimAmount, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeUnstakeData_lift(_ buf: RustBuffer) throws -> UnstakeData {
+    return try FfiConverterTypeUnstakeData.lift(buf)
+}
+
+public func FfiConverterTypeUnstakeData_lower(_ value: UnstakeData) -> RustBuffer {
+    return FfiConverterTypeUnstakeData.lower(value)
+}
+
+
+public struct UnstakeDataEntry {
+    public var nonFungibleGlobalId: NonFungibleGlobalId
+    public var data: UnstakeData
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(nonFungibleGlobalId: NonFungibleGlobalId, data: UnstakeData) {
+        self.nonFungibleGlobalId = nonFungibleGlobalId
+        self.data = data
+    }
+}
+
+
+
+public struct FfiConverterTypeUnstakeDataEntry: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UnstakeDataEntry {
+        return try UnstakeDataEntry(
+            nonFungibleGlobalId: FfiConverterTypeNonFungibleGlobalId.read(from: &buf), 
+            data: FfiConverterTypeUnstakeData.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UnstakeDataEntry, into buf: inout [UInt8]) {
+        FfiConverterTypeNonFungibleGlobalId.write(value.nonFungibleGlobalId, into: &buf)
+        FfiConverterTypeUnstakeData.write(value.data, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeUnstakeDataEntry_lift(_ buf: RustBuffer) throws -> UnstakeDataEntry {
+    return try FfiConverterTypeUnstakeDataEntry.lift(buf)
+}
+
+public func FfiConverterTypeUnstakeDataEntry_lower(_ value: UnstakeDataEntry) -> RustBuffer {
+    return FfiConverterTypeUnstakeDataEntry.lower(value)
+}
+
+
 public struct UnstakeEvent {
     public var stakeUnits: Decimal
 
@@ -10813,7 +10906,7 @@ public enum DetailedManifestClass {
     case poolContribution(poolAddresses: [Address], poolContributions: [TrackedPoolContribution])
     case poolRedemption(poolAddresses: [Address], poolRedemptions: [TrackedPoolRedemption])
     case validatorStake(validatorAddresses: [Address], validatorStakes: [TrackedValidatorStake])
-    case validatorUnstake(validatorAddresses: [Address], validatorUnstakes: [TrackedValidatorUnstake])
+    case validatorUnstake(validatorAddresses: [Address], validatorUnstakes: [TrackedValidatorUnstake], claimsNonFungibleData: [UnstakeDataEntry])
     case validatorClaim(validatorAddresses: [Address], validatorClaims: [TrackedValidatorClaim])
     case accountDepositSettingsUpdate(resourcePreferencesUpdates: [String: [String: ResourcePreferenceUpdate]], depositModeUpdates: [String: AccountDefaultDepositRule], authorizedDepositorsAdded: [String: [ResourceOrNonFungible]], authorizedDepositorsRemoved: [String: [ResourceOrNonFungible]])
 }
@@ -10848,7 +10941,8 @@ public struct FfiConverterTypeDetailedManifestClass: FfiConverterRustBuffer {
         
         case 6: return .validatorUnstake(
             validatorAddresses: try FfiConverterSequenceTypeAddress.read(from: &buf), 
-            validatorUnstakes: try FfiConverterSequenceTypeTrackedValidatorUnstake.read(from: &buf)
+            validatorUnstakes: try FfiConverterSequenceTypeTrackedValidatorUnstake.read(from: &buf), 
+            claimsNonFungibleData: try FfiConverterSequenceTypeUnstakeDataEntry.read(from: &buf)
         )
         
         case 7: return .validatorClaim(
@@ -10898,10 +10992,11 @@ public struct FfiConverterTypeDetailedManifestClass: FfiConverterRustBuffer {
             FfiConverterSequenceTypeTrackedValidatorStake.write(validatorStakes, into: &buf)
             
         
-        case let .validatorUnstake(validatorAddresses,validatorUnstakes):
+        case let .validatorUnstake(validatorAddresses,validatorUnstakes,claimsNonFungibleData):
             writeInt(&buf, Int32(6))
             FfiConverterSequenceTypeAddress.write(validatorAddresses, into: &buf)
             FfiConverterSequenceTypeTrackedValidatorUnstake.write(validatorUnstakes, into: &buf)
+            FfiConverterSequenceTypeUnstakeDataEntry.write(claimsNonFungibleData, into: &buf)
             
         
         case let .validatorClaim(validatorAddresses,validatorClaims):
@@ -17759,6 +17854,28 @@ fileprivate struct FfiConverterSequenceTypeTrackedValidatorUnstake: FfiConverter
     }
 }
 
+fileprivate struct FfiConverterSequenceTypeUnstakeDataEntry: FfiConverterRustBuffer {
+    typealias SwiftType = [UnstakeDataEntry]
+
+    public static func write(_ value: [UnstakeDataEntry], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeUnstakeDataEntry.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [UnstakeDataEntry] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [UnstakeDataEntry]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeUnstakeDataEntry.read(from: &buf))
+        }
+        return seq
+    }
+}
+
 fileprivate struct FfiConverterSequenceTypeDetailedManifestClass: FfiConverterRustBuffer {
     typealias SwiftType = [DetailedManifestClass]
 
@@ -19549,6 +19666,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_new() != 17594) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_hash_sbor_decode() != 26443) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_instructions_from_instructions() != 51039) {
