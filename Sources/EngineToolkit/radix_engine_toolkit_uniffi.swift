@@ -6447,7 +6447,7 @@ public func FfiConverterTypeEventTypeIdentifier_lower(_ value: EventTypeIdentifi
 public struct ExecutionSummary {
     public var accountWithdraws: [String: [ResourceIndicator]]
     public var accountDeposits: [String: [ResourceIndicator]]
-    public var presentedProofs: [Address]
+    public var presentedProofs: [String: [ResourceSpecifier]]
     public var newEntities: NewEntities
     public var encounteredEntities: [Address]
     public var accountsRequiringAuth: [Address]
@@ -6460,7 +6460,7 @@ public struct ExecutionSummary {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(accountWithdraws: [String: [ResourceIndicator]], accountDeposits: [String: [ResourceIndicator]], presentedProofs: [Address], newEntities: NewEntities, encounteredEntities: [Address], accountsRequiringAuth: [Address], identitiesRequiringAuth: [Address], reservedInstructions: [ReservedInstruction], feeLocks: FeeLocks, feeSummary: FeeSummary, detailedClassification: [DetailedManifestClass], newlyCreatedNonFungibles: [NonFungibleGlobalId]) {
+    public init(accountWithdraws: [String: [ResourceIndicator]], accountDeposits: [String: [ResourceIndicator]], presentedProofs: [String: [ResourceSpecifier]], newEntities: NewEntities, encounteredEntities: [Address], accountsRequiringAuth: [Address], identitiesRequiringAuth: [Address], reservedInstructions: [ReservedInstruction], feeLocks: FeeLocks, feeSummary: FeeSummary, detailedClassification: [DetailedManifestClass], newlyCreatedNonFungibles: [NonFungibleGlobalId]) {
         self.accountWithdraws = accountWithdraws
         self.accountDeposits = accountDeposits
         self.presentedProofs = presentedProofs
@@ -6483,7 +6483,7 @@ public struct FfiConverterTypeExecutionSummary: FfiConverterRustBuffer {
         return try ExecutionSummary(
             accountWithdraws: FfiConverterDictionaryStringSequenceTypeResourceIndicator.read(from: &buf), 
             accountDeposits: FfiConverterDictionaryStringSequenceTypeResourceIndicator.read(from: &buf), 
-            presentedProofs: FfiConverterSequenceTypeAddress.read(from: &buf), 
+            presentedProofs: FfiConverterDictionaryStringSequenceTypeResourceSpecifier.read(from: &buf), 
             newEntities: FfiConverterTypeNewEntities.read(from: &buf), 
             encounteredEntities: FfiConverterSequenceTypeAddress.read(from: &buf), 
             accountsRequiringAuth: FfiConverterSequenceTypeAddress.read(from: &buf), 
@@ -6499,7 +6499,7 @@ public struct FfiConverterTypeExecutionSummary: FfiConverterRustBuffer {
     public static func write(_ value: ExecutionSummary, into buf: inout [UInt8]) {
         FfiConverterDictionaryStringSequenceTypeResourceIndicator.write(value.accountWithdraws, into: &buf)
         FfiConverterDictionaryStringSequenceTypeResourceIndicator.write(value.accountDeposits, into: &buf)
-        FfiConverterSequenceTypeAddress.write(value.presentedProofs, into: &buf)
+        FfiConverterDictionaryStringSequenceTypeResourceSpecifier.write(value.presentedProofs, into: &buf)
         FfiConverterTypeNewEntities.write(value.newEntities, into: &buf)
         FfiConverterSequenceTypeAddress.write(value.encounteredEntities, into: &buf)
         FfiConverterSequenceTypeAddress.write(value.accountsRequiringAuth, into: &buf)
@@ -7576,7 +7576,7 @@ public func FfiConverterTypeManifestProof_lower(_ value: ManifestProof) -> RustB
 
 
 public struct ManifestSummary {
-    public var presentedProofs: [Address]
+    public var presentedProofs: [String: [ResourceSpecifier]]
     public var accountsWithdrawnFrom: [Address]
     public var accountsDepositedInto: [Address]
     public var encounteredEntities: [Address]
@@ -7587,7 +7587,7 @@ public struct ManifestSummary {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(presentedProofs: [Address], accountsWithdrawnFrom: [Address], accountsDepositedInto: [Address], encounteredEntities: [Address], accountsRequiringAuth: [Address], identitiesRequiringAuth: [Address], reservedInstructions: [ReservedInstruction], classification: [ManifestClass]) {
+    public init(presentedProofs: [String: [ResourceSpecifier]], accountsWithdrawnFrom: [Address], accountsDepositedInto: [Address], encounteredEntities: [Address], accountsRequiringAuth: [Address], identitiesRequiringAuth: [Address], reservedInstructions: [ReservedInstruction], classification: [ManifestClass]) {
         self.presentedProofs = presentedProofs
         self.accountsWithdrawnFrom = accountsWithdrawnFrom
         self.accountsDepositedInto = accountsDepositedInto
@@ -7604,7 +7604,7 @@ public struct ManifestSummary {
 public struct FfiConverterTypeManifestSummary: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ManifestSummary {
         return try ManifestSummary(
-            presentedProofs: FfiConverterSequenceTypeAddress.read(from: &buf), 
+            presentedProofs: FfiConverterDictionaryStringSequenceTypeResourceSpecifier.read(from: &buf), 
             accountsWithdrawnFrom: FfiConverterSequenceTypeAddress.read(from: &buf), 
             accountsDepositedInto: FfiConverterSequenceTypeAddress.read(from: &buf), 
             encounteredEntities: FfiConverterSequenceTypeAddress.read(from: &buf), 
@@ -7616,7 +7616,7 @@ public struct FfiConverterTypeManifestSummary: FfiConverterRustBuffer {
     }
 
     public static func write(_ value: ManifestSummary, into buf: inout [UInt8]) {
-        FfiConverterSequenceTypeAddress.write(value.presentedProofs, into: &buf)
+        FfiConverterDictionaryStringSequenceTypeResourceSpecifier.write(value.presentedProofs, into: &buf)
         FfiConverterSequenceTypeAddress.write(value.accountsWithdrawnFrom, into: &buf)
         FfiConverterSequenceTypeAddress.write(value.accountsDepositedInto, into: &buf)
         FfiConverterSequenceTypeAddress.write(value.encounteredEntities, into: &buf)
@@ -18140,6 +18140,28 @@ fileprivate struct FfiConverterSequenceTypeResourceOrNonFungible: FfiConverterRu
     }
 }
 
+fileprivate struct FfiConverterSequenceTypeResourceSpecifier: FfiConverterRustBuffer {
+    typealias SwiftType = [ResourceSpecifier]
+
+    public static func write(_ value: [ResourceSpecifier], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeResourceSpecifier.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [ResourceSpecifier] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [ResourceSpecifier]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeResourceSpecifier.read(from: &buf))
+        }
+        return seq
+    }
+}
+
 fileprivate struct FfiConverterSequenceTypeSignatureWithPublicKey: FfiConverterRustBuffer {
     typealias SwiftType = [SignatureWithPublicKey]
 
@@ -18363,6 +18385,29 @@ fileprivate struct FfiConverterDictionaryStringSequenceTypeResourceOrNonFungible
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
             let value = try FfiConverterSequenceTypeResourceOrNonFungible.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+fileprivate struct FfiConverterDictionaryStringSequenceTypeResourceSpecifier: FfiConverterRustBuffer {
+    public static func write(_ value: [String: [ResourceSpecifier]], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterSequenceTypeResourceSpecifier.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [ResourceSpecifier]] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: [ResourceSpecifier]]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterSequenceTypeResourceSpecifier.read(from: &buf)
             dict[key] = value
         }
         return dict
