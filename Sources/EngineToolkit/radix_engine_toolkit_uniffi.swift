@@ -14533,7 +14533,6 @@ public enum ReservedInstruction {
     case accountLockFee
     case accountSecurify
     case identitySecurify
-    case accountUpdateSettings
     case accessControllerMethod
 }
 
@@ -14550,9 +14549,7 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
         
         case 3: return .identitySecurify
         
-        case 4: return .accountUpdateSettings
-        
-        case 5: return .accessControllerMethod
+        case 4: return .accessControllerMethod
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -14574,12 +14571,8 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
             writeInt(&buf, Int32(3))
         
         
-        case .accountUpdateSettings:
-            writeInt(&buf, Int32(4))
-        
-        
         case .accessControllerMethod:
-            writeInt(&buf, Int32(5))
+            writeInt(&buf, Int32(4))
         
         }
     }
