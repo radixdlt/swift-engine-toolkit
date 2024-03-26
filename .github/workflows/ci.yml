@@ -77,7 +77,7 @@ jobs:
           snyk auth ${{ env.SNYK_TOKEN }}
       - name: Generate SBOM # check SBOM can be generated but nothing is done with it
         run: |
-          snyk sbom --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json --json-file-output sbom.json
+          snyk sbom --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json > sbom.json
       - name: Upload SBOM
         if: github.event_name == 'release'
         uses: RDXWorks-actions/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a
