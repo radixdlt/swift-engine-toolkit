@@ -8592,6 +8592,53 @@ public func FfiConverterTypeProtocolUpdateReadinessSignalEvent_lower(_ value: Pr
 }
 
 
+public struct PublicKeyFingerprint {
+    public var bytes: HashableBytes
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(bytes: HashableBytes) {
+        self.bytes = bytes
+    }
+}
+
+
+extension PublicKeyFingerprint: Equatable, Hashable {
+    public static func ==(lhs: PublicKeyFingerprint, rhs: PublicKeyFingerprint) -> Bool {
+        if lhs.bytes != rhs.bytes {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(bytes)
+    }
+}
+
+
+public struct FfiConverterTypePublicKeyFingerprint: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PublicKeyFingerprint {
+        return try PublicKeyFingerprint(
+            bytes: FfiConverterTypeHashableBytes.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: PublicKeyFingerprint, into buf: inout [UInt8]) {
+        FfiConverterTypeHashableBytes.write(value.bytes, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypePublicKeyFingerprint_lift(_ buf: RustBuffer) throws -> PublicKeyFingerprint {
+    return try FfiConverterTypePublicKeyFingerprint.lift(buf)
+}
+
+public func FfiConverterTypePublicKeyFingerprint_lower(_ value: PublicKeyFingerprint) -> RustBuffer {
+    return FfiConverterTypePublicKeyFingerprint.lower(value)
+}
+
+
 public struct RecoveryProposal {
     public var ruleSet: RuleSet
     public var timedRecoveryDelayInMinutes: UInt32?
@@ -18460,6 +18507,29 @@ fileprivate struct FfiConverterDictionaryStringDictionaryStringOptionTypeMetadat
     }
 }
 
+fileprivate struct FfiConverterDictionaryTypePublicKeyFingerprintData: FfiConverterRustBuffer {
+    public static func write(_ value: [PublicKeyFingerprint: Data], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterTypePublicKeyFingerprint.write(key, into: &buf)
+            FfiConverterData.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [PublicKeyFingerprint: Data] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [PublicKeyFingerprint: Data]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterTypePublicKeyFingerprint.read(from: &buf)
+            let value = try FfiConverterData.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 fileprivate struct FfiConverterDictionaryTypeCurveTypeTypeDecryptorsByCurve: FfiConverterRustBuffer {
     public static func write(_ value: [CurveType: DecryptorsByCurve], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -18506,60 +18576,37 @@ fileprivate struct FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress: FfiC
     }
 }
 
-fileprivate struct FfiConverterDictionaryTypePublicKeyFingerprintData: FfiConverterRustBuffer {
-    public static func write(_ value: [PublicKeyFingerprint: Data], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for (key, value) in value {
-            FfiConverterTypePublicKeyFingerprint.write(key, into: &buf)
-            FfiConverterData.write(value, into: &buf)
-        }
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [PublicKeyFingerprint: Data] {
-        let len: Int32 = try readInt(&buf)
-        var dict = [PublicKeyFingerprint: Data]()
-        dict.reserveCapacity(Int(len))
-        for _ in 0..<len {
-            let key = try FfiConverterTypePublicKeyFingerprint.read(from: &buf)
-            let value = try FfiConverterData.read(from: &buf)
-            dict[key] = value
-        }
-        return dict
-    }
-}
-
 
 /**
  * Typealias from the type name used in the UDL file to the builtin type.  This
  * is needed because the UDL type name is used in function/method signatures.
  */
-public typealias PublicKeyFingerprint = Data
-public struct FfiConverterTypePublicKeyFingerprint: FfiConverter {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PublicKeyFingerprint {
+public typealias HashableBytes = Data
+public struct FfiConverterTypeHashableBytes: FfiConverter {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> HashableBytes {
         return try FfiConverterData.read(from: &buf)
     }
 
-    public static func write(_ value: PublicKeyFingerprint, into buf: inout [UInt8]) {
+    public static func write(_ value: HashableBytes, into buf: inout [UInt8]) {
         return FfiConverterData.write(value, into: &buf)
     }
 
-    public static func lift(_ value: RustBuffer) throws -> PublicKeyFingerprint {
+    public static func lift(_ value: RustBuffer) throws -> HashableBytes {
         return try FfiConverterData.lift(value)
     }
 
-    public static func lower(_ value: PublicKeyFingerprint) -> RustBuffer {
+    public static func lower(_ value: HashableBytes) -> RustBuffer {
         return FfiConverterData.lower(value)
     }
 }
 
 
-public func FfiConverterTypePublicKeyFingerprint_lift(_ value: RustBuffer) throws -> PublicKeyFingerprint {
-    return try FfiConverterTypePublicKeyFingerprint.lift(value)
+public func FfiConverterTypeHashableBytes_lift(_ value: RustBuffer) throws -> HashableBytes {
+    return try FfiConverterTypeHashableBytes.lift(value)
 }
 
-public func FfiConverterTypePublicKeyFingerprint_lower(_ value: PublicKeyFingerprint) -> RustBuffer {
-    return FfiConverterTypePublicKeyFingerprint.lower(value)
+public func FfiConverterTypeHashableBytes_lower(_ value: HashableBytes) -> RustBuffer {
+    return FfiConverterTypeHashableBytes.lower(value)
 }
 
 
@@ -18725,6 +18772,24 @@ public func nonFungibleLocalIdSborEncode(value: NonFungibleLocalId) throws -> Da
     )
 }
 
+public func publicKeyFingerprintFromVec(bytes: Data)  -> PublicKeyFingerprint {
+    return try!  FfiConverterTypePublicKeyFingerprint.lift(
+        try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_public_key_fingerprint_from_vec(
+        FfiConverterData.lower(bytes),$0)
+}
+    )
+}
+
+public func publicKeyFingerprintToVec(value: PublicKeyFingerprint)  -> Data {
+    return try!  FfiConverterData.lift(
+        try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_public_key_fingerprint_to_vec(
+        FfiConverterTypePublicKeyFingerprint.lower(value),$0)
+}
+    )
+}
+
 public func sborDecodeToStringRepresentation(bytes: Data, representation: SerializationMode, networkId: UInt8, schema: Schema?) throws -> String {
     return try  FfiConverterString.lift(
         try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -18842,6 +18907,12 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_sbor_encode() != 44017) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_public_key_fingerprint_from_vec() != 41521) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_public_key_fingerprint_to_vec() != 4950) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_string_representation() != 11831) {
