@@ -774,9 +774,6 @@ uint8_t uniffi_radix_engine_toolkit_uniffi_fn_method_validationconfig_network_id
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_init_callback_signer(ForeignCallback _Nonnull callback_stub, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_build_information(RustCallStatus *_Nonnull out_status
-    
-);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_olympia_account_address_from_public_key(RustBuffer public_key, RustBuffer olympia_network, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_derive_public_key_from_olympia_account_address(void*_Nonnull olympia_resource_address, RustCallStatus *_Nonnull out_status
@@ -791,9 +788,12 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_identity
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_signature_non_fungible_global_id_from_public_key(RustBuffer public_key, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_hash(RustBuffer data, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_get_build_information(RustCallStatus *_Nonnull out_status
+    
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_known_addresses(uint8_t network_id, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_get_hash(RustBuffer data, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_get_known_addresses(uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_manifest_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
 );
@@ -808,6 +808,10 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_from
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_sbor_decode(RustBuffer bytes, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_non_fungible_local_id_sbor_encode(RustBuffer value, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_public_key_fingerprint_from_vec(RustBuffer bytes, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_public_key_fingerprint_to_vec(RustBuffer value, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_func_sbor_decode_to_string_representation(RustBuffer bytes, RustBuffer representation, uint8_t network_id, RustBuffer schema, RustCallStatus *_Nonnull out_status
 );
@@ -933,9 +937,6 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_void(void* _Nonnull handle
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_complete_void(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_build_information(void
-    
-);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_olympia_account_address_from_public_key(void
     
 );
@@ -957,10 +958,13 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_identit
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_signature_non_fungible_global_id_from_public_key(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_hash(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_get_build_information(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_known_addresses(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_get_hash(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_get_known_addresses(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_manifest_sbor_decode_to_string_representation(void
@@ -982,6 +986,12 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_sbor_encode(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_public_key_fingerprint_from_vec(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_public_key_fingerprint_to_vec(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_string_representation(void
