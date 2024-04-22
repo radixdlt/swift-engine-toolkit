@@ -8592,6 +8592,53 @@ public func FfiConverterTypeProtocolUpdateReadinessSignalEvent_lower(_ value: Pr
 }
 
 
+public struct PublicKeyFingerprint {
+    public var bytes: HashableBytes
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(bytes: HashableBytes) {
+        self.bytes = bytes
+    }
+}
+
+
+extension PublicKeyFingerprint: Equatable, Hashable {
+    public static func ==(lhs: PublicKeyFingerprint, rhs: PublicKeyFingerprint) -> Bool {
+        if lhs.bytes != rhs.bytes {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(bytes)
+    }
+}
+
+
+public struct FfiConverterTypePublicKeyFingerprint: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PublicKeyFingerprint {
+        return try PublicKeyFingerprint(
+            bytes: FfiConverterTypeHashableBytes.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: PublicKeyFingerprint, into buf: inout [UInt8]) {
+        FfiConverterTypeHashableBytes.write(value.bytes, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypePublicKeyFingerprint_lift(_ buf: RustBuffer) throws -> PublicKeyFingerprint {
+    return try FfiConverterTypePublicKeyFingerprint.lift(buf)
+}
+
+public func FfiConverterTypePublicKeyFingerprint_lower(_ value: PublicKeyFingerprint) -> RustBuffer {
+    return FfiConverterTypePublicKeyFingerprint.lower(value)
+}
+
+
 public struct RecoveryProposal {
     public var ruleSet: RuleSet
     public var timedRecoveryDelayInMinutes: UInt32?
@@ -10705,8 +10752,8 @@ extension CurveType: Equatable, Hashable {}
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum DecryptorsByCurve {
     
-    case ed25519(dhEphemeralPublicKey: Ed25519PublicKey, decryptors: [Data: Data])
-    case secp256k1(dhEphemeralPublicKey: Secp256k1PublicKey, decryptors: [Data: Data])
+    case ed25519(dhEphemeralPublicKey: Ed25519PublicKey, decryptors: [PublicKeyFingerprint: Data])
+    case secp256k1(dhEphemeralPublicKey: Secp256k1PublicKey, decryptors: [PublicKeyFingerprint: Data])
 }
 
 public struct FfiConverterTypeDecryptorsByCurve: FfiConverterRustBuffer {
@@ -10718,12 +10765,12 @@ public struct FfiConverterTypeDecryptorsByCurve: FfiConverterRustBuffer {
         
         case 1: return .ed25519(
             dhEphemeralPublicKey: try FfiConverterTypeEd25519PublicKey.read(from: &buf), 
-            decryptors: try FfiConverterDictionaryDataData.read(from: &buf)
+            decryptors: try FfiConverterDictionaryTypePublicKeyFingerprintData.read(from: &buf)
         )
         
         case 2: return .secp256k1(
             dhEphemeralPublicKey: try FfiConverterTypeSecp256k1PublicKey.read(from: &buf), 
-            decryptors: try FfiConverterDictionaryDataData.read(from: &buf)
+            decryptors: try FfiConverterDictionaryTypePublicKeyFingerprintData.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -10737,13 +10784,13 @@ public struct FfiConverterTypeDecryptorsByCurve: FfiConverterRustBuffer {
         case let .ed25519(dhEphemeralPublicKey,decryptors):
             writeInt(&buf, Int32(1))
             FfiConverterTypeEd25519PublicKey.write(dhEphemeralPublicKey, into: &buf)
-            FfiConverterDictionaryDataData.write(decryptors, into: &buf)
+            FfiConverterDictionaryTypePublicKeyFingerprintData.write(decryptors, into: &buf)
             
         
         case let .secp256k1(dhEphemeralPublicKey,decryptors):
             writeInt(&buf, Int32(2))
             FfiConverterTypeSecp256k1PublicKey.write(dhEphemeralPublicKey, into: &buf)
-            FfiConverterDictionaryDataData.write(decryptors, into: &buf)
+            FfiConverterDictionaryTypePublicKeyFingerprintData.write(decryptors, into: &buf)
             
         }
     }
@@ -18453,22 +18500,22 @@ fileprivate struct FfiConverterDictionaryStringDictionaryStringOptionTypeMetadat
     }
 }
 
-fileprivate struct FfiConverterDictionaryDataData: FfiConverterRustBuffer {
-    public static func write(_ value: [Data: Data], into buf: inout [UInt8]) {
+fileprivate struct FfiConverterDictionaryTypePublicKeyFingerprintData: FfiConverterRustBuffer {
+    public static func write(_ value: [PublicKeyFingerprint: Data], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for (key, value) in value {
-            FfiConverterData.write(key, into: &buf)
+            FfiConverterTypePublicKeyFingerprint.write(key, into: &buf)
             FfiConverterData.write(value, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [Data: Data] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [PublicKeyFingerprint: Data] {
         let len: Int32 = try readInt(&buf)
-        var dict = [Data: Data]()
+        var dict = [PublicKeyFingerprint: Data]()
         dict.reserveCapacity(Int(len))
         for _ in 0..<len {
-            let key = try FfiConverterData.read(from: &buf)
+            let key = try FfiConverterTypePublicKeyFingerprint.read(from: &buf)
             let value = try FfiConverterData.read(from: &buf)
             dict[key] = value
         }
@@ -18522,13 +18569,39 @@ fileprivate struct FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress: FfiC
     }
 }
 
-public func buildInformation()  -> BuildInformation {
-    return try!  FfiConverterTypeBuildInformation.lift(
-        try! rustCall() {
-    uniffi_radix_engine_toolkit_uniffi_fn_func_build_information($0)
+
+/**
+ * Typealias from the type name used in the UDL file to the builtin type.  This
+ * is needed because the UDL type name is used in function/method signatures.
+ */
+public typealias HashableBytes = Data
+public struct FfiConverterTypeHashableBytes: FfiConverter {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> HashableBytes {
+        return try FfiConverterData.read(from: &buf)
+    }
+
+    public static func write(_ value: HashableBytes, into buf: inout [UInt8]) {
+        return FfiConverterData.write(value, into: &buf)
+    }
+
+    public static func lift(_ value: RustBuffer) throws -> HashableBytes {
+        return try FfiConverterData.lift(value)
+    }
+
+    public static func lower(_ value: HashableBytes) -> RustBuffer {
+        return FfiConverterData.lower(value)
+    }
 }
-    )
+
+
+public func FfiConverterTypeHashableBytes_lift(_ value: RustBuffer) throws -> HashableBytes {
+    return try FfiConverterTypeHashableBytes.lift(value)
 }
+
+public func FfiConverterTypeHashableBytes_lower(_ value: HashableBytes) -> RustBuffer {
+    return FfiConverterTypeHashableBytes.lower(value)
+}
+
 
 public func deriveOlympiaAccountAddressFromPublicKey(publicKey: PublicKey, olympiaNetwork: OlympiaNetwork) throws -> OlympiaAddress {
     return try  FfiConverterTypeOlympiaAddress.lift(
@@ -18599,19 +18672,27 @@ public func deriveVirtualSignatureNonFungibleGlobalIdFromPublicKey(publicKey: Pu
     )
 }
 
-public func hash(data: Data)  -> Hash {
+public func getBuildInformation()  -> BuildInformation {
+    return try!  FfiConverterTypeBuildInformation.lift(
+        try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_get_build_information($0)
+}
+    )
+}
+
+public func getHash(data: Data)  -> Hash {
     return try!  FfiConverterTypeHash.lift(
         try! rustCall() {
-    uniffi_radix_engine_toolkit_uniffi_fn_func_hash(
+    uniffi_radix_engine_toolkit_uniffi_fn_func_get_hash(
         FfiConverterData.lower(data),$0)
 }
     )
 }
 
-public func knownAddresses(networkId: UInt8)  -> KnownAddresses {
+public func getKnownAddresses(networkId: UInt8)  -> KnownAddresses {
     return try!  FfiConverterTypeKnownAddresses.lift(
         try! rustCall() {
-    uniffi_radix_engine_toolkit_uniffi_fn_func_known_addresses(
+    uniffi_radix_engine_toolkit_uniffi_fn_func_get_known_addresses(
         FfiConverterUInt8.lower(networkId),$0)
 }
     )
@@ -18684,6 +18765,24 @@ public func nonFungibleLocalIdSborEncode(value: NonFungibleLocalId) throws -> Da
     )
 }
 
+public func publicKeyFingerprintFromVec(bytes: Data)  -> PublicKeyFingerprint {
+    return try!  FfiConverterTypePublicKeyFingerprint.lift(
+        try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_public_key_fingerprint_from_vec(
+        FfiConverterData.lower(bytes),$0)
+}
+    )
+}
+
+public func publicKeyFingerprintToVec(value: PublicKeyFingerprint)  -> Data {
+    return try!  FfiConverterData.lift(
+        try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_public_key_fingerprint_to_vec(
+        FfiConverterTypePublicKeyFingerprint.lower(value),$0)
+}
+    )
+}
+
 public func sborDecodeToStringRepresentation(bytes: Data, representation: SerializationMode, networkId: UInt8, schema: Schema?) throws -> String {
     return try  FfiConverterString.lift(
         try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
@@ -18752,9 +18851,6 @@ private var initializationResult: InitializationResult {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_build_information() != 17662) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_olympia_account_address_from_public_key() != 19647) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -18776,10 +18872,13 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_signature_non_fungible_global_id_from_public_key() != 61146) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_hash() != 16303) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_get_build_information() != 61037) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_known_addresses() != 16813) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_get_hash() != 23353) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_get_known_addresses() != 16556) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_manifest_sbor_decode_to_string_representation() != 19578) {
@@ -18801,6 +18900,12 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_non_fungible_local_id_sbor_encode() != 44017) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_public_key_fingerprint_from_vec() != 41521) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_public_key_fingerprint_to_vec() != 4950) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_sbor_decode_to_string_representation() != 11831) {
