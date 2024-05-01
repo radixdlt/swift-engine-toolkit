@@ -1015,6 +1015,7 @@ public protocol DecimalProtocol {
     func round(decimalPlaces: Int32, roundingMode: RoundingMode)  throws -> Decimal
     func sqrt()   -> Decimal?
     func sub(other: Decimal)  throws -> Decimal
+    func toLeBytes()   -> Data
     
 }
 
@@ -1036,6 +1037,15 @@ public class Decimal: DecimalProtocol {
 
     deinit {
         try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_decimal(pointer, $0) }
+    }
+
+    
+
+    public static func fromLeBytes(value: Data)  -> Decimal {
+        return Decimal(unsafeFromRawPointer: try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_decimal_from_le_bytes(
+        FfiConverterData.lower(value),$0)
+})
     }
 
     
@@ -1327,6 +1337,17 @@ public class Decimal: DecimalProtocol {
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_sub(self.pointer, 
         FfiConverterTypeDecimal.lower(other),$0
+    )
+}
+        )
+    }
+
+    public func toLeBytes()  -> Data {
+        return try!  FfiConverterData.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_decimal_to_le_bytes(self.pointer, $0
     )
 }
         )
@@ -1809,6 +1830,16 @@ public protocol ManifestBuilderProtocol {
     func accountLockFee(address: Address, amount: Decimal)  throws -> ManifestBuilder
     func accountLockFeeAndWithdraw(address: Address, amountToLock: Decimal, resourceAddress: Address, amount: Decimal)  throws -> ManifestBuilder
     func accountLockFeeAndWithdrawNonFungibles(address: Address, amountToLock: Decimal, resourceAddress: Address, ids: [NonFungibleLocalId])  throws -> ManifestBuilder
+    func accountLockerAirdrop(address: Address, claimants: [String: ResourceSpecifier], bucket: ManifestBuilderBucket, tryDirectSend: Bool)  throws -> ManifestBuilder
+    func accountLockerClaim(address: Address, claimant: Address, resourceAddress: Address, amount: Decimal)  throws -> ManifestBuilder
+    func accountLockerClaimNonFungibles(address: Address, claimant: Address, resourceAddress: Address, ids: [NonFungibleLocalId])  throws -> ManifestBuilder
+    func accountLockerGetAmount(address: Address, claimant: Address, resourceAddress: Address)  throws -> ManifestBuilder
+    func accountLockerGetNonFungibleLocalIds(address: Address, claimant: Address, resourceAddress: Address, limit: UInt32)  throws -> ManifestBuilder
+    func accountLockerInstantiate(ownerRole: OwnerRole, storerRole: AccessRule, storerUpdaterRole: AccessRule, recovererRole: AccessRule, recovererUpdaterRole: AccessRule, addressReservation: ManifestBuilderAddressReservation?)  throws -> ManifestBuilder
+    func accountLockerInstantiateSimple(allowRecover: Bool)  throws -> ManifestBuilder
+    func accountLockerRecover(address: Address, claimant: Address, resourceAddress: Address, amount: Decimal)  throws -> ManifestBuilder
+    func accountLockerRecoverNonFungibles(address: Address, claimant: Address, resourceAddress: Address, ids: [NonFungibleLocalId])  throws -> ManifestBuilder
+    func accountLockerStore(address: Address, claimant: Address, bucket: ManifestBuilderBucket, tryDirectSend: Bool)  throws -> ManifestBuilder
     func accountRemoveAuthorizedDepositor(address: Address, badge: ResourceOrNonFungible)  throws -> ManifestBuilder
     func accountRemoveResourcePreference(address: Address, resourceAddress: Address)  throws -> ManifestBuilder
     func accountSecurify(address: Address)  throws -> ManifestBuilder
@@ -2363,6 +2394,144 @@ public class ManifestBuilder: ManifestBuilderProtocol {
         FfiConverterTypeDecimal.lower(amountToLock),
         FfiConverterTypeAddress.lower(resourceAddress),
         FfiConverterSequenceTypeNonFungibleLocalId.lower(ids),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerAirdrop(address: Address, claimants: [String: ResourceSpecifier], bucket: ManifestBuilderBucket, tryDirectSend: Bool) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_airdrop(self.pointer, 
+        FfiConverterTypeAddress.lower(address),
+        FfiConverterDictionaryStringTypeResourceSpecifier.lower(claimants),
+        FfiConverterTypeManifestBuilderBucket.lower(bucket),
+        FfiConverterBool.lower(tryDirectSend),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerClaim(address: Address, claimant: Address, resourceAddress: Address, amount: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_claim(self.pointer, 
+        FfiConverterTypeAddress.lower(address),
+        FfiConverterTypeAddress.lower(claimant),
+        FfiConverterTypeAddress.lower(resourceAddress),
+        FfiConverterTypeDecimal.lower(amount),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerClaimNonFungibles(address: Address, claimant: Address, resourceAddress: Address, ids: [NonFungibleLocalId]) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_claim_non_fungibles(self.pointer, 
+        FfiConverterTypeAddress.lower(address),
+        FfiConverterTypeAddress.lower(claimant),
+        FfiConverterTypeAddress.lower(resourceAddress),
+        FfiConverterSequenceTypeNonFungibleLocalId.lower(ids),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerGetAmount(address: Address, claimant: Address, resourceAddress: Address) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_get_amount(self.pointer, 
+        FfiConverterTypeAddress.lower(address),
+        FfiConverterTypeAddress.lower(claimant),
+        FfiConverterTypeAddress.lower(resourceAddress),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerGetNonFungibleLocalIds(address: Address, claimant: Address, resourceAddress: Address, limit: UInt32) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_get_non_fungible_local_ids(self.pointer, 
+        FfiConverterTypeAddress.lower(address),
+        FfiConverterTypeAddress.lower(claimant),
+        FfiConverterTypeAddress.lower(resourceAddress),
+        FfiConverterUInt32.lower(limit),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerInstantiate(ownerRole: OwnerRole, storerRole: AccessRule, storerUpdaterRole: AccessRule, recovererRole: AccessRule, recovererUpdaterRole: AccessRule, addressReservation: ManifestBuilderAddressReservation?) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_instantiate(self.pointer, 
+        FfiConverterTypeOwnerRole.lower(ownerRole),
+        FfiConverterTypeAccessRule.lower(storerRole),
+        FfiConverterTypeAccessRule.lower(storerUpdaterRole),
+        FfiConverterTypeAccessRule.lower(recovererRole),
+        FfiConverterTypeAccessRule.lower(recovererUpdaterRole),
+        FfiConverterOptionTypeManifestBuilderAddressReservation.lower(addressReservation),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerInstantiateSimple(allowRecover: Bool) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_instantiate_simple(self.pointer, 
+        FfiConverterBool.lower(allowRecover),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerRecover(address: Address, claimant: Address, resourceAddress: Address, amount: Decimal) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_recover(self.pointer, 
+        FfiConverterTypeAddress.lower(address),
+        FfiConverterTypeAddress.lower(claimant),
+        FfiConverterTypeAddress.lower(resourceAddress),
+        FfiConverterTypeDecimal.lower(amount),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerRecoverNonFungibles(address: Address, claimant: Address, resourceAddress: Address, ids: [NonFungibleLocalId]) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_recover_non_fungibles(self.pointer, 
+        FfiConverterTypeAddress.lower(address),
+        FfiConverterTypeAddress.lower(claimant),
+        FfiConverterTypeAddress.lower(resourceAddress),
+        FfiConverterSequenceTypeNonFungibleLocalId.lower(ids),$0
+    )
+}
+        )
+    }
+
+    public func accountLockerStore(address: Address, claimant: Address, bucket: ManifestBuilderBucket, tryDirectSend: Bool) throws -> ManifestBuilder {
+        return try  FfiConverterTypeManifestBuilder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestbuilder_account_locker_store(self.pointer, 
+        FfiConverterTypeAddress.lower(address),
+        FfiConverterTypeAddress.lower(claimant),
+        FfiConverterTypeManifestBuilderBucket.lower(bucket),
+        FfiConverterBool.lower(tryDirectSend),$0
     )
 }
         )
@@ -4187,6 +4356,7 @@ public protocol PreciseDecimalProtocol {
     func round(decimalPlaces: Int32, roundingMode: RoundingMode)  throws -> PreciseDecimal
     func sqrt()   -> PreciseDecimal?
     func sub(other: PreciseDecimal)  throws -> PreciseDecimal
+    func toLeBytes()   -> Data
     
 }
 
@@ -4208,6 +4378,15 @@ public class PreciseDecimal: PreciseDecimalProtocol {
 
     deinit {
         try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_precisedecimal(pointer, $0) }
+    }
+
+    
+
+    public static func fromLeBytes(value: Data)  -> PreciseDecimal {
+        return PreciseDecimal(unsafeFromRawPointer: try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_precisedecimal_from_le_bytes(
+        FfiConverterData.lower(value),$0)
+})
     }
 
     
@@ -4499,6 +4678,17 @@ public class PreciseDecimal: PreciseDecimalProtocol {
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sub(self.pointer, 
         FfiConverterTypePreciseDecimal.lower(other),$0
+    )
+}
+        )
+    }
+
+    public func toLeBytes()  -> Data {
+        return try!  FfiConverterData.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_to_le_bytes(self.pointer, $0
     )
 }
         )
@@ -6187,6 +6377,48 @@ public func FfiConverterTypeCancelRecoveryProposalEvent_lift(_ buf: RustBuffer) 
 
 public func FfiConverterTypeCancelRecoveryProposalEvent_lower(_ value: CancelRecoveryProposalEvent) -> RustBuffer {
     return FfiConverterTypeCancelRecoveryProposalEvent.lower(value)
+}
+
+
+public struct ClaimEvent {
+    public var claimant: Address
+    public var resourceAddress: Address
+    public var resources: ResourceSpecifier
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(claimant: Address, resourceAddress: Address, resources: ResourceSpecifier) {
+        self.claimant = claimant
+        self.resourceAddress = resourceAddress
+        self.resources = resources
+    }
+}
+
+
+
+public struct FfiConverterTypeClaimEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ClaimEvent {
+        return try ClaimEvent(
+            claimant: FfiConverterTypeAddress.read(from: &buf), 
+            resourceAddress: FfiConverterTypeAddress.read(from: &buf), 
+            resources: FfiConverterTypeResourceSpecifier.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: ClaimEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.claimant, into: &buf)
+        FfiConverterTypeAddress.write(value.resourceAddress, into: &buf)
+        FfiConverterTypeResourceSpecifier.write(value.resources, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeClaimEvent_lift(_ buf: RustBuffer) throws -> ClaimEvent {
+    return try FfiConverterTypeClaimEvent.lift(buf)
+}
+
+public func FfiConverterTypeClaimEvent_lower(_ value: ClaimEvent) -> RustBuffer {
+    return FfiConverterTypeClaimEvent.lower(value)
 }
 
 
@@ -8639,6 +8871,48 @@ public func FfiConverterTypePublicKeyFingerprint_lower(_ value: PublicKeyFingerp
 }
 
 
+public struct RecoverEvent {
+    public var claimant: Address
+    public var resourceAddress: Address
+    public var resources: ResourceSpecifier
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(claimant: Address, resourceAddress: Address, resources: ResourceSpecifier) {
+        self.claimant = claimant
+        self.resourceAddress = resourceAddress
+        self.resources = resources
+    }
+}
+
+
+
+public struct FfiConverterTypeRecoverEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RecoverEvent {
+        return try RecoverEvent(
+            claimant: FfiConverterTypeAddress.read(from: &buf), 
+            resourceAddress: FfiConverterTypeAddress.read(from: &buf), 
+            resources: FfiConverterTypeResourceSpecifier.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: RecoverEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.claimant, into: &buf)
+        FfiConverterTypeAddress.write(value.resourceAddress, into: &buf)
+        FfiConverterTypeResourceSpecifier.write(value.resources, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeRecoverEvent_lift(_ buf: RustBuffer) throws -> RecoverEvent {
+    return try FfiConverterTypeRecoverEvent.lift(buf)
+}
+
+public func FfiConverterTypeRecoverEvent_lower(_ value: RecoverEvent) -> RustBuffer {
+    return FfiConverterTypeRecoverEvent.lower(value)
+}
+
+
 public struct RecoveryProposal {
     public var ruleSet: RuleSet
     public var timedRecoveryDelayInMinutes: UInt32?
@@ -9397,6 +9671,48 @@ public func FfiConverterTypeStopTimedRecoveryEvent_lift(_ buf: RustBuffer) throw
 
 public func FfiConverterTypeStopTimedRecoveryEvent_lower(_ value: StopTimedRecoveryEvent) -> RustBuffer {
     return FfiConverterTypeStopTimedRecoveryEvent.lower(value)
+}
+
+
+public struct StoreEvent {
+    public var claimant: Address
+    public var resourceAddress: Address
+    public var resources: ResourceSpecifier
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(claimant: Address, resourceAddress: Address, resources: ResourceSpecifier) {
+        self.claimant = claimant
+        self.resourceAddress = resourceAddress
+        self.resources = resources
+    }
+}
+
+
+
+public struct FfiConverterTypeStoreEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> StoreEvent {
+        return try StoreEvent(
+            claimant: FfiConverterTypeAddress.read(from: &buf), 
+            resourceAddress: FfiConverterTypeAddress.read(from: &buf), 
+            resources: FfiConverterTypeResourceSpecifier.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: StoreEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeAddress.write(value.claimant, into: &buf)
+        FfiConverterTypeAddress.write(value.resourceAddress, into: &buf)
+        FfiConverterTypeResourceSpecifier.write(value.resources, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeStoreEvent_lift(_ buf: RustBuffer) throws -> StoreEvent {
+    return try FfiConverterTypeStoreEvent.lift(buf)
+}
+
+public func FfiConverterTypeStoreEvent_lower(_ value: StoreEvent) -> RustBuffer {
+    return FfiConverterTypeStoreEvent.lower(value)
 }
 
 
@@ -11155,6 +11471,7 @@ public enum EntityType {
     case globalOneResourcePool
     case globalTwoResourcePool
     case globalMultiResourcePool
+    case globalAccountLocker
     case globalTransactionTracker
     case internalFungibleVault
     case internalNonFungibleVault
@@ -11201,15 +11518,17 @@ public struct FfiConverterTypeEntityType: FfiConverterRustBuffer {
         
         case 16: return .globalMultiResourcePool
         
-        case 17: return .globalTransactionTracker
+        case 17: return .globalAccountLocker
         
-        case 18: return .internalFungibleVault
+        case 18: return .globalTransactionTracker
         
-        case 19: return .internalNonFungibleVault
+        case 19: return .internalFungibleVault
         
-        case 20: return .internalGenericComponent
+        case 20: return .internalNonFungibleVault
         
-        case 21: return .internalKeyValueStore
+        case 21: return .internalGenericComponent
+        
+        case 22: return .internalKeyValueStore
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -11283,24 +11602,28 @@ public struct FfiConverterTypeEntityType: FfiConverterRustBuffer {
             writeInt(&buf, Int32(16))
         
         
-        case .globalTransactionTracker:
+        case .globalAccountLocker:
             writeInt(&buf, Int32(17))
         
         
-        case .internalFungibleVault:
+        case .globalTransactionTracker:
             writeInt(&buf, Int32(18))
         
         
-        case .internalNonFungibleVault:
+        case .internalFungibleVault:
             writeInt(&buf, Int32(19))
         
         
-        case .internalGenericComponent:
+        case .internalNonFungibleVault:
             writeInt(&buf, Int32(20))
         
         
-        case .internalKeyValueStore:
+        case .internalGenericComponent:
             writeInt(&buf, Int32(21))
+        
+        
+        case .internalKeyValueStore:
+            writeInt(&buf, Int32(22))
         
         }
     }
@@ -14580,6 +14903,7 @@ public enum ReservedInstruction {
     case accountLockFee
     case accountSecurify
     case identitySecurify
+    case accountUpdateSettings
     case accessControllerMethod
 }
 
@@ -14596,7 +14920,9 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
         
         case 3: return .identitySecurify
         
-        case 4: return .accessControllerMethod
+        case 4: return .accountUpdateSettings
+        
+        case 5: return .accessControllerMethod
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -14618,8 +14944,12 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
             writeInt(&buf, Int32(3))
         
         
-        case .accessControllerMethod:
+        case .accountUpdateSettings:
             writeInt(&buf, Int32(4))
+        
+        
+        case .accessControllerMethod:
+            writeInt(&buf, Int32(5))
         
         }
     }
@@ -15639,6 +15969,72 @@ public func FfiConverterTypeTypedAccountBlueprintEvent_lower(_ value: TypedAccou
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum TypedAccountLockerBlueprintEvent {
+    
+    case storeEventValue(value: StoreEvent)
+    case recoverEventValue(value: RecoverEvent)
+    case claimEventValue(value: ClaimEvent)
+}
+
+public struct FfiConverterTypeTypedAccountLockerBlueprintEvent: FfiConverterRustBuffer {
+    typealias SwiftType = TypedAccountLockerBlueprintEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedAccountLockerBlueprintEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .storeEventValue(
+            value: try FfiConverterTypeStoreEvent.read(from: &buf)
+        )
+        
+        case 2: return .recoverEventValue(
+            value: try FfiConverterTypeRecoverEvent.read(from: &buf)
+        )
+        
+        case 3: return .claimEventValue(
+            value: try FfiConverterTypeClaimEvent.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: TypedAccountLockerBlueprintEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .storeEventValue(value):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeStoreEvent.write(value, into: &buf)
+            
+        
+        case let .recoverEventValue(value):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeRecoverEvent.write(value, into: &buf)
+            
+        
+        case let .claimEventValue(value):
+            writeInt(&buf, Int32(3))
+            FfiConverterTypeClaimEvent.write(value, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeTypedAccountLockerBlueprintEvent_lift(_ buf: RustBuffer) throws -> TypedAccountLockerBlueprintEvent {
+    return try FfiConverterTypeTypedAccountLockerBlueprintEvent.lift(buf)
+}
+
+public func FfiConverterTypeTypedAccountLockerBlueprintEvent_lower(_ value: TypedAccountLockerBlueprintEvent) -> RustBuffer {
+    return FfiConverterTypeTypedAccountLockerBlueprintEvent.lower(value)
+}
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedAccountPackageEvent {
     
     case account(value: TypedAccountBlueprintEvent)
@@ -15949,6 +16345,52 @@ public func FfiConverterTypeTypedFungibleVaultBlueprintEvent_lower(_ value: Type
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+public enum TypedLockerPackageEvent {
+    
+    case accountLocker(value: TypedAccountLockerBlueprintEvent)
+}
+
+public struct FfiConverterTypeTypedLockerPackageEvent: FfiConverterRustBuffer {
+    typealias SwiftType = TypedLockerPackageEvent
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TypedLockerPackageEvent {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .accountLocker(
+            value: try FfiConverterTypeTypedAccountLockerBlueprintEvent.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: TypedLockerPackageEvent, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .accountLocker(value):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeTypedAccountLockerBlueprintEvent.write(value, into: &buf)
+            
+        }
+    }
+}
+
+
+public func FfiConverterTypeTypedLockerPackageEvent_lift(_ buf: RustBuffer) throws -> TypedLockerPackageEvent {
+    return try FfiConverterTypeTypedLockerPackageEvent.lift(buf)
+}
+
+public func FfiConverterTypeTypedLockerPackageEvent_lower(_ value: TypedLockerPackageEvent) -> RustBuffer {
+    return FfiConverterTypeTypedLockerPackageEvent.lower(value)
+}
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum TypedMetadataBlueprintEvent {
     
     case setMetadataEventValue(value: SetMetadataEvent)
@@ -16136,6 +16578,7 @@ public enum TypedNativeEvent {
     case resource(value: TypedResourcePackageEvent)
     case roleAssignment(value: TypedRoleAssignmentPackageEvent)
     case metadata(value: TypedMetadataPackageEvent)
+    case locker(value: TypedLockerPackageEvent)
 }
 
 public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
@@ -16171,6 +16614,10 @@ public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
         
         case 7: return .metadata(
             value: try FfiConverterTypeTypedMetadataPackageEvent.read(from: &buf)
+        )
+        
+        case 8: return .locker(
+            value: try FfiConverterTypeTypedLockerPackageEvent.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -16214,6 +16661,11 @@ public struct FfiConverterTypeTypedNativeEvent: FfiConverterRustBuffer {
         case let .metadata(value):
             writeInt(&buf, Int32(7))
             FfiConverterTypeTypedMetadataPackageEvent.write(value, into: &buf)
+            
+        
+        case let .locker(value):
+            writeInt(&buf, Int32(8))
+            FfiConverterTypeTypedLockerPackageEvent.write(value, into: &buf)
             
         }
     }
@@ -18339,6 +18791,29 @@ fileprivate struct FfiConverterDictionaryStringTypeResourcePreferenceUpdate: Ffi
     }
 }
 
+fileprivate struct FfiConverterDictionaryStringTypeResourceSpecifier: FfiConverterRustBuffer {
+    public static func write(_ value: [String: ResourceSpecifier], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterTypeResourceSpecifier.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: ResourceSpecifier] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: ResourceSpecifier]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterTypeResourceSpecifier.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 fileprivate struct FfiConverterDictionaryStringOptionTypeAccessRule: FfiConverterRustBuffer {
     public static func write(_ value: [String: AccessRule?], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -19052,6 +19527,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_sub() != 26365) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_decimal_to_le_bytes() != 17037) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_hash_as_str() != 46597) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -19191,6 +19669,36 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_lock_fee_and_withdraw_non_fungibles() != 46012) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_airdrop() != 40671) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_claim() != 20662) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_claim_non_fungibles() != 38683) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_get_amount() != 29397) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_get_non_fungible_local_ids() != 23927) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_instantiate() != 7727) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_instantiate_simple() != 65307) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_recover() != 2999) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_recover_non_fungibles() != 65115) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_locker_store() != 40050) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestbuilder_account_remove_authorized_depositor() != 17654) {
@@ -19619,6 +20127,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub() != 2969) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_to_le_bytes() != 6841) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_curve() != 56035) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -19787,6 +20298,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_virtual_identity_address_from_public_key() != 32432) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_from_le_bytes() != 14760) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_decimal_max() != 38313) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -19851,6 +20365,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_olympiaaddress_new() != 12724) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_from_le_bytes() != 24547) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_max() != 49495) {
