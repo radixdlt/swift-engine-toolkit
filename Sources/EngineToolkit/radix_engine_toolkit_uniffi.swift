@@ -6498,6 +6498,40 @@ public func FfiConverterTypeComponentAddresses_lower(_ value: ComponentAddresses
 }
 
 
+public struct DepositRecoveryXrdEvent {
+    public var amount: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(amount: Decimal) {
+        self.amount = amount
+    }
+}
+
+
+
+public struct FfiConverterTypeDepositRecoveryXrdEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> DepositRecoveryXrdEvent {
+        return try DepositRecoveryXrdEvent(
+            amount: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: DepositRecoveryXrdEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeDecimal.write(value.amount, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeDepositRecoveryXrdEvent_lift(_ buf: RustBuffer) throws -> DepositRecoveryXrdEvent {
+    return try FfiConverterTypeDepositRecoveryXrdEvent.lift(buf)
+}
+
+public func FfiConverterTypeDepositRecoveryXrdEvent_lower(_ value: DepositRecoveryXrdEvent) -> RustBuffer {
+    return FfiConverterTypeDepositRecoveryXrdEvent.lower(value)
+}
+
+
 public struct Ed25519PublicKey {
     public var value: Data
 
@@ -10659,6 +10693,40 @@ public func FfiConverterTypeVaultCreationEvent_lift(_ buf: RustBuffer) throws ->
 
 public func FfiConverterTypeVaultCreationEvent_lower(_ value: VaultCreationEvent) -> RustBuffer {
     return FfiConverterTypeVaultCreationEvent.lower(value)
+}
+
+
+public struct WithdrawRecoveryXrdEvent {
+    public var amount: Decimal
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(amount: Decimal) {
+        self.amount = amount
+    }
+}
+
+
+
+public struct FfiConverterTypeWithdrawRecoveryXrdEvent: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WithdrawRecoveryXrdEvent {
+        return try WithdrawRecoveryXrdEvent(
+            amount: FfiConverterTypeDecimal.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: WithdrawRecoveryXrdEvent, into buf: inout [UInt8]) {
+        FfiConverterTypeDecimal.write(value.amount, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeWithdrawRecoveryXrdEvent_lift(_ buf: RustBuffer) throws -> WithdrawRecoveryXrdEvent {
+    return try FfiConverterTypeWithdrawRecoveryXrdEvent.lift(buf)
+}
+
+public func FfiConverterTypeWithdrawRecoveryXrdEvent_lower(_ value: WithdrawRecoveryXrdEvent) -> RustBuffer {
+    return FfiConverterTypeWithdrawRecoveryXrdEvent.lower(value)
 }
 
 // Note that we don't yet support `indirect` for enums.
@@ -15692,6 +15760,8 @@ public enum TypedAccessControllerBlueprintEvent {
     case lockPrimaryRoleEventValue(value: LockPrimaryRoleEvent)
     case unlockPrimaryRoleEventValue(value: UnlockPrimaryRoleEvent)
     case stopTimedRecoveryEventValue(value: StopTimedRecoveryEvent)
+    case depositRecoveryXrdEventValue(value: DepositRecoveryXrdEvent)
+    case withdrawRecoveryXrdEventValue(value: WithdrawRecoveryXrdEvent)
 }
 
 public struct FfiConverterTypeTypedAccessControllerBlueprintEvent: FfiConverterRustBuffer {
@@ -15735,6 +15805,14 @@ public struct FfiConverterTypeTypedAccessControllerBlueprintEvent: FfiConverterR
         
         case 9: return .stopTimedRecoveryEventValue(
             value: try FfiConverterTypeStopTimedRecoveryEvent.read(from: &buf)
+        )
+        
+        case 10: return .depositRecoveryXrdEventValue(
+            value: try FfiConverterTypeDepositRecoveryXrdEvent.read(from: &buf)
+        )
+        
+        case 11: return .withdrawRecoveryXrdEventValue(
+            value: try FfiConverterTypeWithdrawRecoveryXrdEvent.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -15788,6 +15866,16 @@ public struct FfiConverterTypeTypedAccessControllerBlueprintEvent: FfiConverterR
         case let .stopTimedRecoveryEventValue(value):
             writeInt(&buf, Int32(9))
             FfiConverterTypeStopTimedRecoveryEvent.write(value, into: &buf)
+            
+        
+        case let .depositRecoveryXrdEventValue(value):
+            writeInt(&buf, Int32(10))
+            FfiConverterTypeDepositRecoveryXrdEvent.write(value, into: &buf)
+            
+        
+        case let .withdrawRecoveryXrdEventValue(value):
+            writeInt(&buf, Int32(11))
+            FfiConverterTypeWithdrawRecoveryXrdEvent.write(value, into: &buf)
             
         }
     }
