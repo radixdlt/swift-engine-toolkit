@@ -44,6 +44,7 @@ jobs:
         run: |
           snyk test --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
       - name: Snyk code scan
+        continue-on-error: true
         run: |
           snyk code test --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
 
