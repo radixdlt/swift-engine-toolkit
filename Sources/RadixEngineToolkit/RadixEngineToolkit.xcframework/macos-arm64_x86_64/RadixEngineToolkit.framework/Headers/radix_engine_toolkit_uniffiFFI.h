@@ -586,8 +586,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv1builder_val
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_manifestv2builder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_manifestv2builder_new(RustCallStatus *_Nonnull out_status
-    
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_manifestv2builder_new(uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_access_controller_cancel_primary_role_badge_withdraw_attempt(void*_Nonnull ptr, void*_Nonnull address, RustCallStatus *_Nonnull out_status
 );
@@ -705,6 +704,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_acc
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_account_withdraw_non_fungibles(void*_Nonnull ptr, void*_Nonnull address, void*_Nonnull resource_address, RustBuffer ids, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_add_instruction(void*_Nonnull ptr, RustBuffer instruction, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_allocate_global_address(void*_Nonnull ptr, void*_Nonnull package_address, RustBuffer blueprint_name, RustBuffer into_address_reservation, RustBuffer into_named_address, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_assert_worktop_contains(void*_Nonnull ptr, void*_Nonnull resource_address, void*_Nonnull amount, RustCallStatus *_Nonnull out_status
@@ -713,7 +714,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_ass
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_assert_worktop_contains_non_fungibles(void*_Nonnull ptr, void*_Nonnull resource_address, RustBuffer ids, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_build(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_build(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_burn_resource(void*_Nonnull ptr, RustBuffer bucket, RustCallStatus *_Nonnull out_status
 );
@@ -2322,6 +2323,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_ac
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_account_withdraw_non_fungibles(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_add_instruction(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_allocate_global_address(void

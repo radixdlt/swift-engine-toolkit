@@ -4180,11 +4180,12 @@ public protocol ManifestV2BuilderProtocol {
     func accountTryDepositOrRefund(address: Address, bucket: ManifestBuilderBucket, authorizedDepositorBadge: ResourceOrNonFungible?)  throws -> ManifestV2Builder
     func accountWithdraw(address: Address, resourceAddress: Address, amount: Decimal)  throws -> ManifestV2Builder
     func accountWithdrawNonFungibles(address: Address, resourceAddress: Address, ids: [NonFungibleLocalId])  throws -> ManifestV2Builder
+    func addInstruction(instruction: InstructionV2)  throws -> ManifestV2Builder
     func allocateGlobalAddress(packageAddress: Address, blueprintName: String, intoAddressReservation: ManifestBuilderAddressReservation, intoNamedAddress: ManifestBuilderNamedAddress)  throws -> ManifestV2Builder
     func assertWorktopContains(resourceAddress: Address, amount: Decimal)  throws -> ManifestV2Builder
     func assertWorktopContainsAny(resourceAddress: Address)  throws -> ManifestV2Builder
     func assertWorktopContainsNonFungibles(resourceAddress: Address, ids: [NonFungibleLocalId])  throws -> ManifestV2Builder
-    func build(networkId: UInt8)   -> TransactionManifestV2
+    func build()   -> TransactionManifestV2
     func burnResource(bucket: ManifestBuilderBucket)  throws -> ManifestV2Builder
     func callAccessRulesMethod(address: ManifestBuilderAddress, methodName: String, args: [ManifestBuilderValue])  throws -> ManifestV2Builder
     func callDirectVaultMethod(address: Address, methodName: String, args: [ManifestBuilderValue])  throws -> ManifestV2Builder
@@ -4285,9 +4286,10 @@ public class ManifestV2Builder: ManifestV2BuilderProtocol {
     required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
-    public convenience init()  {
+    public convenience init(networkId: UInt8)  {
         self.init(unsafeFromRawPointer: try! rustCall() {
-    uniffi_radix_engine_toolkit_uniffi_fn_constructor_manifestv2builder_new($0)
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_manifestv2builder_new(
+        FfiConverterUInt8.lower(networkId),$0)
 })
     }
 
@@ -5030,6 +5032,17 @@ public class ManifestV2Builder: ManifestV2BuilderProtocol {
         )
     }
 
+    public func addInstruction(instruction: InstructionV2) throws -> ManifestV2Builder {
+        return try  FfiConverterTypeManifestV2Builder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_add_instruction(self.pointer, 
+        FfiConverterTypeInstructionV2.lower(instruction),$0
+    )
+}
+        )
+    }
+
     public func allocateGlobalAddress(packageAddress: Address, blueprintName: String, intoAddressReservation: ManifestBuilderAddressReservation, intoNamedAddress: ManifestBuilderNamedAddress) throws -> ManifestV2Builder {
         return try  FfiConverterTypeManifestV2Builder.lift(
             try 
@@ -5079,13 +5092,12 @@ public class ManifestV2Builder: ManifestV2BuilderProtocol {
         )
     }
 
-    public func build(networkId: UInt8)  -> TransactionManifestV2 {
+    public func build()  -> TransactionManifestV2 {
         return try!  FfiConverterTypeTransactionManifestV2.lift(
             try! 
     rustCall() {
     
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_build(self.pointer, 
-        FfiConverterUInt8.lower(networkId),$0
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_build(self.pointer, $0
     )
 }
         )
@@ -25422,6 +25434,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_account_withdraw_non_fungibles() != 33553) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_add_instruction() != 35858) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_allocate_global_address() != 19420) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -25434,7 +25449,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_assert_worktop_contains_non_fungibles() != 16655) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_build() != 23646) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_build() != 60418) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_burn_resource() != 12566) {
@@ -26166,7 +26181,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_manifestv1builder_new() != 57381) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_manifestv2builder_new() != 37050) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_manifestv2builder_new() != 15308) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_from_parts() != 36478) {
