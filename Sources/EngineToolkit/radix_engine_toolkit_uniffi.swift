@@ -4234,7 +4234,6 @@ public protocol ManifestV2BuilderProtocol {
     func packagePublishAdvanced(ownerRole: OwnerRole, code: Data, definition: Data, metadata: [String: MetadataInitEntry], packageAddress: ManifestBuilderAddressReservation?)  throws -> ManifestV2Builder
     func popFromAuthZone(intoProof: ManifestBuilderProof)  throws -> ManifestV2Builder
     func pushToAuthZone(proof: ManifestBuilderProof)  throws -> ManifestV2Builder
-    func registerSubintent(subintent: IntentCoreV2, name: ManifestBuilderIntent)  throws -> ManifestV2Builder
     func returnToWorktop(bucket: ManifestBuilderBucket)  throws -> ManifestV2Builder
     func roleAssignmentGet(address: Address, module: ModuleId, roleKey: String)  throws -> ManifestV2Builder
     func roleAssignmentLockOwner(address: Address)  throws -> ManifestV2Builder
@@ -4253,6 +4252,7 @@ public protocol ManifestV2BuilderProtocol {
     func twoResourcePoolProtectedDeposit(address: Address, bucket: ManifestBuilderBucket)  throws -> ManifestV2Builder
     func twoResourcePoolProtectedWithdraw(address: Address, resourceAddress: Address, amount: Decimal, withdrawStrategy: WithdrawStrategy)  throws -> ManifestV2Builder
     func twoResourcePoolRedeem(address: Address, bucket: ManifestBuilderBucket)  throws -> ManifestV2Builder
+    func useChild(subintentHash: TransactionHash, name: ManifestBuilderIntent)  throws -> ManifestV2Builder
     func validatorAcceptsDelegatedStake(address: Address)  throws -> ManifestV2Builder
     func validatorClaimXrd(address: Address, bucket: ManifestBuilderBucket)  throws -> ManifestV2Builder
     func validatorFinishUnlockOwnerStakeUnits(address: Address)  throws -> ManifestV2Builder
@@ -5686,18 +5686,6 @@ public class ManifestV2Builder: ManifestV2BuilderProtocol {
         )
     }
 
-    public func registerSubintent(subintent: IntentCoreV2, name: ManifestBuilderIntent) throws -> ManifestV2Builder {
-        return try  FfiConverterTypeManifestV2Builder.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_register_subintent(self.pointer, 
-        FfiConverterTypeIntentCoreV2.lower(subintent),
-        FfiConverterTypeManifestBuilderIntent.lower(name),$0
-    )
-}
-        )
-    }
-
     public func returnToWorktop(bucket: ManifestBuilderBucket) throws -> ManifestV2Builder {
         return try  FfiConverterTypeManifestV2Builder.lift(
             try 
@@ -5915,6 +5903,18 @@ public class ManifestV2Builder: ManifestV2BuilderProtocol {
     uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_two_resource_pool_redeem(self.pointer, 
         FfiConverterTypeAddress.lower(address),
         FfiConverterTypeManifestBuilderBucket.lower(bucket),$0
+    )
+}
+        )
+    }
+
+    public func useChild(subintentHash: TransactionHash, name: ManifestBuilderIntent) throws -> ManifestV2Builder {
+        return try  FfiConverterTypeManifestV2Builder.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_use_child(self.pointer, 
+        FfiConverterTypeTransactionHash.lower(subintentHash),
+        FfiConverterTypeManifestBuilderIntent.lower(name),$0
     )
 }
         )
@@ -9287,6 +9287,10 @@ public func FfiConverterTypeTransactionV2Builder_lower(_ value: TransactionV2Bui
 
 
 public protocol TransactionV2BuilderSignatureStepProtocol {
+    func notarizeWithPrivateKey(privateKey: PrivateKey)  throws -> NotarizedTransactionV2
+    func notarizeWithSigner(privateKey: Signer)  throws -> NotarizedTransactionV2
+    func signWithPrivateKey(privateKey: PrivateKey)   -> TransactionV2BuilderSignatureStep
+    func signWithSigner(signer: Signer)   -> TransactionV2BuilderSignatureStep
     
 }
 
@@ -9308,6 +9312,52 @@ public class TransactionV2BuilderSignatureStep: TransactionV2BuilderSignatureSte
 
     
     
+
+    public func notarizeWithPrivateKey(privateKey: PrivateKey) throws -> NotarizedTransactionV2 {
+        return try  FfiConverterTypeNotarizedTransactionV2.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2buildersignaturestep_notarize_with_private_key(self.pointer, 
+        FfiConverterTypePrivateKey.lower(privateKey),$0
+    )
+}
+        )
+    }
+
+    public func notarizeWithSigner(privateKey: Signer) throws -> NotarizedTransactionV2 {
+        return try  FfiConverterTypeNotarizedTransactionV2.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2buildersignaturestep_notarize_with_signer(self.pointer, 
+        FfiConverterCallbackInterfaceSigner.lower(privateKey),$0
+    )
+}
+        )
+    }
+
+    public func signWithPrivateKey(privateKey: PrivateKey)  -> TransactionV2BuilderSignatureStep {
+        return try!  FfiConverterTypeTransactionV2BuilderSignatureStep.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2buildersignaturestep_sign_with_private_key(self.pointer, 
+        FfiConverterTypePrivateKey.lower(privateKey),$0
+    )
+}
+        )
+    }
+
+    public func signWithSigner(signer: Signer)  -> TransactionV2BuilderSignatureStep {
+        return try!  FfiConverterTypeTransactionV2BuilderSignatureStep.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2buildersignaturestep_sign_with_signer(self.pointer, 
+        FfiConverterCallbackInterfaceSigner.lower(signer),$0
+    )
+}
+        )
+    }
 }
 
 public struct FfiConverterTypeTransactionV2BuilderSignatureStep: FfiConverter {
@@ -25596,9 +25646,6 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_push_to_auth_zone() != 38749) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_register_subintent() != 44269) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_return_to_worktop() != 3045) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -25651,6 +25698,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_two_resource_pool_redeem() != 8311) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_use_child() != 25776) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_validator_accepts_delegated_stake() != 63270) {
@@ -26080,6 +26130,18 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2builder_transaction_header() != 42344) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2buildersignaturestep_notarize_with_private_key() != 48137) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2buildersignaturestep_notarize_with_signer() != 25051) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2buildersignaturestep_sign_with_private_key() != 12688) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2buildersignaturestep_sign_with_signer() != 49560) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_allow_all() != 26074) {

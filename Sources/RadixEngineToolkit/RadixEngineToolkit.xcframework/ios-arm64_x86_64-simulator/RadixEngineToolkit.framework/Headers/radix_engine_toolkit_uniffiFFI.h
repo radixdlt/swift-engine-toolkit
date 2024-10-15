@@ -812,8 +812,6 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_pop
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_push_to_auth_zone(void*_Nonnull ptr, RustBuffer proof, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_register_subintent(void*_Nonnull ptr, void*_Nonnull subintent, RustBuffer name, RustCallStatus *_Nonnull out_status
-);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_return_to_worktop(void*_Nonnull ptr, RustBuffer bucket, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_role_assignment_get(void*_Nonnull ptr, void*_Nonnull address, RustBuffer module, RustBuffer role_key, RustCallStatus *_Nonnull out_status
@@ -849,6 +847,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_two
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_two_resource_pool_protected_withdraw(void*_Nonnull ptr, void*_Nonnull address, void*_Nonnull resource_address, void*_Nonnull amount, RustBuffer withdraw_strategy, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_two_resource_pool_redeem(void*_Nonnull ptr, void*_Nonnull address, RustBuffer bucket, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_use_child(void*_Nonnull ptr, void*_Nonnull subintent_hash, RustBuffer name, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_manifestv2builder_validator_accepts_delegated_stake(void*_Nonnull ptr, void*_Nonnull address, RustCallStatus *_Nonnull out_status
 );
@@ -1258,6 +1258,14 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2builder_
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2builder_transaction_header(void*_Nonnull ptr, RustBuffer transaction_header, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionv2buildersignaturestep(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2buildersignaturestep_notarize_with_private_key(void*_Nonnull ptr, void*_Nonnull private_key, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2buildersignaturestep_notarize_with_signer(void*_Nonnull ptr, uint64_t private_key, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2buildersignaturestep_sign_with_private_key(void*_Nonnull ptr, void*_Nonnull private_key, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2buildersignaturestep_sign_with_signer(void*_Nonnull ptr, uint64_t signer, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_init_callback_signer(ForeignCallback _Nonnull callback_stub, RustCallStatus *_Nonnull out_status
 );
@@ -2487,9 +2495,6 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_po
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_push_to_auth_zone(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_register_subintent(void
-    
-);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_return_to_worktop(void
     
 );
@@ -2542,6 +2547,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_tw
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_two_resource_pool_redeem(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_use_child(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_manifestv2builder_validator_accepts_delegated_stake(void
@@ -2971,6 +2979,18 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2builder
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2builder_transaction_header(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2buildersignaturestep_notarize_with_private_key(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2buildersignaturestep_notarize_with_signer(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2buildersignaturestep_sign_with_private_key(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionv2buildersignaturestep_sign_with_signer(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_allow_all(void
