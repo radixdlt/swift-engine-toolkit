@@ -3983,6 +3983,26 @@ public class NonFungibleGlobalId: NonFungibleGlobalIdProtocol {
 
     
 
+    public static func globalCallerBadge(componentAddress: Address, networkId: UInt8) throws -> NonFungibleGlobalId {
+        return NonFungibleGlobalId(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_global_caller_badge(
+        FfiConverterTypeAddress.lower(componentAddress),
+        FfiConverterUInt8.lower(networkId),$0)
+})
+    }
+
+    
+
+    public static func packageOfDirectCallerBadge(packageAddress: Address, networkId: UInt8) throws -> NonFungibleGlobalId {
+        return NonFungibleGlobalId(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_package_of_direct_caller_badge(
+        FfiConverterTypeAddress.lower(packageAddress),
+        FfiConverterUInt8.lower(networkId),$0)
+})
+    }
+
+    
+
     public static func virtualSignatureBadge(publicKey: PublicKey, networkId: UInt8) throws -> NonFungibleGlobalId {
         return NonFungibleGlobalId(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_virtual_signature_badge(
@@ -5588,7 +5608,7 @@ public func FfiConverterTypeTransactionHash_lower(_ value: TransactionHash) -> U
 public protocol TransactionManifestProtocol {
     func blobs()   -> [Data]
     func compile()  throws -> Data
-    func executionSummary(networkId: UInt8, encodedReceipt: Data)  throws -> ExecutionSummary
+    func executionSummary(networkId: UInt8, toolkitReceipt: String)  throws -> ExecutionSummary
     func extractAddresses()   -> [EntityType: [Address]]
     func instructions()   -> Instructions
     func modify(modifications: TransactionManifestModifications)  throws -> TransactionManifest
@@ -5654,13 +5674,13 @@ public class TransactionManifest: TransactionManifestProtocol {
         )
     }
 
-    public func executionSummary(networkId: UInt8, encodedReceipt: Data) throws -> ExecutionSummary {
+    public func executionSummary(networkId: UInt8, toolkitReceipt: String) throws -> ExecutionSummary {
         return try  FfiConverterTypeExecutionSummary.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_execution_summary(self.pointer, 
         FfiConverterUInt8.lower(networkId),
-        FfiConverterData.lower(encodedReceipt),$0
+        FfiConverterString.lower(toolkitReceipt),$0
     )
 }
         )
@@ -14971,7 +14991,6 @@ public enum ReservedInstruction {
     case accountLockFee
     case accountSecurify
     case identitySecurify
-    case accountUpdateSettings
     case accessControllerMethod
 }
 
@@ -14988,9 +15007,7 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
         
         case 3: return .identitySecurify
         
-        case 4: return .accountUpdateSettings
-        
-        case 5: return .accessControllerMethod
+        case 4: return .accessControllerMethod
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -15012,12 +15029,8 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
             writeInt(&buf, Int32(3))
         
         
-        case .accountUpdateSettings:
-            writeInt(&buf, Int32(4))
-        
-        
         case .accessControllerMethod:
-            writeInt(&buf, Int32(5))
+            writeInt(&buf, Int32(4))
         
         }
     }
@@ -19215,11 +19228,31 @@ public func deriveVirtualAccountAddressFromPublicKey(publicKey: PublicKey, netwo
     )
 }
 
+public func deriveVirtualGlobalCallerNonFungibleGlobalIdFromComponentAddress(componentAddress: Address, networkId: UInt8) throws -> NonFungibleGlobalId {
+    return try  FfiConverterTypeNonFungibleGlobalId.lift(
+        try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_global_caller_non_fungible_global_id_from_component_address(
+        FfiConverterTypeAddress.lower(componentAddress),
+        FfiConverterUInt8.lower(networkId),$0)
+}
+    )
+}
+
 public func deriveVirtualIdentityAddressFromPublicKey(publicKey: PublicKey, networkId: UInt8) throws -> Address {
     return try  FfiConverterTypeAddress.lift(
         try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_identity_address_from_public_key(
         FfiConverterTypePublicKey.lower(publicKey),
+        FfiConverterUInt8.lower(networkId),$0)
+}
+    )
+}
+
+public func deriveVirtualPackageOfDirectCallerNonFungibleGlobalIdFromComponentAddress(packageAddress: Address, networkId: UInt8) throws -> NonFungibleGlobalId {
+    return try  FfiConverterTypeNonFungibleGlobalId.lift(
+        try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_package_of_direct_caller_non_fungible_global_id_from_component_address(
+        FfiConverterTypeAddress.lower(packageAddress),
         FfiConverterUInt8.lower(networkId),$0)
 }
     )
@@ -19429,7 +19462,13 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_account_address_from_public_key() != 36758) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_global_caller_non_fungible_global_id_from_component_address() != 55602) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_identity_address_from_public_key() != 11003) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_package_of_direct_caller_non_fungible_global_id_from_component_address() != 42759) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_signature_non_fungible_global_id_from_public_key() != 61146) {
@@ -20308,7 +20347,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_compile() != 11452) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_execution_summary() != 43934) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_execution_summary() != 6206) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifest_extract_addresses() != 5474) {
@@ -20440,7 +20479,13 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_from_parts() != 36478) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_global_caller_badge() != 5635) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_new() != 58056) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_package_of_direct_caller_badge() != 11141) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_virtual_signature_badge() != 22546) {

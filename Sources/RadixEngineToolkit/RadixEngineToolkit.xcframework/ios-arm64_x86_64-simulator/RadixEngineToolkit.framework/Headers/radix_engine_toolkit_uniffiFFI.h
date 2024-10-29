@@ -567,7 +567,11 @@ void uniffi_radix_engine_toolkit_uniffi_fn_free_nonfungibleglobalid(void*_Nonnul
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_from_parts(void*_Nonnull resource_address, RustBuffer non_fungible_local_id, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_global_caller_badge(void*_Nonnull component_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_new(RustBuffer non_fungible_global_id, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_package_of_direct_caller_badge(void*_Nonnull package_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_virtual_signature_badge(RustBuffer public_key, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
@@ -770,7 +774,7 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_blob
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_compile(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_execution_summary(void*_Nonnull ptr, uint8_t network_id, RustBuffer encoded_receipt, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_execution_summary(void*_Nonnull ptr, uint8_t network_id, RustBuffer toolkit_receipt, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifest_extract_addresses(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -812,7 +816,11 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_account_
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_account_address_from_public_key(RustBuffer public_key, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_global_caller_non_fungible_global_id_from_component_address(void*_Nonnull component_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_identity_address_from_public_key(RustBuffer public_key, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_package_of_direct_caller_non_fungible_global_id_from_component_address(void*_Nonnull package_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_virtual_signature_non_fungible_global_id_from_public_key(RustBuffer public_key, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
@@ -980,7 +988,13 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_account
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_account_address_from_public_key(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_global_caller_non_fungible_global_id_from_component_address(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_identity_address_from_public_key(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_package_of_direct_caller_non_fungible_global_id_from_component_address(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_virtual_signature_non_fungible_global_id_from_public_key(void
@@ -1991,7 +2005,13 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_messagevalidati
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_from_parts(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_global_caller_badge(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_new(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_package_of_direct_caller_badge(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_virtual_signature_badge(void
