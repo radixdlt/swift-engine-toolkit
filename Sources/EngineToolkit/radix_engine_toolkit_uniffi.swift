@@ -1756,13 +1756,10 @@ public func FfiConverterTypeInstructionsV2_lower(_ value: InstructionsV2) -> Uns
 public protocol IntentCoreV2Protocol {
     func blobs()   -> [Data]
     func children()   -> [Hash]
-    func hash()  throws -> TransactionHash
     func header()   -> IntentHeaderV2
     func instructions()   -> InstructionsV2
-    func intentHash()  throws -> TransactionHash
+    func intoSubintent()   -> SubintentV2
     func message()   -> MessageV2
-    func subintentHash()  throws -> TransactionHash
-    func toPayloadBytes()  throws -> Data
     
 }
 
@@ -1792,15 +1789,6 @@ public class IntentCoreV2: IntentCoreV2Protocol {
 
     
 
-    public static func fromPayloadBytes(compiledIntent: Data) throws -> IntentCoreV2 {
-        return IntentCoreV2(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_constructor_intentcorev2_from_payload_bytes(
-        FfiConverterData.lower(compiledIntent),$0)
-})
-    }
-
-    
-
     
     
 
@@ -1821,16 +1809,6 @@ public class IntentCoreV2: IntentCoreV2Protocol {
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_intentcorev2_children(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func hash() throws -> TransactionHash {
-        return try  FfiConverterTypeTransactionHash.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_intentcorev2_hash(self.pointer, $0
     )
 }
         )
@@ -1858,11 +1836,12 @@ public class IntentCoreV2: IntentCoreV2Protocol {
         )
     }
 
-    public func intentHash() throws -> TransactionHash {
-        return try  FfiConverterTypeTransactionHash.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_intentcorev2_intent_hash(self.pointer, $0
+    public func intoSubintent()  -> SubintentV2 {
+        return try!  FfiConverterTypeSubintentV2.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_intentcorev2_into_subintent(self.pointer, $0
     )
 }
         )
@@ -1874,26 +1853,6 @@ public class IntentCoreV2: IntentCoreV2Protocol {
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_intentcorev2_message(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func subintentHash() throws -> TransactionHash {
-        return try  FfiConverterTypeTransactionHash.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_intentcorev2_subintent_hash(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func toPayloadBytes() throws -> Data {
-        return try  FfiConverterData.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_intentcorev2_to_payload_bytes(self.pointer, $0
     )
 }
         )
@@ -6752,10 +6711,9 @@ public func FfiConverterTypeOlympiaAddress_lower(_ value: OlympiaAddress) -> Uns
 
 
 public protocol PartialTransactionV2Protocol {
-    func hash()  throws -> TransactionHash
-    func intentHash()  throws -> TransactionHash
-    func nonRootSubintents()   -> [IntentCoreV2]
-    func rootSubintent()   -> IntentCoreV2
+    func nonRootSubintents()   -> [SubintentV2]
+    func rootSubintent()   -> SubintentV2
+    func rootSubintentHash()  throws -> TransactionHash
     func toPayloadBytes()  throws -> Data
     
 }
@@ -6769,11 +6727,11 @@ public class PartialTransactionV2: PartialTransactionV2Protocol {
     required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
-    public convenience init(rootSubintent: IntentCoreV2, nonRootSubintents: [IntentCoreV2])  {
+    public convenience init(rootSubintent: SubintentV2, nonRootSubintents: [SubintentV2])  {
         self.init(unsafeFromRawPointer: try! rustCall() {
     uniffi_radix_engine_toolkit_uniffi_fn_constructor_partialtransactionv2_new(
-        FfiConverterTypeIntentCoreV2.lower(rootSubintent),
-        FfiConverterSequenceTypeIntentCoreV2.lower(nonRootSubintents),$0)
+        FfiConverterTypeSubintentV2.lower(rootSubintent),
+        FfiConverterSequenceTypeSubintentV2.lower(nonRootSubintents),$0)
 })
     }
 
@@ -6795,28 +6753,8 @@ public class PartialTransactionV2: PartialTransactionV2Protocol {
     
     
 
-    public func hash() throws -> TransactionHash {
-        return try  FfiConverterTypeTransactionHash.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2_hash(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func intentHash() throws -> TransactionHash {
-        return try  FfiConverterTypeTransactionHash.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2_intent_hash(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func nonRootSubintents()  -> [IntentCoreV2] {
-        return try!  FfiConverterSequenceTypeIntentCoreV2.lift(
+    public func nonRootSubintents()  -> [SubintentV2] {
+        return try!  FfiConverterSequenceTypeSubintentV2.lift(
             try! 
     rustCall() {
     
@@ -6826,12 +6764,22 @@ public class PartialTransactionV2: PartialTransactionV2Protocol {
         )
     }
 
-    public func rootSubintent()  -> IntentCoreV2 {
-        return try!  FfiConverterTypeIntentCoreV2.lift(
+    public func rootSubintent()  -> SubintentV2 {
+        return try!  FfiConverterTypeSubintentV2.lift(
             try! 
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2_root_subintent(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func rootSubintentHash() throws -> TransactionHash {
+        return try  FfiConverterTypeTransactionHash.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2_root_subintent_hash(self.pointer, $0
     )
 }
         )
@@ -7480,10 +7428,9 @@ public func FfiConverterTypePrivateKey_lower(_ value: PrivateKey) -> UnsafeMutab
 
 
 public protocol SignedPartialTransactionV2Protocol {
-    func hash()  throws -> TransactionHash
-    func intentHash()  throws -> TransactionHash
     func nonRootSubintentSignatures()   -> [[SignatureWithPublicKeyV1]]
     func partialTransaction()   -> PartialTransactionV2
+    func rootSubintentHash()  throws -> TransactionHash
     func rootSubintentSignatures()   -> [SignatureWithPublicKeyV1]
     func toPayloadBytes()  throws -> Data
     
@@ -7525,26 +7472,6 @@ public class SignedPartialTransactionV2: SignedPartialTransactionV2Protocol {
     
     
 
-    public func hash() throws -> TransactionHash {
-        return try  FfiConverterTypeTransactionHash.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_signedpartialtransactionv2_hash(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func intentHash() throws -> TransactionHash {
-        return try  FfiConverterTypeTransactionHash.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_signedpartialtransactionv2_intent_hash(self.pointer, $0
-    )
-}
-        )
-    }
-
     public func nonRootSubintentSignatures()  -> [[SignatureWithPublicKeyV1]] {
         return try!  FfiConverterSequenceSequenceTypeSignatureWithPublicKeyV1.lift(
             try! 
@@ -7562,6 +7489,16 @@ public class SignedPartialTransactionV2: SignedPartialTransactionV2Protocol {
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_signedpartialtransactionv2_partial_transaction(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func rootSubintentHash() throws -> TransactionHash {
+        return try  FfiConverterTypeTransactionHash.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_signedpartialtransactionv2_root_subintent_hash(self.pointer, $0
     )
 }
         )
@@ -8170,6 +8107,250 @@ public func FfiConverterTypeSignedTransactionIntentV2_lower(_ value: SignedTrans
 }
 
 
+public protocol SubintentManifestV2Protocol {
+    func asEnclosed(networkId: UInt8)   -> TransactionManifestV2?
+    func blobs()   -> [Data]
+    func extractAddresses()   -> [EntityType: [Address]]
+    func instructions()   -> InstructionsV2
+    func staticAnalysis(networkId: UInt8)  throws -> StaticAnalysis
+    func toPayloadBytes()  throws -> Data
+    
+}
+
+public class SubintentManifestV2: SubintentManifestV2Protocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+    public convenience init(instructions: InstructionsV2, blobs: [Data], children: [Hash])  {
+        self.init(unsafeFromRawPointer: try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_subintentmanifestv2_new(
+        FfiConverterTypeInstructionsV2.lower(instructions),
+        FfiConverterSequenceData.lower(blobs),
+        FfiConverterSequenceTypeHash.lower(children),$0)
+})
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_subintentmanifestv2(pointer, $0) }
+    }
+
+    
+
+    public static func fromPayloadBytes(compiled: Data, networkId: UInt8) throws -> SubintentManifestV2 {
+        return SubintentManifestV2(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_subintentmanifestv2_from_payload_bytes(
+        FfiConverterData.lower(compiled),
+        FfiConverterUInt8.lower(networkId),$0)
+})
+    }
+
+    
+
+    
+    
+
+    public func asEnclosed(networkId: UInt8)  -> TransactionManifestV2? {
+        return try!  FfiConverterOptionTypeTransactionManifestV2.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_as_enclosed(self.pointer, 
+        FfiConverterUInt8.lower(networkId),$0
+    )
+}
+        )
+    }
+
+    public func blobs()  -> [Data] {
+        return try!  FfiConverterSequenceData.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_blobs(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func extractAddresses()  -> [EntityType: [Address]] {
+        return try!  FfiConverterDictionaryTypeEntityTypeSequenceTypeAddress.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_extract_addresses(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func instructions()  -> InstructionsV2 {
+        return try!  FfiConverterTypeInstructionsV2.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_instructions(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func staticAnalysis(networkId: UInt8) throws -> StaticAnalysis {
+        return try  FfiConverterTypeStaticAnalysis.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_static_analysis(self.pointer, 
+        FfiConverterUInt8.lower(networkId),$0
+    )
+}
+        )
+    }
+
+    public func toPayloadBytes() throws -> Data {
+        return try  FfiConverterData.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_to_payload_bytes(self.pointer, $0
+    )
+}
+        )
+    }
+}
+
+public struct FfiConverterTypeSubintentManifestV2: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = SubintentManifestV2
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SubintentManifestV2 {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if (ptr == nil) {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: SubintentManifestV2, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> SubintentManifestV2 {
+        return SubintentManifestV2(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: SubintentManifestV2) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+
+public func FfiConverterTypeSubintentManifestV2_lift(_ pointer: UnsafeMutableRawPointer) throws -> SubintentManifestV2 {
+    return try FfiConverterTypeSubintentManifestV2.lift(pointer)
+}
+
+public func FfiConverterTypeSubintentManifestV2_lower(_ value: SubintentManifestV2) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeSubintentManifestV2.lower(value)
+}
+
+
+public protocol SubintentV2Protocol {
+    func subintentHash()  throws -> TransactionHash
+    
+}
+
+public class SubintentV2: SubintentV2Protocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+    public convenience init(intentCore: IntentCoreV2)  {
+        self.init(unsafeFromRawPointer: try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_subintentv2_new(
+        FfiConverterTypeIntentCoreV2.lower(intentCore),$0)
+})
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_subintentv2(pointer, $0) }
+    }
+
+    
+
+    public static func fromPayloadBytes(compiledIntent: Data) throws -> SubintentV2 {
+        return SubintentV2(unsafeFromRawPointer: try rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_subintentv2_from_payload_bytes(
+        FfiConverterData.lower(compiledIntent),$0)
+})
+    }
+
+    
+
+    
+    
+
+    public func subintentHash() throws -> TransactionHash {
+        return try  FfiConverterTypeTransactionHash.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_subintentv2_subintent_hash(self.pointer, $0
+    )
+}
+        )
+    }
+}
+
+public struct FfiConverterTypeSubintentV2: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = SubintentV2
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SubintentV2 {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if (ptr == nil) {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: SubintentV2, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> SubintentV2 {
+        return SubintentV2(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: SubintentV2) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+
+public func FfiConverterTypeSubintentV2_lift(_ pointer: UnsafeMutableRawPointer) throws -> SubintentV2 {
+    return try FfiConverterTypeSubintentV2.lift(pointer)
+}
+
+public func FfiConverterTypeSubintentV2_lower(_ value: SubintentV2) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeSubintentV2.lower(value)
+}
+
+
 public protocol TransactionHashProtocol {
     func asHash()   -> Hash
     func asStr()   -> String
@@ -8294,11 +8475,11 @@ public func FfiConverterTypeTransactionHash_lower(_ value: TransactionHash) -> U
 
 public protocol TransactionIntentV2Protocol {
     func hash()  throws -> TransactionHash
-    func intentHash()  throws -> TransactionHash
-    func nonRootSubintents()   -> [IntentCoreV2]
+    func nonRootSubintents()   -> [SubintentV2]
     func rootIntentCore()   -> IntentCoreV2
     func toPayloadBytes()  throws -> Data
     func transactionHeader()   -> TransactionHeaderV2
+    func transactionIntentHash()  throws -> TransactionHash
     
 }
 
@@ -8311,12 +8492,12 @@ public class TransactionIntentV2: TransactionIntentV2Protocol {
     required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
-    public convenience init(transactionHeader: TransactionHeaderV2, rootIntentCore: IntentCoreV2, nonRootSubintents: [IntentCoreV2])  {
+    public convenience init(transactionHeader: TransactionHeaderV2, rootIntentCore: IntentCoreV2, nonRootSubintents: [SubintentV2])  {
         self.init(unsafeFromRawPointer: try! rustCall() {
     uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionintentv2_new(
         FfiConverterTypeTransactionHeaderV2.lower(transactionHeader),
         FfiConverterTypeIntentCoreV2.lower(rootIntentCore),
-        FfiConverterSequenceTypeIntentCoreV2.lower(nonRootSubintents),$0)
+        FfiConverterSequenceTypeSubintentV2.lower(nonRootSubintents),$0)
 })
     }
 
@@ -8348,18 +8529,8 @@ public class TransactionIntentV2: TransactionIntentV2Protocol {
         )
     }
 
-    public func intentHash() throws -> TransactionHash {
-        return try  FfiConverterTypeTransactionHash.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionintentv2_intent_hash(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func nonRootSubintents()  -> [IntentCoreV2] {
-        return try!  FfiConverterSequenceTypeIntentCoreV2.lift(
+    public func nonRootSubintents()  -> [SubintentV2] {
+        return try!  FfiConverterSequenceTypeSubintentV2.lift(
             try! 
     rustCall() {
     
@@ -8396,6 +8567,16 @@ public class TransactionIntentV2: TransactionIntentV2Protocol {
     rustCall() {
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_transactionintentv2_transaction_header(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func transactionIntentHash() throws -> TransactionHash {
+        return try  FfiConverterTypeTransactionHash.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionintentv2_transaction_intent_hash(self.pointer, $0
     )
 }
         )
@@ -19383,6 +19564,7 @@ public enum RadixEngineToolkitError {
     case EntityTypeMismatchError(expected: [EntityType], actual: EntityType)
     case DerivationError(error: String)
     case InvalidPublicKey
+    case InstructionAddError(error: String)
     case CompileError(error: String)
     case DecompileError(error: String)
     case PrepareError(error: String)
@@ -19393,13 +19575,13 @@ public enum RadixEngineToolkitError {
     case ManifestSborError(error: String)
     case ScryptoSborError(error: String)
     case TypedNativeEventError(error: String)
-    case FailedToDecodeTransactionHash
+    case FailedToDecodeTransactionHash(error: String)
     case ManifestBuilderNameRecordError(error: NameRecordError)
     case InvalidEntityTypeIdError(error: String)
     case DecimalError
     case SignerError(error: String)
     case InvalidReceipt
-    case StaticAnalysisFailed
+    case StaticAnalysisFailed(error: String)
     case NotAllBuilderItemsWereSpecified
 
     fileprivate static func uniffiErrorHandler(_ error: RustBuffer) throws -> Error {
@@ -19444,50 +19626,57 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
             error: try FfiConverterString.read(from: &buf)
             )
         case 8: return .InvalidPublicKey
-        case 9: return .CompileError(
+        case 9: return .InstructionAddError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 10: return .DecompileError(
+        case 10: return .CompileError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 11: return .PrepareError(
+        case 11: return .DecompileError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 12: return .EncodeError(
+        case 12: return .PrepareError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 13: return .DecodeError(
+        case 13: return .EncodeError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 14: return .TransactionValidationFailed(
+        case 14: return .DecodeError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 15: return .ExecutionModuleError(
+        case 15: return .TransactionValidationFailed(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 16: return .ManifestSborError(
+        case 16: return .ExecutionModuleError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 17: return .ScryptoSborError(
+        case 17: return .ManifestSborError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 18: return .TypedNativeEventError(
+        case 18: return .ScryptoSborError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 19: return .FailedToDecodeTransactionHash
-        case 20: return .ManifestBuilderNameRecordError(
+        case 19: return .TypedNativeEventError(
+            error: try FfiConverterString.read(from: &buf)
+            )
+        case 20: return .FailedToDecodeTransactionHash(
+            error: try FfiConverterString.read(from: &buf)
+            )
+        case 21: return .ManifestBuilderNameRecordError(
             error: try FfiConverterTypeNameRecordError.read(from: &buf)
             )
-        case 21: return .InvalidEntityTypeIdError(
+        case 22: return .InvalidEntityTypeIdError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 22: return .DecimalError
-        case 23: return .SignerError(
+        case 23: return .DecimalError
+        case 24: return .SignerError(
             error: try FfiConverterString.read(from: &buf)
             )
-        case 24: return .InvalidReceipt
-        case 25: return .StaticAnalysisFailed
-        case 26: return .NotAllBuilderItemsWereSpecified
+        case 25: return .InvalidReceipt
+        case 26: return .StaticAnalysisFailed(
+            error: try FfiConverterString.read(from: &buf)
+            )
+        case 27: return .NotAllBuilderItemsWereSpecified
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -19543,89 +19732,96 @@ public struct FfiConverterTypeRadixEngineToolkitError: FfiConverterRustBuffer {
             writeInt(&buf, Int32(8))
         
         
-        case let .CompileError(error):
+        case let .InstructionAddError(error):
             writeInt(&buf, Int32(9))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .DecompileError(error):
+        case let .CompileError(error):
             writeInt(&buf, Int32(10))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .PrepareError(error):
+        case let .DecompileError(error):
             writeInt(&buf, Int32(11))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .EncodeError(error):
+        case let .PrepareError(error):
             writeInt(&buf, Int32(12))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .DecodeError(error):
+        case let .EncodeError(error):
             writeInt(&buf, Int32(13))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .TransactionValidationFailed(error):
+        case let .DecodeError(error):
             writeInt(&buf, Int32(14))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .ExecutionModuleError(error):
+        case let .TransactionValidationFailed(error):
             writeInt(&buf, Int32(15))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .ManifestSborError(error):
+        case let .ExecutionModuleError(error):
             writeInt(&buf, Int32(16))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .ScryptoSborError(error):
+        case let .ManifestSborError(error):
             writeInt(&buf, Int32(17))
             FfiConverterString.write(error, into: &buf)
             
         
-        case let .TypedNativeEventError(error):
+        case let .ScryptoSborError(error):
             writeInt(&buf, Int32(18))
             FfiConverterString.write(error, into: &buf)
             
         
-        case .FailedToDecodeTransactionHash:
+        case let .TypedNativeEventError(error):
             writeInt(&buf, Int32(19))
+            FfiConverterString.write(error, into: &buf)
+            
         
+        case let .FailedToDecodeTransactionHash(error):
+            writeInt(&buf, Int32(20))
+            FfiConverterString.write(error, into: &buf)
+            
         
         case let .ManifestBuilderNameRecordError(error):
-            writeInt(&buf, Int32(20))
+            writeInt(&buf, Int32(21))
             FfiConverterTypeNameRecordError.write(error, into: &buf)
             
         
         case let .InvalidEntityTypeIdError(error):
-            writeInt(&buf, Int32(21))
+            writeInt(&buf, Int32(22))
             FfiConverterString.write(error, into: &buf)
             
         
         case .DecimalError:
-            writeInt(&buf, Int32(22))
+            writeInt(&buf, Int32(23))
         
         
         case let .SignerError(error):
-            writeInt(&buf, Int32(23))
+            writeInt(&buf, Int32(24))
             FfiConverterString.write(error, into: &buf)
             
         
         case .InvalidReceipt:
-            writeInt(&buf, Int32(24))
-        
-        
-        case .StaticAnalysisFailed:
             writeInt(&buf, Int32(25))
         
         
-        case .NotAllBuilderItemsWereSpecified:
+        case let .StaticAnalysisFailed(error):
             writeInt(&buf, Int32(26))
+            FfiConverterString.write(error, into: &buf)
+            
+        
+        case .NotAllBuilderItemsWereSpecified:
+            writeInt(&buf, Int32(27))
         
         }
     }
@@ -19699,7 +19895,6 @@ public enum ReservedInstruction {
     case accountLockFee
     case accountSecurify
     case identitySecurify
-    case accountUpdateSettings
     case accessControllerMethod
 }
 
@@ -19716,9 +19911,7 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
         
         case 3: return .identitySecurify
         
-        case 4: return .accountUpdateSettings
-        
-        case 5: return .accessControllerMethod
+        case 4: return .accessControllerMethod
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -19740,12 +19933,8 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
             writeInt(&buf, Int32(3))
         
         
-        case .accountUpdateSettings:
-            writeInt(&buf, Int32(4))
-        
-        
         case .accessControllerMethod:
-            writeInt(&buf, Int32(5))
+            writeInt(&buf, Int32(4))
         
         }
     }
@@ -22841,6 +23030,27 @@ fileprivate struct FfiConverterOptionTypePreciseDecimal: FfiConverterRustBuffer 
     }
 }
 
+fileprivate struct FfiConverterOptionTypeTransactionManifestV2: FfiConverterRustBuffer {
+    typealias SwiftType = TransactionManifestV2?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeTransactionManifestV2.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeTransactionManifestV2.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
 fileprivate struct FfiConverterOptionTypeManifestBuilderAddressReservation: FfiConverterRustBuffer {
     typealias SwiftType = ManifestBuilderAddressReservation?
 
@@ -23166,28 +23376,6 @@ fileprivate struct FfiConverterSequenceTypeHash: FfiConverterRustBuffer {
     }
 }
 
-fileprivate struct FfiConverterSequenceTypeIntentCoreV2: FfiConverterRustBuffer {
-    typealias SwiftType = [IntentCoreV2]
-
-    public static func write(_ value: [IntentCoreV2], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for item in value {
-            FfiConverterTypeIntentCoreV2.write(item, into: &buf)
-        }
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [IntentCoreV2] {
-        let len: Int32 = try readInt(&buf)
-        var seq = [IntentCoreV2]()
-        seq.reserveCapacity(Int(len))
-        for _ in 0 ..< len {
-            seq.append(try FfiConverterTypeIntentCoreV2.read(from: &buf))
-        }
-        return seq
-    }
-}
-
 fileprivate struct FfiConverterSequenceTypeNonFungibleGlobalId: FfiConverterRustBuffer {
     typealias SwiftType = [NonFungibleGlobalId]
 
@@ -23205,6 +23393,28 @@ fileprivate struct FfiConverterSequenceTypeNonFungibleGlobalId: FfiConverterRust
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeNonFungibleGlobalId.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+fileprivate struct FfiConverterSequenceTypeSubintentV2: FfiConverterRustBuffer {
+    typealias SwiftType = [SubintentV2]
+
+    public static func write(_ value: [SubintentV2], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeSubintentV2.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [SubintentV2] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [SubintentV2]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeSubintentV2.read(from: &buf))
         }
         return seq
     }
@@ -24827,25 +25037,16 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_children() != 63939) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_hash() != 12837) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_header() != 42313) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_instructions() != 30446) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_intent_hash() != 3317) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_into_subintent() != 3577) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_message() != 9657) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_subintent_hash() != 47178) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentcorev2_to_payload_bytes() != 46112) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_intentv1_hash() != 25295) {
@@ -25826,16 +26027,13 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_olympiaaddress_public_key() != 33649) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_hash() != 7316) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_non_root_subintents() != 48381) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_intent_hash() != 55700) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_root_subintent() != 44096) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_non_root_subintents() != 49721) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_root_subintent() != 40364) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_root_subintent_hash() != 47571) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_to_payload_bytes() != 40008) {
@@ -25937,16 +26135,13 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_sign_to_signature_with_public_key() != 3087) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_hash() != 44538) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_intent_hash() != 53171) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_non_root_subintent_signatures() != 60250) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_partial_transaction() != 33675) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_root_subintent_hash() != 56046) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_root_subintent_signatures() != 17028) {
@@ -26018,6 +26213,27 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_signedtransactionintentv2_transaction_intent_signatures() != 8514) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_as_enclosed() != 7828) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_blobs() != 53010) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_extract_addresses() != 17889) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_instructions() != 14630) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_static_analysis() != 40803) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_to_payload_bytes() != 44508) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentv2_subintent_hash() != 63266) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionhash_as_hash() != 1343) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -26033,10 +26249,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionintentv2_hash() != 46670) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionintentv2_intent_hash() != 59290) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionintentv2_non_root_subintents() != 20904) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionintentv2_non_root_subintents() != 36705) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionintentv2_root_intent_core() != 41107) {
@@ -26046,6 +26259,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionintentv2_transaction_header() != 26458) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionintentv2_transaction_intent_hash() != 33090) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_blobs() != 37273) {
@@ -26228,9 +26444,6 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_instructionsv2_from_string() != 18755) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_intentcorev2_from_payload_bytes() != 5622) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_intentcorev2_new() != 44152) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -26273,7 +26486,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_partialtransactionv2_from_payload_bytes() != 49926) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_partialtransactionv2_new() != 49244) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_partialtransactionv2_new() != 33234) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_from_le_bytes() != 24547) {
@@ -26324,13 +26537,25 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_signedtransactionintentv2_new() != 13944) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_subintentmanifestv2_from_payload_bytes() != 49882) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_subintentmanifestv2_new() != 60741) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_subintentv2_from_payload_bytes() != 32674) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_subintentv2_new() != 39119) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionhash_from_str() != 37610) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionintentv2_from_payload_bytes() != 57262) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionintentv2_new() != 50610) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionintentv2_new() != 41531) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_transactionmanifestv1_from_payload_bytes() != 48079) {
