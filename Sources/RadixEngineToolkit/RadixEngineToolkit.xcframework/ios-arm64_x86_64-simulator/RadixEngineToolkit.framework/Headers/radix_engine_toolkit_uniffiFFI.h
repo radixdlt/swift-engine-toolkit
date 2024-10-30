@@ -81,7 +81,7 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_requi
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_count_of(uint8_t count, RustBuffer resources, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_virtual_signature(RustBuffer public_key, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_accessrule_require_signature(RustBuffer public_key, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_accessrule_and(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
@@ -888,9 +888,13 @@ void uniffi_radix_engine_toolkit_uniffi_fn_free_nonfungibleglobalid(void*_Nonnul
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_from_parts(void*_Nonnull resource_address, RustBuffer non_fungible_local_id, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_global_caller_badge(void*_Nonnull component_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_new(RustBuffer non_fungible_global_id, RustCallStatus *_Nonnull out_status
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_virtual_signature_badge(RustBuffer public_key, uint8_t network_id, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_package_of_direct_caller_badge(void*_Nonnull package_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_nonfungibleglobalid_signature_badge(RustBuffer public_key, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_nonfungibleglobalid_as_str(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -937,6 +941,8 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_notarizedtransactionv2_n
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_notarizedtransactionv2_signed_transaction_intent(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_notarizedtransactionv2_signed_transaction_intent_hash(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void uniffi_radix_engine_toolkit_uniffi_fn_method_notarizedtransactionv2_statically_validate(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_notarizedtransactionv2_to_payload_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -1066,6 +1072,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_signedpartialtransact
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_signedpartialtransactionv2_root_subintent_signatures(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void uniffi_radix_engine_toolkit_uniffi_fn_method_signedpartialtransactionv2_statically_validate(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_signedpartialtransactionv2_to_payload_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_signedpartialtransactionv2builder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -1145,6 +1153,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_i
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_static_analysis(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
+void uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_statically_validate(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_to_payload_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_subintentv2(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -1221,6 +1231,8 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_static_analysis(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
+void uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_statically_validate(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_to_payload_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_transactionv1builder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -1283,7 +1295,11 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionv2builders
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_init_callback_signer(ForeignCallback _Nonnull callback_stub, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_global_caller_non_fungible_global_id_from_component_address(void*_Nonnull component_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_olympia_account_address_from_public_key(RustBuffer public_key, RustBuffer olympia_network, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_package_of_direct_caller_non_fungible_global_id_from_component_address(void*_Nonnull package_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_func_derive_preallocated_account_address_from_olympia_account_address(void*_Nonnull olympia_account_address, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
@@ -1450,7 +1466,13 @@ void ffi_radix_engine_toolkit_uniffi_rust_future_free_void(void* _Nonnull handle
 );
 void ffi_radix_engine_toolkit_uniffi_rust_future_complete_void(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_global_caller_non_fungible_global_id_from_component_address(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_olympia_account_address_from_public_key(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_package_of_direct_caller_non_fungible_global_id_from_component_address(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_func_derive_preallocated_account_address_from_olympia_account_address(void
@@ -2671,6 +2693,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransaction
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransactionv2_signed_transaction_intent_hash(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransactionv2_statically_validate(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_notarizedtransactionv2_to_payload_bytes(void
     
 );
@@ -2800,6 +2825,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransac
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_root_subintent_signatures(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_statically_validate(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_signedpartialtransactionv2_to_payload_bytes(void
     
 );
@@ -2881,6 +2909,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_static_analysis(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_statically_validate(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_to_payload_bytes(void
     
 );
@@ -2951,6 +2982,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_static_analysis(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_statically_validate(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_to_payload_bytes(void
@@ -3034,7 +3068,7 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_requ
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require_count_of(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require_virtual_signature(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_accessrule_require_signature(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_address_from_raw(void
@@ -3115,10 +3149,16 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_manifestv2build
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_from_parts(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_global_caller_badge(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_new(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_virtual_signature_badge(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_package_of_direct_caller_badge(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_nonfungibleglobalid_signature_badge(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_notarizedtransactionv1_from_payload_bytes(void
