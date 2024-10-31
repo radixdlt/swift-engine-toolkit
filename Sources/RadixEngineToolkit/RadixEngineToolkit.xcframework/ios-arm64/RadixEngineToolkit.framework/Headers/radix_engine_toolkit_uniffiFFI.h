@@ -1203,13 +1203,15 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanif
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_blobs(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_classify(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_dynamic_analysis(void*_Nonnull ptr, uint8_t network_id, RustBuffer toolkit_receipt, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_extract_addresses(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_instructions(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_static_analysis(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_static_analysis_and_validate(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_statically_validate(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
@@ -1223,13 +1225,15 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_transactionmanif
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_blobs(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_classify(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_dynamic_analysis(void*_Nonnull ptr, uint8_t network_id, RustBuffer toolkit_receipt, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_extract_addresses(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_instructions(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
-RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_static_analysis(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_static_analysis_and_validate(void*_Nonnull ptr, uint8_t network_id, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_statically_validate(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -2951,6 +2955,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionintentv2_
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_blobs(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_classify(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_dynamic_analysis(void
     
 );
@@ -2960,7 +2967,7 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_instructions(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_static_analysis(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_static_analysis_and_validate(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_statically_validate(void
@@ -2972,6 +2979,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_blobs(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_classify(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_dynamic_analysis(void
     
 );
@@ -2981,7 +2991,7 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_instructions(void
     
 );
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_static_analysis(void
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_static_analysis_and_validate(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_statically_validate(void

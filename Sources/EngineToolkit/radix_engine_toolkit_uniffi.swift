@@ -8674,10 +8674,11 @@ public func FfiConverterTypeTransactionIntentV2_lower(_ value: TransactionIntent
 
 public protocol TransactionManifestV1Protocol {
     func blobs()   -> [Data]
+    func classify()   -> [ManifestClass]
     func dynamicAnalysis(networkId: UInt8, toolkitReceipt: String)  throws -> DynamicAnalysis
     func extractAddresses()   -> [EntityType: [Address]]
     func instructions()   -> InstructionsV1
-    func staticAnalysis(networkId: UInt8)  throws -> StaticAnalysis
+    func staticAnalysisAndValidate(networkId: UInt8)  throws -> StaticAnalysis
     func staticallyValidate(networkId: UInt8)  throws
     func toPayloadBytes()  throws -> Data
     
@@ -8730,6 +8731,17 @@ public class TransactionManifestV1: TransactionManifestV1Protocol {
         )
     }
 
+    public func classify()  -> [ManifestClass] {
+        return try!  FfiConverterSequenceTypeManifestClass.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_classify(self.pointer, $0
+    )
+}
+        )
+    }
+
     public func dynamicAnalysis(networkId: UInt8, toolkitReceipt: String) throws -> DynamicAnalysis {
         return try  FfiConverterTypeDynamicAnalysis.lift(
             try 
@@ -8764,11 +8776,11 @@ public class TransactionManifestV1: TransactionManifestV1Protocol {
         )
     }
 
-    public func staticAnalysis(networkId: UInt8) throws -> StaticAnalysis {
+    public func staticAnalysisAndValidate(networkId: UInt8) throws -> StaticAnalysis {
         return try  FfiConverterTypeStaticAnalysis.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_static_analysis(self.pointer, 
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_static_analysis_and_validate(self.pointer, 
         FfiConverterUInt8.lower(networkId),$0
     )
 }
@@ -8837,10 +8849,11 @@ public func FfiConverterTypeTransactionManifestV1_lower(_ value: TransactionMani
 
 public protocol TransactionManifestV2Protocol {
     func blobs()   -> [Data]
+    func classify()   -> [ManifestClass]
     func dynamicAnalysis(networkId: UInt8, toolkitReceipt: String)  throws -> DynamicAnalysis
     func extractAddresses()   -> [EntityType: [Address]]
     func instructions()   -> InstructionsV2
-    func staticAnalysis(networkId: UInt8)  throws -> StaticAnalysis
+    func staticAnalysisAndValidate(networkId: UInt8)  throws -> StaticAnalysis
     func staticallyValidate()  throws
     func toPayloadBytes()  throws -> Data
     
@@ -8894,6 +8907,17 @@ public class TransactionManifestV2: TransactionManifestV2Protocol {
         )
     }
 
+    public func classify()  -> [ManifestClass] {
+        return try!  FfiConverterSequenceTypeManifestClass.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_classify(self.pointer, $0
+    )
+}
+        )
+    }
+
     public func dynamicAnalysis(networkId: UInt8, toolkitReceipt: String) throws -> DynamicAnalysis {
         return try  FfiConverterTypeDynamicAnalysis.lift(
             try 
@@ -8928,11 +8952,11 @@ public class TransactionManifestV2: TransactionManifestV2Protocol {
         )
     }
 
-    public func staticAnalysis(networkId: UInt8) throws -> StaticAnalysis {
+    public func staticAnalysisAndValidate(networkId: UInt8) throws -> StaticAnalysis {
         return try  FfiConverterTypeStaticAnalysis.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_static_analysis(self.pointer, 
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_static_analysis_and_validate(self.pointer, 
         FfiConverterUInt8.lower(networkId),$0
     )
 }
@@ -26369,6 +26393,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_blobs() != 37273) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_classify() != 434) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_dynamic_analysis() != 27204) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -26378,7 +26405,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_instructions() != 28436) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_static_analysis() != 27026) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_static_analysis_and_validate() != 55818) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_statically_validate() != 1391) {
@@ -26390,6 +26417,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_blobs() != 59861) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_classify() != 8493) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_dynamic_analysis() != 2627) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -26399,7 +26429,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_instructions() != 30513) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_static_analysis() != 25127) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_static_analysis_and_validate() != 5100) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_statically_validate() != 5014) {
