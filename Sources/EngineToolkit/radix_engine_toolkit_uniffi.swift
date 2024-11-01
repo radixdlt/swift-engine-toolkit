@@ -8152,7 +8152,7 @@ public protocol SubintentManifestV2Protocol {
     func blobs()   -> [Data]
     func extractAddresses()   -> [EntityType: [Address]]
     func instructions()   -> InstructionsV2
-    func staticAnalysis(networkId: UInt8)  throws -> StaticAnalysis
+    func staticAnalysis(networkId: UInt8)  throws -> StaticAnalysisWithResourceMovements
     func staticallyValidate()  throws
     func toPayloadBytes()  throws -> Data
     
@@ -8240,8 +8240,8 @@ public class SubintentManifestV2: SubintentManifestV2Protocol {
         )
     }
 
-    public func staticAnalysis(networkId: UInt8) throws -> StaticAnalysis {
-        return try  FfiConverterTypeStaticAnalysis.lift(
+    public func staticAnalysis(networkId: UInt8) throws -> StaticAnalysisWithResourceMovements {
+        return try  FfiConverterTypeStaticAnalysisWithResourceMovements.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
     uniffi_radix_engine_toolkit_uniffi_fn_method_subintentmanifestv2_static_analysis(self.pointer, 
@@ -8674,11 +8674,11 @@ public func FfiConverterTypeTransactionIntentV2_lower(_ value: TransactionIntent
 
 public protocol TransactionManifestV1Protocol {
     func blobs()   -> [Data]
-    func classify()   -> [ManifestClass]
-    func dynamicAnalysis(networkId: UInt8, toolkitReceipt: String)  throws -> DynamicAnalysis
+    func dynamicallyAnalyze(networkId: UInt8, toolkitReceipt: String)  throws -> DynamicAnalysis
     func extractAddresses()   -> [EntityType: [Address]]
     func instructions()   -> InstructionsV1
-    func staticAnalysisAndValidate(networkId: UInt8)  throws -> StaticAnalysis
+    func staticallyAnalyze(networkId: UInt8)   -> StaticAnalysis
+    func staticallyAnalyzeAndValidate(networkId: UInt8)  throws -> StaticAnalysisWithResourceMovements
     func staticallyValidate(networkId: UInt8)  throws
     func toPayloadBytes()  throws -> Data
     
@@ -8731,22 +8731,11 @@ public class TransactionManifestV1: TransactionManifestV1Protocol {
         )
     }
 
-    public func classify()  -> [ManifestClass] {
-        return try!  FfiConverterSequenceTypeManifestClass.lift(
-            try! 
-    rustCall() {
-    
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_classify(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func dynamicAnalysis(networkId: UInt8, toolkitReceipt: String) throws -> DynamicAnalysis {
+    public func dynamicallyAnalyze(networkId: UInt8, toolkitReceipt: String) throws -> DynamicAnalysis {
         return try  FfiConverterTypeDynamicAnalysis.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_dynamic_analysis(self.pointer, 
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_dynamically_analyze(self.pointer, 
         FfiConverterUInt8.lower(networkId),
         FfiConverterString.lower(toolkitReceipt),$0
     )
@@ -8776,11 +8765,23 @@ public class TransactionManifestV1: TransactionManifestV1Protocol {
         )
     }
 
-    public func staticAnalysisAndValidate(networkId: UInt8) throws -> StaticAnalysis {
-        return try  FfiConverterTypeStaticAnalysis.lift(
+    public func staticallyAnalyze(networkId: UInt8)  -> StaticAnalysis {
+        return try!  FfiConverterTypeStaticAnalysis.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_statically_analyze(self.pointer, 
+        FfiConverterUInt8.lower(networkId),$0
+    )
+}
+        )
+    }
+
+    public func staticallyAnalyzeAndValidate(networkId: UInt8) throws -> StaticAnalysisWithResourceMovements {
+        return try  FfiConverterTypeStaticAnalysisWithResourceMovements.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_static_analysis_and_validate(self.pointer, 
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv1_statically_analyze_and_validate(self.pointer, 
         FfiConverterUInt8.lower(networkId),$0
     )
 }
@@ -8849,11 +8850,11 @@ public func FfiConverterTypeTransactionManifestV1_lower(_ value: TransactionMani
 
 public protocol TransactionManifestV2Protocol {
     func blobs()   -> [Data]
-    func classify()   -> [ManifestClass]
-    func dynamicAnalysis(networkId: UInt8, toolkitReceipt: String)  throws -> DynamicAnalysis
+    func dynamicallyAnalyze(networkId: UInt8, toolkitReceipt: String)  throws -> DynamicAnalysis
     func extractAddresses()   -> [EntityType: [Address]]
     func instructions()   -> InstructionsV2
-    func staticAnalysisAndValidate(networkId: UInt8)  throws -> StaticAnalysis
+    func staticallyAnalyze(networkId: UInt8)   -> StaticAnalysis
+    func staticallyAnalyzeAndValidate(networkId: UInt8)  throws -> StaticAnalysisWithResourceMovements
     func staticallyValidate()  throws
     func toPayloadBytes()  throws -> Data
     
@@ -8907,22 +8908,11 @@ public class TransactionManifestV2: TransactionManifestV2Protocol {
         )
     }
 
-    public func classify()  -> [ManifestClass] {
-        return try!  FfiConverterSequenceTypeManifestClass.lift(
-            try! 
-    rustCall() {
-    
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_classify(self.pointer, $0
-    )
-}
-        )
-    }
-
-    public func dynamicAnalysis(networkId: UInt8, toolkitReceipt: String) throws -> DynamicAnalysis {
+    public func dynamicallyAnalyze(networkId: UInt8, toolkitReceipt: String) throws -> DynamicAnalysis {
         return try  FfiConverterTypeDynamicAnalysis.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_dynamic_analysis(self.pointer, 
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_dynamically_analyze(self.pointer, 
         FfiConverterUInt8.lower(networkId),
         FfiConverterString.lower(toolkitReceipt),$0
     )
@@ -8952,11 +8942,23 @@ public class TransactionManifestV2: TransactionManifestV2Protocol {
         )
     }
 
-    public func staticAnalysisAndValidate(networkId: UInt8) throws -> StaticAnalysis {
-        return try  FfiConverterTypeStaticAnalysis.lift(
+    public func staticallyAnalyze(networkId: UInt8)  -> StaticAnalysis {
+        return try!  FfiConverterTypeStaticAnalysis.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_statically_analyze(self.pointer, 
+        FfiConverterUInt8.lower(networkId),$0
+    )
+}
+        )
+    }
+
+    public func staticallyAnalyzeAndValidate(networkId: UInt8) throws -> StaticAnalysisWithResourceMovements {
+        return try  FfiConverterTypeStaticAnalysisWithResourceMovements.lift(
             try 
     rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_static_analysis_and_validate(self.pointer, 
+    uniffi_radix_engine_toolkit_uniffi_fn_method_transactionmanifestv2_statically_analyze_and_validate(self.pointer, 
         FfiConverterUInt8.lower(networkId),$0
     )
 }
@@ -13608,6 +13610,68 @@ public func FfiConverterTypeStakeEvent_lower(_ value: StakeEvent) -> RustBuffer 
 
 
 public struct StaticAnalysis {
+    public var presentedProofs: [String: [ResourceSpecifier]]
+    public var accountsWithdrawnFrom: [Address]
+    public var accountsDepositedInto: [Address]
+    public var encounteredEntities: [Address]
+    public var accountsRequiringAuth: [Address]
+    public var identitiesRequiringAuth: [Address]
+    public var reservedInstructions: [ReservedInstruction]
+    public var classification: [ManifestClass]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(presentedProofs: [String: [ResourceSpecifier]], accountsWithdrawnFrom: [Address], accountsDepositedInto: [Address], encounteredEntities: [Address], accountsRequiringAuth: [Address], identitiesRequiringAuth: [Address], reservedInstructions: [ReservedInstruction], classification: [ManifestClass]) {
+        self.presentedProofs = presentedProofs
+        self.accountsWithdrawnFrom = accountsWithdrawnFrom
+        self.accountsDepositedInto = accountsDepositedInto
+        self.encounteredEntities = encounteredEntities
+        self.accountsRequiringAuth = accountsRequiringAuth
+        self.identitiesRequiringAuth = identitiesRequiringAuth
+        self.reservedInstructions = reservedInstructions
+        self.classification = classification
+    }
+}
+
+
+
+public struct FfiConverterTypeStaticAnalysis: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> StaticAnalysis {
+        return try StaticAnalysis(
+            presentedProofs: FfiConverterDictionaryStringSequenceTypeResourceSpecifier.read(from: &buf), 
+            accountsWithdrawnFrom: FfiConverterSequenceTypeAddress.read(from: &buf), 
+            accountsDepositedInto: FfiConverterSequenceTypeAddress.read(from: &buf), 
+            encounteredEntities: FfiConverterSequenceTypeAddress.read(from: &buf), 
+            accountsRequiringAuth: FfiConverterSequenceTypeAddress.read(from: &buf), 
+            identitiesRequiringAuth: FfiConverterSequenceTypeAddress.read(from: &buf), 
+            reservedInstructions: FfiConverterSequenceTypeReservedInstruction.read(from: &buf), 
+            classification: FfiConverterSequenceTypeManifestClass.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: StaticAnalysis, into buf: inout [UInt8]) {
+        FfiConverterDictionaryStringSequenceTypeResourceSpecifier.write(value.presentedProofs, into: &buf)
+        FfiConverterSequenceTypeAddress.write(value.accountsWithdrawnFrom, into: &buf)
+        FfiConverterSequenceTypeAddress.write(value.accountsDepositedInto, into: &buf)
+        FfiConverterSequenceTypeAddress.write(value.encounteredEntities, into: &buf)
+        FfiConverterSequenceTypeAddress.write(value.accountsRequiringAuth, into: &buf)
+        FfiConverterSequenceTypeAddress.write(value.identitiesRequiringAuth, into: &buf)
+        FfiConverterSequenceTypeReservedInstruction.write(value.reservedInstructions, into: &buf)
+        FfiConverterSequenceTypeManifestClass.write(value.classification, into: &buf)
+    }
+}
+
+
+public func FfiConverterTypeStaticAnalysis_lift(_ buf: RustBuffer) throws -> StaticAnalysis {
+    return try FfiConverterTypeStaticAnalysis.lift(buf)
+}
+
+public func FfiConverterTypeStaticAnalysis_lower(_ value: StaticAnalysis) -> RustBuffer {
+    return FfiConverterTypeStaticAnalysis.lower(value)
+}
+
+
+public struct StaticAnalysisWithResourceMovements {
     public var accountWithdraws: [String: [AccountWithdraw]]
     public var accountDeposits: [String: [AccountDeposit]]
     public var presentedProofs: [String: [ResourceSpecifier]]
@@ -13637,9 +13701,9 @@ public struct StaticAnalysis {
 
 
 
-public struct FfiConverterTypeStaticAnalysis: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> StaticAnalysis {
-        return try StaticAnalysis(
+public struct FfiConverterTypeStaticAnalysisWithResourceMovements: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> StaticAnalysisWithResourceMovements {
+        return try StaticAnalysisWithResourceMovements(
             accountWithdraws: FfiConverterDictionaryStringSequenceTypeAccountWithdraw.read(from: &buf), 
             accountDeposits: FfiConverterDictionaryStringSequenceTypeAccountDeposit.read(from: &buf), 
             presentedProofs: FfiConverterDictionaryStringSequenceTypeResourceSpecifier.read(from: &buf), 
@@ -13653,7 +13717,7 @@ public struct FfiConverterTypeStaticAnalysis: FfiConverterRustBuffer {
         )
     }
 
-    public static func write(_ value: StaticAnalysis, into buf: inout [UInt8]) {
+    public static func write(_ value: StaticAnalysisWithResourceMovements, into buf: inout [UInt8]) {
         FfiConverterDictionaryStringSequenceTypeAccountWithdraw.write(value.accountWithdraws, into: &buf)
         FfiConverterDictionaryStringSequenceTypeAccountDeposit.write(value.accountDeposits, into: &buf)
         FfiConverterDictionaryStringSequenceTypeResourceSpecifier.write(value.presentedProofs, into: &buf)
@@ -13668,12 +13732,12 @@ public struct FfiConverterTypeStaticAnalysis: FfiConverterRustBuffer {
 }
 
 
-public func FfiConverterTypeStaticAnalysis_lift(_ buf: RustBuffer) throws -> StaticAnalysis {
-    return try FfiConverterTypeStaticAnalysis.lift(buf)
+public func FfiConverterTypeStaticAnalysisWithResourceMovements_lift(_ buf: RustBuffer) throws -> StaticAnalysisWithResourceMovements {
+    return try FfiConverterTypeStaticAnalysisWithResourceMovements.lift(buf)
 }
 
-public func FfiConverterTypeStaticAnalysis_lower(_ value: StaticAnalysis) -> RustBuffer {
-    return FfiConverterTypeStaticAnalysis.lower(value)
+public func FfiConverterTypeStaticAnalysisWithResourceMovements_lower(_ value: StaticAnalysisWithResourceMovements) -> RustBuffer {
+    return FfiConverterTypeStaticAnalysisWithResourceMovements.lower(value)
 }
 
 
@@ -26348,7 +26412,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_instructions() != 14630) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_static_analysis() != 40803) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_static_analysis() != 59806) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_subintentmanifestv2_statically_validate() != 63790) {
@@ -26393,10 +26457,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_blobs() != 37273) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_classify() != 434) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_dynamic_analysis() != 27204) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_dynamically_analyze() != 1239) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_extract_addresses() != 24084) {
@@ -26405,7 +26466,10 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_instructions() != 28436) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_static_analysis_and_validate() != 55818) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_statically_analyze() != 52728) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_statically_analyze_and_validate() != 5080) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv1_statically_validate() != 1391) {
@@ -26417,10 +26481,7 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_blobs() != 59861) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_classify() != 8493) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_dynamic_analysis() != 2627) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_dynamically_analyze() != 62016) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_extract_addresses() != 31977) {
@@ -26429,7 +26490,10 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_instructions() != 30513) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_static_analysis_and_validate() != 5100) {
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_statically_analyze() != 52561) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_statically_analyze_and_validate() != 51639) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_transactionmanifestv2_statically_validate() != 5014) {
