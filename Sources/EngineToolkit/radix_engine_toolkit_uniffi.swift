@@ -6866,6 +6866,138 @@ public func FfiConverterTypePartialTransactionV2_lower(_ value: PartialTransacti
 }
 
 
+public protocol PartialTransactionV2BuilderProtocol {
+    func addChild(child: PartialTransactionV2)   -> PartialTransactionV2Builder
+    func build()  throws -> PartialTransactionV2
+    func intentHeader(intentHeader: IntentHeaderV2)   -> PartialTransactionV2Builder
+    func manifest(manifest: TransactionManifestV2)   -> PartialTransactionV2Builder
+    func message(message: MessageV2)   -> PartialTransactionV2Builder
+    
+}
+
+public class PartialTransactionV2Builder: PartialTransactionV2BuilderProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+    public convenience init()  {
+        self.init(unsafeFromRawPointer: try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_partialtransactionv2builder_new($0)
+})
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_partialtransactionv2builder(pointer, $0) }
+    }
+
+    
+
+    
+    
+
+    public func addChild(child: PartialTransactionV2)  -> PartialTransactionV2Builder {
+        return try!  FfiConverterTypePartialTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_add_child(self.pointer, 
+        FfiConverterTypePartialTransactionV2.lower(child),$0
+    )
+}
+        )
+    }
+
+    public func build() throws -> PartialTransactionV2 {
+        return try  FfiConverterTypePartialTransactionV2.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_build(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func intentHeader(intentHeader: IntentHeaderV2)  -> PartialTransactionV2Builder {
+        return try!  FfiConverterTypePartialTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_intent_header(self.pointer, 
+        FfiConverterTypeIntentHeaderV2.lower(intentHeader),$0
+    )
+}
+        )
+    }
+
+    public func manifest(manifest: TransactionManifestV2)  -> PartialTransactionV2Builder {
+        return try!  FfiConverterTypePartialTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_manifest(self.pointer, 
+        FfiConverterTypeTransactionManifestV2.lower(manifest),$0
+    )
+}
+        )
+    }
+
+    public func message(message: MessageV2)  -> PartialTransactionV2Builder {
+        return try!  FfiConverterTypePartialTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_message(self.pointer, 
+        FfiConverterTypeMessageV2.lower(message),$0
+    )
+}
+        )
+    }
+}
+
+public struct FfiConverterTypePartialTransactionV2Builder: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = PartialTransactionV2Builder
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PartialTransactionV2Builder {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if (ptr == nil) {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: PartialTransactionV2Builder, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> PartialTransactionV2Builder {
+        return PartialTransactionV2Builder(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: PartialTransactionV2Builder) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+
+public func FfiConverterTypePartialTransactionV2Builder_lift(_ pointer: UnsafeMutableRawPointer) throws -> PartialTransactionV2Builder {
+    return try FfiConverterTypePartialTransactionV2Builder.lift(pointer)
+}
+
+public func FfiConverterTypePartialTransactionV2Builder_lower(_ value: PartialTransactionV2Builder) -> UnsafeMutableRawPointer {
+    return FfiConverterTypePartialTransactionV2Builder.lower(value)
+}
+
+
 public protocol PreciseDecimalProtocol {
     func abs()  throws -> PreciseDecimal
     func add(other: PreciseDecimal)  throws -> PreciseDecimal
@@ -7266,6 +7398,165 @@ public func FfiConverterTypePreciseDecimal_lift(_ pointer: UnsafeMutableRawPoint
 
 public func FfiConverterTypePreciseDecimal_lower(_ value: PreciseDecimal) -> UnsafeMutableRawPointer {
     return FfiConverterTypePreciseDecimal.lower(value)
+}
+
+
+public protocol PreviewTransactionV2BuilderProtocol {
+    func addChild(partialTransaction: PartialTransactionV2, signers: [PublicKey])   -> PreviewTransactionV2Builder
+    func addRootIntentSigner(signer: PublicKey)   -> PreviewTransactionV2Builder
+    func build()  throws -> Data
+    func intentHeader(intentHeader: IntentHeaderV2)   -> PreviewTransactionV2Builder
+    func manifest(manifest: TransactionManifestV2)   -> PreviewTransactionV2Builder
+    func message(message: MessageV2)   -> PreviewTransactionV2Builder
+    func transactionHeader(transactionHeader: TransactionHeaderV2)   -> PreviewTransactionV2Builder
+    
+}
+
+public class PreviewTransactionV2Builder: PreviewTransactionV2BuilderProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+    public convenience init()  {
+        self.init(unsafeFromRawPointer: try! rustCall() {
+    uniffi_radix_engine_toolkit_uniffi_fn_constructor_previewtransactionv2builder_new($0)
+})
+    }
+
+    deinit {
+        try! rustCall { uniffi_radix_engine_toolkit_uniffi_fn_free_previewtransactionv2builder(pointer, $0) }
+    }
+
+    
+
+    
+    
+
+    public func addChild(partialTransaction: PartialTransactionV2, signers: [PublicKey])  -> PreviewTransactionV2Builder {
+        return try!  FfiConverterTypePreviewTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_add_child(self.pointer, 
+        FfiConverterTypePartialTransactionV2.lower(partialTransaction),
+        FfiConverterSequenceTypePublicKey.lower(signers),$0
+    )
+}
+        )
+    }
+
+    public func addRootIntentSigner(signer: PublicKey)  -> PreviewTransactionV2Builder {
+        return try!  FfiConverterTypePreviewTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_add_root_intent_signer(self.pointer, 
+        FfiConverterTypePublicKey.lower(signer),$0
+    )
+}
+        )
+    }
+
+    public func build() throws -> Data {
+        return try  FfiConverterData.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_build(self.pointer, $0
+    )
+}
+        )
+    }
+
+    public func intentHeader(intentHeader: IntentHeaderV2)  -> PreviewTransactionV2Builder {
+        return try!  FfiConverterTypePreviewTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_intent_header(self.pointer, 
+        FfiConverterTypeIntentHeaderV2.lower(intentHeader),$0
+    )
+}
+        )
+    }
+
+    public func manifest(manifest: TransactionManifestV2)  -> PreviewTransactionV2Builder {
+        return try!  FfiConverterTypePreviewTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_manifest(self.pointer, 
+        FfiConverterTypeTransactionManifestV2.lower(manifest),$0
+    )
+}
+        )
+    }
+
+    public func message(message: MessageV2)  -> PreviewTransactionV2Builder {
+        return try!  FfiConverterTypePreviewTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_message(self.pointer, 
+        FfiConverterTypeMessageV2.lower(message),$0
+    )
+}
+        )
+    }
+
+    public func transactionHeader(transactionHeader: TransactionHeaderV2)  -> PreviewTransactionV2Builder {
+        return try!  FfiConverterTypePreviewTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_transaction_header(self.pointer, 
+        FfiConverterTypeTransactionHeaderV2.lower(transactionHeader),$0
+    )
+}
+        )
+    }
+}
+
+public struct FfiConverterTypePreviewTransactionV2Builder: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = PreviewTransactionV2Builder
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PreviewTransactionV2Builder {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if (ptr == nil) {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: PreviewTransactionV2Builder, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> PreviewTransactionV2Builder {
+        return PreviewTransactionV2Builder(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: PreviewTransactionV2Builder) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
+
+public func FfiConverterTypePreviewTransactionV2Builder_lift(_ pointer: UnsafeMutableRawPointer) throws -> PreviewTransactionV2Builder {
+    return try FfiConverterTypePreviewTransactionV2Builder.lift(pointer)
+}
+
+public func FfiConverterTypePreviewTransactionV2Builder_lower(_ value: PreviewTransactionV2Builder) -> UnsafeMutableRawPointer {
+    return FfiConverterTypePreviewTransactionV2Builder.lower(value)
 }
 
 
@@ -26223,6 +26514,21 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_to_payload_bytes() != 40008) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_add_child() != 63936) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_build() != 44045) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_intent_header() != 22434) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_manifest() != 9515) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_message() != 49253) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_abs() != 753) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -26293,6 +26599,27 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_to_le_bytes() != 6841) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_add_child() != 49145) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_add_root_intent_signer() != 45430) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_build() != 17377) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_intent_header() != 11361) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_manifest() != 64146) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_message() != 34085) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_transaction_header() != 60706) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_curve() != 56035) {
@@ -26694,6 +27021,9 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_partialtransactionv2_new() != 33234) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_partialtransactionv2builder_new() != 30026) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_from_le_bytes() != 24547) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -26710,6 +27040,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_zero() != 5648) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_previewtransactionv2builder_new() != 64735) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_constructor_privatekey_new() != 47612) {

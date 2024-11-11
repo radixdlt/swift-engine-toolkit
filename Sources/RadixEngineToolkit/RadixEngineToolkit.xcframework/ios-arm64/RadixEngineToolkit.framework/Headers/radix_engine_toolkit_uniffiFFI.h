@@ -968,6 +968,21 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2_
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2_to_payload_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void uniffi_radix_engine_toolkit_uniffi_fn_free_partialtransactionv2builder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_partialtransactionv2builder_new(RustCallStatus *_Nonnull out_status
+    
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_add_child(void*_Nonnull ptr, void*_Nonnull child, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_build(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_intent_header(void*_Nonnull ptr, RustBuffer intent_header, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_manifest(void*_Nonnull ptr, void*_Nonnull manifest, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_partialtransactionv2builder_message(void*_Nonnull ptr, RustBuffer message, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_precisedecimal(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_precisedecimal_from_le_bytes(RustBuffer value, RustCallStatus *_Nonnull out_status
@@ -1033,6 +1048,25 @@ RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sqrt(void
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sub(void*_Nonnull ptr, void*_Nonnull other, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_to_le_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void uniffi_radix_engine_toolkit_uniffi_fn_free_previewtransactionv2builder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_previewtransactionv2builder_new(RustCallStatus *_Nonnull out_status
+    
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_add_child(void*_Nonnull ptr, void*_Nonnull partial_transaction, RustBuffer signers, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_add_root_intent_signer(void*_Nonnull ptr, RustBuffer signer, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_build(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_intent_header(void*_Nonnull ptr, RustBuffer intent_header, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_manifest(void*_Nonnull ptr, void*_Nonnull manifest, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_message(void*_Nonnull ptr, RustBuffer message, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_transaction_header(void*_Nonnull ptr, RustBuffer transaction_header, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_privatekey(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -2721,6 +2755,21 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2_to_payload_bytes(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_add_child(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_build(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_intent_header(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_manifest(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_partialtransactionv2builder_message(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_abs(void
     
 );
@@ -2791,6 +2840,27 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub(v
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_to_le_bytes(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_add_child(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_add_root_intent_signer(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_build(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_intent_header(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_manifest(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_message(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_transaction_header(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_privatekey_curve(void
@@ -3192,6 +3262,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_partialtransact
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_partialtransactionv2_new(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_partialtransactionv2builder_new(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_from_le_bytes(void
     
 );
@@ -3208,6 +3281,9 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_zero(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_previewtransactionv2builder_new(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_privatekey_new(void
