@@ -1049,12 +1049,39 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_sub(vo
 );
 RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_precisedecimal_to_le_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
+void uniffi_radix_engine_toolkit_uniffi_fn_free_previewpartialtransactionv2(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_previewpartialtransactionv2_new(void*_Nonnull partial_transaction, RustBuffer root_subintent_signers, RustBuffer non_root_subintent_signers, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2_non_root_subintent_signers(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2_partial_transaction(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2_root_subintent_hash(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+RustBuffer uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2_root_subintent_signers(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void uniffi_radix_engine_toolkit_uniffi_fn_free_previewpartialtransactionv2builder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_previewpartialtransactionv2builder_new(RustCallStatus *_Nonnull out_status
+    
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_add_child(void*_Nonnull ptr, void*_Nonnull child, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_intent_header(void*_Nonnull ptr, RustBuffer intent_header, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_manifest(void*_Nonnull ptr, void*_Nonnull manifest, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_message(void*_Nonnull ptr, RustBuffer message, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_prepare_for_signing(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void uniffi_radix_engine_toolkit_uniffi_fn_free_previewtransactionv2builder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_previewtransactionv2builder_new(RustCallStatus *_Nonnull out_status
     
 );
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_add_child(void*_Nonnull ptr, void*_Nonnull partial_transaction, RustBuffer signers, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_add_child(void*_Nonnull ptr, void*_Nonnull partial_preview_transaction, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewtransactionv2builder_add_root_intent_signer(void*_Nonnull ptr, RustBuffer signer, RustCallStatus *_Nonnull out_status
 );
@@ -2842,6 +2869,33 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_sub(v
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_precisedecimal_to_le_bytes(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2_non_root_subintent_signers(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2_partial_transaction(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2_root_subintent_hash(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2_root_subintent_signers(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_add_child(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_intent_header(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_manifest(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_message(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_prepare_for_signing(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_add_child(void
     
 );
@@ -3281,6 +3335,12 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_precisedecimal_zero(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_previewpartialtransactionv2_new(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_previewpartialtransactionv2builder_new(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_constructor_previewtransactionv2builder_new(void
