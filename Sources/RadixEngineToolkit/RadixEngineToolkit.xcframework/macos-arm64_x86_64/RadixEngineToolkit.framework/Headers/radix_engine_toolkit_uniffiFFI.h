@@ -1068,13 +1068,15 @@ void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_constructor_previewpartialtr
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_add_child(void*_Nonnull ptr, void*_Nonnull child, RustCallStatus *_Nonnull out_status
 );
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_add_root_subintent_signer(void*_Nonnull ptr, RustBuffer signer, RustCallStatus *_Nonnull out_status
+);
+void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_build(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_intent_header(void*_Nonnull ptr, RustBuffer intent_header, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_manifest(void*_Nonnull ptr, void*_Nonnull manifest, RustCallStatus *_Nonnull out_status
 );
 void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_message(void*_Nonnull ptr, RustBuffer message, RustCallStatus *_Nonnull out_status
-);
-void*_Nonnull uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_prepare_for_signing(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 void uniffi_radix_engine_toolkit_uniffi_fn_free_previewtransactionv2builder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
@@ -2884,6 +2886,12 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransa
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_add_child(void
     
 );
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_add_root_subintent_signer(void
+    
+);
+uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_build(void
+    
+);
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_intent_header(void
     
 );
@@ -2891,9 +2899,6 @@ uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransa
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_message(void
-    
-);
-uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_prepare_for_signing(void
     
 );
 uint16_t uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_add_child(void

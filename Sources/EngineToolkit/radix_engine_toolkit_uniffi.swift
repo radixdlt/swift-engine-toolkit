@@ -7522,10 +7522,11 @@ public func FfiConverterTypePreviewPartialTransactionV2_lower(_ value: PreviewPa
 
 public protocol PreviewPartialTransactionV2BuilderProtocol {
     func addChild(child: PreviewPartialTransactionV2)   -> PreviewPartialTransactionV2Builder
+    func addRootSubintentSigner(signer: PublicKey)   -> PreviewPartialTransactionV2Builder
+    func build()  throws -> PreviewPartialTransactionV2
     func intentHeader(intentHeader: IntentHeaderV2)   -> PreviewPartialTransactionV2Builder
     func manifest(manifest: TransactionManifestV2)   -> PreviewPartialTransactionV2Builder
     func message(message: MessageV2)   -> PreviewPartialTransactionV2Builder
-    func prepareForSigning()  throws -> PreviewPartialTransactionV2
     
 }
 
@@ -7565,6 +7566,28 @@ public class PreviewPartialTransactionV2Builder: PreviewPartialTransactionV2Buil
         )
     }
 
+    public func addRootSubintentSigner(signer: PublicKey)  -> PreviewPartialTransactionV2Builder {
+        return try!  FfiConverterTypePreviewPartialTransactionV2Builder.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_add_root_subintent_signer(self.pointer, 
+        FfiConverterTypePublicKey.lower(signer),$0
+    )
+}
+        )
+    }
+
+    public func build() throws -> PreviewPartialTransactionV2 {
+        return try  FfiConverterTypePreviewPartialTransactionV2.lift(
+            try 
+    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
+    uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_build(self.pointer, $0
+    )
+}
+        )
+    }
+
     public func intentHeader(intentHeader: IntentHeaderV2)  -> PreviewPartialTransactionV2Builder {
         return try!  FfiConverterTypePreviewPartialTransactionV2Builder.lift(
             try! 
@@ -7596,16 +7619,6 @@ public class PreviewPartialTransactionV2Builder: PreviewPartialTransactionV2Buil
     
     uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_message(self.pointer, 
         FfiConverterTypeMessageV2.lower(message),$0
-    )
-}
-        )
-    }
-
-    public func prepareForSigning() throws -> PreviewPartialTransactionV2 {
-        return try  FfiConverterTypePreviewPartialTransactionV2.lift(
-            try 
-    rustCallWithError(FfiConverterTypeRadixEngineToolkitError.lift) {
-    uniffi_radix_engine_toolkit_uniffi_fn_method_previewpartialtransactionv2builder_prepare_for_signing(self.pointer, $0
     )
 }
         )
@@ -26888,6 +26901,12 @@ private var initializationResult: InitializationResult {
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_add_child() != 42126) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_add_root_subintent_signer() != 45374) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_build() != 62773) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_intent_header() != 61016) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -26895,9 +26914,6 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_message() != 61966) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewpartialtransactionv2builder_prepare_for_signing() != 49234) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_radix_engine_toolkit_uniffi_checksum_method_previewtransactionv2builder_add_child() != 13075) {
