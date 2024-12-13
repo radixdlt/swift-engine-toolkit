@@ -18200,6 +18200,7 @@ extension ManifestBuilderValueKind: Equatable, Hashable {}
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 public enum ManifestClass {
     
+    case generalSubintent
     case general
     case transfer
     case poolContribution
@@ -18217,21 +18218,23 @@ public struct FfiConverterTypeManifestClass: FfiConverterRustBuffer {
         let variant: Int32 = try readInt(&buf)
         switch variant {
         
-        case 1: return .general
+        case 1: return .generalSubintent
         
-        case 2: return .transfer
+        case 2: return .general
         
-        case 3: return .poolContribution
+        case 3: return .transfer
         
-        case 4: return .poolRedemption
+        case 4: return .poolContribution
         
-        case 5: return .validatorStake
+        case 5: return .poolRedemption
         
-        case 6: return .validatorUnstake
+        case 6: return .validatorStake
         
-        case 7: return .validatorClaim
+        case 7: return .validatorUnstake
         
-        case 8: return .accountDepositSettingsUpdate
+        case 8: return .validatorClaim
+        
+        case 9: return .accountDepositSettingsUpdate
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -18241,36 +18244,40 @@ public struct FfiConverterTypeManifestClass: FfiConverterRustBuffer {
         switch value {
         
         
-        case .general:
+        case .generalSubintent:
             writeInt(&buf, Int32(1))
         
         
-        case .transfer:
+        case .general:
             writeInt(&buf, Int32(2))
         
         
-        case .poolContribution:
+        case .transfer:
             writeInt(&buf, Int32(3))
         
         
-        case .poolRedemption:
+        case .poolContribution:
             writeInt(&buf, Int32(4))
         
         
-        case .validatorStake:
+        case .poolRedemption:
             writeInt(&buf, Int32(5))
         
         
-        case .validatorUnstake:
+        case .validatorStake:
             writeInt(&buf, Int32(6))
         
         
-        case .validatorClaim:
+        case .validatorUnstake:
             writeInt(&buf, Int32(7))
         
         
-        case .accountDepositSettingsUpdate:
+        case .validatorClaim:
             writeInt(&buf, Int32(8))
+        
+        
+        case .accountDepositSettingsUpdate:
+            writeInt(&buf, Int32(9))
         
         }
     }
@@ -20603,7 +20610,11 @@ public enum ReservedInstruction {
     
     case accountLockFee
     case accountSecurify
+    case accountLockOwnerKeysMetadataField
+    case accountUpdateOwnerKeysMetadataField
     case identitySecurify
+    case identityLockOwnerKeysMetadataField
+    case identityUpdateOwnerKeysMetadataField
     case accessControllerMethod
 }
 
@@ -20618,9 +20629,17 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
         
         case 2: return .accountSecurify
         
-        case 3: return .identitySecurify
+        case 3: return .accountLockOwnerKeysMetadataField
         
-        case 4: return .accessControllerMethod
+        case 4: return .accountUpdateOwnerKeysMetadataField
+        
+        case 5: return .identitySecurify
+        
+        case 6: return .identityLockOwnerKeysMetadataField
+        
+        case 7: return .identityUpdateOwnerKeysMetadataField
+        
+        case 8: return .accessControllerMethod
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -20638,12 +20657,28 @@ public struct FfiConverterTypeReservedInstruction: FfiConverterRustBuffer {
             writeInt(&buf, Int32(2))
         
         
-        case .identitySecurify:
+        case .accountLockOwnerKeysMetadataField:
             writeInt(&buf, Int32(3))
         
         
-        case .accessControllerMethod:
+        case .accountUpdateOwnerKeysMetadataField:
             writeInt(&buf, Int32(4))
+        
+        
+        case .identitySecurify:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .identityLockOwnerKeysMetadataField:
+            writeInt(&buf, Int32(6))
+        
+        
+        case .identityUpdateOwnerKeysMetadataField:
+            writeInt(&buf, Int32(7))
+        
+        
+        case .accessControllerMethod:
+            writeInt(&buf, Int32(8))
         
         }
     }
