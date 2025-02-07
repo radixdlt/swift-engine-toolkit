@@ -22,12 +22,37 @@ jobs:
     steps:
       - uses: actions/checkout@v3.1.0
 
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-swift-engine-toolkit-secrets-read-access'
+          app_name: 'swift-engine-toolkit'
+          step_name: 'fetch-bite-ssh-key'
+          secret_prefix: 'BITE_UNIT_TESTS_SSH_KEY'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/swift-engine-toolkit/bite-unit-test-ssh-key-omHqLq'
+          parse_json: true
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-swift-engine-toolkit-secrets-read-access'
+          app_name: 'swift-engine-toolkit'
+          step_name: 'fetch-slip-ssh-key'
+          secret_prefix: 'SLIP_10_UNIT_TESTS_SSH_KEY'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/swift-engine-toolkit/slip-unit-test-ssh-key-vJWCk8'
+          parse_json: true
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-swift-engine-toolkit-secrets-read-access'
+          app_name: 'swift-engine-toolkit'
+          step_name: 'fetch-mnemonic-ssh-key'
+          secret_prefix: 'MNEMONIC_UNIT_TESTS_SSH_KEY'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/swift-engine-toolkit/mnemonic-unit-test-ssh-key-cFG0FT'
+          parse_json: true
+
       - uses: webfactory/ssh-agent@v0.6.0
         with:
           ssh-private-key: |
-            ${{ secrets.BITE_UNIT_TESTS_SSH_KEY }}
-            ${{ secrets.SLIP_10_UNIT_TESTS_SSH_KEY }}
-            ${{ secrets.MNEMONIC_UNIT_TESTS_SSH_KEY }}
+            ${{ env.BITE_UNIT_TESTS_SSH_KEY }}
+            ${{ env.SLIP_10_UNIT_TESTS_SSH_KEY }}
+            ${{ env.MNEMONIC_UNIT_TESTS_SSH_KEY }}
 
       - name: Run unit tests
         uses: mxcl/xcodebuild@v1
