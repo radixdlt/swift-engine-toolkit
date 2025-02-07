@@ -20,7 +20,7 @@ jobs:
           - iOS
 
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: RDXWorks-actions/checkout@main
 
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
@@ -47,7 +47,7 @@ jobs:
           secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/swift-engine-toolkit/mnemonic-unit-test-ssh-key-cFG0FT'
           parse_json: true
 
-      - uses: webfactory/ssh-agent@v0.6.0
+      - uses: RDXWorks-actions/ssh-agent@master
         with:
           ssh-private-key: |
             ${{ env.BITE_UNIT_TESTS_SSH_KEY }}
@@ -55,7 +55,7 @@ jobs:
             ${{ env.MNEMONIC_UNIT_TESTS_SSH_KEY }}
 
       - name: Run unit tests
-        uses: mxcl/xcodebuild@v1
+        uses: RDXWorks-actions/xcodebuild@master
         with:
           xcode: ^14.2
           action: test
